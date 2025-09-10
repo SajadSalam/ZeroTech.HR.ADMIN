@@ -244,7 +244,7 @@ table {
 
     tr {
         margin: 4rem;
-        background: #f5f5f5;
+        background: rgba(235, 240, 245, 0.65);
     }
 
     // make tr striped

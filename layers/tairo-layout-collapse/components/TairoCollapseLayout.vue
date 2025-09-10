@@ -95,7 +95,7 @@ const mainClass = computed(() => {
 </template>
 <style lang="scss">
 .bg {
-    background-color: rgba(238, 238, 238, 0.46);
+    background-color: rgba(241, 243, 247, 1);
     position: relative;
     z-index: 1;
 

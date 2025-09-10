@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import type { ExaminationCenter, ExaminationCenterDto } from '../types'
 import type { BaseFilters } from '~/utils/types/ApiResponses'
 import { ExaminationCenterService } from '../service'
+import type { ExaminationCenter, ExaminationCenterDto } from '../types'
 const examinationCenterService = new ExaminationCenterService()
 export const useExaminationCenters = defineStore('examinationCenters', () => {
   const examinationCenters = ref<ExaminationCenterDto[]>([])
@@ -80,10 +80,10 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
   }
 
 
-  const assignSegregateManager = async (id: string, data: { managerId: number }) => {
+  const assignSurrogateManager = async (id: string, data: { managerId: number }) => {
     try {
       isLoading.value = true
-      await examinationCenterService.assignSegregateManager(id, data)
+      await examinationCenterService.assignSurrogateManager(id, data)
     } catch (error) {
     } finally {
       isLoading.value = false
@@ -124,7 +124,7 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
     selectedExaminationCenter,
     isEditDialogOpen,
     isAssignExamCenterManagerDialogOpen,
-    assignSegregateManager,
+    assignSurrogateManager,
     assignExamCenterManager,
     getExaminationCenter,
     getExams,

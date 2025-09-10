@@ -7,42 +7,52 @@ export const tableHeaders = (t: (key: string) => string) => {
     {
       key: 'name',
       label: t('name'),
+      icon: 'lucide:file-text',
     },
     {
       key: 'questionBanks',
       label: t('question-banks'),
+      icon: 'lucide:file',
     },
     {
       key: 'studyYear',
       label: t('study-year'),
+      icon: 'lucide:calendar',
     },
     {
       key: 'randomizeAnswer',
       label: t('randomize-choices'),
+      icon: 'lucide:shuffle',
     },
     {
       key: 'displayResult',
       label: t('display-result'),
+      icon: 'lucide:check-circle',
     },
     {
       key: 'randomizeChoices',
       label: t('randomize-answers'),
+      icon: 'lucide:shuffle',
     },
     {
       key: 'moveBetweenQuestion',
       label: t('move-between-questions'),
+      icon: 'lucide:move',
     },
     {
       key: 'successGrade',
       label: t('success-grade'),
+      icon: 'lucide:check',
     },
     {
       key: 'halfSuccessGrade',
       label: t('half-success-grade'),
+      icon: 'lucide:list-checks',
     },
     {
       key: 'actions',
       label: t('actions'),
+      icon: 'lucide:more-vertical',
     },
   ]
 }

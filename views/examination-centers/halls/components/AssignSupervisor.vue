@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useHallStore } from '../store/index'
-import { useOrganizationStore } from '~/views/orgaization/store'
-import type { Organization } from '~/views/orgaization/types'
-import OrganizationTree from '~/views/orgaization/OrganizationTree.vue'
-import { useEmployeeStore } from '~/views/employee/store'
-import type { Employee, EmployeeFilters } from '~/views/employee/types'
-import AppInputField from '~/components/app-field/AppInputField.vue'
 import { debounce } from 'lodash-es'
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
+import AppInputField from '~/components/app-field/AppInputField.vue'
+import { useEmployeeStore } from '~/views/employee/store'
+import type { Employee, EmployeeFilters } from '~/views/employee/types'
+import OrganizationTree from '~/views/orgaization/OrganizationTree.vue'
+import { useOrganizationStore } from '~/views/orgaization/store'
+import type { Organization } from '~/views/orgaization/types'
+import { useHallStore } from '../store/index'
 
 const hallsStore = useHallStore()
 const organizationStore = useOrganizationStore()
@@ -75,7 +75,7 @@ const saveAssign = async () => {
     if (selectedTab.value === 'exam-center-managers') {
         await hallsStore.assignSupervisor(hallsStore.selectedHall.id, { supervisorId: selectedEmployee.value?.employeeId })
     } else {
-        await hallsStore.assignSegregateManager(hallsStore.selectedHall.id, { managerId: selectedEmployee.value?.employeeId })
+        await hallsStore.assignSurrogateManager(hallsStore.selectedHall.id, { managerId: selectedEmployee.value?.employeeId })
     }
     hallsStore.isAssignSupervisorDialogOpen = false
     await hallsStore.getHalls(hallsStore.filters)

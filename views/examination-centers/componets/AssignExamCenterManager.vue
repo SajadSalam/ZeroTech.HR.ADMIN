@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useExaminationCenters } from '../store/index'
-import { useOrganizationStore } from '~/views/orgaization/store'
-import type { Organization } from '~/views/orgaization/types'
-import OrganizationTree from '~/views/orgaization/OrganizationTree.vue'
-import { useEmployeeStore } from '~/views/employee/store'
-import type { Employee, EmployeeFilters } from '~/views/employee/types'
-import AppInputField from '~/components/app-field/AppInputField.vue'
 import { debounce } from 'lodash-es'
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
+import AppInputField from '~/components/app-field/AppInputField.vue'
+import { useEmployeeStore } from '~/views/employee/store'
+import type { Employee, EmployeeFilters } from '~/views/employee/types'
+import OrganizationTree from '~/views/orgaization/OrganizationTree.vue'
+import { useOrganizationStore } from '~/views/orgaization/store'
+import type { Organization } from '~/views/orgaization/types'
+import { useExaminationCenters } from '../store/index'
 
 const examinationCenterStore = useExaminationCenters()
 const organizationStore = useOrganizationStore()
@@ -75,7 +75,7 @@ const saveAssign = async () => {
     if (selectedTab.value === 'exam-center-managers') {
         await examinationCenterStore.assignExamCenterManager(examinationCenterStore.selectedExaminationCenter.id, { managerId: selectedEmployee.value?.employeeId })
     } else {
-        await examinationCenterStore.assignSegregateManager(examinationCenterStore.selectedExaminationCenter.id, { managerId: selectedEmployee.value?.employeeId })
+        await examinationCenterStore.assignSurrogateManager(examinationCenterStore.selectedExaminationCenter.id, { managerId: selectedEmployee.value?.employeeId })
     }
     examinationCenterStore.isAssignExamCenterManagerDialogOpen = false
     await examinationCenterStore.getExaminationCenters(examinationCenterStore.filters)

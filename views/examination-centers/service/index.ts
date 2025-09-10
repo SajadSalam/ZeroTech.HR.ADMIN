@@ -1,7 +1,7 @@
 import axios from '~/services/app-client/axios'
 import type { BaseFilters, PaginatedResponse } from '~/utils/types/ApiResponses'
-import type { ExaminationCenter, ExaminationCenterDto } from '../types'
 import type { ExamDto } from '~/views/exams/types'
+import type { ExaminationCenter, ExaminationCenterDto } from '../types'
 interface IExaminationCenterService {
   get: (filters: BaseFilters) => Promise<PaginatedResponse<ExaminationCenterDto>>
   create: (data: ExaminationCenter) => Promise<ExaminationCenterDto>
@@ -41,8 +41,8 @@ export class ExaminationCenterService implements IExaminationCenterService {
     await axios.put(`/exam-center/${id}/assign-manager`, data)
   }
 
-  async assignSegregateManager(id: string, data: { managerId: number }): Promise<void> {
-    await axios.put(`/exam-center/${id}/assign-segregate-manager`, data)
+  async assignSurrogateManager(id: string, data: { managerId: number }): Promise<void> {
+    await axios.put(`/exam-center/${id}/assign-surrogate-manager`, data)
   }
 
 
