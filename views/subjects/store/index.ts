@@ -1,4 +1,3 @@
-import { fakeData } from '..'
 import { SubjectService } from '../service'
 import type { Subject, SubjectDto, SubjectFilters } from '../types'
 

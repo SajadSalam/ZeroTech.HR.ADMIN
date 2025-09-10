@@ -3,7 +3,6 @@ import { useAuthStore } from '~/views/auth/store/auth'
 import ReplaceQuestion from '~/views/exams/components/ReplaceQuestion.vue'
 import { useExamStore } from '~/views/exams/store'
 import type { ExamDetailed } from '~/views/exams/types'
-import { questionsFakeData } from '~/views/question-bank'
 import QuestionCard from '~/views/question-bank/components/questions/view/QuestionCard.vue'
 import type { Question, QuestionDto } from '~/views/question-bank/types/question'
 

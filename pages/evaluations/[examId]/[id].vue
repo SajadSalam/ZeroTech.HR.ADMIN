@@ -4,7 +4,6 @@ import AppInputField from '~/components/app-field/AppInputField.vue'
 import CardNoData from '~/components/app-table/components/CardNoData.vue'
 import { useEvaluationStore } from '~/views/evaluations/store'
 import type { EvaluationDetialedDto } from '~/views/evaluations/types'
-import { questionsFakeData } from '~/views/question-bank'
 import QuestionCard from '~/views/question-bank/components/questions/view/QuestionCard.vue'
 import {
   Difficulty,
@@ -17,7 +16,7 @@ definePageMeta({
   description: 'to-add-or-edit-questions',
 })
 const route = useRoute()
-const questions = ref<Question[]>([...questionsFakeData])
+const questions = ref<Question[]>([])
 
 const dragOptions = {
   animation: 200,

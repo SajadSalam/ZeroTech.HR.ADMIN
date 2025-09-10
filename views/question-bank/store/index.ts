@@ -4,11 +4,9 @@ import type {
     QuestionFilters,
     QuestionType,
 } from '~/views/question-bank/types/question'
-import { fakeData, questionsFakeData } from '..'
 import { QuestionBankService } from '../service'
 import {
     AssignType,
-    questionTypeMap,
     type AssignDto,
     type AssignForm,
     type QuestionBank,

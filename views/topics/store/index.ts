@@ -1,4 +1,3 @@
-import { fakeData } from '..'
 import { TopicService } from '../service'
 import type { Topic, TopicDto, TopicFilters } from '../types'
 

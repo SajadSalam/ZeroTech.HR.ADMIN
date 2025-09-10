@@ -1,4 +1,3 @@
-import { fakeData } from '..'
 import { HallService } from '../service'
 import type { Hall, HallDto, HallFilters } from '../types'
 

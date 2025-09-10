@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { questionsFakeData } from '~/views/question-bank'
 import QuestionCard from '~/views/question-bank/components/questions/view/QuestionCard.vue'
 import type { Question } from '~/views/question-bank/types/question'
 
@@ -7,7 +6,7 @@ definePageMeta({
   title: 'exam-view',
   description: 'to-view-exam-like-student',
 })
-const questions = ref<Question[]>([...questionsFakeData])
+const questions = ref<Question[]>([])
 </script>
 
 <template>
