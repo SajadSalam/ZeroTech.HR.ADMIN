@@ -1,0 +1,132 @@
+import { defineStore } from 'pinia'
+import type { ExaminationCenter, ExaminationCenterDto } from '../types'
+import type { BaseFilters } from '~/utils/types/ApiResponses'
+import { ExaminationCenterService } from '../service'
+const examinationCenterService = new ExaminationCenterService()
+export const useExaminationCenters = defineStore('examinationCenters', () => {
+  const examinationCenters = ref<ExaminationCenterDto[]>([])
+  const selectedExaminationCenter = ref<ExaminationCenterDto | null>(null)
+  const isLoading = ref(false)
+  const isCreateDialogOpen = ref(false)
+  const isEditDialogOpen = ref(false)
+  const isAssignExamCenterManagerDialogOpen = ref(false)
+  const filters = ref<BaseFilters>({
+    search: '',
+    pageSize: 10,
+    pageNumber: 1,
+  })
+  const totalPages = ref(0)
+
+  const getExaminationCenters = async (questionBankFilters: BaseFilters) => {
+    try {
+      isLoading.value = true
+      const response = await examinationCenterService.get(filters.value)
+      examinationCenters.value = response.data.map(
+        (item) =>
+          ({
+            ...item,
+            collegeName: item.college ? item.college.arabicName : '',
+            creationDate: item.creationDate.split('T')[0],
+          }) as ExaminationCenterDto
+      )
+      totalPages.value = response.pagesCount
+    } catch (error) {
+    } finally {
+      isLoading.value = false
+    }
+  }
+  const getExaminationCenter = async (id: string) => {
+    try {
+      isLoading.value = true
+      const response = await examinationCenterService.getById(id)
+      return response
+    } catch (error) {
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const createExaminationCenter = async (data: ExaminationCenter) => {
+    try {
+      isLoading.value = true
+      await examinationCenterService.create(data)
+      await getExaminationCenters(filters.value)
+    } catch (error) {
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const updateExaminationCenter = async (data: ExaminationCenter) => {
+    try {
+      isLoading.value = true
+      await examinationCenterService.update(selectedExaminationCenter.value!.id, data)
+      await getExaminationCenters(filters.value)
+    } catch (error) {
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const deleteExaminationCenter = async (id: string) => {
+    try {
+      isLoading.value = true
+      await examinationCenterService.delete(id)
+      await getExaminationCenters(filters.value)
+    } catch (error) {
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+
+  const assignSegregateManager = async (id: string, data: { managerId: number }) => {
+    try {
+      isLoading.value = true
+      await examinationCenterService.assignSegregateManager(id, data)
+    } catch (error) {
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const assignExamCenterManager = async (id: string, data: { managerId: number }) => {
+    try {
+      isLoading.value = true
+      await examinationCenterService.assignManager(id, data)
+    } catch (error) {
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const getExams = async (id: string) => {
+    try {
+      isLoading.value = true
+      const response = await examinationCenterService.getExams(id)
+      return response
+    } catch (error) {
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  return {
+    examinationCenters,
+    isLoading,
+    isCreateDialogOpen,
+    filters,
+    totalPages,
+    getExaminationCenters,
+    createExaminationCenter,
+    updateExaminationCenter,
+    deleteExaminationCenter,
+    selectedExaminationCenter,
+    isEditDialogOpen,
+    isAssignExamCenterManagerDialogOpen,
+    assignSegregateManager,
+    assignExamCenterManager,
+    getExaminationCenter,
+    getExams,
+  }
+})

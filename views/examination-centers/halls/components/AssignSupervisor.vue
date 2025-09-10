@@ -1,0 +1,236 @@
+<script setup lang="ts">
+import { useHallStore } from '../store/index'
+import { useOrganizationStore } from '~/views/orgaization/store'
+import type { Organization } from '~/views/orgaization/types'
+import OrganizationTree from '~/views/orgaization/OrganizationTree.vue'
+import { useEmployeeStore } from '~/views/employee/store'
+import type { Employee, EmployeeFilters } from '~/views/employee/types'
+import AppInputField from '~/components/app-field/AppInputField.vue'
+import { debounce } from 'lodash-es'
+import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
+
+const hallsStore = useHallStore()
+const organizationStore = useOrganizationStore()
+const employeeStore = useEmployeeStore()
+const tree = ref<Organization[]>([])
+const isLoading = ref(false)
+const selectedEmployee = ref<Employee | null>(null)
+const filters = computed<EmployeeFilters>({
+  get() {
+    return employeeStore.filters
+  },
+  set(value: EmployeeFilters) {
+    employeeStore.filters = value
+  },
+})
+
+const fetchEmployees = async (collegeId: number) => {
+  filters.value.collegeId = collegeId
+  await employeeStore.getEmployees(filters.value)
+}
+const debouncedSearch = debounce((value: string) => {
+  filters.value.search = value
+  fetchEmployees(selectedItem.value)
+}, 300)
+const employees = computed(() => {
+  return employeeStore.employees
+})
+const selectedItem = ref<number>(0)
+
+onMounted(async () => {
+  filters.value = {
+    search: null,
+    position: null,
+    courses: [],
+    collegeId: null,
+    pageSize: 50,
+    pageNumber: 1,
+  }
+  tree.value = await organizationStore.getOrganizations({ parentId: null })
+  isLoading.value = false
+})
+
+watchDeep(
+  () => selectedItem.value,
+  () => {
+    fetchEmployees(selectedItem.value)
+  }
+)
+const toggleEmployee = (employee: Employee) => {
+  selectedEmployee.value = employee
+}
+const tabs = (t: (key: string) => string) => [
+  
+    {
+        label: t('exam-center-managers'),
+        value: 'exam-center-managers',
+    },
+      {
+        label: t('surrogate-managers'),
+        value: 'surrogate-managers',
+    },
+]
+const selectedTab = ref<string>('exam-center-managers')
+const saveAssign = async () => {
+    if (selectedTab.value === 'exam-center-managers') {
+        await hallsStore.assignSupervisor(hallsStore.selectedHall.id, { supervisorId: selectedEmployee.value?.employeeId })
+    } else {
+        await hallsStore.assignSegregateManager(hallsStore.selectedHall.id, { managerId: selectedEmployee.value?.employeeId })
+    }
+    hallsStore.isAssignSupervisorDialogOpen = false
+    await hallsStore.getHalls(hallsStore.filters)
+    selectedEmployee.value = null
+    selectedTab.value = 'exam-center-managers'
+}
+
+// watchDeep(
+//   () => examinationCenterStore.assign,
+//   () => {
+//     selectedEmployee.value = examinationCenterStore.assign.map((emp: AssignDto) => {
+//       return {
+//         ...emp.employee,
+//         empFullName: `${emp.employee.empArFirstName} ${emp.employee.empArSecondName} ${emp.employee.empArThirdName} ${emp.employee.empArFourthName}`,
+//       }
+//     })
+//   }
+// )
+watchDeep(
+  () => filters.value,
+  () => {
+    fetchEmployees(selectedItem.value)
+  }
+)
+watch(
+  () => hallsStore.isAssignSupervisorDialogOpen,
+  () => {
+    filters.value = {
+      search: null,
+      position: null,
+      courses: [],
+      collegeId: null,
+      pageSize: 50,
+      pageNumber: 1,
+    }
+    employeeStore.employees = []
+  }
+)
+const handleCourseChange = (selectedCourses: any[]) => {
+  filters.value.courses = selectedCourses
+  fetchEmployees(selectedItem.value)
+}
+
+const supervisor = computed(() => {
+  return hallsStore.selectedHall?.supervisorName
+})
+const removeSupervisor = () => {
+  selectedEmployee.value = null
+  hallsStore.selectedHall.supervisorName = null
+}
+</script>
+<template>
+  <AppDialog
+    v-model="hallsStore.isAssignSupervisorDialogOpen"
+    :title="
+      $t('assign-supervisor')
+    "
+    size="3xl"
+    overflow-y="visible"
+    class="!max-w-7xl"
+  >
+    <hr class="my-4" />
+    <div class="min-h-[300px] grid gap-4 md:grid-cols-2">
+      <div class="max-h-[300px] overflow-auto">
+        <OrganizationTree v-model="selectedItem" />
+      </div>
+
+      <div class="max-h-[300px] overflow-auto border-s-2 border-gray-200 ps-3">
+        <h1 class="text-xl font-bold">{{ $t('employees') }}</h1>
+
+        <div v-if="!employees.length" class="flex flex-col items-center justify-center">
+          <img
+            src="/assets/images/no-data.png"
+            class="w-120 h-60 object-contain"
+            alt=""
+            srcset=""
+          >
+          <h1>
+            {{ $t('no-data-found') }}
+          </h1>
+        </div>
+        <div class="mt-2 grid gap-2 md:grid-cols-1">
+          <div
+            v-for="employee in employees"
+            :key="employee.employeeId"
+            class="flex items-center gap-3"
+          >
+            <BaseCheckbox
+              color="primary"
+              :value="employee.employeeId"
+              :model-value="selectedEmployee?.employeeId === employee.employeeId"
+              @update:model-value="(val) => toggleEmployee(employee)"
+            />
+            <BaseAvatar color="primary" size="xs">
+              <Icon name="ph-user-duotone" size="20" class="text-primary" />
+            </BaseAvatar>
+            <div>
+              <h1 class="text-md font-bold">
+                {{ employee.empFullName }}
+              </h1>
+              <p class="text-sm text-muted-500">
+                {{ employee.academicRank }}
+                -
+                {{ employee.position }}
+              </p>
+            </div>
+          </div>
+          <template v-if="isLoading">
+            <AppLoading v-for="i in 8" :key="i" :show-avatar="true" />
+          </template>
+        </div>
+      </div>
+    </div>
+    <h1 class="my-3">
+      {{
+        ' ' + $t('supervisor')
+      }}
+    </h1>
+    <div class="bg-op-5 pa-5 grid gap-2 rounded-lg bg-primary md:grid-cols-3">
+        
+      <div
+        v-if="supervisor"
+        class="bg-op-20 pa-2 flex items-center justify-around rounded-full bg-primary"
+        color="primary"
+        variant="pastel"
+      >
+        <BaseIconBox variant="pastel" rounded="full" color="primary" size="xs">
+          <Icon name="ph-user-duotone" class="text-primary" />
+        </BaseIconBox>
+        <p class="text-black">
+          {{ supervisor }}
+        </p>
+
+        <Icon name="ph-x" class="cursor-pointer text-red-500" @click="removeSupervisor" />
+      </div>
+      
+    </div>
+    <div class="mt-4 flex items-center justify-end">
+      <BaseButton
+        color="primary"
+        :disabled="hallsStore.isLoading"
+        class="gap-1"
+        :loading="hallsStore.isLoading"
+        @click="saveAssign"
+      >
+        <Icon name="ph:upload-simple-duotone" class="size-5" />
+        {{ $t('assigns') }}
+      </BaseButton>
+    </div>
+  </AppDialog>
+</template>
+<style lang="scss">
+.treeview {
+  .nui-icon-box {
+    background-color: transparent !important;
+  }
+}
+</style>
