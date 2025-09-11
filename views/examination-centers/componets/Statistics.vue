@@ -14,7 +14,7 @@ definePageMeta({
             الإحصائيات
           </span>
         <h1 class="text-2xl font-bold">
-        احصائيات مدير المركز
+        احصائيات مدير النظام
       </h1>
       </div>
     
@@ -53,6 +53,37 @@ definePageMeta({
           variant="default"
         />
     </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <InfoLabel
+          label="مبلغ رسوم الامتحانات المدفوعة"
+          value="204,000,000 د.ع"
+          icon="ph:money-fill"
+          color="primary"
+          :no-counting="true"
+        />
+        
+        <InfoLabel
+          label="عدد الامتحانات القادمة"
+          :value="279"
+          icon="ph:calendar-plus-fill"
+          color="primary"
+        />
+        
+        <InfoLabel
+          label="نسبة انشغال المقاعد"
+          :value="279"
+          icon="ph:chair-fill"
+          color="primary"
+        />
+        
+        <InfoLabel
+          label="الامتحانات الجارية حاليا"
+          :value="50"
+          icon="ph:play-circle-fill"
+          color="primary"
+        />
+    </div>
+    
    
 
       <div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-6 mb-6">

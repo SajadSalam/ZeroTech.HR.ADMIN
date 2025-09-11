@@ -8,6 +8,7 @@ import HallView from '~/views/examination-centers/halls/components/HallView.vue'
 import { useExaminationCenters } from '~/views/examination-centers/store'
 import type { ExaminationCenter } from '~/views/examination-centers/types'
 import Exams from '~/views/examination-centers/componets/Exams.vue'
+import Statistics from '~/views/examination-centers/componets/Statistics.vue'
 
 const examinationCenterStore = useExaminationCenters()
 const appTableStore = useAppTableStore()
@@ -28,6 +29,10 @@ const tabs = (t: any) => [
     label: t('exams'),
     value: 'exams',
   },
+  {
+    label: t('statistics'),
+    value: 'statistics',
+  }
 ]
 
 const statistics = ref({
@@ -44,7 +49,7 @@ const statistics = ref({
         <h1 class="text-2xl font-bold">{{ $t('exam-center') }} {{ examinationCenter?.name }}</h1>
         <BaseTabs  :tabs="tabs($t)" v-model="selectedTab"></BaseTabs>
     </div>
-     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+     <div class="grid grid-cols-2 md:grid-cols-4 gap-3" v-if="selectedTab !== 'statistics'">
             <InfoLabel :label="$t('number-of-halls')" color="primary" icon="ph:building-duotone"
                 :value="statistics.halls">
             </InfoLabel>
@@ -63,6 +68,7 @@ const statistics = ref({
         </div>
     <HallView v-if="selectedTab === 'halls'" />
     <Exams v-if="selectedTab === 'exams'" />
+    <Statistics v-if="selectedTab === 'statistics'" />
   </div>
 </template>
 <style>
