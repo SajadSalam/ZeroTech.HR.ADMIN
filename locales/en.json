@@ -604,5 +604,9 @@
   "assign-supervisor": "Assign Supervisor",
   "supervisor": "Supervisor",
   "incoming": "Incoming",
-  "statistics": "Statistics"
+  "statistics": "Statistics",
+  "back-to-examination-centers": "Back to Examination Centers",
+  "exam-center-overview": "View Examination Center",
+  "manage-examination-center-exams": "Manage Exams in the Center",
+  "examination-center-exams": "Exams in the Center"
 }

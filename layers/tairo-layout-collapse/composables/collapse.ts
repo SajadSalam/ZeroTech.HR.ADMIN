@@ -64,16 +64,29 @@ export interface TairoCollapseResolvedConfig {
  */
 export function useCollapse() {
   const app = useAppConfig()
+  const route = useRoute()
 
   const menuItems = computed(() => {
-    if (
-      (app.tairo?.collapse?.navigation?.enabled as boolean) === false ||
-      app.tairo?.collapse?.navigation?.items?.length === 0
-    ) {
+    if (((app.tairo as any)?.collapse?.navigation?.enabled as boolean) === false) {
       return []
     }
-    return app.tairo?.collapse?.navigation?.items?.map(
-      (navigation) =>
+
+    // Check if we need dynamic navigation
+    let navigationItems = ((app.tairo as any)?.collapse?.navigation?.items as any[]) || []
+    
+    // Check if we're in exam center detail view and use dynamic navigation
+    if (route.path.startsWith('/examination-centers/') && route.params.id) {
+      const { getExamCenterNavigation } = useDynamicNavigation()
+      const examCenterId = route.params.id as string
+      navigationItems = getExamCenterNavigation(examCenterId)
+    }
+
+    if (navigationItems.length === 0) {
+      return []
+    }
+
+    return navigationItems.map(
+      (navigation: any) =>
         <TairoCollapseResolvedConfig>{
           ...navigation,
           position: navigation.position ?? 'start',
@@ -85,11 +98,11 @@ export function useCollapse() {
   const isMobileOpen = useState('collapse-mobile-open', () => false)
 
   const header = computed(() => {
-    return app.tairo?.collapse?.navigation?.header
+    return (app.tairo as any)?.collapse?.navigation?.header
   })
 
   const footer = computed(() => {
-    return app.tairo?.collapse?.navigation?.footer
+    return (app.tairo as any)?.collapse?.navigation?.footer
   })
 
   function toggle() {
@@ -102,9 +115,8 @@ export function useCollapse() {
     }
   }
 
-  if (import.meta.client) {
-    const route = useRoute()
-    const { lg, xl } = useTailwindBreakpoints()
+  if (process.client) {
+    const { lg } = useTailwindBreakpoints()
     watch(lg, (isLg) => {
       if (isLg) {
         isMobileOpen.value = false

@@ -9,7 +9,7 @@ import AssignExamCenterManager from '~/views/examination-centers/componets/Assig
 import CreateExaminationCenter from '~/views/examination-centers/componets/CreateExaminationCenter.vue'
 import EditExaminationCenter from '~/views/examination-centers/componets/EditExaminationCenter.vue'
 import { useExaminationCenters } from '~/views/examination-centers/store'
-import type { ExaminationCenter, ExaminationCenterDto } from '~/views/examination-centers/types'
+import type { ExaminationCenterDto } from '~/views/examination-centers/types'
 
 definePageMeta({
   title: 'examination-centers',
@@ -89,7 +89,7 @@ const { hasPrivilege } = useAuthStore()
           <BaseButton color="primary" @click="openAssignExamCenterManager(item)">
             {{ $t('assign-exam-center-manager') }}
           </BaseButton>
-          <BaseButton color="primary" :to="`/examination-centers/${item.id}`">
+          <BaseButton color="primary" :to="`/examination-centers/${item.id}/exams`">
             <Icon name="ph:eye" class="size-4" />
             {{ $t('view-examination-center') }}
           </BaseButton>

@@ -626,5 +626,10 @@
   "assign-supervisor": "تعيين مراقب للقاعة",
   "supervisor": "مراقب القاعة",
   "incoming": "قادم",
-  "statistics": "الاحصائيات"
+  "statistics": "الاحصائيات",
+  "back-to-examination-centers": "العودة إلى المراكز",
+  "exam-center-overview": "رؤية تفاصيل المركز",
+  "manage-examination-center-exams": "إدارة الامتحانات في المركز",
+  "examination-center-exams": "الامتحانات في المركز",
+
 }

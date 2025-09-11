@@ -1,4 +1,4 @@
-export default [
+const defaultNavigation = [
   {
     name: 'home-page',
     icon: { name: 'ph-house-duotone', class: 'w-5 h-5' },
@@ -95,3 +95,6 @@ export default [
   },
 
 ]
+
+// Default export for backward compatibility
+export default defaultNavigation
