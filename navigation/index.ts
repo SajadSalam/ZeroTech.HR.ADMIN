@@ -93,53 +93,5 @@ export default [
       },
     ],
   },
-  {
-    name: 'dashboards',
-    icon: { name: 'ph-list-checks-duotone', class: 'w-5 h-5' },
-    privilege: 'ums:ems:exam:view-any',
-    children: [
-      {
-        name: 'exam_efficiency',
-        icon: { name: 'ph-file-cloud-duotone', class: 'w-5 h-5' },
-        to: '/exam-efficiency',
-        privilege: 'ums:ems:exam:create',
-      },
-      {
-        name: 'exam_supervision',
-        icon: { name: 'ph-file-cloud-duotone', class: 'w-5 h-5' },
-        to: '/exam-supervision',
-        privilege: 'ums:ems:exam:create',
-      },
-      {
-        name: 'system_insights',
-        icon: { name: 'ph-file-cloud-duotone', class: 'w-5 h-5' },
-        to: '/system-insights',
-        privilege: 'ums:ems:question-bank:create',
-      },
-      {
-        name: 'admin_dashboard',
-        icon: { name: 'ph-book-open-duotone', class: 'w-5 h-5' },
-        to: '/admin-dashboard',
-        privilege: 'ums:ems:question-bank:create',
-      },
-      {
-        name: 'student_dashboard',
-        icon: { name: 'ph-book-open-duotone', class: 'w-5 h-5' },
-        to: '/student-dashboard',
-        privilege: 'ums:ems:exam:create',
-      },
-      {
-        name: 'question_dashboard',
-        icon: { name: 'ph-book-open-duotone', class: 'w-5 h-5' },
-        to: '/question-dashboard',
-        privilege: 'ums:ems:question-bank:create',
-      },
-      {
-        name: 'exam_dashboard',
-        icon: { name: 'ph-book-open-duotone', class: 'w-5 h-5' },
-        to: '/exam-dashboard',
-        privilege: 'ums:ems:exam:create',
-      },
-    ],
-  },
+
 ]

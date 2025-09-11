@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import systemper from './system-performance-dashboard/index.vue'
+
 definePageMeta({
   title: 'home-page',
   description: 'this-is-the-home-page',
