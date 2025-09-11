@@ -15,3 +15,21 @@ export type ExaminationCenterDto = ExaminationCenter &
     college: Organization
     collegeName: string
   }
+export interface OtpResponse {
+    otp:            string;
+    ticketId:       string;
+    examTitle:      string;
+    examCenterName: string;
+    duration:       number;
+    studentId:      number;
+    studentName:    string;
+    studentEmail:   string;
+    documentNumber: string;
+    collegeName:    string;
+    ticketNumber:   string;
+    status:         number;
+    paymentDate:    string;
+    amount:         number;
+    notes:          string;
+    examDate:       string;
+}

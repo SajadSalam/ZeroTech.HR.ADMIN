@@ -3,6 +3,7 @@
 import { useRoute } from 'vue-router'
 import HallView from '~/views/examination-centers/halls/components/HallView.vue'
 import { useExaminationCenters } from '~/views/examination-centers/store'
+import GenerateOTP from '~/views/examination-centers/componets/GenerateOTP.vue'
 
 definePageMeta({
   title: 'halls',
@@ -11,6 +12,15 @@ definePageMeta({
 
 const { id } = useRoute().params
 const examinationCenterStore = useExaminationCenters()
+
+const isGenerateOTPDialogOpen = computed({
+  get() {
+    return examinationCenterStore.isGenerateOTPDialogOpen
+  },
+  set(value: boolean) {
+    examinationCenterStore.isGenerateOTPDialogOpen = value
+  }
+})
 const examinationCenter = ref<any>(null)
 
 const getExaminationCenter = async () => {
@@ -32,8 +42,12 @@ const statistics = ref({
 
 <template>
   <div class="flex flex-col gap-2">
-    <div class="flex flex-col gap-2">
-      <h1 class="text-2xl font-bold">{{ $t('exam-center') }} {{ examinationCenter?.name }} - {{ $t('halls') }}</h1>
+    <div class="flex  items-center justify-between gap-2 my-5">
+      <h1 class="text-2xl font-bold">{{ $t('exam-center') }} {{ examinationCenter?.name }} - {{ $t('halls') }} {{ isGenerateOTPDialogOpen }}</h1>
+      <BaseButton color="primary" @click="isGenerateOTPDialogOpen = true">
+        <Icon name="ph:qr-code-duotone" class="size-4" />
+        {{ $t('generate-otp') }}
+      </BaseButton>
     </div>
     
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -55,5 +69,6 @@ const statistics = ref({
     </div>
     
     <HallView />
+    <GenerateOTP />
   </div>
 </template>

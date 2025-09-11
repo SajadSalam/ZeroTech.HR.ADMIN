@@ -631,5 +631,12 @@
   "exam-center-overview": "رؤية تفاصيل المركز",
   "manage-examination-center-exams": "إدارة الامتحانات في المركز",
   "examination-center-exams": "الامتحانات في المركز",
-
+  "generate-otp": "كلمة مرور الامتحان للطالب",
+  "scan-qr-code-instruction": "امسح رمز الاستجابة السريعة لإنتاج كلمة المرور",
+  "scan-qr-code-description": "ضع رمز الاستجابة السريعة داخل إطار الكاميرا لمسحه تلقائياً وإنتاج كلمة مرور",
+  "camera-preview": "ستظهر معاينة الكاميرا هنا",
+  "start-scanning": "بدء المسح",
+  "stop-scanning": "إيقاف المسح",
+  "qr-code-scanned-successfully": "تم مسح رمز الاستجابة السريعة بنجاح، قم بأعطاء هذا الرمز الى الطالب ليتمكن من بدأ الامتحان!",
+  "loading-otp": "يتم تحميل الرمز السريع..."
 }

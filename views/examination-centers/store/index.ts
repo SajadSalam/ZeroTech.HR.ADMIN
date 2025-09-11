@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import type { BaseFilters } from '~/utils/types/ApiResponses'
 import { ExaminationCenterService } from '../service'
-import type { ExaminationCenter, ExaminationCenterDto } from '../types'
+import type { ExaminationCenter, ExaminationCenterDto, OtpResponse } from '../types'
 const examinationCenterService = new ExaminationCenterService()
 export const useExaminationCenters = defineStore('examinationCenters', () => {
   const examinationCenters = ref<ExaminationCenterDto[]>([])
@@ -10,6 +10,7 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
   const isCreateDialogOpen = ref(false)
   const isEditDialogOpen = ref(false)
   const isAssignExamCenterManagerDialogOpen = ref(false)
+  const isGenerateOTPDialogOpen = ref(false)
   const filters = ref<BaseFilters>({
     search: '',
     pageSize: 10,
@@ -17,7 +18,7 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
   })
   const totalPages = ref(0)
 
-  const getExaminationCenters = async (questionBankFilters: BaseFilters) => {
+  const getExaminationCenters = async () => {
     try {
       isLoading.value = true
       const response = await examinationCenterService.get(filters.value)
@@ -111,6 +112,18 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
     }
   }
 
+
+  const checkIn = async (id: string): Promise<OtpResponse> => {
+    try {
+      isLoading.value = true
+      const response = await examinationCenterService.checkIn(id)
+      return response
+    } catch (error) {
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     examinationCenters,
     isLoading,
@@ -128,5 +141,7 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
     assignExamCenterManager,
     getExaminationCenter,
     getExams,
+    isGenerateOTPDialogOpen,
+    checkIn,
   }
 })
