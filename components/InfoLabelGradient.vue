@@ -16,6 +16,7 @@ const props = defineProps<{
     icon: string;
     value: string | number;
     noCounting?: boolean;
+    variant?: 'default' | 'gradient';
 }>();
 
 const displayValue = ref(typeof props.value === 'number' ? 0 : props.value);
@@ -64,19 +65,55 @@ watch(
         }
     }
 );
+
+// Computed classes based on variant
+const containerClasses = computed(() => {
+    if (props.variant === 'gradient') {
+        return 'p-4 gap-6 rounded-2xl flex items-center shadow-sm border-0 bg-gradient-to-b from-[#A01E11] to-[#750D02]';
+    }
+    return 'bg-white p-4 gap-6 rounded-2xl flex items-center shadow-sm border-0';
+});
+
+const iconBgClasses = computed(() => {
+    if (props.variant === 'gradient') {
+        return 'flex-shrink-0 rounded-full p-4 flex items-center justify-center bg-white bg-opacity-10';
+    }
+    return 'flex-shrink-0 rounded-full p-4 flex items-center justify-center bg-[rgba(117,13,2,0.1)]';
+});
+
+const iconClasses = computed(() => {
+    if (props.variant === 'gradient') {
+        return 'size-8 text-white';
+    }
+    return 'size-8 text-[#750D02]';
+});
+
+const labelClasses = computed(() => {
+    if (props.variant === 'gradient') {
+        return 'text-white text-base font-normal';
+    }
+    return 'text-[#7B7B7B] text-base font-normal';
+});
+
+const valueClasses = computed(() => {
+    if (props.variant === 'gradient') {
+        return 'text-white text-[28px] font-bold leading-tight tracking-tight';
+    }
+    return 'text-[#202020] text-[28px] font-bold leading-tight tracking-tight';
+});
 </script>
 
 <template>
-    <div class="bg-white p-4 gap-6 rounded-2xl flex items-center shadow-sm border-0" style="border-radius: 16px;">
+    <div :class="containerClasses" style="border-radius: 16px;">
         <!-- Icon Container -->
-        <div class="flex-shrink-0 rounded-full p-4 flex items-center justify-center" style="background-color: rgba(117, 13, 2, 0.1);">
-            <Icon :name="icon" class="size-8 text-[#750D02]" />
+        <div :class="iconBgClasses">
+            <Icon :name="icon" :class="iconClasses" />
         </div>
 
         <!-- Content -->
         <div class="flex flex-col gap-1 flex-1 min-w-0">
-            <p class="text-[#7B7B7B] text-base font-normal">{{ label }}</p>
-            <h1 class="text-[#202020] text-[28px] font-bold leading-tight tracking-tight" :key="displayValue">
+            <p :class="labelClasses">{{ label }}</p>
+            <h1 :class="valueClasses" :key="displayValue">
                 {{ typeof displayValue === 'string' ? displayValue : displayValue.toLocaleString() }}
             </h1>
         </div>
