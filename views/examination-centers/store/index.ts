@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
-import type { BaseFilters } from '~/utils/types/ApiResponses'
+import type { BaseFilters, PaginatedResponse } from '~/utils/types/ApiResponses'
 import { ExaminationCenterService } from '../service'
 import type { ExaminationCenter, ExaminationCenterDto, OtpResponse } from '../types'
+import type { StudentTicket } from '../types/ticket'
 const examinationCenterService = new ExaminationCenterService()
 export const useExaminationCenters = defineStore('examinationCenters', () => {
   const examinationCenters = ref<ExaminationCenterDto[]>([])
@@ -124,6 +125,17 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
     }
   }
 
+  const getBookedStudents = async (filters: BaseFilters): PaginatedResponse<StudentTicket> => {
+    try {
+      isLoading.value = true
+      const response = await examinationCenterService.getBookedStudents(filters)
+      return response
+    } catch (error) {
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     examinationCenters,
     isLoading,
@@ -143,5 +155,6 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
     getExams,
     isGenerateOTPDialogOpen,
     checkIn,
+    getBookedStudents
   }
 })

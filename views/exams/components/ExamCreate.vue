@@ -195,7 +195,7 @@ const updateExamType = (type: ExamType) => {
         @click="updateExamType(type.value)"
         class="
         transition-all duration-300
-        flex flex-col gap-2 rounded-3xl p-3 hover:bg-primary border-2 hover:border-primary hover:text-white cursor-pointer"
+        flex flex-col gap-4 rounded-3xl p-3 hover:bg-primary border-2 hover:border-primary hover:text-white cursor-pointer"
         :class="type.value == body.examType.$model ? 'bg-primary/20 border-primary text-primary' : 'bg-white'"
         >
             <h1 class="text-xl font-bold">{{ type.label }}</h1>
@@ -342,7 +342,7 @@ const updateExamType = (type: ExamType) => {
       </div>
     </div>
     <div v-else class="flex items-center justify-center h-full my-10">
-        <div class="flex flex-col gap-2 items-center justify-center">
+        <div class="flex flex-col gap-4 items-center justify-center">
             <Icon name="ph-info-duotone" class="text-primary size-25" />
             <h1 class="text-2xl font-bold">
                 قم بتحديد نوع الامتحان ليتم تحديد الاعدادات الخاصة به

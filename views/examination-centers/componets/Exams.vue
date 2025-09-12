@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-import { tableHeaders } from '~/views/exams/index'
-import { useExaminationCenters } from '~/views/examination-centers/store'
 import { useI18n } from 'vue-i18n'
-import { examTypesOptions,examStatusOptions } from '~/views/exams/types/index'
-import { ExamStatus } from '~/views/exams/types/index'
 import axios from '~/services/app-client/axios'
+import { useExaminationCenters } from '~/views/examination-centers/store'
+import { tableHeaders } from '~/views/exams/index'
+import { ExamStatus, examTypesOptions, type Exam } from '~/views/exams/types/index'
 
 const examinationCenterStore = useExaminationCenters()
 const isLoading = computed(() => examinationCenterStore.isLoading)
@@ -76,14 +75,24 @@ const toggleExamStatus = async (examId: string,isRejected: boolean) => {
 
     <AppTable title="Exams" :items="exams.data" :headers="headers" >
         <template #data-actions="{ item }">
-          <BaseButton :loading="isLoading" @click="toggleExamStatus(item.id,!item.isRejected)"
+          <div class="flex items-center gap-3">
+            <BaseButton :loading="isLoading" @click="toggleExamStatus(item.id,!item.isRejected)"
           variant="pastel"
-          :color="!item.isRejected ? 'danger' : 'success'"
-          class="w-full text-lg font-bold"
+          :color="item.isRejected ? 'danger' : 'success'"
+          class=" font-bold"
           >
-            <Icon :name="!item.isRejected ? 'ph:x-circle-duotone' : 'ph:check-circle-duotone'" class="size-6 me-2" />
-            {{ item.isRejected ? "المركز جاهز للامتحان" : "المركز غير جاهز للامتحان" }}
+            <Icon :name="item.isRejected ? 'ph:x-circle-duotone' : 'ph:check-circle-duotone'" class="size-6 me-2" />
+            {{ !item.isRejected ? "المركز جاهز للامتحان" : "المركز غير جاهز للامتحان" }}
           </BaseButton>
+           <BaseButton :loading="isLoading" :to="`/examination-centers/${id}/students/${item.examId}`"
+          variant="pastel"
+          color="primary"
+          class="font-bold"
+          >
+            <Icon name="ph:users-duotone" class="size-6 me-2" />
+            الطلاب المتقدمين
+          </BaseButton>
+          </div>
         </template>
       
         <template #['data-exam.examType']="{ item }">
@@ -111,5 +120,8 @@ const toggleExamStatus = async (examId: string,isRejected: boolean) => {
 <style>
 .nui-button.nui-button-pastel.nui-button-success {
     border: 1px solid rgb(68 213 128)
+}
+.nui-button.nui-button-pastel.nui-button-primary {
+    border: 1px solid #A9321E
 }
 </style>

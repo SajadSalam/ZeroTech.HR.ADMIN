@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
 import { useRoute } from 'vue-router'
+import GenerateOTP from '~/views/examination-centers/componets/GenerateOTP.vue'
 import HallView from '~/views/examination-centers/halls/components/HallView.vue'
 import { useExaminationCenters } from '~/views/examination-centers/store'
-import GenerateOTP from '~/views/examination-centers/componets/GenerateOTP.vue'
 
 definePageMeta({
   title: 'halls',
@@ -41,7 +41,7 @@ const statistics = ref({
 </script>
 
 <template>
-  <div class="flex flex-col gap-2">
+  <div class="flex flex-col gap-4">
     <div class="flex  items-center justify-between gap-2 my-5">
       <h1 class="text-2xl font-bold">{{ $t('exam-center') }} {{ examinationCenter?.name }} - {{ $t('halls') }} {{ isGenerateOTPDialogOpen }}</h1>
       <BaseButton color="primary" @click="isGenerateOTPDialogOpen = true">

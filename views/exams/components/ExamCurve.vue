@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
-import { useExamStore } from '../store/index'
-import { Validator } from '~/services/validator'
 import { requiredValidator } from '~/services/validation'
+import { Validator } from '~/services/validator'
 import { ExamGradeTypes, examGradeTypesOptions } from '~/views/exams/types'
+import { useExamStore } from '../store/index'
 
 const examStore = useExamStore()
 const props = defineProps<{
@@ -69,7 +69,7 @@ const submit = async () => {
           :value="option.value"
         />
       </div>
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-4">
         <p v-if="curveType === ExamGradeTypes.Curve" class="text-sm text-gray-500">
           {{ $t('add-a-grades-for-all-student') }}
         </p>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import 'leaflet/dist/leaflet.css'
 import { LMap, LMarker, LTileLayer } from '@vue-leaflet/vue-leaflet'
-import AppInputField from './AppInputField.vue'
-import { Validator } from '~/services/validator'
+import 'leaflet/dist/leaflet.css'
 import { latValidator, lngValidator } from '~/services/validation'
+import { Validator } from '~/services/validator'
+import AppInputField from './AppInputField.vue'
 const props = defineProps<{
   height?: number
   label?: string
@@ -71,7 +71,7 @@ watch(markerPosition, () => {
 </script>
 <template>
   <ClientOnly>
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-4">
       <div v-if="label" class="mt-2 font-bold">{{ props.label }}</div>
 
       <div class="w-100% flex items-end justify-center gap-2">

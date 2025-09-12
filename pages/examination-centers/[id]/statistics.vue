@@ -24,11 +24,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-2">
-    <div class="flex flex-col gap-2">
+  <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4">
       <h1 class="text-2xl font-bold">{{ $t('exam-center') }} {{ examinationCenter?.name }} - {{ $t('statistics') }}</h1>
     </div>
-    SS
     <Statistics />
   </div>
 </template>

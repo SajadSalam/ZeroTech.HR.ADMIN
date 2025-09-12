@@ -56,4 +56,9 @@ export class ExaminationCenterService implements IExaminationCenterService {
     return response.data
   }
 
+  async getBookedStudents(filters: BaseFilters): Promise<PaginatedResponse<ExaminationCenterDto>> {
+    const response = await axios.get<PaginatedResponse<ExaminationCenterDto>>(`/external-student-booking/all-student-tickets`,{ params:filters })
+    return response.data
+  }
+
 }

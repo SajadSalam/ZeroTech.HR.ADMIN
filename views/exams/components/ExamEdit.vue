@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-import { ref, computed, onMounted, watch } from 'vue'
-import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
-import { useExamStore } from '../store/index'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Validator } from '~/services/validator'
 import { requiredValidator } from '~/services/validation'
+import { Validator } from '~/services/validator'
+import { useExamStore } from '../store/index'
 import type { ExamEdit } from '../types'
 
 const { t } = useI18n()
@@ -138,8 +137,8 @@ const update = async () => {
 
   const isValid = await body.value.$validate();
   if (!isValid) return;
-
-  await examStore.updateExam(props.examId.toString(), validator.value.extractBody());
+  console.log(validator.value.formData)
+  await examStore.updateExam(props.examId.toString(), validator.value.formData);
   validator.value.resetBody();
   examStore.isUpdateDialogOpen = false;
 };

@@ -616,5 +616,10 @@
   "start-scanning": "Start Scanning",
   "stop-scanning": "Stop Scanning",
   "qr-code-scanned-successfully": "QR code scanned successfully!",
-  "loading-otp": "Generating OTP ..."
+  "loading-otp": "Generating OTP ...",
+  "unpaid": "Paid",
+  "paid": "Paid",
+  "ticket-number": "#",
+  "document-number": "Document Number",
+  "exam-date": "Exam Date"
 }

@@ -32,6 +32,11 @@ export const useDynamicNavigation = () => {
         icon: { name: 'ph-chart-pie-duotone', class: 'w-5 h-5' },
         to: `/examination-centers/${examCenterId}/statistics`,
       },
+      {
+        name: 'students',
+        icon: { name: 'ph-users-duotone', class: 'w-5 h-5' },
+        to: `/examination-centers/${examCenterId}/all-students`,
+      },
     ]
   }
 

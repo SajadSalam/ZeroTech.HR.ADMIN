@@ -3,6 +3,7 @@
 import { useRoute } from 'vue-router'
 import Exams from '~/views/examination-centers/componets/Exams.vue'
 import { useExaminationCenters } from '~/views/examination-centers/store'
+import Students from '~/views/examination-centers/componets/Students.vue'
 
 definePageMeta({
   title: 'examination-center-exams',
@@ -33,27 +34,21 @@ const statistics = ref({
 <template>
   <div class="flex flex-col gap-4">
     <div class="flex flex-col gap-4">
-      <h1 class="text-2xl font-bold">{{ $t('exam-center') }} {{ examinationCenter?.name }} - {{ $t('exams') }}</h1>
+      <h1 class="text-2xl font-bold">{{ $t('exam-center') }} {{ examinationCenter?.name }} - {{ $t('students') }}</h1>
     </div>
     
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-      <InfoLabel :label="$t('number-of-halls')" color="primary" icon="ph:building-duotone"
-          :value="statistics.halls">
-      </InfoLabel>
-
-      <InfoLabel :label="$t('number-of-exams')" color="warning" icon="ph:building-apartment-duotone"
-          :value="statistics.exams">
-      </InfoLabel>
-
-      <InfoLabel :label="$t('number-of-students')" color="primary" icon="ph:folder-notch-open-duotone"
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 my-2">
+    
+      <InfoLabelGradient :label="$t('number-of-students')" color="primary" icon="ph:folder-notch-open-duotone"
           :value="statistics.students">
-      </InfoLabel>
+      </InfoLabelGradient>
 
       <InfoLabel :label="$t('amount')" color="warning" icon="ph:arrows-clockwise-duotone"
           :value="statistics.amount">
       </InfoLabel>
     </div>
     
-    <Exams />
+    <!-- <Exams /> -->
+    <Students />
   </div>
 </template>

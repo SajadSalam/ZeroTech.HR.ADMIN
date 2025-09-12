@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import { useRoute } from 'vue-router'
-import Exams from '~/views/examination-centers/componets/Exams.vue'
+import Students from '~/views/examination-centers/componets/Students.vue'
 import { useExaminationCenters } from '~/views/examination-centers/store'
 
 definePageMeta({
@@ -33,18 +33,11 @@ const statistics = ref({
 <template>
   <div class="flex flex-col gap-4">
     <div class="flex flex-col gap-4">
-      <h1 class="text-2xl font-bold">{{ $t('exam-center') }} {{ examinationCenter?.name }} - {{ $t('exams') }}</h1>
+      <h1 class="text-2xl font-bold">{{ $t('exam-center') }} {{ examinationCenter?.name }} - {{ $t('students') }}</h1>
     </div>
     
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-      <InfoLabel :label="$t('number-of-halls')" color="primary" icon="ph:building-duotone"
-          :value="statistics.halls">
-      </InfoLabel>
-
-      <InfoLabel :label="$t('number-of-exams')" color="warning" icon="ph:building-apartment-duotone"
-          :value="statistics.exams">
-      </InfoLabel>
-
+    
       <InfoLabel :label="$t('number-of-students')" color="primary" icon="ph:folder-notch-open-duotone"
           :value="statistics.students">
       </InfoLabel>
@@ -54,6 +47,7 @@ const statistics = ref({
       </InfoLabel>
     </div>
     
-    <Exams />
+    <!-- <Exams /> -->
+    <Students />
   </div>
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RouteLocationRaw } from 'vue-router'
+import type { RouteLocationRaw } from 'vue-router';
 
 const props = defineProps<{
   /**
@@ -75,7 +75,7 @@ const props = defineProps<{
       </div>
       <div class="flex w-1/2 items-center justify-center">
         <div class="w-full px-3 py-5 text-center">
-          <div class="flex flex-col gap-2">
+          <div class="flex flex-col gap-4">
             <img
               :src="props.images[0]"
               class="h-16 rounded bg-muted-100 object-cover"
