@@ -92,6 +92,10 @@ const { hasPrivilege } = useAuthStore()
           <BaseButton color="primary" @click="openAssignSupervisor(item)">
             {{ $t('assign-supervisor') }}
           </BaseButton>
+          <BaseButton color="info" :to="`/examination-centers/${id}/hall/${item.id}`">
+            <Icon name="ph:eye-duotone" class="size-4" />
+            {{ $t('exam_supervision') }}
+          </BaseButton>
           </div>
         </template>
         <template #data-isActive="{ item }">

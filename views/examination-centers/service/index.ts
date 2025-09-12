@@ -1,12 +1,13 @@
 import axios from '~/services/app-client/axios'
 import type { BaseFilters, PaginatedResponse } from '~/utils/types/ApiResponses'
 import type { ExamDto } from '~/views/exams/types'
-import type { ExaminationCenter, ExaminationCenterDto, OtpResponse } from '../types'
+import type { ExamCenterStatistics, ExaminationCenter, ExaminationCenterDto, OtpResponse } from '../types'
 interface IExaminationCenterService {
   get: (filters: BaseFilters) => Promise<PaginatedResponse<ExaminationCenterDto>>
   create: (data: ExaminationCenter) => Promise<ExaminationCenterDto>
   update: (id: string, data: ExaminationCenter) => Promise<ExaminationCenterDto>
   delete: (id: string) => Promise<void>
+  
 }
 
 export class ExaminationCenterService implements IExaminationCenterService {
@@ -61,4 +62,8 @@ export class ExaminationCenterService implements IExaminationCenterService {
     return response.data
   }
 
+  async getExamCenterStatistics(id: string): Promise<ExamCenterStatistics> {
+    const response = await axios.get<ExamCenterStatistics>(`/exam-center/${id}/statistics`)
+    return response.data
+  }
 }

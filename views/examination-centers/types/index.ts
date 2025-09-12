@@ -33,3 +33,12 @@ export interface OtpResponse {
     notes:          string;
     examDate:       string;
 }
+
+
+
+export interface ExamCenterStatistics {
+  numberOfHall: number
+  numberOfExams: number
+  numberOfStudents: number
+  amount: number
+}

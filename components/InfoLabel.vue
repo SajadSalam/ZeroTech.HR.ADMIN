@@ -77,7 +77,7 @@ watch(
         <div class="flex flex-col gap-1 flex-1 min-w-0">
             <p class="text-[#7B7B7B] text-base font-normal">{{ label }}</p>
             <h1 class="text-[#202020] text-[28px] font-bold leading-tight tracking-tight" :key="displayValue">
-                {{ typeof displayValue === 'string' ? displayValue : displayValue.toLocaleString() }}
+                {{ typeof displayValue === 'number' ? displayValue.toLocaleString() : displayValue }}
             </h1>
         </div>
 

@@ -3,6 +3,7 @@
 import { useRoute } from 'vue-router'
 import Exams from '~/views/examination-centers/componets/Exams.vue'
 import { useExaminationCenters } from '~/views/examination-centers/store'
+import type { ExamCenterStatistics } from '~/views/examination-centers/types'
 
 definePageMeta({
   title: 'examination-center-exams',
@@ -18,15 +19,19 @@ const getExaminationCenter = async () => {
   examinationCenter.value = response
 }
 
+const statistics = ref<ExamCenterStatistics>({
+  numberOfHall: 0,
+  numberOfExams: 0,
+  numberOfStudents: 0,
+  amount: 0,
+})
+const getStatistics = async () => {
+  const response = await examinationCenterStore.getExamCenterStatistics(id as string)
+  statistics.value = response
+}
 onMounted(() => {
   getExaminationCenter()
-})
-
-const statistics = ref({
-    halls: 12,
-    exams: 5,
-    students: 100,
-    amount: 20000000,
+  getStatistics()
 })
 </script>
 
@@ -38,15 +43,15 @@ const statistics = ref({
     
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
       <InfoLabel :label="$t('number-of-halls')" color="primary" icon="ph:building-duotone"
-          :value="statistics.halls">
+          :value="statistics.numberOfHall">
       </InfoLabel>
 
       <InfoLabel :label="$t('number-of-exams')" color="warning" icon="ph:building-apartment-duotone"
-          :value="statistics.exams">
+          :value="statistics.numberOfExams">
       </InfoLabel>
 
       <InfoLabel :label="$t('number-of-students')" color="primary" icon="ph:folder-notch-open-duotone"
-          :value="statistics.students">
+          :value="statistics.numberOfStudents">
       </InfoLabel>
 
       <InfoLabel :label="$t('amount')" color="warning" icon="ph:arrows-clockwise-duotone"

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import type { BaseFilters, PaginatedResponse } from '~/utils/types/ApiResponses'
 import { ExaminationCenterService } from '../service'
-import type { ExaminationCenter, ExaminationCenterDto, OtpResponse } from '../types'
+import type { ExamCenterStatistics, ExaminationCenter, ExaminationCenterDto, OtpResponse } from '../types'
 import type { StudentTicket } from '../types/ticket'
 const examinationCenterService = new ExaminationCenterService()
 export const useExaminationCenters = defineStore('examinationCenters', () => {
@@ -136,6 +136,17 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
     }
   }
 
+  const getExamCenterStatistics = async (id: string): Promise<ExamCenterStatistics> => {
+    try {
+      isLoading.value = true
+      const response = await examinationCenterService.getExamCenterStatistics(id)
+      return response
+    } catch (error) {
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     examinationCenters,
     isLoading,
@@ -155,6 +166,7 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
     getExams,
     isGenerateOTPDialogOpen,
     checkIn,
-    getBookedStudents
+    getBookedStudents,
+    getExamCenterStatistics
   }
 })
