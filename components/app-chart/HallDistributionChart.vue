@@ -7,7 +7,7 @@
           احصائية
         </span>
         <h3 class="text-[#1E1B39] font-bold text-lg leading-tight">
-          عدد الطلاب حسب القاعات
+          عدد المسجلين حسب القاعات
         </h3>
       </div>
     </div>

@@ -12,9 +12,9 @@ export default defineAppConfig({
           // {
           // 	component: 'DemoThemeToggle',
           // },
-          {
-            component: 'DemoToolbarNotifications',
-          },
+        //   {
+        //     component: 'DemoToolbarNotifications',
+        //   },
           {
             component: 'DemoToolbarAccountMenu',
           },

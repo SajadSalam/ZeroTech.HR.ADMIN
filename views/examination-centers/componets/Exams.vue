@@ -94,7 +94,7 @@ onMounted(() => {
           class="font-bold"
           >
             <Icon name="ph:users-duotone" class="size-6 me-2" />
-            الطلاب المتقدمين
+            المسجلين المتقدمين
           </BaseButton>
           </div>
         </template>

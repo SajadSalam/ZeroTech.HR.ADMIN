@@ -47,22 +47,24 @@ function animateValue(target: number, duration = 3000) {
 }
 
 onMounted(() => {
-    if (!props.noCounting && typeof props.value === 'number') {
-        animateValue(props.value);
-    } else {
-        displayValue.value = props.value;
-    }
+    // if (!props.noCounting && typeof props.value === 'number') {
+    //     animateValue(props.value);
+    // } else {
+    //     displayValue.value = props.value;
+    // }
+    displayValue.value = props.value;
+
 });
 
 // Optional: reactively animate if value changes
 watch(
     () => props.value,
     (newVal) => {
-        if (!props.noCounting && typeof newVal === 'number') {
-            animateValue(newVal);
-        } else {
+        // if (!props.noCounting && typeof newVal === 'number') {
+        //     animateValue(newVal);
+        // } else {
             displayValue.value = newVal;
-        }
+        // }
     }
 );
 

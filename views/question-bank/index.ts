@@ -1,12 +1,8 @@
 import type { TableHeader } from '@/components/app-table/types'
 import {
-    AuditStatus,
     Difficulty,
     KnowledgeLevel,
-    QuestionType,
-    type Question,
 } from '~/views/question-bank/types/question'
-import type { QuestionBankDto } from './types'
 
 export const tableHeader = (t: (key: string) => string) => {
   return [
@@ -34,11 +30,11 @@ export const tableHeader = (t: (key: string) => string) => {
       label: t('question-count'),
       icon: 'lucide:activity',
     },
-    {
-      key: 'categories',
-      label: t('categories'),
-      icon: 'lucide:tag',
-    },
+    // {
+    //   key: 'categories',
+    //   label: t('categories'),
+    //   icon: 'lucide:tag',
+    // },
     {
       key: 'creationPeriod',
       label: t('creation-period'),

@@ -57,11 +57,13 @@ onMounted(() => {
 watch(
     () => props.value,
     (newVal) => {
-        if (!props.noCounting && typeof newVal === 'number') {
-            animateValue(newVal);
-        } else {
-            displayValue.value = newVal;
-        }
+        // if (!props.noCounting && typeof newVal === 'number') {
+        //     animateValue(newVal);
+        // } else {
+        //     displayValue.value = newVal;
+        // }
+        displayValue.value = newVal;
+
     }
 );
 </script>

@@ -16,7 +16,6 @@ import {
 } from '~/views/question-bank/types/index'
 definePageMeta({
   title: 'question-bank-schedule',
-  description: 'to-create-groups-of-questions',
 })
 
 const questionBankStore = useQuestionBankStore()

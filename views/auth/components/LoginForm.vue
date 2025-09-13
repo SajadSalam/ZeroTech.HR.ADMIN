@@ -44,7 +44,7 @@ onMounted(() => {})
 
 <template>
   <form @submit.prevent="login">
-    <div class="w-100% flex flex-col gap-3 !text-black">
+    <div class="w-[100%] flex flex-col gap-3 !text-black">
       <AppInputField
         v-model="validator.validation.value.email.$model"
         :errors="validator.validation.value.email.$errors"
@@ -70,7 +70,6 @@ onMounted(() => {})
         <BaseButton :loading="isLoading" type="submit" class="w-full" color="primary">
           {{ $t('login') }}
         </BaseButton>
-        <ChangeLocale />
       </div>
     </div>
   </form>

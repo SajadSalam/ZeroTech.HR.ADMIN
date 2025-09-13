@@ -15,7 +15,14 @@ interface AppConfig {
 const app = useAppConfig() as AppConfig
 const auth = useAuthStore()
 const router = useRouter()
+
+const i18n = useI18n()
 onMounted(async () => {
+    if (i18n.locale.value === 'en') {
+        i18n.locale.value = 'ar';
+        localStorage.setItem('locale', i18n.locale.value);
+        window.location.reload();
+    }
   if (auth.isLogged && auth.userPrivileges.length == 0) {
     await auth.fetchUserPrivileges()
   }
@@ -36,8 +43,9 @@ onMounted(async () => {
         router.push(expectedRoute)
         }
     }
+
+   
 })
-const i18n = useI18n()
 useHead({
   titleTemplate: (titleChunk) => {
     //

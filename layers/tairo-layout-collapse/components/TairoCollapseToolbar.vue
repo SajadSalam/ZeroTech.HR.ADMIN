@@ -36,13 +36,12 @@ const showNavBurger = computed(() => {
           {{ $t(route.meta.title ?? 'home-page') }}
         </slot>
       </BaseHeading>
-      <span class="text-sm text-muted-500">
+      <span v-if="route.meta.description" class="text-sm text-muted-500">
         {{ $t(route.meta.description ?? 'this-is-the-home-page') }}
       </span>
     </div>
 
     <div class="ms-auto" />
-    <ChangeLocale />
     <Signature />
     <template v-for="tool of app.tairo?.collapse?.toolbar?.tools">
       <component
