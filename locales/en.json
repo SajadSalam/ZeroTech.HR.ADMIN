@@ -662,4 +662,14 @@
   "if-the-signature-is-not-clear-you-can-press-the-clear-button-to-try-again": "If the signature is not clear, you can press the clear button to try again",
   "after-completing-press-the-save-button-to-confirm-it-in-the-certificates": "After completing, press the save button to confirm it in the certificates",
   "student-status": "Student status",
+  "generate-supervisor-otp": "Generate Supervisor OTP",
+  "supervisor-otp-title": "Generate Supervisor OTP",
+  "supervisor-otp-description": "Click the button below to generate a one-time password for supervisor access",
+  "generating-supervisor-otp": "Generating supervisor OTP...",
+  "supervisor-otp-generated": "Supervisor OTP Generated Successfully!",
+  "supervisor-otp-code": "Supervisor OTP Code",
+  "supervisor-otp-instructions": "Share this code with the supervisor for authentication",
+  "generate-new-otp": "Generate New OTP",
+  "try-again": "Try Again",
+  "close": "Close"
 }

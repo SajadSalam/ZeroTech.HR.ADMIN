@@ -67,10 +67,19 @@ axiosIns.interceptors.response.use(
     },
     (error) => {
         // Handle error
-        useToast({
-            title: error.response.data.message,
-            isError: true
-        })
+        if(error.response.data.message){
+            useToast({
+                title: error.response.data.message,
+                message: error.response.data.message,
+                isError: true
+            })
+        } else {
+            useToast({
+                title: 'حدث خطا',
+                message: "حدث خطأ , يرجى المحاولة مرة أخرى",
+                isError: true
+            })
+        }
         // if (!error.response || error.response.status === 401) {
         //
         //   useAppUserStore().user = {}

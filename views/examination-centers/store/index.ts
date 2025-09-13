@@ -14,6 +14,7 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
   const isAssignExamCenterManagerDialogOpen = ref(false)
   const isGenerateOTPDialogOpen = ref(false)
   const isManagerSignatureDialogOpen = ref(false)
+  const isSupervisorOTPDialogOpen = ref(false)
   const filters = ref<BaseFilters>({
     search: '',
     pageSize: 10,
@@ -182,6 +183,18 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
     }
   }
 
+  const generateSupervisorOTP = async (): Promise<{ otp: string }> => {
+    try {
+      isLoading.value = true
+      const response = await examinationCenterService.generateSupervisorOTP()
+      return response
+    } catch (error) {
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     examinationCenters,
     isLoading,
@@ -206,6 +219,8 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
     getHallStatistics,
     getProgressStudents,
     setManagerSignature,
-    isManagerSignatureDialogOpen
+    isManagerSignatureDialogOpen,
+    isSupervisorOTPDialogOpen,
+    generateSupervisorOTP
   }
 })

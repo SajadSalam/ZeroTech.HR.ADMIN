@@ -87,4 +87,9 @@ export class ExaminationCenterService implements IExaminationCenterService {
       }
     })
   }
+
+  async generateSupervisorOTP(): Promise<{ otp: string }> {
+    const response = await axios.get('/externalstudentexam/generate-supervisor-otp')
+    return response.data
+  }
 }

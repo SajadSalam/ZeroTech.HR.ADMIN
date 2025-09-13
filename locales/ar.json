@@ -683,4 +683,14 @@
   "if-the-signature-is-not-clear-you-can-press-the-clear-button-to-try-again": "إذا لم يكن التوقيع واضحاً، يمكنك الضغط على زر المسح للمحاولة مرة أخرى",
   "after-completing-press-the-save-button-to-confirm-it-in-the-certificates": "بعد الانتهاء، اضغط على زر الحفظ لتأكيده في الشهادات",
   "student-status": "حالة الطالب في الامتحان",
+  "generate-supervisor-otp": "إنشاء رمز المشرف لأنهاء الامتحان",
+  "supervisor-otp-title": "إنشاء رمز المشرف",
+  "supervisor-otp-description": "انقر على الزر أدناه لإنشاء كلمة مرور لمرة واحدة للوصول للمشرف",
+  "generating-supervisor-otp": "جارٍ إنشاء رمز المشرف...",
+  "supervisor-otp-generated": "تم إنشاء رمز المشرف بنجاح!",
+  "supervisor-otp-code": "رمز المشرف",
+  "supervisor-otp-instructions": "شارك هذا الرمز مع المشرف للمصادقة",
+  "generate-new-otp": "إنشاء رمز جديد",
+  "try-again": "حاول مرة أخرى",
+  "close": "إغلاق"
 }

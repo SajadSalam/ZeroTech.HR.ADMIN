@@ -1,12 +1,12 @@
 <script setup lang="ts">
 definePageMeta({
-    title: 'examination-center-hall',
-    description: 'manage-examination-center-hall',
+    title: 'مراقبة الامتحان الحالي في القاعة',
 })
 import { useI18n } from 'vue-i18n'
 import ExamTimer from '~/components/ExamTimer.vue'
 import type { BaseFilters } from '~/utils/types/ApiResponses'
 import GenerateOTP from '~/views/examination-centers/componets/GenerateOTP.vue'
+import SupervisorOTP from '~/views/examination-centers/componets/SupervisorOTP.vue'
 import { useExaminationCenters } from '~/views/examination-centers/store'
 import { examPresentStatus, examStudentStatus, progressHeaders, type ProgressStatistics, type ProgressStudent } from '~/views/examination-centers/types/progress'
 import type { StudentTicket, StudentTicketFilters } from '~/views/examination-centers/types/ticket'
@@ -15,12 +15,23 @@ const { id } = useRoute().params
 
 const examinationCenterStore = useExaminationCenters()
 
+const isLoading = computed(() => examinationCenterStore.isLoading)
+
 const isGenerateOTPDialogOpen = computed({
     get() {
         return examinationCenterStore.isGenerateOTPDialogOpen
     },
     set(value: boolean) {
         examinationCenterStore.isGenerateOTPDialogOpen = value
+    }
+})
+
+const isSupervisorOTPDialogOpen = computed({
+    get() {
+        return examinationCenterStore.isSupervisorOTPDialogOpen
+    },
+    set(value: boolean) {
+        examinationCenterStore.isSupervisorOTPDialogOpen = value
     }
 })
 
@@ -112,9 +123,9 @@ const students = ref<ProgressStudent[]>([])
                     </h1>
                 </div>
                 <div class="flex items-center gap-2">
-                    <BaseButton color="danger" variant="pastel" @click="isGenerateOTPDialogOpen = true">
-                        <Icon name="ph:x-circle-duotone" class="size-4" />
-                        {{ $t('report-issue') }}
+                    <BaseButton color="primary" variant="pastel" @click="isSupervisorOTPDialogOpen = true">
+                        <Icon name="ph:key-duotone" class="size-4" />
+                        {{ $t('generate-supervisor-otp') }}
                     </BaseButton>
                     <BaseButton color="primary" @click="isGenerateOTPDialogOpen = true">
                         <Icon name="ph:qr-code-duotone" class="size-4" />
@@ -236,5 +247,6 @@ const students = ref<ProgressStudent[]>([])
         </AppTable>
     </AppCrud>
     <GenerateOTP />
+    <SupervisorOTP />
 
 </template>
