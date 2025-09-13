@@ -43,6 +43,7 @@ const showNavBurger = computed(() => {
 
     <div class="ms-auto" />
     <ChangeLocale />
+    <Signature />
     <template v-for="tool of app.tairo?.collapse?.toolbar?.tools">
       <component
         :is="resolveComponentOrNative(tool.component)"
