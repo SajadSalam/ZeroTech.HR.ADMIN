@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useAppToaster } from '../toaster/toaster'
+import { useToast } from '~/composables/toaster'
 
 export const baseURL = 'http://192.168.50.157:5002/'
 // export const baseURL = 'https://ums-national-ems-api-dev.mohesr.net/'
@@ -54,7 +54,12 @@ axiosIns.interceptors.response.use(
             if (response.config.url !== '/file/multi') {
                 const method = response.config.method
                 if (method && ['post', 'put', 'delete'].includes(method)) {
-                    useAppToaster().show('success', getSuccessMessage(method))
+                    useToast(
+                        {
+                            title: getSuccessMessage(method),
+                            isError: false
+                        }
+                    )
                 }
             }
         }
@@ -62,7 +67,10 @@ axiosIns.interceptors.response.use(
     },
     (error) => {
         // Handle error
-        useAppToaster().show('danger', error.response.data.message)
+        useToast({
+            title: error.response.data.message,
+            isError: true
+        })
         // if (!error.response || error.response.status === 401) {
         //
         //   useAppUserStore().user = {}

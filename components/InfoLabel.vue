@@ -46,11 +46,11 @@ function animateValue(target: number, duration = 3000) {
 }
 
 onMounted(() => {
-    if (!props.noCounting && typeof props.value === 'number') {
-        animateValue(props.value);
-    } else {
+    // if (!props.noCounting && typeof props.value === 'number') {
+    //     animateValue(props.value);
+    // } else {
         displayValue.value = props.value;
-    }
+    // }
 });
 
 // Optional: reactively animate if value changes
@@ -67,10 +67,10 @@ watch(
 </script>
 
 <template>
-    <div class="bg-white p-4 gap-6 rounded-2xl flex items-center shadow-sm border-0" style="border-radius: 16px;">
+    <div class="bg-white p-4 gap-6 rounded-2xl flex items-center  border-0" style="border-radius: 16px;">
         <!-- Icon Container -->
         <div class="flex-shrink-0 rounded-full p-4 flex items-center justify-center" style="background-color: rgba(117, 13, 2, 0.1);">
-            <Icon :name="icon" class="size-8 text-[#750D02]" />
+            <Icon :name="icon" class="size-6 text-[#750D02]" />
         </div>
 
         <!-- Content -->

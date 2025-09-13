@@ -29,6 +29,9 @@ async function getBookedStudents() {
     if (examId) {
         filters.value.examId = examId as string
     }
+    if(id) {
+        filters.value.examCenterId = id as string
+    }
     const response = await examinationCenterStore.getBookedStudents(filters.value)
     students.value = response
     total.value = response.pagesCount

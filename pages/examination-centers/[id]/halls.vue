@@ -5,6 +5,7 @@ import GenerateOTP from '~/views/examination-centers/componets/GenerateOTP.vue'
 import HallView from '~/views/examination-centers/halls/components/HallView.vue'
 import { useExaminationCenters } from '~/views/examination-centers/store'
 import type { ExamCenterStatistics } from '~/views/examination-centers/types'
+import ManagerSignature from '~/views/examination-centers/componets/ManagerSignature.vue'
 
 definePageMeta({
   title: 'halls',
@@ -20,6 +21,15 @@ const isGenerateOTPDialogOpen = computed({
   },
   set(value: boolean) {
     examinationCenterStore.isGenerateOTPDialogOpen = value
+  }
+})
+
+const isManagerSignatureDialogOpen = computed({
+  get() {
+        return examinationCenterStore.isManagerSignatureDialogOpen
+  },
+  set(value: boolean) {
+      examinationCenterStore.isManagerSignatureDialogOpen = value
   }
 })
 const examinationCenter = ref<any>(null)
@@ -49,11 +59,13 @@ onMounted(() => {
 <template>
   <div class="flex flex-col gap-4">
     <div class="flex  items-center justify-between gap-2 my-5">
-      <h1 class="text-2xl font-bold">{{ $t('exam-center') }} {{ examinationCenter?.name }} - {{ $t('halls') }} </h1>
-      <BaseButton color="primary" @click="isGenerateOTPDialogOpen = true">
-        <Icon name="ph:qr-code-duotone" class="size-4" />
-        {{ $t('generate-otp') }}
-      </BaseButton>
+      <h1 class="text-2xl font-bold">{{ examinationCenter?.name }} - {{ $t('halls') }} </h1>
+      <div class="flex items-center gap-2">
+        <BaseButton color="primary" @click="isGenerateOTPDialogOpen = true">
+          <Icon name="ph:qr-code-duotone" class="size-4" />
+          {{ $t('generate-otp') }}
+        </BaseButton>
+      </div>
     </div>
     
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -76,5 +88,6 @@ onMounted(() => {
     
     <HallView />
     <GenerateOTP />
+    <ManagerSignature :exam-center-id="id" />
   </div>
 </template>

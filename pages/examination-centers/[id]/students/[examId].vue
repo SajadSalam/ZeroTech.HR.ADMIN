@@ -33,7 +33,7 @@ const statistics = ref({
 <template>
   <div class="flex flex-col gap-4">
     <div class="flex flex-col gap-4">
-      <h1 class="text-2xl font-bold">{{ $t('exam-center') }} {{ examinationCenter?.name }} - {{ $t('students') }}</h1>
+      <h1 class="text-2xl font-bold">{{ examinationCenter?.name }} - {{ $t('students') }}</h1>
     </div>
     
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">

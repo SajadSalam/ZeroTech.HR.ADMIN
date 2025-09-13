@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { useAuthStore } from '~/views/auth/store/auth'
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
+import { useAuthStore } from '~/views/auth/store/auth';
 
 const props = defineProps<{
     horizontal?: boolean
@@ -33,7 +33,7 @@ const role = computed(
                     >
                         <img
                             src="/img/avatars/2.svg"
-                            class="max-w-full rounded-full object-cover shadow-sm dark:border-transparent"
+                            class="max-w-full rounded-full object-cover  dark:border-transparent"
                             alt=""
                         />
                     </div>
@@ -63,7 +63,7 @@ const role = computed(
                             >
                                 <img
                                     src="/img/avatars/2.svg"
-                                    class="max-w-full rounded-full object-cover shadow-sm dark:border-transparent"
+                                    class="max-w-full rounded-full object-cover  dark:border-transparent"
                                     alt=""
                                 />
                             </div>

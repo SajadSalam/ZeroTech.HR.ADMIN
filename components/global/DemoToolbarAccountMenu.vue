@@ -28,7 +28,7 @@ console.log('orgStructure', orgStructure.value)
                     >
                         <img
                             src="/img/avatars/3.svg"
-                            class="max-w-full z-40 rounded-full object-cover shadow-sm dark:border-transparent"
+                            class="max-w-full z-40 rounded-full object-cover  dark:border-transparent"
                             alt=""
                         />
                         <div class="absolute -left-1 bg-white w-3 h-4 z-20" />
@@ -69,7 +69,7 @@ console.log('orgStructure', orgStructure.value)
                         >
                             <img
                                 src="/img/avatars/2.svg"
-                                class="max-w-full rounded-full object-cover shadow-sm dark:border-transparent"
+                                class="max-w-full rounded-full object-cover  dark:border-transparent"
                                 alt=""
                             />
                         </div>

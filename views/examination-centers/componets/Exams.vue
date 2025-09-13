@@ -66,6 +66,10 @@ const toggleExamStatus = async (examId: string,isRejected: boolean) => {
     await getExams()
     isLoading.value = false
 }
+
+onMounted(() => {
+    getExams()
+})
 </script>
 <template>
     <div v-if="isLoading">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 </script>
 
 <template>
@@ -39,7 +39,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
                   : 'text-muted-500',
               ]" @click.passive="close">
               <div class="relative inline-flex size-9 items-center justify-center rounded-full">
-                <img src="/img/avatars/12.svg" class="max-w-full rounded-full object-cover shadow-sm " alt="" />
+                <img src="/img/avatars/12.svg" class="max-w-full rounded-full object-cover  " alt="" />
               </div>
               <div class="ms-2">
                 <h6 class="font-heading text-muted-800 text-xs font-semibold leading-tight dark:text-white">

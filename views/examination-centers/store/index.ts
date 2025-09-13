@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import type { BaseFilters, PaginatedResponse } from '~/utils/types/ApiResponses'
 import { ExaminationCenterService } from '../service'
 import type { ExamCenterStatistics, ExaminationCenter, ExaminationCenterDto, OtpResponse } from '../types'
+import type { ProgressStatistics, ProgressStudent } from '../types/progress'
 import type { StudentTicket } from '../types/ticket'
 const examinationCenterService = new ExaminationCenterService()
 export const useExaminationCenters = defineStore('examinationCenters', () => {
@@ -12,6 +13,7 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
   const isEditDialogOpen = ref(false)
   const isAssignExamCenterManagerDialogOpen = ref(false)
   const isGenerateOTPDialogOpen = ref(false)
+  const isManagerSignatureDialogOpen = ref(false)
   const filters = ref<BaseFilters>({
     search: '',
     pageSize: 10,
@@ -147,6 +149,39 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
     }
   }
 
+  const getHallStatistics = async (id: string): Promise<ProgressStatistics> => {
+    try {
+      isLoading.value = true
+      const response = await examinationCenterService.getHallStatistics(id)
+      return response
+    } catch (error) {
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const getProgressStudents = async (id: string, filters: BaseFilters): Promise<PaginatedResponse<ProgressStudent>> => {
+    try {
+      isLoading.value = true
+      const response = await examinationCenterService.getProgressStudents(id, filters)
+      return response
+    } catch (error) {
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const setManagerSignature = async (id: string, signatureFile: File): Promise<void> => {
+    try {
+      isLoading.value = true
+      await examinationCenterService.setManagerSignature(id, signatureFile)
+    } catch (error) {
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     examinationCenters,
     isLoading,
@@ -167,6 +202,10 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
     isGenerateOTPDialogOpen,
     checkIn,
     getBookedStudents,
-    getExamCenterStatistics
+    getExamCenterStatistics,
+    getHallStatistics,
+    getProgressStudents,
+    setManagerSignature,
+    isManagerSignatureDialogOpen
   }
 })

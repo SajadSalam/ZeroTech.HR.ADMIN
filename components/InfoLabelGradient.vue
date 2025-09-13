@@ -69,9 +69,9 @@ watch(
 // Computed classes based on variant
 const containerClasses = computed(() => {
     if (props.variant === 'gradient') {
-        return 'p-4 gap-6 rounded-2xl flex items-center shadow-sm border-0 bg-gradient-to-b from-[#A01E11] to-[#750D02]';
+        return 'p-4 gap-6 rounded-2xl flex items-center  border-0 bg-gradient-to-b from-[#A01E11] to-[#750D02]';
     }
-    return 'bg-white p-4 gap-6 rounded-2xl flex items-center shadow-sm border-0';
+    return 'bg-white p-4 gap-6 rounded-2xl flex items-center  border-0';
 });
 
 const iconBgClasses = computed(() => {
@@ -83,9 +83,9 @@ const iconBgClasses = computed(() => {
 
 const iconClasses = computed(() => {
     if (props.variant === 'gradient') {
-        return 'size-8 text-white';
+        return 'size-6 text-white';
     }
-    return 'size-8 text-[#750D02]';
+    return 'size-6 text-[#750D02]';
 });
 
 const labelClasses = computed(() => {

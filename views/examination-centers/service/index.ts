@@ -2,6 +2,7 @@ import axios from '~/services/app-client/axios'
 import type { BaseFilters, PaginatedResponse } from '~/utils/types/ApiResponses'
 import type { ExamDto } from '~/views/exams/types'
 import type { ExamCenterStatistics, ExaminationCenter, ExaminationCenterDto, OtpResponse } from '../types'
+import type { ProgressStatistics } from '../types/progress'
 interface IExaminationCenterService {
   get: (filters: BaseFilters) => Promise<PaginatedResponse<ExaminationCenterDto>>
   create: (data: ExaminationCenter) => Promise<ExaminationCenterDto>
@@ -65,5 +66,25 @@ export class ExaminationCenterService implements IExaminationCenterService {
   async getExamCenterStatistics(id: string): Promise<ExamCenterStatistics> {
     const response = await axios.get<ExamCenterStatistics>(`/exam-center/${id}/statistics`)
     return response.data
+  }
+
+  async getHallStatistics(id: string): Promise<ProgressStatistics> {
+    const response = await axios.get<ProgressStatistics>(`/external-student-exam/hall/${id}/statistics`)
+    return response.data
+  }
+
+  async getProgressStudents(id: string, filters: BaseFilters): Promise<PaginatedResponse<ProgressStudent>> {
+    const response = await axios.get<PaginatedResponse<ProgressStudent>>(`/external-student-exam/hall/${id}/students`, { params: filters })
+    return response.data
+  }
+
+  async setManagerSignature(id: string, signatureFile: File): Promise<void> {
+    const formData = new FormData()
+    formData.append('File', signatureFile)
+    await axios.post(`/exam-center/${id}/signature`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
   }
 }

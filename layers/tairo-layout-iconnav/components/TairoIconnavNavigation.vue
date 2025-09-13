@@ -50,12 +50,12 @@ const filteredMenuItems = menuItems.value!.filter((item) => isUserInRole(item.ro
     >
       <!-- Flex container -->
       <div class="flex h-20 w-full items-center justify-between">
+
         <!-- Logo -->
         <div class="w-1/5 md:w-1/4">
           <slot />
         </div>
         <!-- Menu Items -->
-
         <div
           class="border-1 hidden justify-between gap-x-3 overflow-hidden rounded-3xl border-white bg-white lg:flex ltablet:flex"
         >
@@ -97,7 +97,7 @@ const filteredMenuItems = menuItems.value!.filter((item) => isUserInRole(item.ro
                 <Icon :name="item.icon.name" :class="item.icon.class" />
               </div>
               <p class="w-full text-center text-xs text-muted-400">
-                {{ item.name }}
+                {{ item.name }}ss
               </p>
             </button>
             <NuxtLink

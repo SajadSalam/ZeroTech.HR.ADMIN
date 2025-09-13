@@ -1,5 +1,5 @@
 import { AuthService } from '../service'
-import type { AuthResponse, LoginBody, RegisterBody, UserPrivilege } from '../types'
+import type { AuthResponse, LoginBody, UserPrivilege } from '../types'
 
 const authService = new AuthService()
 export const useAuthStore = defineStore('auth-store', () => {
@@ -23,6 +23,7 @@ export const useAuthStore = defineStore('auth-store', () => {
       return role.some((r) => userData.value.roles.findIndex((rl) => rl.slug === r) != -1)
     return userData.value.roles.findIndex((r) => r.slug === role) != -1
   }
+  
 
   const login = async (body: LoginBody) => {
     try {

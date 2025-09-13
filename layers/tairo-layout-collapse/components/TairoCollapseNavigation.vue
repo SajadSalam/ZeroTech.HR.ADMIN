@@ -5,13 +5,31 @@ import { useCollapse } from '../composables/collapse'
 const { isOpen, isMobileOpen, menuItems } = useCollapse()
 const app = useAppConfig()
 const {locale} = useI18n()
+const authStore = useAuthStore()
+
+const isUserHasRole = (role: string | string[]) => {
+
+    return authStore.hasRole(role)
+}
 const startMenuItems = computed(() =>
+
     menuItems.value?.filter((sidebar) => !sidebar.position || sidebar.position === 'start')
 )
 const endMenuItems = computed(() =>
     menuItems.value?.filter((sidebar) => sidebar.position === 'end')
 )
-const authStore = useAuthStore()
+
+const hasRoleOrPrivilege = (item: any) => {
+    if(!item.role && !item.privilege) return true
+    if (item.role) {
+        return isUserHasRole(item.role)
+    }
+    if (item.privilege) {
+        return authStore.hasPrivilege(item.privilege)
+    }
+}
+
+
 </script>
 
 <template>
@@ -32,7 +50,7 @@ const authStore = useAuthStore()
             <ul v-if="startMenuItems?.length" class="space-y-2">
                 <!--Menu item-->
                 <template v-for="(item, index) in startMenuItems">
-                    <li v-if="item.privilege ? authStore.hasPrivilege(item.privilege) : true" :key="index">
+                    <li v-if="hasRoleOrPrivilege(item)" :key="index">
                         <component :is="resolveComponentOrNative(item?.component?.name)" v-if="item?.component?.name"
                             v-bind="item?.component?.props" />
                         <TairoCollapseNavigationCollapseLinks v-else-if="item.children" :item="item" :expanded="isOpen"

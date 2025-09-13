@@ -26,7 +26,7 @@ onMounted(() => {
 <template>
   <div class="flex flex-col gap-4">
     <div class="flex flex-col gap-4">
-      <h1 class="text-2xl font-bold">{{ $t('exam-center') }} {{ examinationCenter?.name }} - {{ $t('statistics') }}</h1>
+      <h1 class="text-2xl font-bold">{{ examinationCenter?.name }} - {{ $t('statistics') }}</h1>
     </div>
     <Statistics />
   </div>

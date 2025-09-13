@@ -142,7 +142,7 @@ watch(
             </template>
 
             <div class="col-span-12 mt-5 sm:col-span-3 ptablet:col-span-6">
-              <div class="flex w-fit items-center gap-4 p-4 shadow-sm">
+              <div class="flex w-fit items-center gap-4 p-4 ">
                 <Icon name="ph:thumbs-up-duotone" class="size-7 text-primary-500" />
                 <div>
                   <BaseHeading
