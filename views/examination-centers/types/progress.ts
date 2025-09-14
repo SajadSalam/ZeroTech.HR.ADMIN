@@ -9,6 +9,8 @@ export interface ProgressStatistics {
     examStartDate:          string;
     examTime:               string;
     remainingStartExamTime: string;
+    remainingTimeToStartExam: number;
+    remainingTimeToEndExam: number;
 }
 
 export const progressHeaders = (t: any) => [
@@ -43,6 +45,11 @@ export const progressHeaders = (t: any) => [
         key: 'examStatus',
         icon: 'ph:check-circle-duotone',
     },
+    {
+        label: t('actions'),
+        key: 'actions',
+        icon: 'ph:dots-three-vertical-duotone',
+    },
    
 ]
 
@@ -56,6 +63,9 @@ export interface ProgressStudent {
     timeRemaining: string;
     examStatus: ExamStudentStatus;
     examPresentStatus: ExamPresentStatus;
+    studentExamTicketId: string;
+    studentId: number;
+    studentName: string;
 }
 
 export enum ExamStudentStatus
@@ -63,6 +73,7 @@ export enum ExamStudentStatus
     NotStarted = 0,
     InProgress = 1,
     Completed = 2,
+    Cheating = 3
 }
 
 
@@ -88,6 +99,11 @@ export const examStudentStatus = (t: any) => [
         value: ExamStudentStatus.Completed,
         color: 'success',
     },
+    {
+        label: t('cheating'),
+        value: ExamStudentStatus.Cheating,
+        color: 'warning',
+    }
 ]
 
 export const examPresentStatus = (t: any) => [

@@ -7,6 +7,7 @@ import ExamTimer from '~/components/ExamTimer.vue'
 import type { BaseFilters } from '~/utils/types/ApiResponses'
 import GenerateOTP from '~/views/examination-centers/componets/GenerateOTP.vue'
 import SupervisorOTP from '~/views/examination-centers/componets/SupervisorOTP.vue'
+import BlacklistStudent from '~/views/examination-centers/componets/BlacklistStudent.vue'
 import { useExaminationCenters } from '~/views/examination-centers/store'
 import { examPresentStatus, examStudentStatus, progressHeaders, type ProgressStatistics, type ProgressStudent } from '~/views/examination-centers/types/progress'
 import type { StudentTicket, StudentTicketFilters } from '~/views/examination-centers/types/ticket'
@@ -58,7 +59,8 @@ const statistics = ref<ProgressStatistics>({
     examStartDate: '',
     examTime: '',
     remainingStartExamTime: '',
-    remainingTimeToStartExam:0,
+    remainingTimeToStartExam: 0,
+    remainingTimeToEndExam: 0,
 })
 const { t } = useI18n()
 
@@ -108,6 +110,12 @@ onUnmounted(() => {
 })
 
 const students = ref<ProgressStudent[]>([])
+
+// Handle ending exam (blacklisting student)
+const endExam = (student: ProgressStudent) => {
+    examinationCenterStore.selectedStudentForBlacklist = student
+    examinationCenterStore.isBlacklistStudentDialogOpen = true
+}
 </script>
 
 <template>
@@ -219,11 +227,7 @@ const students = ref<ProgressStudent[]>([])
 
         <AppTable :loading="isLoading" title="Students" :items="students" :headers="progressHeaders($t)" :total="total"
             :pageNumber="filters.pageNumber" :pageSize="filters.pageSize" @page-change="getProgressStudents">
-            <template #data-actions="">
-                <div class="flex items-center gap-3">
-
-                </div>
-            </template>
+          
             <template #data-examStatus="{ item }">
                 <BaseTag :color="examStudentStatus(t)?.find(status => status.value === item.examStatus)?.color"
                     variant="pastel">
@@ -244,9 +248,18 @@ const students = ref<ProgressStudent[]>([])
                     {{ statusLabel(item.status)?.label }}
                 </BaseTag>
             </template> -->
+            <template #data-actions="{ item }">
+                <div class="flex items-center gap-3">
+                    <BaseButton color="primary"  @click="endExam(item)">
+                        <Icon name="ph:x-circle-duotone" class="size-6 me-2" />
+                        {{ $t('mark-as-cheating') }}
+                    </BaseButton>
+                </div>
+            </template>
         </AppTable>
     </AppCrud>
     <GenerateOTP />
     <SupervisorOTP />
+    <BlacklistStudent />
 
 </template>

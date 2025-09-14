@@ -15,6 +15,8 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
   const isGenerateOTPDialogOpen = ref(false)
   const isManagerSignatureDialogOpen = ref(false)
   const isSupervisorOTPDialogOpen = ref(false)
+  const isBlacklistStudentDialogOpen = ref(false)
+  const selectedStudentForBlacklist = ref<any>(null)
   const filters = ref<BaseFilters>({
     search: '',
     pageSize: 10,
@@ -195,6 +197,17 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
     }
   }
 
+  const blacklistStudent = async (data: { ticketId: string; reason: string }): Promise<void> => {
+    try {
+      isLoading.value = true
+      await examinationCenterService.blacklistStudent(data)
+    } catch (error) {
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     examinationCenters,
     isLoading,
@@ -221,6 +234,9 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
     setManagerSignature,
     isManagerSignatureDialogOpen,
     isSupervisorOTPDialogOpen,
-    generateSupervisorOTP
+    generateSupervisorOTP,
+    isBlacklistStudentDialogOpen,
+    selectedStudentForBlacklist,
+    blacklistStudent
   }
 })

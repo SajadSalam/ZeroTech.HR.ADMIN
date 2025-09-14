@@ -5,6 +5,11 @@ const defaultNavigation = [
     to: '/',
   },
   {
+    name: 'blacklist',
+    icon: { name: 'ph-user-minus-duotone', class: 'w-5 h-5' },
+    to: '/blacklist',
+  },
+  {
     name: 'questions-banks',
     icon: { name: 'ph-folders-duotone', class: 'w-5 h-5' },
     privilege: 'ums:ems:question-bank:view-any',

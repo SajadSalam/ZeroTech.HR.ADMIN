@@ -92,4 +92,8 @@ export class ExaminationCenterService implements IExaminationCenterService {
     const response = await axios.get('/externalstudentexam/generate-supervisor-otp')
     return response.data
   }
+
+  async blacklistStudent(data: { ticketId: string; reason: string }): Promise<void> {
+    await axios.post('/externalstudentblacklist', data)
+  }
 }
