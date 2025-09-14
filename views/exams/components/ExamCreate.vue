@@ -163,6 +163,8 @@ watch(
   (val: boolean) => {
     if (val) {
       validator.resetBody()
+      body.value.examType.$model = examTypesOptions(t)[0].value;
+
     }
   }
 )
@@ -176,7 +178,6 @@ const updateInstructions = (content: string) => {
 const updateExamType = (type: ExamType) => {
     body.value.examType.$model = type;
     window.setTimeout(() => {
-        body.value.examType.$model = type;
     }, 1300);
 }
 </script>

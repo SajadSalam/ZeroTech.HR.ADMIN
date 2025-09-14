@@ -67,7 +67,6 @@ const { hasPrivilege } = useAuthStore()
       :pagination="true"
       :total-pages="hallsStore.totalPages"
       :title="$t('halls')"
-      :hide-create="!hasPrivilege('ums:ems:examcenter:create')"
     >
       <!-- Search filter -->
       <template #filters>
@@ -83,8 +82,6 @@ const { hasPrivilege } = useAuthStore()
           <div class="flex gap-2 items-center">
             <AppCrudActions
             :delete-service="() => deleteHall(item)"
-            :hide-delete="!hasPrivilege('ums:ems:examcenter:delete')"
-            :hide-update="!hasPrivilege('ums:ems:examcenter:update')"
             :item="item"
             :edit-button-action="() => openEdit(item)"
           />

@@ -8,7 +8,7 @@ export const useDynamicNavigation = () => {
         name: 'back-to-examination-centers',
         icon: { name: 'ph-arrow-left-duotone', class: 'w-5 h-5' },
         to: '/examination-centers',
-        role:['ums@ems:exam-center-manager','ums@ems:superadmin']
+        role:['ums@ems:superadmin']
 
       },
       { divider: true },

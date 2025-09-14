@@ -31,7 +31,7 @@ onMounted(async () => {
     if (auth.isLogged && auth.userData.examCenter) {
         const expectedRoute = `/examination-centers/${auth.userData.examCenter.id}`
         const currentRoute = router.currentRoute.value.path
-        if (currentRoute !== expectedRoute) {
+        if (!currentRoute.includes(expectedRoute)) {
             router.push(expectedRoute + '/exams')
         }
     }
