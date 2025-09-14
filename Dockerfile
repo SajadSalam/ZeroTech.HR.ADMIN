@@ -24,6 +24,12 @@ RUN pnpm run generate
 # Stage 2: Serve with Nginx
 FROM nginx:1.25-alpine
 
+# Install tzdata for timezones
+RUN apk add --no-cache tzdata
+
+# Set timezone to Baghdad
+ENV TZ=Asia/Baghdad
+
 # Copy built files from the build stage
 COPY --from=build /app/.output/public /usr/share/nginx/html
 
