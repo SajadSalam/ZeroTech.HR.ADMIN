@@ -1,0 +1,83 @@
+<script setup lang="ts">
+import { useAuthStore } from '~/views/auth/store/auth';
+
+const props = defineProps<{
+    item: any
+    expanded?: boolean
+}>()
+const emit = defineEmits<{
+    clicked: []
+}>()
+const isOpen = ref(false)
+const route = useRoute()
+
+const isActive = computed(() => {
+  const currentItem = props.item
+  if (currentItem.children) {
+    currentItem.children.forEach((child) => {
+      if (route.path.search(child.to) != -1) {
+        isOpen.value = true
+        return true
+      }
+    })
+  }
+  return false
+})
+
+const buttonRef = ref<HTMLElement>()
+
+function onDropClick() {
+    isOpen.value = !isOpen.value
+    if (!isOpen.value) {
+        buttonRef.value?.blur()
+    }
+    emit('clicked')
+}
+const authStore = useAuthStore()
+</script>
+
+<template>
+    <div class="group">
+        <div v-if="props.item.children.filter(x => authStore.hasPrivilege(x.privilege)).length > 0" ref="buttonRef"
+            class="nui-focus text-white dark:text-muted-400/80 hover:bg-muted-100 dark:hover:bg-muted-700/60 hover:text-muted-600 dark:hover:text-muted-200 ursor-pointer  gap-4 rounded-lg py-3 transition-colors duration-300 flex justify-between items-center"
+            :class="props.expanded ? 'gap-4 px-4 ' : 'px-2 justify-center'"
+            :data-nui-tooltip="props.expanded ? undefined : item.name" data-nui-tooltip-position="end"
+            @click.stop.prevent="onDropClick">
+            <div class="flex items-center gap-2">
+                <Icon :name="item.icon.name" :class="[item.icon.class, isActive && 'text-primary-500']"
+                    class="shrink-0" />
+                <span class=" whitespace-nowrap font-sans text-sm" :class="[
+                    isActive && 'text-primary-500', 
+                    !props.expanded ? 'hidden' : 'block',
+                ]">
+                    {{ $t(item.name) }}
+                </span>
+            </div>
+            <span class=" items-center justify-center" :class="!props.expanded ? 'hidden' : 'flex'">
+                <Icon name="lucide:chevron-up" class="size-4 transition-transform duration-200"
+                    :class="!isOpen ? 'rotate-180' : ''" />
+            </span>
+        </div>
+
+        <ul v-if="props.expanded" class="border-muted-200 relative block ps-4" :class="{
+            'max-h-0 overflow-hidden opacity-0 group-focus-within:max-h-max group-focus-within:overflow-visible group-focus-within:opacity-100':
+                !isOpen,
+            'after:border-muted-200 max-h-max opacity-100': isOpen,
+        }">
+            <template v-for="child in props.item.children">
+                <li v-if="child.privilege ? authStore.hasPrivilege(child.privilege) : true" :key="child.to"
+                    class=" dark:border-muted-700 ms-2  text-md first:mt-2">
+                    <NuxtLink :to="child.to"
+                        exact-active-class="!bg-white/20 rounded-lg !border-white-500 !text-white dark:!text-white font-bold"
+                        class="nui-focus text-muted-300 hover:text-muted-600 dark:text-muted-400/80 dark:hover:text-muted-200 relative -start-0.5 flex cursor-pointer items-center gap-2 py-2 ps-4 transition-colors duration-300">
+                        <Icon :name="child.icon.name" :class="child.icon.class" class="shrink-0" />
+                        <span class="whitespace-nowrap font-sans text-[0.85rem]"
+                            :class="[!props.expanded ? 'hidden' : 'block']">
+                            {{ $t(child.name) }}
+                        </span>
+                    </NuxtLink>
+                </li>
+            </template>
+        </ul>
+    </div>
+</template>

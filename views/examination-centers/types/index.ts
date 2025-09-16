@@ -1,0 +1,44 @@
+import type { BaseDto } from '~/utils/types/base-dto'
+import type { Organization } from '~/views/orgaization/types'
+
+
+
+export interface ExaminationCenter {
+  name: string
+  isActive: boolean
+  collegeId: number
+  governorateId: number
+  maxCapacity: number
+}
+export type ExaminationCenterDto = ExaminationCenter &
+  BaseDto & {
+    college: Organization
+    collegeName: string
+  }
+export interface OtpResponse {
+    otp:            string;
+    ticketId:       string;
+    examTitle:      string;
+    examCenterName: string;
+    duration:       number;
+    studentId:      number;
+    studentName:    string;
+    studentEmail:   string;
+    documentNumber: string;
+    collegeName:    string;
+    ticketNumber:   string;
+    status:         number;
+    paymentDate:    string;
+    amount:         number;
+    notes:          string;
+    examDate:       string;
+}
+
+
+
+export interface ExamCenterStatistics {
+  numberOfHall: number
+  numberOfExams: number
+  numberOfStudents: number
+  amount: number
+}
