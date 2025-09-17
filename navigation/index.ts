@@ -43,7 +43,7 @@ const defaultNavigation = [
         name: 'blueprints',
         icon: { name: 'ph-file-archive-duotone', class: 'w-5 h-5' },
         to: '/blueprint',
-        privilege: 'ums:ems:examtemplate:view-any',
+        privilege: 'ums:ems:exam-template:view-any',
       },
 
       {
@@ -70,7 +70,7 @@ const defaultNavigation = [
         name: 'examination-centers',
         icon: { name: 'ph-building-duotone', class: 'w-5 h-5' },
         to: '/examination-centers',
-        privilege: 'ums:ems:examcenter:view-any',
+        privilege: 'ums:ems:exam-center:view-any',
       },
       {
         name: 'topics',
@@ -94,7 +94,7 @@ const defaultNavigation = [
         name: 'knowledgelevel',
         icon: { name: 'ph-folder-simple-duotone', class: 'w-5 h-5' },
         to: '/knowledgelevel',
-        // privilege: 'ums:ems:category:view-any',
+        privilege: 'ums:ems:knowledge-level:view-any',
       },
     ],
   },
