@@ -116,6 +116,18 @@ const fetchQuestionBank = async () => {
         clientId: generateGuid(),
       }
     }) || []
+
+    questions.value.forEach((x: Question) => {
+      if (x.type === QuestionType.Dialogue) {
+        x.subQuestions = x.subQuestions.map(( subQuestion: Question,index: number) => {
+          return {
+            ...subQuestion,
+            order: index + 1,
+            clientId: generateGuid(),
+          }
+        })
+      }
+    })
   topicTabs.value = questionBankStore.selectedQuestionBank?.questionBankTopics.map(
     (x: QuestionBankTopicDto) => {
       return { label: x.topic.name, value: x.topicId }

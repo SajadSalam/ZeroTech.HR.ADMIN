@@ -6,8 +6,6 @@ import {
     QuestionType,
     type Question,
 } from '~/views/question-bank/types/question'
-import { fakeData as subjects } from '../subjects'
-import { fakeData as topics } from '../topics'
 import type { QuestionBankDto } from './types'
 
 export const tableHeader = (t: (key: string) => string) => {
@@ -79,73 +77,6 @@ export const questionsTableHeaders = (t: (key: string) => string) => {
   ] as TableHeader[]
 }
 
-// Mock QuestionBank data
-export const fakeData: QuestionBankDto[] = [
-  {
-    title: 'Physics Core Topics',
-    id: '1',
-    creationDate: '2025-02-20',
-    deleted: false,
-    subject: subjects[0], // Physics
-    questionBankTopics: [topics[0], topics[1], topics[2]], // Topics: Mechanics, Thermodynamics, Optics
-  },
-  {
-    title: 'Advanced Physics - Quantum Mechanics',
-    id: '2',
-    creationDate: '2025-02-20',
-    deleted: false,
-    subject: subjects[0], // Physics
-    questionBankTopics: [topics[3]], // Topic: Quantum Mechanics
-  },
-  {
-    title: 'Mathematics Algebra',
-    id: '3',
-    creationDate: '2025-02-20',
-    deleted: false,
-    subject: subjects[1], // Mathematics
-    questionBankTopics: [topics[5]], // Topic: Algebra
-  },
-  {
-    title: 'Geometry and Trigonometry',
-    id: '4',
-    creationDate: '2025-02-20',
-    deleted: false,
-    subject: subjects[1], // Mathematics
-    questionBankTopics: [topics[6], topics[7]], // Topics: Geometry, Trigonometry
-  },
-  {
-    title: 'Organic Chemistry',
-    id: '5',
-    creationDate: '2025-02-20',
-    deleted: false,
-    subject: subjects[2], // Chemistry
-    questionBankTopics: [topics[9]], // Topic: Organic Chemistry
-  },
-  {
-    title: 'Physical and Inorganic Chemistry',
-    id: '6',
-    creationDate: '2025-02-20',
-    deleted: false,
-    subject: subjects[2], // Chemistry
-    questionBankTopics: [topics[10], topics[11]], // Topics: Inorganic Chemistry, Physical Chemistry
-  },
-  {
-    title: 'Introduction to Biology',
-    id: '7',
-    creationDate: '2025-02-20',
-    deleted: false,
-    subject: subjects[3], // Biology
-    questionBankTopics: [topics[13], topics[14]], // Topics: Zoology, Botany
-  },
-  {
-    title: 'Genetics and Ecology',
-    id: '8',
-    creationDate: '2025-02-20',
-    deleted: false,
-    subject: subjects[3], // Biology
-    questionBankTopics: [topics[15], topics[16]], // Topics: Genetics, Ecology
-  },
-]
 
 export const difficultyOptions = (t: (key: string) => string) => {
   return [

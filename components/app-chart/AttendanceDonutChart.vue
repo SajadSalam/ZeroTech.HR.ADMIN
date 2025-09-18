@@ -4,7 +4,7 @@
     <div class="flex flex-col items-start gap-1 mb-8">
       <span class="text-[#9291A5] text-lg font-normal">احصائية</span>
       <h3 class="text-[#1E1B39] font-bold text-[22px] leading-tight">
-        الحضور حسب العدد الكلي للطلبة
+        نسبة المسجلين
       </h3>
     </div>
 
@@ -26,7 +26,7 @@
         <!-- Center Content -->
         <div class="absolute inset-2 top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center">
           <span class="text-[#1E1B39] text-[20px] font-bold">1323209</span>
-          <span class="text-[#9291A5] text-base font-normal mb-2">العدد الكلي للطلبة</span>
+          <span class="text-[#9291A5] text-sm font-normal mb-2">العدد الكلي للممتحنين</span>
         </div>
       </div>
 
@@ -82,7 +82,7 @@ const chartOptions: ApexOptions = {
     '#CDD2E5', // الغياب - Light gray
     '#EBEDF6'  // Remaining - Very light gray
   ],
-  labels: ['الحضور', 'الغياب', 'الباقي'],
+  labels: ['الحضور', 'الغياب', 'مجدولين'],
   legend: {
     show: false // Using custom legend
   },
