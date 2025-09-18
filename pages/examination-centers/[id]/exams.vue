@@ -2,6 +2,7 @@
 
 import { useRoute } from 'vue-router'
 import Exams from '~/views/examination-centers/componets/Exams.vue'
+import DeactivateExamCenter from '~/views/examination-centers/componets/DeactivateExamCenter.vue'
 import { useExaminationCenters } from '~/views/examination-centers/store'
 import type { ExamCenterStatistics } from '~/views/examination-centers/types'
 
@@ -29,6 +30,10 @@ const getStatistics = async () => {
   const response = await examinationCenterStore.getExamCenterStatistics(id as string)
   statistics.value = response
 }
+const openDeactivateExamCenterDialog = () => {
+  examinationCenterStore.isDeactivateDialogOpen = true
+}
+
 onMounted(() => {
   getExaminationCenter()
   getStatistics()
@@ -37,8 +42,11 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col gap-4">
-    <div class="flex flex-col gap-4">
+    <div class="flex items-center justify-between gap-4">
       <h1 class="text-2xl font-bold">{{ examinationCenter?.name }} - {{ $t('exams') }}</h1>
+      <BaseButton color="primary" @click="openDeactivateExamCenterDialog">
+        {{ $t('deactivate-exam-center') }}
+      </BaseButton>
     </div>
     
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -60,5 +68,11 @@ onMounted(() => {
     </div>
     
     <Exams />
+    
+    <!-- Deactivation Dialog -->
+    <DeactivateExamCenter 
+      :exam-center-id="id as string" 
+      :exam-center-name="examinationCenter?.name" 
+    />
   </div>
 </template>

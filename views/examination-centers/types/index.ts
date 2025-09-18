@@ -42,3 +42,33 @@ export interface ExamCenterStatistics {
   numberOfStudents: number
   amount: number
 }
+
+export interface DeactivationRequest {
+  reason: string
+  deactivationDate: string
+}
+
+export interface DeactivationResponse {
+  message: string
+  deactivationPeriodId: string
+  affectedTickets: number
+  freeTakePointsGranted: number
+  studentsAffected: number
+  deactivationDate: string
+  reason: string
+}
+
+export interface DeactivationPeriod {
+  id: string
+  examCenterId: string
+  examCenterName: string
+  deactivationDate: string
+  deactivationReason: string
+  status: 'Active' | 'Completed' | 'Reactivated'
+  affectedTicketsCount: number
+  totalFreeTakePointsGranted: number
+  affectedStudentsCount: number
+  deactivatedByEmployeeName: string
+  reactivatedDate: string | null
+  creationDate: string
+}

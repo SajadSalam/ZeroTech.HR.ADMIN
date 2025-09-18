@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import type { BaseFilters, PaginatedResponse } from '~/utils/types/ApiResponses'
 import { ExaminationCenterService } from '../service'
-import type { ExamCenterStatistics, ExaminationCenter, ExaminationCenterDto, OtpResponse } from '../types'
+import type { ExamCenterStatistics, ExaminationCenter, ExaminationCenterDto, OtpResponse, DeactivationRequest, DeactivationResponse, DeactivationPeriod } from '../types'
 import type { ProgressStatistics, ProgressStudent } from '../types/progress'
 import type { StudentTicket } from '../types/ticket'
 const examinationCenterService = new ExaminationCenterService()
@@ -17,6 +17,9 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
   const isSupervisorOTPDialogOpen = ref(false)
   const isBlacklistStudentDialogOpen = ref(false)
   const selectedStudentForBlacklist = ref<any>(null)
+  const isDeactivateDialogOpen = ref(false)
+  const deactivationPeriods = ref<DeactivationPeriod[]>([])
+  const deactivationResponse = ref<DeactivationResponse | null>(null)
   const filters = ref<BaseFilters>({
     search: '',
     pageSize: 10,
@@ -208,6 +211,30 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
     }
   }
 
+  const deactivateExamCenter = async (examCenterId: string, data: DeactivationRequest): Promise<void> => {
+    try {
+      isLoading.value = true
+      const response = await examinationCenterService.deactivateExamCenter(examCenterId, data)
+      deactivationResponse.value = response
+    } catch (error) {
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const getDeactivationPeriods = async (examCenterId: string, filters?: { fromDate?: string; toDate?: string; status?: string }): Promise<void> => {
+    try {
+      isLoading.value = true
+      const response = await examinationCenterService.getDeactivationPeriods(examCenterId, filters)
+      deactivationPeriods.value = response
+    } catch (error) {
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     examinationCenters,
     isLoading,
@@ -237,6 +264,11 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
     generateSupervisorOTP,
     isBlacklistStudentDialogOpen,
     selectedStudentForBlacklist,
-    blacklistStudent
+    blacklistStudent,
+    isDeactivateDialogOpen,
+    deactivationPeriods,
+    deactivationResponse,
+    deactivateExamCenter,
+    getDeactivationPeriods
   }
 })
