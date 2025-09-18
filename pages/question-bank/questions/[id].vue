@@ -191,7 +191,7 @@ const currentTopicName = computed(() => {
 })
 </script>
 <template>
-  <div v-if="!questionBankStore.isLoading">
+  <div v-if="!questionBankStore.isLoading" class="min-h-screen mb-30">
     <div class="rounded-lg bg-white p-5">
       <div class="flex items-center justify-between">
         <div>

@@ -691,5 +691,18 @@
   "unblacklisted": "Unblacklisted",
   "all": "All",
   "view-details": "View Details",
-  "blacklist": "Black List"
+  "blacklist": "Black List",
+  "dialogue": "Dialogue",
+  "sub-questions": "Sub Questions",
+"sub-question": "Sub Question",
+"sub-question-title": "Sub Question Title",
+"add-sub-question": "Add Sub Question",
+"add-first-sub-question": "Add First Sub Question",
+"no-sub-questions": "No Sub Questions",
+"add-sub-questions-to-create-dialogue": "Add sub-questions to create a dialogue",
+"this-dialogue-has-no-sub-questions": "This dialogue has no sub-questions",
+"show-alternate-title": "Show Alternate Title",
+"alternate-title": "Alternate Title",
+"enter-alternate-title": "Enter Alternate Title",
+"no-answer-provided": "No answer provided"
 }

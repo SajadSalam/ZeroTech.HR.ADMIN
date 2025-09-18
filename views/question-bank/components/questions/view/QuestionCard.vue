@@ -43,7 +43,7 @@ const { hasPrivilege } = useAuthStore()
       </div>
     </div>
 
-    <div class="pa-0 mt-3 transition-all duration-500">
+    <div class="pa-0 mt-3 transition-all duration-500 w-full">
       <QuestionForm v-model="element" :custom-answers="customAnswers" />
       <slot />
     </div>

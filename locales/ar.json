@@ -712,5 +712,18 @@
   "unblacklisted": "تم إزالته من القائمة السوداء",
   "all": "الكل",
   "view-details": "عرض التفاصيل",
-  "blacklist": "القائمة السوداء"
+  "blacklist": "القائمة السوداء",
+  "dialogue": "القطعة",
+  "sub-questions": "الاسئلة الفرعية",
+"sub-question": "السؤال الفرعي",
+  "sub-question-title": "عنوان السؤال الفرعي",
+  "add-sub-question": "إضافة سؤال فرعي",
+  "add-first-sub-question": "إضافة سؤال فرعي أول",
+"no-sub-questions": "لا يوجد أسئلة فرعية",
+"add-sub-questions-to-create-dialogue": "إضافة اسئلة فرعية لإنشاء القطعة",
+"this-dialogue-has-no-sub-questions": "لا يوجد أسئلة فرعية لهذا القطعة",
+"show-alternate-title": "عرض العنوان البديل",
+"alternate-title": "العنوان البديل",
+"enter-alternate-title": "أدخل العنوان البديل",
+"no-answer-provided": "لا يوجد إجابة"
 }
