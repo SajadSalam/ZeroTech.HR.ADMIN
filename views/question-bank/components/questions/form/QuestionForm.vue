@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import AppInputWithFile from '~/components/app-field/AppInputWithFile.vue'
+import AppInputField from '~/components/app-field/AppInputField.vue'
 import { QuestionType, type Question } from '~/views/question-bank/types/question'
+import Dialogue from './fields/Dialogue.vue'
 import Matching from './fields/Matching.vue'
 import MultiItems from './fields/MultiItems.vue'
 import Reorder from './fields/Reorder.vue'
@@ -20,7 +22,7 @@ const isQuestionHaveMultipleItems = computed(() => {
 })
 watch(
   () => element.value.type,
-  (newValue: QuestionType) => {
+  () => {
     if (!element.value?.options) {
       element.value.options = []
     }
@@ -46,6 +48,9 @@ watch(
     if (element.value?.type == QuestionType.Reorder) {
       element.value.orderItems = []
     }
+    if (element.value?.type == QuestionType.Dialogue) {
+      element.value.subQuestions = []
+    }
   }
 )
 </script>
@@ -58,7 +63,27 @@ watch(
     :label="$t('question-title')"
     class=""
   />
-  <div class="question-form w-[50%] mt-3 flex flex-col gap-5">
+  
+  <!-- Alternate title section for main question -->
+  <div class="mb-4 mt-2 ">
+    <BaseCheckbox
+      v-model="element.isAlternateTitleShown"
+      :disabled="isEvaluation"
+      :label="$t('show-alternate-title')"
+      class="mb-2"
+    />
+    <AppInputField
+      v-if="element.isAlternateTitleShown"
+      v-model="element.alternateTitle"
+      :disabled="isEvaluation"
+      :label="$t('alternate-title')"
+      :placeholder="$t('enter-alternate-title')"
+    />
+  </div>
+  <div  class="question-form w-[50%] mt-3 flex flex-col gap-5"
+    :class="{
+      'w-full': element.type === QuestionType.Article || element.type === QuestionType.Dialogue,
+    }">
     <MultiItems
       v-if="isQuestionHaveMultipleItems"
       v-model="element"
@@ -106,9 +131,10 @@ watch(
       v-model="element"
       :is-evaluation="isEvaluation"
     />
+    <Dialogue
+      v-if="element?.type === QuestionType.Dialogue"
+      v-model="element"
+      :is-evaluation="isEvaluation"
+    />
   </div>
 </template>
-<style lang="scss">
-.question-form {
-}
-</style>

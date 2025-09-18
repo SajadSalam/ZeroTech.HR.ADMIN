@@ -1,13 +1,14 @@
 <script lang="ts" setup>
 import AppFileUploaderButton from '~/components/app-field/AppFileUploaderButton.vue'
 
-import { type Question, QuestionType } from '~/views/question-bank/types/question'
 import AppInputWithFile from '~/components/app-field/AppInputWithFile.vue'
-import MultiItems from './fields/MultiItems.vue'
-import Matching from './fields/Matching.vue'
-import Reorder from './fields/Reorder.vue'
 import { difficultyOptions } from '~/views/question-bank'
 import type { QuestionCustomAnswerProps } from '~/views/question-bank/types'
+import { QuestionType, type Question } from '~/views/question-bank/types/question'
+import Dialogue from './fields/Dialogue.vue'
+import Matching from './fields/Matching.vue'
+import MultiItems from './fields/MultiItems.vue'
+import Reorder from './fields/Reorder.vue'
 
 const element = defineModel<Question>({
   default: {} as Question,
@@ -37,10 +38,15 @@ watchDeep(element, () => {
 
 <template>
   <BaseHeading :level="3" class="text-2xl font-bold">{{ element.title }}</BaseHeading>
+  <div v-if="element.isAlternateTitleShown && element.alternateTitle" class="mt-2">
+    <BaseHeading :level="4" class="text-lg font-medium text-gray-600">
+      {{ element.alternateTitle }}
+    </BaseHeading>
+  </div>
   <div
-    class="question-form w-50% mt-3 flex flex-col gap-5"
+    class="question-form w-[50%] mt-3 flex flex-col gap-5"
     :class="{
-      'w-full': element.type === QuestionType.Article,
+      'w-full': element.type === QuestionType.Article || element.type === QuestionType.Dialogue,
     }"
   >
     <MultiItems v-if="isQuestionHaveMultipleItems" v-model="element" is-evaluation />
@@ -61,6 +67,11 @@ watchDeep(element, () => {
     </div>
     <Matching v-if="element?.type === QuestionType.Matching" v-model="element" is-evaluation />
     <Reorder v-if="element?.type === QuestionType.Reorder" v-model="element" is-evaluation />
+    <Dialogue
+      v-if="element?.type === QuestionType.Dialogue"
+      v-model="element"
+      :custom-answers="customAnswers"
+    />
   </div>
 </template>
 <style lang="scss">

@@ -1,10 +1,10 @@
 import type { BaseFilters } from '~/utils/types/ApiResponses'
 import type { BaseDto } from '~/utils/types/base-dto'
+import type { CategoryDto } from '~/views/categories/types'
+import type { Employee } from '~/views/employee/types'
 import type { SubjectDto } from '~/views/subjects/types'
 import type { TopicDto } from '~/views/topics/types'
 import { QuestionType, type Question } from './question'
-import type { Employee } from '~/views/employee/types'
-import type { CategoryDto } from '~/views/categories/types'
 
 export interface QuestionBank {
   title: string
@@ -98,6 +98,10 @@ export const questionTypeOptions = (t: (key: string) => string) => {
     {
       label: t('reorder'),
       value: QuestionType.Reorder
+    },
+    {
+      label: t('dialogue'),
+      value: QuestionType.Dialogue
     },
   ]
 }

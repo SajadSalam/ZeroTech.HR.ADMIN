@@ -1,7 +1,7 @@
 import axios from '~/services/app-client/axios'
 import type { BaseFilters, PaginatedResponse } from '~/utils/types/ApiResponses'
 import type { ExamDto } from '~/views/exams/types'
-import type { ExamCenterStatistics, ExaminationCenter, ExaminationCenterDto, OtpResponse } from '../types'
+import type { ExamCenterStatistics, ExaminationCenter, ExaminationCenterDto, OtpResponse, DeactivationRequest, DeactivationResponse, DeactivationPeriod } from '../types'
 import type { ProgressStatistics } from '../types/progress'
 interface IExaminationCenterService {
   get: (filters: BaseFilters) => Promise<PaginatedResponse<ExaminationCenterDto>>
@@ -95,5 +95,17 @@ export class ExaminationCenterService implements IExaminationCenterService {
 
   async blacklistStudent(data: { ticketId: string; reason: string }): Promise<void> {
     await axios.post('/externalstudentblacklist', data)
+  }
+
+  async deactivateExamCenter(examCenterId: string, data: DeactivationRequest): Promise<DeactivationResponse> {
+    const response = await axios.post<DeactivationResponse>(`/exam-centers/${examCenterId}/deactivation`, data)
+    return response.data
+  }
+
+  async getDeactivationPeriods(examCenterId: string, filters?: { fromDate?: string; toDate?: string; status?: string }): Promise<DeactivationPeriod[]> {
+    const response = await axios.get<DeactivationPeriod[]>(`/exam-centers/${examCenterId}/deactivation`, {
+      params: filters
+    })
+    return response.data
   }
 }

@@ -3,7 +3,10 @@ import type { BaseDto } from '~/utils/types/base-dto'
 
 export type QuestionDto = BaseDto & Question
 export interface Question {
+  id?: string
   title: string
+  alternateTitle?: string
+  isAlternateTitleShown?: boolean
   image: File | null
   order: number
   type: QuestionType
@@ -11,6 +14,7 @@ export interface Question {
   correctBoolean: boolean
   correctText: string
   knowledgeLevelId: string
+  knowledgeLevelSimplifiedIntId?: number
   difficulty: Difficulty
   isContentShown?: boolean
   matchingPairs?: MatchingItem[]
@@ -23,6 +27,8 @@ export interface Question {
   rejectReason?: string
   topicId: string
   clientId?: string
+  parentQuestionId?: string
+  subQuestions?: Question[]
 }
 export interface MatchingItem {
   left: string // The first item in the pair
@@ -33,8 +39,10 @@ export interface OrderItem {
   order: number
 }
 export interface Option {
-  id: string
+  id?: string
   title: string
+  alternateTitle?: string
+  isAlternateTitleShown?: boolean
   image?: File | null
   order: number
   isCorrect: boolean
@@ -64,6 +72,7 @@ export enum QuestionType {
   Radio = 6,
   Matching = 7,
   Reorder = 8,
+  Dialogue = 9,
 }
 
 export enum AuditStatus {

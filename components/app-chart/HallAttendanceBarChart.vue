@@ -4,9 +4,9 @@
     <div class="flex justify-between items-center mb-8">
         <!-- Title -->
       <div class="flex flex-col items-start gap-1">
-        <span class="text-[#9291A5] text-lg font-normal">طلبة</span>
+        <span class="text-[#9291A5] text-lg font-normal">احصائية</span>
         <h3 class="text-[#1E1B39] font-bold text-[22px] leading-tight">
-          الحضور حسب القاعة
+          الحضور حسب المركز الامتحاني
         </h3>
       </div>
       <!-- Dropdown -->
@@ -48,7 +48,7 @@ const tooltipPosition = ref({ left: '0px', top: '0px' })
 const tooltipContent = ref('')
 
 // Chart data - halls with their attendance values
-const hallLabels = ['قاعة 1', 'قاعة 2', 'قاعة 3', 'قاعة 4', 'قاعة 5', 'قاعة 6', 'قاعة 7', 'قاعة 8', 'قاعة 9', 'قاعة 10', 'قاعة 11', 'قاعة 12', 'قاعة 13', 'قاعة 14']
+const hallLabels = ['مركز 1 1', 'مركز 1 2', 'مركز 1 3', 'مركز 1 4', 'مركز 1 5', 'مركز 1 6', 'مركز 1 7', 'مركز 1 8', 'مركز 1 9', 'مركز 1 10', 'مركز 1 11', 'مركز 1 12', 'مركز 1 13', 'مركز 1 14']
 const attendanceData = [2500, 1200, 2800, 1800, 1500, 1800, 1500, 1800, 1500, 3000, 1000, 1000, 1000, 2200]
 
 const chartData = {
