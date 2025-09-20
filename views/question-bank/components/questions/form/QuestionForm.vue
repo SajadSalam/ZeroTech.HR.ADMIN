@@ -61,6 +61,7 @@ watch(
     v-model:file="element.image"
     :disabled="isEvaluation"
     :label="$t('question-title')"
+    type="textarea"
     class=""
   />
   
