@@ -27,6 +27,15 @@ const isQuestionHaveMultipleItems = (question: Question) => {
 const subQuestions = computed(() => {
   return modelValue.value?.subQuestions || []
 })
+
+const getImageUrl = (image: any) => {
+  if (typeof image === 'string') {
+    return image
+  }
+  // For File objects in view mode, we shouldn't encounter them
+  // In a real scenario, they should already be converted to URLs
+  return ''
+}
 </script>
 
 <template>
@@ -61,7 +70,7 @@ const subQuestions = computed(() => {
       <!-- Sub-question image if exists -->
       <div v-if="subQuestion.image" class="mb-4">
         <img
-          :src="typeof subQuestion.image === 'string' ? subQuestion.image : URL.createObjectURL(subQuestion.image)"
+          :src="getImageUrl(subQuestion.image)"
           :alt="subQuestion.title"
           class="max-h-64 rounded-lg object-contain"
         />
@@ -72,7 +81,7 @@ const subQuestions = computed(() => {
         <!-- Multiple choice, dropdown, radio -->
         <MultiItems
           v-if="isQuestionHaveMultipleItems(subQuestion)"
-          v-model="subQuestion"
+          :model-value="subQuestion"
           :is-evaluation="true"
         />
 
@@ -114,14 +123,14 @@ const subQuestions = computed(() => {
         <!-- Matching -->
         <Matching
           v-if="subQuestion.type === QuestionType.Matching"
-          v-model="subQuestion"
+          :model-value="subQuestion"
           :is-evaluation="true"
         />
 
         <!-- Reorder -->
         <Reorder
           v-if="subQuestion.type === QuestionType.Reorder"
-          v-model="subQuestion"
+          :model-value="subQuestion"
           :is-evaluation="true"
         />
       </div>
