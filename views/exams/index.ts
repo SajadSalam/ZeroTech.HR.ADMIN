@@ -9,13 +9,13 @@ export const tableHeaders = (t: (key: string) => string) => {
       icon: 'lucide:file-text',
     },
     {
-      key: 'examType',
-      label: t('type'),
+      key: 'availableDays',
+      label: t('available-days'),
       icon: 'lucide:file-text',
     },
     {
-      key: 'orgnaizations',
-      label: t('departments'),
+      key: 'proficiencyExamGroupId',
+      label: t('proficiency-exam-group'),
       icon: 'lucide:align-horizontal-distribute-center',
     },
     {

@@ -13,6 +13,7 @@ const props = defineProps<{
   size?: 'sm' | 'md' | 'lg' | 'xl'
   label?: string
   disabled?: boolean
+  type?: 'text' | 'textarea'
 }>()
 
 const emit = defineEmits(['update:input', 'update:file'])
@@ -82,12 +83,24 @@ const removeImage = () => {
   </p>
   <div class="flex w-full items-center gap-2">
     <BaseInput
+      v-if="type === 'text'"
       v-model="input"
       :placeholder="placeholder || $t('enter-the-text')"
       :size="size || 'md'"
       :classes="{
         wrapper: 'w-full',
       }"
+      :disabled="disabled"
+    />
+    <BaseTextarea
+      v-if="type === 'textarea'"
+      v-model="input"
+      :placeholder="placeholder || $t('enter-the-text')"
+      :size="size || 'md'"
+      :classes="{
+        wrapper: 'w-full',
+      }"
+      class="w-full"
       :disabled="disabled"
     />
     <AppFileUploaderButton v-model="fileModel">

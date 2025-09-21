@@ -7,7 +7,8 @@ import ExamDetails from '~/views/exams/components/ExamDetails.vue'
 import ExamEdit from '~/views/exams/components/ExamEdit.vue'
 import { tableHeaders } from '~/views/exams/index'
 import { useExamStore } from '~/views/exams/store/index'
-import { examStatusOptions, examTypesOptions, type ExamFilters } from '~/views/exams/types/index'
+import { examStatusOptions, examTypesOptions, proficiencyExamGroupOptions, type ExamFilters } from '~/views/exams/types/index'
+import { useToast } from '~/composables/toaster'
 
 definePageMeta({
   title: 'exams-page',
@@ -139,8 +140,8 @@ const openExamDetails = (exam: Record<string, any>) => {
             </BaseDropdown>
           </div>
         </template>
-        <template #data-orgnaizations="{ item }">
-          {{ item.orgnaizations.join(", ") }}
+        <template #data-proficiencyExamGroupId="{ item }">
+          {{ proficiencyExamGroupOptions($t).find((group) => group.value === item.proficiencyExamGroupId)?.label }}
         </template>
         <template #data-templateName="{ item }">
           {{ item.examTemplate.name }}

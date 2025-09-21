@@ -47,7 +47,7 @@ export class Validator<T extends object> {
     }, {} as T)
   }
 
-  resetBody(): void {
+  async resetBody(): Promise<void> {
     const keys = Object.keys(this.validation.value) as (keyof T)[]
     keys.forEach((key) => {
       if (this.validation.value[key] && !key.toString().startsWith('$')) {
@@ -59,7 +59,7 @@ export class Validator<T extends object> {
         }
       }
     })
-    this.validation.value.$reset()
+    await this.validation.value.$reset()
   }
   fillBody(data: T, customKeys?: { fromKey: string; toKey: string }[]): void {
     const keys = Object.keys(this.validation.value) as (keyof T)[]
@@ -93,5 +93,8 @@ export class Validator<T extends object> {
         }
       }
     })
+  }
+  resetErrors(): void {
+    this.validation.value.$reset()
   }
 }

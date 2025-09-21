@@ -267,7 +267,10 @@ table {
         font-weight: 400;
         text-align: start;
         padding: .8rem;
+        direction: auto;
         font-size: 14px;
+        max-width: 250px;
+        overflow: hidden;
         white-space: nowrap;
         /* Prevent cell content wrapping */
 

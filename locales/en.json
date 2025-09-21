@@ -718,5 +718,13 @@
   "show-alternate-title": "Show Alternate Title",
   "alternate-title": "Alternate Title",
   "enter-alternate-title": "Enter Alternate Title",
-  "no-answer-provided": "No answer provided"
+  "no-answer-provided": "No answer provided",
+  "sunday": "Sunday",
+  "monday": "Monday",
+  "tuesday": "Tuesday",
+  "wednesday": "Wednesday",
+  "thursday": "Thursday",
+  "friday": "Friday",
+  "saturday": "Saturday",
+  "available-days": "Available Days"
 }

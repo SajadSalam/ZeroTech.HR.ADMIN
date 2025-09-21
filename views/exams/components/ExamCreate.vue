@@ -6,7 +6,7 @@ import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vu
 import { createValidator } from '~/services/validationWithI18n'
 import { Validator } from '~/services/validator'
 import { useExamStore } from '../store/index'
-import { ExamType, examTypesOptions, proficiencyExamGroupOptions, type ExamCreate } from '../types/index'
+import { ExamType, examTypesOptions, proficiencyExamGroupOptions, type ExamCreate, availableDaysOptions } from '../types/index'
 
 const examStore = useExamStore()
 
@@ -43,6 +43,7 @@ const validator = new Validator<ExamCreate>(
     price: null,
     retryPrice: null,
     proficiencyExamGroupId: null,
+    availableDays: [],
   },
   {
     title: {
@@ -74,7 +75,9 @@ const validator = new Validator<ExamCreate>(
     enterTimeAllowed: {
       minValue: createValidator(t, 'enterance-time-allowed', 'minValue', 1),
     },
-    
+    availableDays: {
+      required: createValidator(t, 'available-days', 'required'),
+    },
   }
 )
 
@@ -309,6 +312,17 @@ const updateExamType = (type: ExamType) => {
           :label="$t('end-time')"
           :placeholder="$t('enter-end-time')"
           type="time"
+        />
+        <AppAutoCompleteField
+        class="col-span-4"
+          v-model="body.availableDays.$model"
+          :errors="body.availableDays.$errors"
+          :label="$t('available-days')"
+          :placeholder="$t('available-days')"
+          :items="availableDaysOptions($t)"
+          item-label="label"
+          item-value="value"
+          multiple
         />
       </div>
       <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
