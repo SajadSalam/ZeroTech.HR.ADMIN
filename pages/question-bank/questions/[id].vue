@@ -313,7 +313,7 @@ const currentTopicName = computed(() => {
   </div>
   <AppLoading v-else />
   <DeleteTopic @update="fetchQuestionBank()" />
-  <AddTopic @update="fetchQuestionBank()" />
+  <AddTopic @update="fetchQuestionBank()" :subject-id="questionBankStore.selectedQuestionBank?.subject.id" />
   <ImportQuestions
     :question-bank-id="route.params.id as string"
     :topic-id="selectedTab"

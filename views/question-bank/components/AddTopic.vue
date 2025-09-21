@@ -9,11 +9,13 @@ const questionBankStore = useQuestionBankStore()
 const subjectStore = useSubjectStore()
 const topicsStore = useTopicStore()
 subjectStore.getSubjects()
-const subjectId = ref('')
+const subjectId = computed(() => props.subjectId)
 const emit = defineEmits(['update'])
 const route = useRoute()
 const { id } = route.params
-
+const props = defineProps<{
+  subjectId: string
+}>()
 const body = ref<QuestionBankTopicUpdate>({
   topicId: '',
 })
@@ -24,7 +26,7 @@ const addTopic = () => {
 }
 watch(subjectId, (value: string) => {
   if (value) {
-    topicsStore.getTopics({ subjectId: value })
+    topicsStore.getTopics({ subjectId: value, pageNumber: 1, pageSize: 100 })
   }
 })
 const topics = computed(() => topicsStore.topics)
@@ -44,7 +46,7 @@ watch(
     overflow-y="visible"
     :loading="questionBankStore.isLoading"
   >
-    <AppAutoCompleteField
+    <!-- <AppAutoCompleteField
       v-model="subjectId"
       fetch-on-search
       search-key="name"
@@ -53,7 +55,7 @@ watch(
       item-label="name"
       item-value="id"
       class="col-span-2"
-    />
+    /> -->
     <AppAutoCompleteField
       v-model="body.topicId"
       fetch-on-search
