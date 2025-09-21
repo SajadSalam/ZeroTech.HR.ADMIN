@@ -78,10 +78,15 @@ const createQuestionBank = async () => {
 }
 watch(
   () => questionBankStore.isCreateDialogOpen,
-  (val: boolean) => {
+  async (val: boolean) => {
     if (val) {
-      validator.resetBody()
-      subjectValidator.resetBody()
+     await subjectValidator.resetBody()
+
+     await validator.resetBody()
+    //   body.value.topicIds.$model = []
+    //   body.value.topicIds.$errors = []
+    //   body.value.categories.$model = []
+    //   body.value.categories.$errors = []
     }
   }
 )
