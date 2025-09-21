@@ -9,8 +9,8 @@ export const tableHeaders = (t: (key: string) => string) => {
       icon: 'lucide:file-text',
     },
     {
-      key: 'examType',
-      label: t('type'),
+      key: 'availableDays',
+      label: t('available-days'),
       icon: 'lucide:file-text',
     },
     {
