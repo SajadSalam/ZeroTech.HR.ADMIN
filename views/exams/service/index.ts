@@ -1,9 +1,8 @@
 import axiosIns from '~/services/app-client/axios'
-import type { ExamCreate, ExamDetailed, ExamDto, ExamEdit, LinkedExam } from '../types'
-import type { BaseFilters, PaginatedResponse, WithoutPagination } from '~/utils/types/ApiResponses'
-import type { BaseDto } from '~/utils/types/base-dto'
-import type { Student, StudentFilters } from '~/views/students/types'
+import type { BaseFilters, PaginatedResponse } from '~/utils/types/ApiResponses'
 import type { QuestionDto } from '~/views/question-bank/types/question'
+import type { StudentFilters } from '~/views/students/types'
+import type { ExamCreate, ExamDetailed, ExamDto, ExamEdit, LinkedExam } from '../types'
 
 interface IExamService {
   get: (filters: BaseFilters) => Promise<PaginatedResponse<ExamDto>>
@@ -12,6 +11,7 @@ interface IExamService {
   getById: (id: string) => Promise<ExamDetailed>
   getLinkedStudents: (id: string, filters: StudentFilters) => Promise<LinkedExam>
   replaceQuestion: (examId: string, questionId: string) => Promise<QuestionDto>
+  getQuestions: (examId: string, date: string) => Promise<QuestionDto[]>
 }
 
 export class ExamService implements IExamService {
@@ -45,6 +45,15 @@ export class ExamService implements IExamService {
     const response = await axiosIns.put<QuestionDto>(
       `/exam/${examId}/replace-question/${questionId}`
     )
+    return response.data
+  }
+  async getQuestions(examId: string, date: string): Promise<QuestionDto[]> {
+    const response = await axiosIns.get<QuestionDto[]>(`/exam/${examId}/questions/?examDate=${date}`)
+    return response.data
+  }
+  // reshuffling
+  async reshuffleQuestions(examId: string, date: string): Promise<QuestionDto[]> {
+    const response = await axiosIns.post<QuestionDto[]>(`/exam/${examId}/reshuffling?examDate=${date}`)
     return response.data
   }
   async update(id: string, data: ExamEdit): Promise<ExamDto> {

@@ -40,8 +40,8 @@ const validator = new Validator<ExamCreate>(
     examGroups: [],
     instructions: '',
     // EvaluationProficiency specific fields
-    price: null,
-    retryPrice: null,
+    price: 30000,
+    retryPrice: 20000,
     proficiencyExamGroupId: null,
     availableDays: [],
   },
@@ -167,6 +167,8 @@ watch(
     if (val) {
       validator.resetBody()
       body.value.examType.$model = examTypesOptions(t)[0].value;
+      body.value.price.$model = 30000;
+      body.value.retryPrice.$model = 20000;
 
     }
   }

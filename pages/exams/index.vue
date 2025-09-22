@@ -112,32 +112,15 @@ const openExamDetails = (exam: Record<string, any>) => {
             >
               <Icon name="ph:eye" size="18" />
             </BaseButtonIcon>
-
-            <BaseDropdown
-              variant="context"
-              :data-nui-tooltip="$t('actions')"
-              placement="bottom-start"
-              size="md"
-            >
-              <BaseDropdownItem
-                :to="`/exams/${data.item.id}/students`"
-                v-if="hasPrivilege('ums:ems:exam:view-linked-exams')"
-              >
-                <template #start>
-                  <Icon name="ph:users" class="text-warning" size="18"></Icon>
-                  {{ $t("students") }}
-                </template>
-              </BaseDropdownItem>
-              <BaseDropdownItem
+            <BaseButton 
+                variant="pastel"
+                color="success"
                 :to="`/exams/${data.item.id}/view`"
-                v-if="hasPrivilege('ums:ems:exam:view')"
-              >
-                <template #start>
-                  <Icon name="ph:question" class="text-green-500" size="18"></Icon>
+                class="border-green-500 font-bold"
+            >
+             <Icon name="ph:question" class="me-2" size="18"></Icon>
                   {{ $t("questions") }}
-                </template>
-              </BaseDropdownItem>
-            </BaseDropdown>
+                </BaseButton>
           </div>
         </template>
         <template #data-proficiencyExamGroupId="{ item }">

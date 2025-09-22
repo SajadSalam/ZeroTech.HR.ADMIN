@@ -2,6 +2,7 @@ import type { BaseFilters } from '~/utils/types/ApiResponses'
 import type { StudentFilters } from '~/views/students/types'
 import { ExamService } from '../service'
 import { type Exam, type ExamCreate, type ExamDto, type ExamFilters } from '../types'
+import type { QuestionDto } from '~/views/questions/types'
 
 const examService = new ExamService()
 export const useExamStore = defineStore('exam', () => {
@@ -22,7 +23,8 @@ export const useExamStore = defineStore('exam', () => {
     const totalPages = ref(0)
     const isUpdateDialogOpen = ref(false);
     const isCurveDialogOpen = ref(false)
-
+    const questions = ref<QuestionDto[]>([])
+    
   const getExams = async (examFilters: BaseFilters) => {
     try {
       isLoading.value = true
@@ -126,6 +128,24 @@ export const useExamStore = defineStore('exam', () => {
     }
   }
 
+  const getQuestions = async (examId: string, date: string) => {
+    try {
+      isLoading.value = true
+      return await examService.getQuestions(examId, date)
+    } catch (error) {
+    } finally {
+      isLoading.value = false
+    }
+  }
+  const reshuffleQuestions = async (examId: string, date: string) => {
+    try {
+      isLoading.value = true
+      return await examService.reshuffleQuestions(examId, date)
+    } catch (error) {
+    } finally {
+      isLoading.value = false
+    }
+  }
 
     return {
         exams,
@@ -146,7 +166,9 @@ export const useExamStore = defineStore('exam', () => {
         cancelExam,
         isUpdateDialogOpen,
         isCurveDialogOpen,
-        addCurve
+        addCurve,
+            getQuestions,
+        reshuffleQuestions
     }
 
 })
