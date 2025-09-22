@@ -3,7 +3,7 @@ import { useI18n } from 'vue-i18n'
 import axios from '~/services/app-client/axios'
 import { useExaminationCenters } from '~/views/examination-centers/store'
 import { tableHeaders } from '~/views/exams/index'
-import { ExamStatus, examTypesOptions, type Exam } from '~/views/exams/types/index'
+import { ExamStatus, examTypesOptions, type Exam, availableDaysOptions } from '~/views/exams/types/index'
 
 const examinationCenterStore = useExaminationCenters()
 const isLoading = computed(() => examinationCenterStore.isLoading)
@@ -115,6 +115,12 @@ onMounted(() => {
             <BaseTag :color="statusLabel(item.exam.status).color">
                 {{ statusLabel(item.exam.status).label }}
             </BaseTag>  
+        </template>
+         <template #['data-exam.availableDays']="{ item }">
+             {{ item.exam.availableDays?.map((day) => availableDaysOptions($t).find((option) => option.value === day)?.label).join(', ') }}
+        </template>
+        <template #['data-exam.proficiencyExamGroupId']="{ item }">
+          {{ proficiencyExamGroupOptions($t).find((group) => group.value === item.exam.proficiencyExamGroupId)?.label }}
         </template>
       </AppTable>
     </div>
