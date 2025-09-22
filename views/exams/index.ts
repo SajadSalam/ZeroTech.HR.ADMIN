@@ -36,7 +36,7 @@ export const tableHeaders = (t: (key: string) => string) => {
 
     {
       key: 'time',
-      label: t('time'),
+      label: t('time') + ' (24hrs)',
       icon: 'lucide:clock',
     },
     {

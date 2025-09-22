@@ -68,6 +68,9 @@ onMounted(() => {
   >
    
     <div class="rounded-3xl p-3">
+        <AppFieldAppMapField
+            label="الموقع"
+        />
       <AppInputField
         v-model="body.name.$model"
         :errors="body.name.$errors"

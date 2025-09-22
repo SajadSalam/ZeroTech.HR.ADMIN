@@ -8,11 +8,30 @@ export type Hall = {
   capacity: number
 }
 
+export type Supervisor = {
+  supervisorId: number
+  isPrimary: boolean
+  notes: string | null
+}
+
+export type HallSupervisor = {
+  id: string
+  supervisorId: number
+  supervisorName: string
+  supervisorEmail: string
+  isPrimary: boolean
+  assignedDate: string
+  assignedByEmployeeName: string
+  notes: string | null
+  isActive: boolean
+}
+
 export type HallDto = BaseDto &
   Hall & {
     examCenterId: string | null
     examCenterName: string | null
     examCenter: ExaminationCenter
+    supervisors?: HallSupervisor[]
   }
 export type HallCreateDto = Hall
 

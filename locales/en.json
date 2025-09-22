@@ -727,5 +727,8 @@
   "friday": "Friday",
   "saturday": "Saturday",
   "available-days": "Available Days",
-  "reshuffle-questions": "Reshuffle Questions"
+  "reshuffle-questions": "Reshuffle Questions",
+  "no-supervisors-selected": "No supervisors selected",
+  "assign-supervisors": "Assign Supervisor",
+  "supervisors": "Supervisors"
 }

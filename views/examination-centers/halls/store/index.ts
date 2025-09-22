@@ -1,5 +1,5 @@
 import { HallService } from '../service'
-import type { Hall, HallDto, HallFilters } from '../types'
+import type { Hall, HallDto, HallFilters, Supervisor } from '../types'
 
 const hallService = new HallService()
 export const useHallStore = defineStore('hall', () => {
@@ -79,6 +79,18 @@ export const useHallStore = defineStore('hall', () => {
     }
   }
 
+  const assignMultipleSupervisors = async (id: string, data: { supervisors: Supervisor[] }) => {
+    try {
+      isLoading.value = true
+      await hallService.assignMultipleSupervisors(id, data)
+      await getHalls(filters.value)
+    } catch (error) {
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     halls,
     isLoading,
@@ -94,5 +106,6 @@ export const useHallStore = defineStore('hall', () => {
     totalPages,
     isAssignSupervisorDialogOpen,
     assignSupervisor,
+    assignMultipleSupervisors,
   }
 })
