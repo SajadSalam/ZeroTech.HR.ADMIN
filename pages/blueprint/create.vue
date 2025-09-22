@@ -139,7 +139,7 @@ const submit = async () => {
     if (totalGrade !== maximumGrade) {
         useToast(
             {
-                title: t('total-grade-must-equal-maximum-grade'),
+                message: t('total-grade-must-equal-maximum-grade'),
                 isError: true
             }
         )

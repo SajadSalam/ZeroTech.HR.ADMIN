@@ -188,7 +188,7 @@ const watchSubQuestionType = (subQuestion: Question, newType: QuestionType) => {
       </div>
 
        <!-- Sub-question type and difficulty selectors -->
-       <div class="mb-4 grid gap-3 md:grid-cols-2">
+       <div class="mb-4 grid gap-3 md:grid-cols-3">
          <AppAutoCompleteField
            v-model="modelValue.subQuestions![index].type"
            :items="questionTypeOptions($t).filter(opt => opt.value !== QuestionType.Dialogue)"
@@ -206,6 +206,14 @@ const watchSubQuestionType = (subQuestion: Question, newType: QuestionType) => {
            item-value="value"
            :disabled="isEvaluation"
          />
+            <AppAutoCompleteField
+           v-model="modelValue.subQuestions![index].knowledgeLevelId"
+           :placeholder="$t('select-a-knowledge')"
+           :disabled="isEvaluation"
+           get-url="/knowledgelevel"
+           item-label="name"
+           item-value="id"
+         />
        </div>
 
        <!-- Sub-question title and content -->
@@ -215,6 +223,7 @@ const watchSubQuestionType = (subQuestion: Question, newType: QuestionType) => {
          :disabled="isEvaluation"
          :label="$t('sub-question-title')"
          class="mb-4"
+         type="text"
        />
 
        <!-- Alternate title section -->
@@ -231,18 +240,6 @@ const watchSubQuestionType = (subQuestion: Question, newType: QuestionType) => {
            :disabled="isEvaluation"
            :label="$t('alternate-title')"
            :placeholder="$t('enter-alternate-title')"
-         />
-       </div>
-
-       <!-- Knowledge level selector -->
-       <div class="mb-4">
-         <AppAutoCompleteField
-           v-model="modelValue.subQuestions![index].knowledgeLevelId"
-           :placeholder="$t('select-a-knowledge')"
-           :disabled="isEvaluation"
-           get-url="/knowledgelevel"
-           item-label="name"
-           item-value="id"
          />
        </div>
 

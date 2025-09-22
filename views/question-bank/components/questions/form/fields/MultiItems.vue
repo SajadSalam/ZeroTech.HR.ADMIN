@@ -51,6 +51,7 @@ const changeCorrect = (item: any) => {
         v-model:file="item.image"
         label=""
         class=""
+        type="text"
         :disabled="isEvaluation"
       />
       <div class="flex items-center">
