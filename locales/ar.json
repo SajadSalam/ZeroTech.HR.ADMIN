@@ -748,5 +748,8 @@
   "friday": "الجمعة",
   "saturday": "السبت",
   "available-days": "الأيام المتاحة",
-  "reshuffle-questions": "اعادة خلط الاسئلة "
+  "reshuffle-questions": "اعادة خلط الاسئلة ",
+  "no-supervisors-selected": "لم يتم تحديد مراقبين بعد",
+  "assign-supervisors": "تعيين المراقبين",
+  "supervisors": "المراقبين المحددين"
 }

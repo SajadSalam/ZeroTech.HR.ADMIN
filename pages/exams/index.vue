@@ -7,7 +7,7 @@ import ExamDetails from '~/views/exams/components/ExamDetails.vue'
 import ExamEdit from '~/views/exams/components/ExamEdit.vue'
 import { tableHeaders } from '~/views/exams/index'
 import { useExamStore } from '~/views/exams/store/index'
-import { examStatusOptions, examTypesOptions, proficiencyExamGroupOptions, type ExamFilters } from '~/views/exams/types/index'
+import { examStatusOptions,availableDaysOptions,  examTypesOptions, proficiencyExamGroupOptions, type ExamFilters } from '~/views/exams/types/index'
 import { useToast } from '~/composables/toaster'
 
 definePageMeta({
@@ -133,7 +133,7 @@ const openExamDetails = (exam: Record<string, any>) => {
           {{ examTypesOptions($t).find((type) => type.value === item.examType)?.label }}
         </template>
         <template #data-time="{ item }">
-          {{ item.startTime }} - {{ item.endTime }}
+          {{ item.startTime }} - {{ item.endTime }} 
         </template>
         <template #data-attendance>
           {{ Math.floor(Math.random() * 100) }}
@@ -149,6 +149,9 @@ const openExamDetails = (exam: Record<string, any>) => {
         </template>
         <template #data-endDate="{ item }">
           {{ item.endDate.split("T")[0] }}
+        </template>
+        <template #data-availableDays="{ item }">
+            {{ item.availableDays?.map((day) => availableDaysOptions($t).find((option) => option.value === day)?.label).join(', ') }}
         </template>
       </AppTable>
     </AppCrud>

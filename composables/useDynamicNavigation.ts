@@ -20,7 +20,7 @@ export const useDynamicNavigation = () => {
 
       },
       {
-        name: 'exams',
+        name: 'scheduled-exams',
         icon: { name: 'ph-list-checks-duotone', class: 'w-5 h-5' },
         to: `/examination-centers/${examCenterId}/exams`,
         role:['ums@ems:exam-center-manager','ums@ems:superadmin']

@@ -1,20 +1,19 @@
 <script setup lang="ts">
 import { debounce } from 'lodash-es'
-import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
-import AppInputField from '~/components/app-field/AppInputField.vue'
 import { useEmployeeStore } from '~/views/employee/store'
 import type { Employee, EmployeeFilters } from '~/views/employee/types'
 import OrganizationTree from '~/views/orgaization/OrganizationTree.vue'
 import { useOrganizationStore } from '~/views/orgaization/store'
 import type { Organization } from '~/views/orgaization/types'
 import { useHallStore } from '../store/index'
+import type { Supervisor } from '../types'
 
 const hallsStore = useHallStore()
 const organizationStore = useOrganizationStore()
 const employeeStore = useEmployeeStore()
 const tree = ref<Organization[]>([])
 const isLoading = ref(false)
-const selectedEmployee = ref<Employee | null>(null)
+const selectedSupervisors = ref<(Employee & { isPrimary: boolean })[]>([])
 const filters = computed<EmployeeFilters>({
   get() {
     return employeeStore.filters
@@ -56,53 +55,110 @@ watchDeep(
     fetchEmployees(selectedItem.value)
   }
 )
-const toggleEmployee = (employee: Employee) => {
-  selectedEmployee.value = employee
-}
-const tabs = (t: (key: string) => string) => [
+
+// Validation computed properties
+const validationErrors = computed(() => {
+  const errors: string[] = []
   
-    {
-        label: t('exam-center-managers'),
-        value: 'exam-center-managers',
-    },
-      {
-        label: t('surrogate-managers'),
-        value: 'surrogate-managers',
-    },
-]
-const selectedTab = ref<string>('exam-center-managers')
-const saveAssign = async () => {
-    if (selectedTab.value === 'exam-center-managers') {
-        await hallsStore.assignSupervisor(hallsStore.selectedHall.id, { supervisorId: selectedEmployee.value?.employeeId })
-    } else {
-        await hallsStore.assignSurrogateManager(hallsStore.selectedHall.id, { managerId: selectedEmployee.value?.employeeId })
-    }
-    hallsStore.isAssignSupervisorDialogOpen = false
-    await hallsStore.getHalls(hallsStore.filters)
-    selectedEmployee.value = null
-    selectedTab.value = 'exam-center-managers'
+  if (selectedSupervisors.value.length < 2) {
+    errors.push('يجب تحديد 2 مراقبين على الاقل للقاعة')
+  }
+  
+  const primaryCount = selectedSupervisors.value.filter(s => s.isPrimary).length
+  if (primaryCount === 0) {
+    errors.push('يجب تحديد مراقب اساسي واحد على الاقل')
+  } else if (primaryCount > 1) {
+    errors.push('يجب تحديد مراقب اساسي واحد فقط')
+  }
+  
+  return errors
+})
+
+const isFormValid = computed(() => validationErrors.value.length === 0)
+
+const toggleEmployee = (employee: Employee) => {
+  const existingIndex = selectedSupervisors.value.findIndex(s => s.employeeId === employee.employeeId)
+  
+  if (existingIndex >= 0) {
+    // Remove supervisor if already selected
+    selectedSupervisors.value.splice(existingIndex, 1)
+  } else {
+    // Add supervisor - set as primary if it's the first one
+    const isPrimary = selectedSupervisors.value.length === 0
+    selectedSupervisors.value.push({ ...employee, isPrimary })
+  }
 }
 
-// watchDeep(
-//   () => examinationCenterStore.assign,
-//   () => {
-//     selectedEmployee.value = examinationCenterStore.assign.map((emp: AssignDto) => {
-//       return {
-//         ...emp.employee,
-//         empFullName: `${emp.employee.empArFirstName} ${emp.employee.empArSecondName} ${emp.employee.empArThirdName} ${emp.employee.empArFourthName}`,
-//       }
-//     })
-//   }
-// )
+const togglePrimary = (employeeId: number) => {
+  selectedSupervisors.value.forEach(supervisor => {
+    supervisor.isPrimary = supervisor.employeeId === employeeId
+  })
+}
+
+const removeSupervisor = (employeeId: number) => {
+  const index = selectedSupervisors.value.findIndex(s => s.employeeId === employeeId)
+  if (index >= 0) {
+    selectedSupervisors.value.splice(index, 1)
+  }
+}
+
+const isEmployeeSelected = (employeeId: number) => {
+  return selectedSupervisors.value.some(s => s.employeeId === employeeId)
+}
+
+const isExistingSupervisor = (employeeId: number) => {
+  return hallsStore.selectedHall?.supervisors?.some(s => s.supervisorId === employeeId && s.isActive) || false
+}
+const saveAssign = async () => {
+    if (!isFormValid.value || !hallsStore.selectedHall) {
+        return
+    }
+    
+    const supervisors: Supervisor[] = selectedSupervisors.value.map(supervisor => ({
+        supervisorId: supervisor.employeeId,
+        isPrimary: supervisor.isPrimary,
+        notes: null
+    }))
+
+    await hallsStore.assignMultipleSupervisors(hallsStore.selectedHall.id, { supervisors })
+    hallsStore.isAssignSupervisorDialogOpen = false
+    await hallsStore.getHalls(hallsStore.filters)
+    selectedSupervisors.value = []
+}
+
 watchDeep(
   () => filters.value,
   () => {
     fetchEmployees(selectedItem.value)
   }
 )
+// Load existing supervisors when dialog opens
+const loadExistingSupervisors = () => {
+  if (hallsStore.selectedHall?.supervisors) {
+    selectedSupervisors.value = hallsStore.selectedHall.supervisors
+      .filter(s => s.isActive)
+      .map(supervisor => ({
+        employeeId: supervisor.supervisorId,
+        empFullName: supervisor.supervisorName,
+        academicRank: null, // Not available in HallSupervisor
+        position: null, // Not available in HallSupervisor
+        isPrimary: supervisor.isPrimary,
+        // Add other Employee properties with defaults
+        empArFirstName: '',
+        empArSecondName: '',
+        empArThirdName: '',
+        empArFourthName: '',
+        collegeId: 0,
+      }))
+  }
+}
+
 watch(
   () => hallsStore.isAssignSupervisorDialogOpen,
-  () => {
+  (isOpen) => {
+    if (isOpen) {
+      loadExistingSupervisors()
+    }
     filters.value = {
       search: null,
       position: null,
@@ -112,6 +168,9 @@ watch(
       pageNumber: 1,
     }
     employeeStore.employees = []
+    if (!isOpen) {
+      selectedSupervisors.value = []
+    }
   }
 )
 const handleCourseChange = (selectedCourses: any[]) => {
@@ -119,13 +178,6 @@ const handleCourseChange = (selectedCourses: any[]) => {
   fetchEmployees(selectedItem.value)
 }
 
-const supervisor = computed(() => {
-  return hallsStore.selectedHall?.supervisorName
-})
-const removeSupervisor = () => {
-  selectedEmployee.value = null
-  hallsStore.selectedHall.supervisorName = null
-}
 </script>
 <template>
   <AppDialog
@@ -162,24 +214,29 @@ const removeSupervisor = () => {
             v-for="employee in employees"
             :key="employee.employeeId"
             class="flex items-center gap-3"
+            :class="{ 'bg-green-50 border border-green-200 rounded p-2': isExistingSupervisor(employee.employeeId) }"
           >
             <BaseCheckbox
               color="primary"
               :value="employee.employeeId"
-              :model-value="selectedEmployee?.employeeId === employee.employeeId"
+              :model-value="isEmployeeSelected(employee.employeeId)"
               @update:model-value="(val) => toggleEmployee(employee)"
             />
             <BaseAvatar color="primary" size="xs">
               <Icon name="ph-user-duotone" size="20" class="text-primary" />
             </BaseAvatar>
-            <div>
-              <h1 class="text-md font-bold">
+            <div class="flex-1">
+              <h1 class="text-md font-bold flex items-center gap-2">
                 {{ employee.empFullName }}
+                <span 
+                  v-if="isExistingSupervisor(employee.employeeId)"
+                  class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full"
+                >
+                  مُعيّن حالياً
+                </span>
               </h1>
               <p class="text-sm text-muted-500">
-                {{ employee.academicRank }}
-                -
-                {{ employee.position }}
+                {{ (employee.academicRank && employee.position) ? `${employee.academicRank} - ${employee.position}` : 'معلومات المنصب غير متوفرة' }}
               </p>
             </div>
           </div>
@@ -190,39 +247,81 @@ const removeSupervisor = () => {
       </div>
     </div>
     <h1 class="my-3">
-      {{
-        ' ' + $t('supervisor')
-      }}
+      {{ $t('supervisors') }} ({{ selectedSupervisors.length }})
     </h1>
-    <div class="bg-op-5 pa-5 grid gap-2 rounded-lg bg-primary md:grid-cols-3">
-        
-      <div
-        v-if="supervisor"
-        class="bg-op-20 pa-2 flex items-center justify-around rounded-full bg-primary"
-        color="primary"
-        variant="pastel"
-      >
-        <BaseIconBox variant="pastel" rounded="full" color="primary" size="xs">
-          <Icon name="ph-user-duotone" class="text-primary" />
-        </BaseIconBox>
-        <p class="text-black">
-          {{ supervisor }}
-        </p>
+    
+    <!-- Validation Errors -->
+    <div v-if="validationErrors.length > 0" class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+      <ul class="list-disc list-inside">
+        <li
+         v-for="error in validationErrors"
+         :key="error"
+         class="mb-2"
+       >
+         {{ error }}
+      </li>
+        </ul>
+    </div>
 
-        <Icon name="ph-x" class="cursor-pointer text-red-500" @click="removeSupervisor" />
+    <div class="bg-op-5 pa-5 grid gap-3 rounded-lg bg-primary">
+      <div
+        v-for="supervisor in selectedSupervisors"
+        :key="supervisor.employeeId"
+        class="bg-op-20 pa-3 flex items-center justify-between rounded-lg bg-white border"
+        :class="{ 'border-green-300 bg-green-50': isExistingSupervisor(supervisor.employeeId) }"
+      >
+        <div class="flex items-center gap-3">
+          <BaseIconBox variant="pastel" rounded="full" color="primary" size="xs">
+            <Icon name="ph-user-duotone" class="text-primary" />
+          </BaseIconBox>
+          <div>
+            <p class="text-black font-medium flex items-center gap-2">
+              {{ supervisor.empFullName }}
+              <span 
+                v-if="isExistingSupervisor(supervisor.employeeId)"
+                class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full"
+              >
+                مُعيّن مسبقاً
+              </span>
+            </p>
+            <p class="text-sm text-gray-600">
+              {{ (supervisor.academicRank && supervisor.position) ? `${supervisor.academicRank} - ${supervisor.position}` : 'معلومات المنصب غير متوفرة' }}
+            </p>
+          </div>
+        </div>
+        
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2">
+            <BaseCheckbox
+              :model-value="supervisor.isPrimary"
+              color="primary"
+              @update:model-value="() => togglePrimary(supervisor.employeeId)"
+            />
+            <label class="text-sm font-medium">مراقب اساسي</label>
+          </div>
+          
+          <Icon 
+            name="ph-x" 
+            class="cursor-pointer text-red-500 hover:text-red-700" 
+            @click="removeSupervisor(supervisor.employeeId)" 
+          />
+        </div>
       </div>
       
+      <div v-if="selectedSupervisors.length === 0" class="text-center text-gray-500 py-4">
+        {{ $t('no-supervisors-selected') }}
+      </div>
     </div>
     <div class="mt-4 flex items-center justify-end">
       <BaseButton
         color="primary"
-        :disabled="hallsStore.isLoading"
+        :disabled="hallsStore.isLoading || !isFormValid"
         class="gap-1"
         :loading="hallsStore.isLoading"
         @click="saveAssign"
       >
         <Icon name="ph:upload-simple-duotone" class="size-5" />
-        {{ $t('assigns') }}
+        {{ $t('assign-supervisors') }}
       </BaseButton>
     </div>
   </AppDialog>

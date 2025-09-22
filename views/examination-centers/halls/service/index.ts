@@ -1,6 +1,6 @@
 import axios from '~/services/app-client/axios'
 import type { PaginatedResponse } from '~/utils/types/ApiResponses'
-import type { Hall, HallDto, HallFilters } from '../types'
+import type { Hall, HallDto, HallFilters, Supervisor } from '../types'
 
 interface IHallService {
   get: (filters: HallFilters) => Promise<PaginatedResponse<HallDto>>
@@ -8,6 +8,7 @@ interface IHallService {
   update: (id: string, data: Hall) => Promise<HallDto>
   delete: (id: string) => Promise<void>
   assignSupervisor: (id: string, data: { supervisorId: string }) => Promise<void>
+  assignMultipleSupervisors: (id: string, data: { supervisors: Supervisor[] }) => Promise<void>
 }
 
 export class HallService implements IHallService {
@@ -33,5 +34,9 @@ export class HallService implements IHallService {
 
   async assignSupervisor(id: string, data: { supervisorId: string }): Promise<void> {
     await axios.put(`/exam-center-halls/${id}/assign-supervisor`, data)
+  }
+
+  async assignMultipleSupervisors(id: string, data: { supervisors: Supervisor[] }): Promise<void> {
+    await axios.put(`/exam-center-halls/${id}/assign-multiple-supervisors`, data)
   }
 }
