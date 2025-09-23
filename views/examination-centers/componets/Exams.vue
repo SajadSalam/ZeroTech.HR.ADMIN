@@ -3,7 +3,7 @@ import { useI18n } from 'vue-i18n'
 import axios from '~/services/app-client/axios'
 import { useExaminationCenters } from '~/views/examination-centers/store'
 import { tableHeaders } from '~/views/exams/index'
-import { ExamStatus, examTypesOptions, type Exam, availableDaysOptions } from '~/views/exams/types/index'
+import { ExamStatus, availableDaysOptions, proficiencyExamGroupOptions, examTypesOptions, type Exam } from '~/views/exams/types/index'
 
 const examinationCenterStore = useExaminationCenters()
 const isLoading = computed(() => examinationCenterStore.isLoading)

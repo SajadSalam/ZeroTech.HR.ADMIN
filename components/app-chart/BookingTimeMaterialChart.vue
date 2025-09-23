@@ -27,55 +27,112 @@
           </div>
         </div>
 
-        <!-- Dropdown -->
-        <div class="bg-[#F8F8FF] rounded-xl px-4 py-3 flex items-center gap-6 min-w-[131px]">
-          <span class="text-[#615E83] font-bold text-sm">شهر</span>
-          <div class="flex flex-col gap-1">
-            <div class="w-[6px] h-[6px] bg-[#D9D9D9] rounded"></div>
-            <div class="w-[6px] h-[6px] bg-[#D9D9D9] rounded"></div>
-          </div>
-        </div>
       </div>
     </div>
 
     <!-- Chart Container -->
     <div class="w-full h-[350px]">
       <AddonApexcharts
+        
         type="line"
         :height="350"
         :width="undefined"
         :series="chartData.series"
         :options="chartOptions"
       />
+      <!-- <div v-else class="w-full h-[350px] flex items-center justify-center">
+        <div class="text-center">
+          <div class="text-gray-400 text-lg mb-2">لا توجد بيانات للعرض</div>
+          <div class="text-gray-500 text-sm">لم يتم العثور على بيانات امتحانات لهذا العام</div>
+        </div>
+      </div> -->
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { ApexOptions } from 'apexcharts'
+import type { ApexOptions } from 'apexcharts';
+import type { ProficiencyExamGroupChartData } from '~/views/home/types/proficiencyExamGroupChartData';
+
+// Props
+interface Props {
+  data?: ProficiencyExamGroupChartData | null
+}
+
+const props = defineProps<Props>()
 
 // Chart data
-const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
 
-const chartData = {
-  series: [
+// Transform API data to chart format
+const transformDataToChartSeries = (apiData: ProficiencyExamGroupChartData | null) => {
+  if (!apiData) {
+    // Return empty data arrays if no data provided
+    return [
+      {
+        name: 'امتحان كفاءة اللغة الانجليزية',
+        type: 'line',
+        data: Array(12).fill(0)
+      },
+      {
+        name: 'امتحان كفاءة اللغة العربي',
+        type: 'line',
+        data: Array(12).fill(0)
+      },
+      {
+        name: 'امتحان كفاءة الحاسوب',
+        type: 'line',
+        data: Array(12).fill(0)
+      }
+    ]
+  }
+
+  // Create arrays for 12 months, initialized with 0
+  const englishData = Array(12).fill(0)
+  const arabicData = Array(12).fill(0)
+  const computerData = Array(12).fill(0)
+
+  // Fill data arrays with API data (month is 1-based, array is 0-based)
+  apiData.englishExams?.forEach(exam => {
+    if (exam.month >= 1 && exam.month <= 12) {
+      englishData[exam.month - 1] = exam.totalStudentsUsedTickets
+    }
+  })
+
+  apiData.arabicExams?.forEach(exam => {
+    if (exam.month >= 1 && exam.month <= 12) {
+      arabicData[exam.month - 1] = exam.totalStudentsUsedTickets
+    }
+  })
+
+  apiData.computerExams?.forEach(exam => {
+    if (exam.month >= 1 && exam.month <= 12) {
+      computerData[exam.month - 1] = exam.totalStudentsUsedTickets
+    }
+  })
+
+  return [
     {
       name: 'امتحان كفاءة اللغة الانجليزية',
       type: 'line',
-      data: [2, 4, 6, 8, 10, 12, 10, 8, 6, 4, 2, 1]
+      data: englishData
     },
     {
       name: 'امتحان كفاءة اللغة العربي',
       type: 'line',
-      data: [1, 3, 5, 7, 9, 11, 9, 7, 5, 3, 1, 0.5]
+      data: arabicData
     },
     {
       name: 'امتحان كفاءة الحاسوب',
       type: 'line',
-      data: [0.5, 2, 4, 6, 8, 10, 8, 6, 4, 2, 0.5, 0.2]
+      data: computerData
     }
   ]
 }
+
+const chartData = computed(() => ({
+  series: transformDataToChartSeries(props.data || null)
+}))
 
 // Chart options
 const chartOptions: ApexOptions = {
@@ -147,8 +204,6 @@ const chartOptions: ApexOptions = {
   },
   yaxis: {
     min: 0,
-    max: 12,
-    tickAmount: 6,
     labels: {
       style: {
         colors: '#474B4E',
@@ -157,7 +212,7 @@ const chartOptions: ApexOptions = {
         fontWeight: 400
       },
       formatter: (value: number): string => {
-        return value.toString()
+        return Math.round(value).toString()
       }
     }
   },
