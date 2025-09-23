@@ -33,19 +33,19 @@
     <!-- Chart Container -->
     <div class="w-full h-[350px]">
       <AddonApexcharts
-        v-if="chartData.series.some(series => series.data.some(value => value > 0))"
+        
         type="line"
         :height="350"
         :width="undefined"
         :series="chartData.series"
         :options="chartOptions"
       />
-      <div v-else class="w-full h-[350px] flex items-center justify-center">
+      <!-- <div v-else class="w-full h-[350px] flex items-center justify-center">
         <div class="text-center">
           <div class="text-gray-400 text-lg mb-2">لا توجد بيانات للعرض</div>
           <div class="text-gray-500 text-sm">لم يتم العثور على بيانات امتحانات لهذا العام</div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

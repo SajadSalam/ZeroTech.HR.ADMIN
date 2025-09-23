@@ -94,7 +94,7 @@ const defaultNavigation = [
         name: 'knowledgelevel',
         icon: { name: 'ph-folder-simple-duotone', class: 'w-5 h-5' },
         to: '/knowledgelevel',
-        privilege: 'ums:ems:knowledge-level:view-any',
+        privilege: 'ums:ems:knowledgelevel:view-any',
       },
     ],
   },

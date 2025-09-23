@@ -113,42 +113,157 @@ const chartData = computed(() => {
 
 const chartOptions = computed((): ApexOptions => ({
   chart: {
-    height: 350,
     type: 'bar',
+    fontFamily: 'Tajawal, sans-serif',
+    toolbar: {
+      show: false
+    },
+    background: 'transparent',
+    animations: {
+      enabled: true,
+      easing: 'easeinout',
+      speed: 800,
+    }
+  },
+  colors: ['#A01E11'],
+  fill: {
+    type: 'gradient',
+    gradient: {
+      shade: 'light',
+      type: 'vertical',
+      shadeIntensity: 0.5,
+      gradientToColors: ['#750D02'],
+      inverseColors: false,
+      opacityFrom: 1,
+      opacityTo: 1,
+      stops: [0, 100]
+    }
   },
   plotOptions: {
     bar: {
-      borderRadius: 10,
+      borderRadius: 7,
+      borderRadiusApplication: 'end',
+      columnWidth: '38px',
       dataLabels: {
-        position: 'top'
+        position: 'top',
       }
     }
   },
-  dataLabels: {
-    enabled: true,
-    formatter: val => val.toString(),
-    offsetY: -20,
-    style: {
-      fontSize: '12px',
-      colors: ["#304758"]
+  grid: {
+    show: true,
+    borderColor: '#E5E5EF',
+    strokeDashArray: 7,
+    position: 'back',
+    xaxis: {
+      lines: {
+        show: false
+      }
+    },
+    yaxis: {
+      lines: {
+        show: true
+      }
+    },
+    padding: {
+      top: 0,
+      right: 30,
+      bottom: 0,
+      left: 20
     }
   },
   xaxis: {
     categories: chartData.value.categories,
-    position: 'bottom',
-    axisBorder: { show: false },
-    axisTicks: { show: false }
-  },
-  yaxis: {
     labels: {
-      formatter: val => val.toString()
+      style: {
+        colors: '#615E83',
+        fontSize: '12px',
+        fontFamily: 'Tajawal, sans-serif',
+        fontWeight: 400
+      },
+      offsetY: 0
+    },
+    axisBorder: {
+      show: false
+    },
+    axisTicks: {
+      show: false
     }
   },
-  title: {
-    text: 'عدد المقاعد المحجوزة حسب المحافظات',
-    align: 'center',
-    style: { color: '#444' }
-  }
+  yaxis: {
+    min: 0,
+    labels: {
+      style: {
+        colors: '#615E83',
+        fontSize: '14px',
+        fontFamily: 'Inter, sans-serif',
+        fontWeight: 400
+      },
+      formatter: (value: number) => {
+        if (value >= 1000) {
+          return (value / 1000) + 'k'
+        }
+        return value.toString()
+      }
+    }
+  },
+  legend: {
+    show: false
+  },
+  tooltip: {
+    enabled: true,
+    style: {
+      fontSize: '12px',
+      fontFamily: 'Tajawal, sans-serif',
+    }
+  },
+  dataLabels: {
+    enabled: true,
+    style: {
+      fontSize: '12px',
+      fontFamily: 'Tajawal, sans-serif',
+      fontWeight: 'bold',
+      colors: ['#fff']
+    },
+    formatter: (val: number) => {
+      if (val >= 1000) {
+        return (val / 1000) + 'k'
+      }
+      return val.toString()
+    }
+  },
+  states: {
+    normal: {
+      filter: {
+        type: 'none'
+      }
+    },
+    hover: {
+      filter: {
+        type: 'lighten',
+        value: 0.1
+      }
+    },
+    active: {
+      allowMultipleDataPointsSelection: false,
+      filter: {
+        type: 'darken',
+        value: 0.1
+      }
+    }
+  },
+  responsive: [{
+    breakpoint: 768,
+    options: {
+      chart: {
+        height: 250
+      },
+      plotOptions: {
+        bar: {
+          columnWidth: '60%'
+        }
+      }
+    }
+  }]
 }))
 
 onMounted(loadGovernorateData)
