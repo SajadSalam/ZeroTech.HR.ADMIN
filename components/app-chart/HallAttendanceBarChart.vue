@@ -1,246 +1,164 @@
 <template>
-  <div class="bg-white rounded-[20px] p-6 w-full h-full min-h-[490px]" style="box-shadow: 0px 2px 6px 0px rgba(13, 10, 44, 0.08)">
-    <!-- Header with Dropdown and Title -->
-    <div class="flex justify-between items-center mb-8">
-        <!-- Title -->
-      <div class="flex flex-col items-start gap-1">
-        <span class="text-[#9291A5] text-lg font-normal">احصائية</span>
-        <h3 class="text-[#1E1B39] font-bold text-[22px] leading-tight">
-          الحضور حسب المركز الامتحاني
-        </h3>
-      </div>
-      <!-- Dropdown -->
-      <div class="bg-[#F8F8FF] rounded-[20px] px-4 py-3 flex items-center gap-6 min-w-[131px]">
-        <span class="text-[#615E83] font-medium text-sm">شهر</span>
-        <div class="flex flex-col gap-1">
-          <div class="w-[6px] h-[6px] bg-[#D9D9D9] rounded"></div>
-          <div class="w-[6px] h-[6px] bg-[#D9D9D9] rounded"></div>
+    <div class="bg-white rounded-[20px] p-6 w-full h-full min-h-[490px]">
+        <!-- Header with Dropdown and Title -->
+        <div class="flex justify-between items-center mb-8">
+            <!-- Title -->
+            <div class="flex flex-col items-start gap-1">
+                <span class="text-[#9291A5] text-lg font-normal">احصائية</span>
+                <h3 class="text-[#1E1B39] font-bold text-[22px] leading-tight">
+                    عدد المتقدمين للأمتحان حسب المحافظات
+                </h3>
+            </div>
+            <!-- Dropdown -->
+            <div class="flex justify-between items-center">
+
+
+                <!-- Month Selector -->
+                <div class="flex items-center gap-4">
+                    <label class="text-[#615E83] font-medium text-sm">اختر الشهر:</label>
+                    <select v-model="selectedMonth"
+                        class="bg-[#F8F8FF] rounded-xl px-4 py-3 text-[#615E83] font-medium text-sm border-none outline-none cursor-pointer min-w-[140px]">
+                        <option v-for="month in months" :key="month.value" :value="month.value">
+                            {{ month.label }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
         </div>
-      </div>
-      
-      
-    </div>
 
-    <!-- Divider -->
-    <hr class="border-[#E5E5EF] border-solid border-t mb-8">
+        <!-- Divider -->
+        <hr class="border-[#E5E5EF] border-solid border-t mb-8">
 
-    <!-- Chart Container -->
-    <div class="relative w-full h-[350px]">
-      <AddonApexcharts
-        type="bar"
-        :height="350"
-        :width="'100%'"
-        :series="chartData.series"
-        :options="chartOptions"
-      />
-      
-    
+        <!-- Chart Container -->
+        <div class="relative w-full h-[350px]">
+            <div v-if="isLoading" class="flex items-center justify-center h-full">
+                <div class="text-gray-500">جاري تحميل البيانات...</div>
+            </div>
+            <!-- <div v-else-if="error" class="flex items-center justify-center h-full">
+                <div class="text-center">
+                    <div class="text-red-500 mb-2">{{ error }}</div>
+                    <button @click="loadGovernorateData" class="px-4 py-2 bg-primary text-white rounded text-sm">
+                        إعادة المحاولة
+                    </button>
+                </div>
+            </div>
+            <div v-else-if="!governorateData?.governorates?.length" class="flex items-center justify-center h-full">
+                <div class="text-gray-500">لا توجد بيانات للعرض</div>
+            </div> -->
+            <AddonApexcharts v-else type="bar" :height="350" :series="chartData.series" :options="chartOptions" />
+        </div>
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
 import type { ApexOptions } from 'apexcharts'
+import { HomeService } from '~/views/home/service'
+import type { GovernorateBookingChartData } from '~/views/home/types/governorateBookingChart'
 
-// Reactive state for tooltip
-const tooltipVisible = ref(false)
-const tooltipPosition = ref({ left: '0px', top: '0px' })
-const tooltipContent = ref('')
+// Current year and month
+const currentYear = new Date().getFullYear()
+const currentMonth = new Date().getMonth() + 1
 
-// Chart data - halls with their attendance values
-const hallLabels = ['مركز 1 1', 'مركز 1 2', 'مركز 1 3', 'مركز 1 4', 'مركز 1 5', 'مركز 1 6', 'مركز 1 7', 'مركز 1 8', 'مركز 1 9', 'مركز 1 10', 'مركز 1 11', 'مركز 1 12', 'مركز 1 13', 'مركز 1 14']
-const attendanceData = [2500, 1200, 2800, 1800, 1500, 1800, 1500, 1800, 1500, 3000, 1000, 1000, 1000, 2200]
+// Month options with Arabic names
+const months = [
+    { value: 1, label: 'يناير' },
+    { value: 2, label: 'فبراير' },
+    { value: 3, label: 'مارس' },
+    { value: 4, label: 'أبريل' },
+    { value: 5, label: 'مايو' },
+    { value: 6, label: 'يونيو' },
+    { value: 7, label: 'يوليو' },
+    { value: 8, label: 'أغسطس' },
+    { value: 9, label: 'سبتمبر' },
+    { value: 10, label: 'أكتوبر' },
+    { value: 11, label: 'نوفمبر' },
+    { value: 12, label: 'ديسمبر' }
+]
 
-const chartData = {
-  series: [{
-    name: 'الحضور',
-    data: attendanceData
-  }]
+// Selected month - defaults to current month
+const selectedMonth = ref(currentMonth)
+
+// Service and state
+const homeService = new HomeService()
+const isLoading = ref(true)
+const error = ref<string | null>(null)
+const governorateData = ref<GovernorateBookingChartData | null>(null)
+
+// Load governorate booking data
+const loadGovernorateData = async () => {
+    try {
+        isLoading.value = true
+        error.value = null
+        governorateData.value = await homeService.getGovernorateBookingChartData(currentYear, selectedMonth.value)
+    } catch (err) {
+        console.error('Error loading governorate booking data:', err)
+        error.value = 'حدث خطأ في تحميل بيانات المحافظات'
+    } finally {
+        isLoading.value = false
+    }
 }
+// Chart data
+const chartData = computed(() => {
+  return {
+    series: [
+      {
+        name: "المقاعد المحجوزة",
+        data: governorateData.value?.governorates.map(gov => gov.totalBookedSeats) || []
+      }
+    ],
+    categories: governorateData.value?.governorates.map(gov => gov.governorateName) || []
+  }
+})
 
-// Chart options
-const chartOptions: ApexOptions = {
+const chartOptions = computed((): ApexOptions => ({
   chart: {
+    height: 350,
     type: 'bar',
-    fontFamily: 'Tajawal, sans-serif',
-    toolbar: {
-      show: false
-    },
-    background: 'transparent',
-    animations: {
-      enabled: true,
-      easing: 'easeinout',
-      speed: 800,
-    },
-    events: {
-      dataPointMouseEnter: handleDataPointHover,
-      dataPointMouseLeave: handleDataPointLeave
-    }
-  },
-  colors: ['#A01E11'],
-  fill: {
-    type: 'gradient',
-    gradient: {
-      shade: 'light',
-      type: 'vertical',
-      shadeIntensity: 0.5,
-      gradientToColors: ['#750D02'],
-      inverseColors: false,
-      opacityFrom: 1,
-      opacityTo: 1,
-      stops: [0, 100]
-    }
   },
   plotOptions: {
     bar: {
-      borderRadius: 7,
-      borderRadiusApplication: 'end',
-      columnWidth: '38px',
+      borderRadius: 10,
       dataLabels: {
-        position: 'top',
+        position: 'top'
       }
     }
   },
-  grid: {
-    show: true,
-    borderColor: '#E5E5EF',
-    strokeDashArray: 7,
-    position: 'back',
-    xaxis: {
-      lines: {
-        show: false
-      }
-    },
-    yaxis: {
-      lines: {
-        show: true
-      }
-    },
-    padding: {
-      top: 0,
-      right: 30,
-      bottom: 0,
-      left: 20
+  dataLabels: {
+    enabled: true,
+    formatter: val => val.toString(),
+    offsetY: -20,
+    style: {
+      fontSize: '12px',
+      colors: ["#304758"]
     }
   },
   xaxis: {
-    categories: hallLabels,
-    labels: {
-      style: {
-        colors: '#615E83',
-        fontSize: '12px',
-        fontFamily: 'Tajawal, sans-serif',
-        fontWeight: 400
-      },
-      offsetY: 0
-    },
-    axisBorder: {
-      show: false
-    },
-    axisTicks: {
-      show: false
-    }
+    categories: chartData.value.categories,
+    position: 'bottom',
+    axisBorder: { show: false },
+    axisTicks: { show: false }
   },
   yaxis: {
-    min: 0,
-    max: 3000,
-    tickAmount: 3,
     labels: {
-      style: {
-        colors: '#615E83',
-        fontSize: '14px',
-        fontFamily: 'Inter, sans-serif',
-        fontWeight: 400
-      },
-      formatter: (value: number) => {
-        if (value >= 1000) {
-          return (value / 1000) + 'k'
-        }
-        return value.toString()
-      }
+      formatter: val => val.toString()
     }
   },
-  legend: {
-    show: true
-  },
-  tooltip: {
-    enabled: true // Using custom tooltip
-  },
-  dataLabels: {
-    enabled: true
-  },
-  states: {
-    normal: {
-      filter: {
-        type: 'none'
-      }
-    },
-    hover: {
-      filter: {
-        type: 'lighten',
-        value: 0.1
-      }
-    },
-    active: {
-      allowMultipleDataPointsSelection: false,
-      filter: {
-        type: 'darken',
-        value: 0.1
-      }
-    }
-  },
-  responsive: [{
-    breakpoint: 768,
-    options: {
-      chart: {
-        height: 250
-      },
-      plotOptions: {
-        bar: {
-          columnWidth: '60%'
-        }
-      }
-    }
-  }]
-}
+  title: {
+    text: 'عدد المقاعد المحجوزة حسب المحافظات',
+    align: 'center',
+    style: { color: '#444' }
+  }
+}))
+
+onMounted(loadGovernorateData)
+watch(selectedMonth, loadGovernorateData)
+
 
 // Handle tooltip events
-function handleDataPointHover(event: any, chartContext: any, config: any) {
-  if (config.dataPointIndex >= 0) {
-    tooltipVisible.value = true
-    tooltipContent.value = `${attendanceData[config.dataPointIndex].toLocaleString()}`
-    
-    // Position tooltip near the hovered point
-    const rect = event.target.getBoundingClientRect()
-    tooltipPosition.value = {
-      left: `${rect.left + rect.width / 2 - 30}px`,
-      top: `${rect.top - 60}px`
-    }
-  }
-}
 
-function handleDataPointLeave() {
-  tooltipVisible.value = false
-}
 </script>
 
 <style scoped>
-/* Custom chart styling */
-:deep(.apexcharts-canvas) {
-  font-family: 'Tajawal', sans-serif;
-}
 
-:deep(.apexcharts-bar-area) {
-  fill: url(#gradient) !important;
-}
-
-/* Inactive bars styling */
-:deep(.apexcharts-series[seriesName="الحضور"] .apexcharts-bar-area:not(.apexcharts-bar-area-selected)) {
-  fill: #750d02  !important;
-}
-
-/* Active/highlighted bar */
-:deep(.apexcharts-series[seriesName="الحضور"] .apexcharts-bar-area:nth-child(10)) {
-  fill: url(#gradient) !important;
-}
 </style>

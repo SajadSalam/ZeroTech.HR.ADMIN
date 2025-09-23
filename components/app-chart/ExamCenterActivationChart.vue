@@ -7,7 +7,7 @@
           احصائية
         </span>
         <h3 class="text-[#1E1B39] font-bold text-lg leading-tight">
-          عدد المسجلين حسب القاعات
+          حالة المراكز الامتحانية
         </h3>
       </div>
     </div>
@@ -36,13 +36,18 @@
 
 <script setup lang="ts">
 import type { ApexOptions } from 'apexcharts'
+import type { ExamCentersAcceptanceStatus } from '~/views/home/types/counts'
+
+const props = defineProps<{
+  data: ExamCentersAcceptanceStatus
+}>()
 
 // Reactive state for hover interactions
 const hoveredIndex = ref<number | null>(null)
 
 // Chart data with corrected values to match the Figma design
 const chartData = {
-  series: [124, 72, 95], // قاعة 2, قاعة 1, قاعة 3
+  series: [props.data.acceptedCenters, props.data.totalCentersForExams - props.data.acceptedCenters],
 }
 
 // Mouse event handlers
@@ -73,14 +78,10 @@ const chartOptions: ApexOptions = {
     }
   },
   colors: [
-    // قاعة 2: Red gradient (using primary color from gradient)
     '#A01E11',
-    // قاعة 1: Light red (exact from Figma)
-    'rgba(117, 13, 2, 0.13)',
-    // قاعة 3: Blue gradient (using primary color from gradient)
-    '#0075AD'
+    'rgba(117, 13, 2, 0.13)'
   ],
-  labels: ['قاعة 2', 'قاعة 1', 'قاعة 3'],
+  labels: [props.data.acceptedCenters > 0 ? 'مفعل' : 'غير مفعل', props.data.rejectionRatio > 0 ? 'غير مفعل' : 'مفعل'],
   legend: {
     show: true // Using custom indicators instead
   },

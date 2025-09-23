@@ -14,7 +14,7 @@ const props = defineProps<{
     | "danger"
     | "none";
     icon: string;
-    value: string | number;
+    value: string | number | undefined | null;
     noCounting?: boolean;
     variant?: 'default' | 'gradient';
 }>();
