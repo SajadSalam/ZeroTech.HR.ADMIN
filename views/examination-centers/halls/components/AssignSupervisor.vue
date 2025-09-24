@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { debounce } from 'lodash-es'
 import { useEmployeeStore } from '~/views/employee/store'
 import type { Employee, EmployeeFilters } from '~/views/employee/types'
 import OrganizationTree from '~/views/orgaization/OrganizationTree.vue'
@@ -27,10 +26,6 @@ const fetchEmployees = async (collegeId: number) => {
   filters.value.collegeId = collegeId
   await employeeStore.getEmployees(filters.value)
 }
-const debouncedSearch = debounce((value: string) => {
-  filters.value.search = value
-  fetchEmployees(selectedItem.value)
-}, 300)
 const employees = computed(() => {
   return employeeStore.employees
 })
@@ -173,10 +168,6 @@ watch(
     }
   }
 )
-const handleCourseChange = (selectedCourses: any[]) => {
-  filters.value.courses = selectedCourses
-  fetchEmployees(selectedItem.value)
-}
 
 </script>
 <template>
@@ -197,6 +188,7 @@ const handleCourseChange = (selectedCourses: any[]) => {
 
       <div class="max-h-[300px] overflow-auto border-s-2 border-gray-200 ps-3">
         <h1 class="text-xl font-bold">{{ $t('employees') }}</h1>
+        <AppFieldAppInputField v-if="employees.length" v-model="filters.search" :label="$t('search-employee')" />
 
         <div v-if="!employees.length" class="flex flex-col items-center justify-center">
           <img

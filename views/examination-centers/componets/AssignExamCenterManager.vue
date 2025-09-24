@@ -158,7 +158,7 @@ const removeManager = () => {
 
       <div class="max-h-[300px] overflow-auto border-s-2 border-gray-200 ps-3">
         <h1 class="text-xl font-bold">{{ $t('employees') }}</h1>
-
+        <AppInputField v-if="employees.length" v-model="filters.search" :label="$t('search-employee')" />
         <div v-if="!employees.length" class="flex flex-col items-center justify-center">
           <img
             src="/assets/images/no-data.png"

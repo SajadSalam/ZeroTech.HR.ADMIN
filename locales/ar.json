@@ -1,4 +1,6 @@
 {
+    "examination-centers-management": "إدارة المراكز الامتحانية",
+  "questions-management": "إدارة الأسئلة",
   "number-of-halls": "عدد القاعات",
   "number-of-exams": "عدد الامتحانات",
   "number-of-students": "عدد المسجلين",
@@ -105,7 +107,7 @@
   "select-subject": "اختر المادة",
   "select-topics": "اختر الموضوعات",
   "save-change": "حفظ التغييرات",
-  "questions-editor": "محرر الأسئلة",
+  "questions-editor": "تفاصيل بنك الأسئلة",
   "to-add-or-edit-questions": "لإضافة أو تعديل الأسئلة",
   "exam-question-form": "نموذج اسئلة الامتحان",
   "it-is-a-special-form-to-enter-the-exam-questions-to-be-summoned-in-the-exam-department": "هو نموذج خاص لإدخال أسئلة الامتحان ليتم استدعاؤها في قسم الامتحانات",
@@ -610,6 +612,7 @@
   "image_uploading": "جاري تحميل الصورة...",
   "image_upload_success": "تم تحميل الصورة بنجاح!",
   "image_upload_failed": "فشل في تحميل الصورة",
+  "file_size_error": "يجب أن يكون حجم الملف أقل من 1 ميجابايت",
   "delete_image": "حذف الصورة",
   "end_before_start_date_error": "جدول غير صالح: لا يمكن أن يكون تاريخ/وقت انتهاء الامتحان قبل تاريخ/وقت البدء",
   "same_day_time_error": "توقيت غير صالح: للامتحانات في نفس اليوم، يجب أن يكون وقت الانتهاء بعد وقت البدء",

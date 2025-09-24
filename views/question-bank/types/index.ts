@@ -79,10 +79,10 @@ export const questionTypeOptions = (t: (key: string) => string) => {
       label: t('dropdown'),
       value: QuestionType.DropDown,
     },
-    {
-      label: t('article'),
-      value: QuestionType.Article,
-    },
+    // {
+    //   label: t('article'),
+    //   value: QuestionType.Article,
+    // },
     {
       label: t('true-or-false'),
       value: QuestionType.TrueOrFalse,

@@ -1,4 +1,6 @@
 {
+    "examination-centers-management": "Examination Centers Management",
+  "questions-management": "Questions Management",
   "number-of-halls": "Number of Halls",
   "number-of-exams": "Number of Exams",
   "number-of-students": "Number of Students",
@@ -589,6 +591,7 @@
   "image_uploading": "Image is uploading...",
   "image_upload_success": "Image uploaded successfully!",
   "image_upload_failed": "Failed to upload image",
+  "file_size_error": "File size must be less than 1MB",
   "delete_image": "Delete Image",
   "end_before_start_date_error": "Invalid schedule: The exam end date/time cannot be earlier than the start date/time",
   "same_day_time_error": "Invalid time: For same-day exams, the end time must be later than the start time",
