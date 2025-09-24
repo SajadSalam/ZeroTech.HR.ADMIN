@@ -225,12 +225,42 @@ watch(isOpen, (newValue) => {
   if (newValue && props.fetchOnSearch && items.value.length === 0) {
     fetchData()
   }
+  if (newValue) {
+    updateMenuPosition()
+  }
+})
+
+// Update position on scroll
+const handleScroll = () => {
+  if (isOpen.value) {
+    updateMenuPosition()
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll, true)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll, true)
 })
 
 const menuWidth = computed(() => {
   if (menu.value) return menu.value.clientWidth
   return 0
 })
+
+const menuPosition = ref({ top: 0, left: 0 })
+
+const updateMenuPosition = () => {
+  if (menu.value) {
+    const rect = menu.value.getBoundingClientRect()
+    menuPosition.value = {
+      top: rect.bottom + window.scrollY,
+      left: rect.left + window.scrollX
+    }
+  }
+}
 
 const isItemSelected = (item: T) => {
   return selectedItems.value.some((i) => itemWithValue(i) === itemWithValue(item))
@@ -252,7 +282,7 @@ onClickOutside(openedMenu, () => {
 </script>
 
 <template>
-  <div ref="menu" class="relative">
+  <div ref="menu" class="">
     <div class="relative">
       <div class="text-gray pointer-events-none absolute inset-y-0 start-0 flex items-center ps-5">
         <i :class="appendIcon" />
@@ -312,10 +342,13 @@ onClickOutside(openedMenu, () => {
 
     </div>
     <div
-    ref="openedMenu"
       v-if="isOpen"
-      class="max-h-[200px] rounded-box dark:bg-dark absolute z-[99] flex flex-col overflow-y-auto rounded-xl border bg-white p-2 shadow dark:text-white"
-      :style="{ width: `${menuWidth}px` }"
+      class="max-h-[200px] rounded-box dark:bg-dark fixed z-[9999] flex flex-col overflow-y-auto rounded-xl border bg-white p-2 shadow dark:text-white"
+      :style="{ 
+        width: `${menuWidth}px`,
+        top: `${menuPosition.top}px`,
+        left: `${menuPosition.left}px`
+      }"
     >
       <!-- Add create option when no exact match is found -->
       <div
