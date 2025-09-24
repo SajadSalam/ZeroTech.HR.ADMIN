@@ -19,16 +19,23 @@ const getExaminationCenter = async () => {
   examinationCenter.value = response
 }
 
-onMounted(() => {
-  getExaminationCenter()
-})
-
 const statistics = ref({
     halls: 12,
     exams: 5,
-    students: 100,
+    numberOfStudents: 100,
     amount: 20000000,
 })
+onMounted(() => {
+  getExaminationCenter()
+  getStatistics()
+})
+
+const getStatistics = async () => {
+  const response = await examinationCenterStore.getExamCenterStatistics(id as string)
+  statistics.value = response
+}
+
+
 </script>
 
 <template>
@@ -38,14 +45,9 @@ const statistics = ref({
     </div>
     
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 my-2">
-    
-      <InfoLabelGradient :label="$t('number-of-students')" color="primary" icon="ph:folder-notch-open-duotone"
-          :value="statistics.students">
+      <InfoLabelGradient :label="$t('number-of-students')" color="primary" icon="ph:users-duotone"
+          :value="statistics.numberOfStudents" variant="gradient">
       </InfoLabelGradient>
-
-      <InfoLabel :label="$t('amount')" color="warning" icon="ph:arrows-clockwise-duotone"
-          :value="statistics.amount">
-      </InfoLabel>
     </div>
     
     <!-- <Exams /> -->

@@ -1,6 +1,7 @@
 <script lang="ts" setup generic="T, TModel">
 import axiosInstance from '~/services/app-client/axios'
 import type { ErrorObject } from '@vuelidate/core'
+import { onClickOutside } from '@vueuse/core'
 import { get } from 'lodash-es'
 interface Props {
   items?: T[]
@@ -244,10 +245,14 @@ const oldData = computed(() => props.oldData)
 // watchDeep(() => oldData.value,() => {
 //     items.value [...oldData.value]
 // })
+const openedMenu = ref(null)
+onClickOutside(openedMenu, () => {
+  isOpen.value = false
+})
 </script>
 
 <template>
-  <div ref="menu" relative>
+  <div ref="menu" class="relative">
     <div class="relative">
       <div class="text-gray pointer-events-none absolute inset-y-0 start-0 flex items-center ps-5">
         <i :class="appendIcon" />
@@ -307,6 +312,7 @@ const oldData = computed(() => props.oldData)
 
     </div>
     <div
+    ref="openedMenu"
       v-if="isOpen"
       class="max-h-[200px] rounded-box dark:bg-dark absolute z-[99] flex flex-col overflow-y-auto rounded-xl border bg-white p-2 shadow dark:text-white"
       :style="{ width: `${menuWidth}px` }"

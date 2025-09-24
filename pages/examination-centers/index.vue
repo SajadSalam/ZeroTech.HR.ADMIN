@@ -76,8 +76,35 @@ const { hasPrivilege } = useAuthStore()
         :items="examinationCenters"
         :is-loading="isLoading"
       >
+      <template #data-managerName="{ item }">
+       <div class="flex items-center justify-center gap-2">
+        <BaseTag
+            v-if="item.managerName"
+            color="warning"
+            variant="pastel"
+            
+            class="cursor-pointer flex items-center gap-2 pa-2" 
+            @click="openAssignExamCenterManager(item)"
+        >
+            {{ item.managerName }}
+           <Icon  name="ph:pen-duotone" color="warning" class="size-4" />
+        </BaseTag>
+        <BaseTag
+            v-if="!item.managerName"
+            class="cursor-pointer flex items-center justify-center gap-2 pa-2" 
+            @click="openAssignExamCenterManager(item)"
+            color="info"
+            variant="pastel"
+       >
+           <span v-if="!item.managerName">
+             {{ $t('assign-exam-center-manager') }}
+           </span>
+           <Icon v-if="!item.managerName" name="ph:plus-circle-duotone" class="me-2 size-4" />
+          </BaseTag> 
+       </div>
+      </template>
         <template #data-actions="{ item }">
-          <div class="flex gap-2 items-center">
+          <div class="flex items-center justify-start W-full gap-2">
             <AppCrudActions
             :delete-service="() => deleteExaminationCenter(item)"
             :hide-delete="!hasPrivilege('ums:ems:examcenter:delete')"
@@ -86,10 +113,8 @@ const { hasPrivilege } = useAuthStore()
             :edit-button-action="() => openEdit(item)"
           />
 
-          <BaseButton color="primary" @click="openAssignExamCenterManager(item)">
-            {{ $t('assign-exam-center-manager') }}
-          </BaseButton>
-          <BaseButton color="primary" :to="`/examination-centers/${item.id}/exams`">
+          
+          <BaseButton size="sm" color="primary" :to="`/examination-centers/${item.id}/exams`">
             <Icon name="ph:eye" class="size-4" />
             {{ $t('view-examination-center') }}
           </BaseButton>
