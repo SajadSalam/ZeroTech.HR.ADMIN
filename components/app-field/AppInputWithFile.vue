@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { FileService } from '~/services/app-client/fileService'
-import AppFileUploaderButton from './AppFileUploaderButton.vue'
-import AppImagePreviewModal from '../AppImagePreviewModal.vue'
 import { useI18n } from 'vue-i18n'
+import { FileService } from '~/services/app-client/fileService'
+import AppImagePreviewModal from '../AppImagePreviewModal.vue'
+import AppFileUploaderButton from './AppFileUploaderButton.vue'
 
 const { t } = useI18n()
 
@@ -35,6 +35,17 @@ const fileService = new FileService()
 const showModal = ref(false)
 watch(fileModel, async (value: File | null) => {
   if (value) {
+    // Check file size (1MB = 1024 * 1024 bytes)
+    const maxSize = 1024 * 1024 // 1MB in bytes
+    if (value.size > maxSize) {
+      useToast({
+        message: t('file_size_error'),
+        isError: true,
+      })
+      fileModel.value = null
+      return
+    }
+
     try {
       isUploading.value = true
       useToast({
