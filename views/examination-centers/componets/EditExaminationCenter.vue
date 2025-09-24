@@ -24,11 +24,30 @@ const validator = new Validator<ExaminationCenter>(
     isActive: true,
     collegeId: 0,
     governorateId:0,
-    maxCapacity: 0
+    maxCapacity: 0,
+    surveillanceDevices: [],
+    longitude: 0,
+    latitude: 0
+
   },
   {
     name: {
       required: createValidator(t, 'name', 'required'),
+    },
+    maxCapacity: {
+      required: createValidator(t, 'max-capacity', 'required'),
+    },
+    governorateId: {
+      required: createValidator(t, 'governorate', 'required'),
+    },
+    collegeId: {
+      required: createValidator(t, 'college', 'required'),
+    },
+    longitude: {
+      required: createValidator(t, 'longitude', 'required'),
+    },
+    latitude: {
+      required: createValidator(t, 'latitude', 'required'),
     },
   }
 )
@@ -70,7 +89,8 @@ onMounted(() => {
     size="2xl"
     overflow-y="visible"
   >
-    <div class="rounded-3xl p-3">
+  <div class="grid grid-cols-2 gap-2 rounded-3xl p-3">
+       
       <AppInputField
         v-model="body.name.$model"
         :errors="body.name.$errors"
@@ -90,16 +110,24 @@ onMounted(() => {
         item-label="arabicName"
         item-value="id"
       />
-      <h1 class="my-2">
-        {{ $t('select-organization') }}
-      </h1>
-      <BaseTag class="mb-2">
-        {{
-          examinationCentersStore.selectedExaminationCenter?.college.fullNameAr ??
-          examinationCentersStore.selectedExaminationCenter?.college.arabicName
-        }}
-      </BaseTag>
-      <OrganizationTree v-model="body.collegeId.$model" />
+      <div class="col-span-2">
+        <h1 class="my-2">
+          {{ $t('select-organization') }}
+        </h1>
+        <OrganizationTree v-model="body.collegeId.$model" />
+      </div>
+      <div class="col-span-2">
+
+        <AppFieldAppMapField
+            class="col-span-2"
+            v-model:lat="body.latitude.$model"
+            v-model:lng="body.longitude.$model"
+            label="الموقع"
+        />
+      </div>
+    </div>
+    <div class="rounded-3xl p-3">
+      
 
       <BaseButton
         color="primary"

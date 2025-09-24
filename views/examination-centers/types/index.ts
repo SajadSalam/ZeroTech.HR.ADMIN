@@ -2,13 +2,32 @@ import type { BaseDto } from '~/utils/types/base-dto'
 import type { Organization } from '~/views/orgaization/types'
 
 
-
+/*
+"surveillanceDevices": [
+    {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "deviceURL": "string",
+      "deviceUserName": "string",
+      "devicePassword": "string"
+    }
+  ],
+  "longitude": 0,
+  "latitude": 0
+  */
 export interface ExaminationCenter {
   name: string
   isActive: boolean
   collegeId: number
   governorateId: number
   maxCapacity: number
+  surveillanceDevices: {
+    id: string
+    deviceURL: string
+    deviceUserName: string
+    devicePassword: string
+  }[]
+  longitude: number
+  latitude: number
 }
 export type ExaminationCenterDto = ExaminationCenter &
   BaseDto & {
