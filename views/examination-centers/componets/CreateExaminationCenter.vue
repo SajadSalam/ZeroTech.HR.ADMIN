@@ -24,12 +24,25 @@ const validator = new Validator<ExaminationCenter>(
     isActive: true,
     collegeId: 0,
     governorateId:0,
-    maxCapacity: 0
+    maxCapacity: 0,
+    surveillanceDevices: [],
+    longitude: 0,
+    latitude: 0
   },
   {
     name: {
       required: createValidator(t, 'name', 'required'),
     },
+    maxCapacity: {
+      required: createValidator(t, 'max-capacity', 'required'),
+    },
+    governorateId: {
+      required: createValidator(t, 'governorate', 'required'),
+    },
+    collegeId: {
+      required: createValidator(t, 'college', 'required'),
+    },
+    
   }
 )
 
@@ -63,14 +76,12 @@ onMounted(() => {
   <AppDialog
     v-model="examinationCentersStore.isCreateDialogOpen"
     :title="$t('create-examination-center')"
-    size="2xl"
+    size="3xl"
     overflow-y="visible"
   >
    
-    <div class="rounded-3xl p-3">
-        <AppFieldAppMapField
-            label="الموقع"
-        />
+    <div class="grid grid-cols-2 gap-2 rounded-3xl p-3">
+       
       <AppInputField
         v-model="body.name.$model"
         :errors="body.name.$errors"
@@ -90,15 +101,25 @@ onMounted(() => {
         item-label="arabicName"
         item-value="id"
       />
-      <h1 class="my-2">
-        {{ $t('select-organization') }}
-      </h1>
-      <OrganizationTree v-model="body.collegeId.$model" />
+      <div class="col-span-2">
+        <h1 class="my-2">
+          {{ $t('select-organization') }}
+        </h1>
+        <OrganizationTree v-model="body.collegeId.$model" />
+      </div>
+      <div class="col-span-2">
 
-      <BaseButton color="primary" class="mt-5 w-full gap-1" @click="createExaminationCenter">
+        <AppFieldAppMapField
+            class="col-span-2"
+            v-model:lat="body.latitude.$model"
+            v-model:lng="body.longitude.$model"
+            label="الموقع"
+        />
+      </div>
+    </div>
+    <BaseButton color="primary" class="mt-5 w-full gap-1" @click="createExaminationCenter">
         <Icon name="ph:upload-simple-duotone" class="size-5" />
         {{ $t('save-change') }}
       </BaseButton>
-    </div>
   </AppDialog>
 </template>
