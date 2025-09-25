@@ -1,5 +1,8 @@
 {
-    "examination-centers-management": "Examination Centers Management",
+    "income-by-exam-type": "Income by Exam Type",
+  "financial-dashboard": "Financial Dashboard",
+  "financial-dashboard-description": "View total revenue from all exam centers",
+  "examination-centers-management": "Examination Centers Management",
   "questions-management": "Questions Management",
   "number-of-halls": "Number of Halls",
   "number-of-exams": "Number of Exams",
@@ -733,5 +736,6 @@
   "reshuffle-questions": "Reshuffle Questions",
   "no-supervisors-selected": "No supervisors selected",
   "assign-supervisors": "Assign Supervisor",
-  "supervisors": "Supervisors"
+  "supervisors": "Supervisors",
+  "test": "Test"
 }

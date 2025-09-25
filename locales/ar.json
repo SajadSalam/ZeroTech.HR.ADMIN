@@ -1,5 +1,8 @@
 {
-    "examination-centers-management": "إدارة المراكز الامتحانية",
+    "income-by-exam-type": "الدخل حسب نوع الامتحان",
+  "financial-dashboard": "الاحصائيات المالية",
+  "financial-dashboard-description": "عرض اجمالي الايرادات من المقاعد المحجوزة لكل المراكز",
+  "examination-centers-management": "إدارة المراكز الامتحانية",
   "questions-management": "إدارة الأسئلة",
   "number-of-halls": "عدد القاعات",
   "number-of-exams": "عدد الامتحانات",
@@ -754,5 +757,6 @@
   "reshuffle-questions": "اعادة خلط الاسئلة ",
   "no-supervisors-selected": "لم يتم تحديد مراقبين بعد",
   "assign-supervisors": "تعيين المراقبين",
-  "supervisors": "المراقبين المحددين"
+  "supervisors": "المراقبين المحددين",
+  "test": "اختبار"
 }

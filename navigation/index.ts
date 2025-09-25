@@ -5,6 +5,11 @@ const defaultNavigation = [
     to: '/',
   },
   {
+    name: 'financial-dashboard',
+    icon: { name: 'ph-chart-pie-duotone', class: 'w-5 h-5' },
+    to: '/financial-dashboard',
+  },
+  {
     name: 'blacklist',
     icon: { name: 'ph-user-minus-duotone', class: 'w-5 h-5' },
     to: '/blacklist',
