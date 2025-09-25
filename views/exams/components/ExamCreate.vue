@@ -267,6 +267,8 @@ const updateExamType = (type: ExamType) => {
           :placeholder="$t('exam-centers')"
           item-subtitle="college.fullNameAr"
           get-url="/exam-center"
+          search-key="search"
+          fetch-on-search
           multiple
           item-label="name"
           :class="body.examType.$model != ExamType.Final ? 'col-span-2' : ''"
