@@ -1,5 +1,5 @@
 {
-    "income-by-exam-type": "Income by Exam Type",
+  "income-by-exam-type": "Income by Exam Type",
   "financial-dashboard": "Financial Dashboard",
   "financial-dashboard-description": "View total revenue from all exam centers",
   "examination-centers-management": "Examination Centers Management",
@@ -553,6 +553,22 @@
   "creation-period": "Creation Period",
   "organizational-structure": "University",
   "import-questions": "Import Questions",
+  "please-select-question-type-first": "Please select a question type first",
+  "download-template": "Download Template",
+  "template-downloaded-successfully": "Template downloaded successfully",
+  "dialogue-radio": "Dialogue (Radio)",
+  "dialogue-blank": "Dialogue (Fill the blank)",
+  "max-file-size": "Max file size",
+  "click-to-upload-or-drag-and-drop": "Click to upload or drag and drop",
+  "file-upload-disabled": "File upload is disabled",
+  "supported-formats": "Supported formats",
+  "uploading-file": "Uploading file",
+  "file-selected-successfully": "File selected successfully",
+  "file-requirements": "File requirements",
+  "max-size": "Maximum size",
+  "accepted-formats": "Accepted formats",
+  "file-size-too-large": "File size is too large. Maximum allowed size is {maxSize}MB",
+  "invalid-file-type-excel": "Invalid file type. Please select an Excel file (.xlsx or .xls)",
   "select-question-type": "Select Question Type",
   "excel-file": "Excel File",
   "questions-imported-successfully": "Questions imported successfully",
@@ -739,5 +755,6 @@
   "no-supervisors-selected": "No supervisors selected",
   "assign-supervisors": "Assign Supervisor",
   "supervisors": "Supervisors",
-  "test": "Test"
+  "test": "Test",
+  "import": "Import"
 }

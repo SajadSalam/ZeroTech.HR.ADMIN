@@ -1,18 +1,18 @@
 import axios from '~/services/app-client/axios'
 import type { BaseFilters, PaginatedResponse, WithoutPagination } from '~/utils/types/ApiResponses'
 import type {
-  QuestionBankDto,
-  QuestionBankCreateDto,
-  QuestionBankFilters,
-  QuestionBankDetailedDto,
-  AssignForm,
-  AssignDto,
-  QuestionBank,
-  QuestionBankTopicUpdate,
-  AssignType,
+    AssignDto,
+    AssignForm,
+    AssignType,
+    QuestionBank,
+    QuestionBankCreateDto,
+    QuestionBankDetailedDto,
+    QuestionBankDto,
+    QuestionBankFilters,
+    QuestionBankTopicUpdate,
 } from '../types'
+import { QUESTION_BANK_ROUTES, type ImportQuestionTypeOption } from '../types'
 import { QuestionType, type Question, type QuestionDto } from '../types/question'
-import { QUESTION_BANK_ROUTES } from '../types'
 
 interface IQuestionBankService {
   get: (filters: QuestionBankFilters) => Promise<PaginatedResponse<QuestionBankDto>>
@@ -38,7 +38,8 @@ interface IQuestionBankService {
   addTopic(questionBankId: string, topic: QuestionBankTopicUpdate): Promise<boolean>
 
   removeTopic(questionBankId: string, topicId: string): Promise<boolean>
-  importQuestions(questionBankId: string, file: File, questionType: QuestionType): Promise<void>
+  importQuestions(questionBankId: string, file: File, questionTypeOption: ImportQuestionTypeOption): Promise<void>
+  downloadTemplate(questionTypeOption: ImportQuestionTypeOption): Promise<void>
 }
 
 export class QuestionBankService implements IQuestionBankService {
@@ -181,25 +182,40 @@ export class QuestionBankService implements IQuestionBankService {
   async importQuestions(
     questionBankId: string,
     file: File,
-    questionType: QuestionType
+    questionTypeOption: ImportQuestionTypeOption
   ): Promise<void> {
     const formData = new FormData()
     formData.append('file', file)
 
     let uploadRoute: string
 
-    switch (questionType) {
-      case QuestionType.MultipleChoice:
-        uploadRoute = QUESTION_BANK_ROUTES.BULK_UPLOAD.MULTIPLE_CHOICE(questionBankId)
-        break
-      case QuestionType.Blank:
-        uploadRoute = QUESTION_BANK_ROUTES.BULK_UPLOAD.BLANK(questionBankId)
-        break
-      case QuestionType.TrueOrFalse:
-        uploadRoute = QUESTION_BANK_ROUTES.BULK_UPLOAD.TRUE_FALSE(questionBankId)
-        break
-      default:
-        throw new Error('Unsupported question type for bulk upload')
+    // Handle dialogue types with subTypes
+    if (questionTypeOption.value === QuestionType.Dialogue) {
+      switch (questionTypeOption.subType) {
+        case 'radio':
+          uploadRoute = QUESTION_BANK_ROUTES.BULK_UPLOAD.DIALOGUE_RADIO(questionBankId)
+          break
+        case 'blank':
+          uploadRoute = QUESTION_BANK_ROUTES.BULK_UPLOAD.DIALOGUE_BLANK(questionBankId)
+          break
+        default:
+          throw new Error('Unsupported dialogue subtype for bulk upload')
+      }
+    } else {
+      // Handle regular question types
+      switch (questionTypeOption.value) {
+        case QuestionType.Radio:
+          uploadRoute = QUESTION_BANK_ROUTES.BULK_UPLOAD.RADIO(questionBankId)
+          break
+        case QuestionType.Blank:
+          uploadRoute = QUESTION_BANK_ROUTES.BULK_UPLOAD.BLANK(questionBankId)
+          break
+        case QuestionType.TrueOrFalse:
+          uploadRoute = QUESTION_BANK_ROUTES.BULK_UPLOAD.TRUE_FALSE(questionBankId)
+          break
+        default:
+          throw new Error('Unsupported question type for bulk upload')
+      }
     }
 
     await axios.post(uploadRoute, formData, {
@@ -207,5 +223,56 @@ export class QuestionBankService implements IQuestionBankService {
         'Content-Type': 'multipart/form-data',
       },
     })
+  }
+
+  async downloadTemplate(questionTypeOption: ImportQuestionTypeOption): Promise<void> {
+    try {
+
+        console.log(questionTypeOption)
+      // Determine the template type based on the question type and subtype
+      let templateType: string
+
+        switch (questionTypeOption.value) {
+          case QuestionType.Radio:
+            templateType = 'radio'
+            break
+          case QuestionType.Blank:
+            templateType = 'blank'
+            break
+          case QuestionType.TrueOrFalse:
+            templateType = 'true-false'
+            break
+
+        case QuestionType.Dialogue:
+          templateType = questionTypeOption.subType === 'radio' ? 'dialogue-multi-choice' : 'dialogue-blank'
+          break
+          default:
+            throw new Error('Unsupported question type for template download')
+        }
+      
+
+      const response = await axios.get(QUESTION_BANK_ROUTES.TEMPLATE_DOWNLOAD.ARABIC(templateType), {
+        responseType: 'blob',
+      })
+
+      // Create a blob from the response data
+      const blob = new Blob([response.data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      })
+
+      // Create a download link and trigger download
+      const downloadUrl = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = downloadUrl
+      link.setAttribute('download', `${templateType}-template.xlsx`)
+      document.body.appendChild(link)
+      link.click()
+
+      // Clean up
+      window.URL.revokeObjectURL(downloadUrl)
+      link.remove()
+    } catch (error) {
+      throw error
+    }
   }
 }
