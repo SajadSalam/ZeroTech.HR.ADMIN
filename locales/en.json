@@ -78,6 +78,8 @@
   "cancel": "Cancel",
   "add": "Add",
   "logout": "Logout",
+  "access-denied": "Access Denied",
+  "access-denied-message": "You don't have permission to access any pages in this system. Please contact your administrator.",
   "ems": "Exam Management System",
   "moheser": "MOHESER",
   "question-bank-schedule": "Question Bank",

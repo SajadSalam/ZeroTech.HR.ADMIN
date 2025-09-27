@@ -42,8 +42,65 @@ export const findFirstAccessiblePage = async (): Promise<string> => {
     }
   }
   
-  // Fallback - if no specific privilege found, return financial dashboard (no privilege required)
-  return '/financial-dashboard'
+  // Fallback - if no navigation items are accessible, return a safe default
+  // This could be an access denied page or a minimal dashboard
+  return '/access-denied'
+}
+
+/**
+ * Check if user has access to a specific route
+ * @param route The route path to check
+ * @returns Promise<boolean> Whether user has access to the route
+ */
+export const hasRouteAccess = async (route: string): Promise<boolean> => {
+  const authStore = useAuthStore()
+  
+  // Ensure user privileges are loaded
+  if (authStore.userPrivileges.length === 0) {
+    await authStore.fetchUserPrivileges()
+  }
+  
+  // Check all navigation items to find matching route
+  const checkRoute = (items: any[]): boolean => {
+    for (const item of items) {
+      // Check children first - children don't need parent access
+      if (item.children) {
+        for (const child of item.children) {
+          // Check direct child route match
+          if (child.to === route) {
+            return hasNavigationAccess(child, authStore)
+          }
+          
+          // Check if route starts with child.to (for nested child routes)
+          if (child.to && route.startsWith(child.to)) {
+            return hasNavigationAccess(child, authStore)
+          }
+          
+          // Recursively check grandchildren if any
+          if (child.children) {
+            const grandchildResult = checkRoute(child.children)
+            if (grandchildResult) return true
+          }
+        }
+      }
+    
+      // Check direct route match for parent items
+      if (item.to === route) {
+        return hasNavigationAccess(item, authStore)
+      }
+      
+      // Check if route starts with item.to (for nested routes)
+      // But avoid matching single "/" which would match everything
+      if (item.to && item.to !== '/' && route.startsWith(item.to)) {
+        return hasNavigationAccess(item, authStore)
+      }
+    }
+    
+    return false
+  }
+
+  
+  return checkRoute(defaultNavigation)
 }
 
 /**

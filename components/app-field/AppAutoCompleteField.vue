@@ -220,7 +220,7 @@ const clearSelected = () => {
       >
         <template #icon>
           <Icon
-            v-if="selectedItems.length > 0"
+            v-if="selectedItems.length > 0 && !props.disabled"
             name="ph-x"
             class="cursor-pointer text-red-500"
             size="20"
