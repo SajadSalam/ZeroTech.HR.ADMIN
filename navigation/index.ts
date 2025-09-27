@@ -9,6 +9,7 @@ const defaultNavigation = [
     name: 'financial-dashboard',
     icon: { name: 'ph-chart-pie-duotone', class: 'w-5 h-5' },
     to: '/financial-dashboard',
+    privilege: 'ums:ems:statistics:superadmin',
   },
   {
     name: 'blacklist',
