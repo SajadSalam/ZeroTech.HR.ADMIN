@@ -147,13 +147,14 @@ async function fetchData() {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   onClickOutside(menu, () => {
     isOpen.value = false
   })
-  if (props.getUrl) fetchData()
+  if (props.getUrl){ await fetchData()}
   if (modelValue.value !== '' && !props.multiple && modelValue.value !== null) {
     const item = items.value.find((i) => i[props!.itemValue]! === modelValue.value)
+    console.log(item, modelValue.value,'testeetert')
 
     selectItem(item as T)
   }
