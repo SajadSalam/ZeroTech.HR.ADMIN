@@ -29,10 +29,13 @@ const login = async () => {
     isLoading.value = true
     isError.value = false
     await authStore.login(body.value)
+
+    window.location.href = '/'
+    
     
     // Find first accessible page and navigate there
-    const firstAccessiblePage = await findFirstAccessiblePage()
-    await navigateTo(firstAccessiblePage)
+    // const firstAccessiblePage = await findFirstAccessiblePage()
+    // await navigateTo(firstAccessiblePage)
   } catch (error) {
     isError.value = true
   } finally {
