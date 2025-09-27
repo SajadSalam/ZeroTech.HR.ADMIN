@@ -29,13 +29,15 @@ export default defineNuxtConfig({
         writeEarlyHints: false,
     },
     
-    // Configure Nitro to suppress middleware warnings
+    // Configure Nitro for static generation
     nitro: {
+        preset: 'static',
         experimental: {
             warnOnMiddlewareConflict: false
         },
-        routeRules: {
-            // Disable all route rules to prevent middleware conflicts
+        prerender: {
+            crawlLinks: false,
+            failOnError: false
         },
         logLevel: 'error' // Suppress warnings
     },
@@ -76,25 +78,6 @@ export default defineNuxtConfig({
                 { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
                 { href: 'https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap', rel: 'stylesheet' },
             ],
-        }
-    },
-    
-    // Route rules to control prerendering and middleware
-    routeRules: {
-        // Disable route rule warnings and override middleware
-        '/**': { 
-            prerender: false,
-            headers: {
-                'x-middleware': 'override'
-            }
-        }
-    },
-    
-    // Override middleware configuration to prevent conflicts
-    hooks: {
-        'nitro:config': (nitroConfig) => {
-            // Suppress middleware warnings in Nitro config
-            nitroConfig.logLevel = 'error'
         }
     },
     
