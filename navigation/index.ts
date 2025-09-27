@@ -3,6 +3,7 @@ const defaultNavigation = [
     name: 'home-page',
     icon: { name: 'ph-house-duotone', class: 'w-5 h-5' },
     to: '/',
+    privilege: 'ums:ems:statistics:superadmin',
   },
   {
     name: 'financial-dashboard',
@@ -13,6 +14,7 @@ const defaultNavigation = [
     name: 'blacklist',
     icon: { name: 'ph-user-minus-duotone', class: 'w-5 h-5' },
     to: '/blacklist',
+    privilege: 'ums:ems:external-student-blacklist:view-any',
   },
   {
     name: 'questions-management',
@@ -47,7 +49,7 @@ const defaultNavigation = [
         name: 'categories',
         icon: { name: 'ph-folder-simple-duotone', class: 'w-5 h-5' },
         to: '/category',
-        // privilege: 'ums:ems:category:view-any',
+        privilege: 'ums:ems:category:view-any',
       },
       {
         name: 'knowledgelevel',

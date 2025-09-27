@@ -2,12 +2,12 @@
 import AppInputField from '~/components/app-field/AppInputField.vue'
 import { requiredValidator } from '~/services/validation'
 import { Validator } from '~/services/validator'
-import type { LoginBody } from '../types/index'
+import { findFirstAccessiblePage } from '~/utils/navigation-helpers'
 import { useAuthStore } from '../store/auth'
-import { useI18n } from 'vue-i18n'
+import type { LoginBody } from '../types/index'
 
 const body = ref<LoginBody>({
-  email: null,
+  email: '',
   password: '',
 })
 const isError = ref(false)
@@ -29,7 +29,10 @@ const login = async () => {
     isLoading.value = true
     isError.value = false
     await authStore.login(body.value)
-    window.location.href = '/'
+    
+    // Find first accessible page and navigate there
+    const firstAccessiblePage = await findFirstAccessiblePage()
+    await navigateTo(firstAccessiblePage)
   } catch (error) {
     isError.value = true
   } finally {
@@ -37,7 +40,6 @@ const login = async () => {
   }
 }
 
-const i18n = useI18n()
 
 onMounted(() => {})
 </script>
