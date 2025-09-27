@@ -154,7 +154,7 @@ onMounted(async () => {
   if (props.getUrl){ await fetchData()}
   if (modelValue.value !== '' && !props.multiple && modelValue.value !== null) {
     const item = items.value.find((i) => i[props!.itemValue]! === modelValue.value)
-    console.log(item, modelValue.value,'testeetert')
+    
 
     selectItem(item as T)
   }
