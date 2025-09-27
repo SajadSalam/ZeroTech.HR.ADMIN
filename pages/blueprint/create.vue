@@ -180,20 +180,20 @@ const submit = async () => {
                 <template #data-topicId="{ index }">
                     <AppAutoCompleteField v-model="body.questionBanks.$model[questionBankIndex].topics[index].topicId"
                         :items="topicsByQuestionBankId(questionBank.questionBankId)" item-label="name"
-                        item-value="id" />
+                        item-value="id" :placeholder="$t('topics')" />
                 </template>
                 <template #data-questionType="{ index }">
                     <AppAutoCompleteField
                         v-model="body.questionBanks.$model[questionBankIndex].topics[index].questionType" :items="questionTypeOptions($t).filter((option) =>
                             quesitonBankById(questionBank.questionBankId).questionTypes.includes(option.value)
                         )
-                            " item-label="label" item-value="value" />
+                            " item-label="label" item-value="value" :placeholder="$t('select-a-question-type')" />
                 </template>
                 <template #data-difficulty="{ index }">
                     <div class="flex items-center gap-2">
                         <AppAutoCompleteField
                             v-model="body.questionBanks.$model[questionBankIndex].topics[index].difficulty"
-                            :items="difficultyOptions($t)" item-label="label" item-value="value" />
+                            :items="difficultyOptions($t)" item-label="label" item-value="value" :placeholder="$t('select-a-difficulty')" />
                         <BaseButtonIcon size="sm" color="none" class="text-red-500"
                             @click="removeTopic(questionBankIndex, index)">
                             <Icon name="tabler-circle-x" class="size-8" />
@@ -209,11 +209,11 @@ const submit = async () => {
                 <template #data-numberOfQuestions="{ index }">
                     <AppInputField
                         v-model="body.questionBanks.$model[questionBankIndex].topics[index].numberOfQuestions"
-                        type="number" required :label="$t('number-of-questions')" />
+                        type="number" required :placeholder="$t('number-of-questions')" />
                 </template>
                 <template #data-grade="{ index }">
                     <AppInputField v-model="body.questionBanks.$model[questionBankIndex].topics[index].grade"
-                        type="number" required :label="$t('grade')" />
+                        type="number" required :placeholder="$t('grade')" />
                 </template>
             </AppTable>
             <div class="flex justify-end">
