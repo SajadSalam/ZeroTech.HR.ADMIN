@@ -61,11 +61,17 @@ watch(() => subjectValidation.value.subjectId.$model, (value: string | null) => 
 
 const topics = computed(() => topicsStore.topics)
 
-const isLoading = computed(() => {
-  return subjectStore.isLoading
+const isLoading = computed({
+    get: () => {
+        return subjectStore.isLoading || questionBankStore.isLoading
+    },
+    set: (value: boolean) => {
+        questionBankStore.isLoading = value
+    }
 })
 
 const createQuestionBank = async () => {
+  if(isLoading.value) return
   const isSubjectValid = await subjectValidation.value.$validate()
   const isBodyValid = await body.value.$validate()
   
@@ -129,7 +135,7 @@ watch(
           item-value="id"
           class="col-span-2"
         />
-        <AppAutoCompleteField
+        <!-- <AppAutoCompleteField
           v-model="body.categories.$model"
           fetch-on-search
           search-key="name"
@@ -139,7 +145,7 @@ watch(
           item-label="name"
           item-value="id"
           class="col-span-2"
-        />
+        /> -->
       </div>
       <h1>
         {{ $t('fill-creation-period-dates-optional') }}
@@ -163,6 +169,7 @@ watch(
       <BaseButton
         color="primary"
         :disabled="isLoading"
+        :loading="isLoading"
         class="mt-5 w-full gap-1"
         @click="createQuestionBank"
       >
