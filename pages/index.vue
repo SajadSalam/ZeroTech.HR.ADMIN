@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { definePageMeta } from '~/.nuxt/imports'
 import { HomeService } from '~/views/home/service'
 import type { Counts } from '~/views/home/types/counts'
 import type { ProficiencyExamGroupChartData } from '~/views/home/types/proficiencyExamGroupChartData'
@@ -32,10 +33,21 @@ const asyncData = async () => {
 onMounted(async () => {
     await asyncData()
 })
+const fields = reactive({
+  first: '',
+})
 
+const frameworks = [
+  'Nuxt',
+  'Vue.js',
+  'React.js',
+  'Angular',
+  'Alpine.js',
+]
 </script>
 
 <template>
+      
     <div v-if="isLoading">
         <AppLoading />
     </div>
@@ -89,7 +101,13 @@ onMounted(async () => {
         <div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-6 mb-6">
             <!-- Hall Distribution Chart -->
             <div class="col-span-1">
-                <AppChartExamCenterActivationChart :data="counts?.examCentersAcceptanceStatus" />
+                <AppChartExamCenterActivationChart 
+                    v-if="counts?.examCentersAcceptanceStatus" 
+                    :data="counts.examCentersAcceptanceStatus" 
+                />
+                <div v-else class="flex items-center justify-center h-64 bg-gray-100 rounded-lg">
+                    <span class="text-gray-500">لا توجد بيانات للعرض</span>
+                </div>
             </div>
             <div class="col-span-2">
                 <AppChartBookingTimeMaterialChart 

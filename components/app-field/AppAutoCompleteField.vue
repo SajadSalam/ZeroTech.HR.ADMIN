@@ -1,8 +1,7 @@
 <script lang="ts" setup generic="T, TModel">
-import axiosInstance from '~/services/app-client/axios'
-import type { ErrorObject } from '@vuelidate/core'
-import { onClickOutside } from '@vueuse/core'
-import { get } from 'lodash-es'
+import type { ErrorObject } from '@vuelidate/core';
+import { get } from 'lodash-es';
+import axiosInstance from '~/services/app-client/axios';
 interface Props {
   items?: T[]
   itemLabel?: string
@@ -148,64 +147,15 @@ async function fetchData() {
   }
 }
 
-onMounted(async () => {
+onMounted(() => {
   onClickOutside(menu, () => {
     isOpen.value = false
   })
-  
-  // For fetchOnSearch mode with an initial value, fetch the specific item(s)
-  if (props.fetchOnSearch && props.getUrl && modelValue.value !== '' && modelValue.value !== null) {
-    try {
-      if (props.multiple && Array.isArray(modelValue.value) && modelValue.value.length > 0) {
-        // For multiple selection, fetch all items first to get the selected ones
-        await fetchData()
-        // Find selected items from the fetched data
-        const selected = items.value.filter((i) => 
-          (modelValue.value as any[]).includes((i as any)[props.itemValue!])
-        )
-        selectedItems.value = selected as T[]
-      } else if (!props.multiple) {
-        // For single selection, try direct fetch first, fallback to list fetch
-        try {
-          const res = await axiosInstance.get(`${props.getUrl}/${modelValue.value}`)
-          if (res.data) {
-            items.value = [res.data]
-            selectedItems.value = [res.data]
-            search.value = itemWithLabel(res.data as T)
-          }
-        } catch (directFetchError) {
-          // Fallback: fetch all items and find the selected one
-          await fetchData()
-          const item = items.value.find((i) => (i as any)[props.itemValue!] === modelValue.value)
-          if (item) {
-            selectedItems.value = [item] as T[]
-            search.value = itemWithLabel(item as T)
-          }
-          
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching initial item(s):', error)
-    }
-  } else {
-    // For non-fetchOnSearch mode, fetch all items first
-    if (props.getUrl) await fetchData()
-    
-    if (modelValue.value !== '' && modelValue.value !== null) {
-      if (props.multiple && Array.isArray(modelValue.value)) {
-        // For multiple selection
-        const selected = items.value.filter((i) => 
-          (modelValue.value as any[]).includes((i as any)[props.itemValue!])
-        )
-        selectedItems.value = selected as T[]
-      } else {
-        // For single selection
-        const item = items.value.find((i) => (i as any)[props.itemValue!] === modelValue.value)
-        if (item) {
-          selectItem(item as T)
-        }
-      }
-    }
+  if (props.getUrl) fetchData()
+  if (modelValue.value !== '' && !props.multiple && modelValue.value !== null) {
+    const item = items.value.find((i) => i[props!.itemValue]! === modelValue.value)
+
+    selectItem(item as T)
   }
 })
 
@@ -217,50 +167,13 @@ watchDebounced(
   () => {
     if (props.fetchOnSearch) fetchData()
   },
-  { debounce: 300 }
+  300
 )
-
-// Watch for when dropdown opens to fetch initial data
-watch(isOpen, (newValue) => {
-  if (newValue && props.fetchOnSearch && items.value.length === 0) {
-    fetchData()
-  }
-  if (newValue) {
-    updateMenuPosition()
-  }
-})
-
-// Update position on scroll
-const handleScroll = () => {
-  if (isOpen.value) {
-    updateMenuPosition()
-  }
-}
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll, true)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll, true)
-})
 
 const menuWidth = computed(() => {
   if (menu.value) return menu.value.clientWidth
   return 0
 })
-
-const menuPosition = ref({ top: 0, left: 0 })
-
-const updateMenuPosition = () => {
-  if (menu.value) {
-    const rect = menu.value.getBoundingClientRect()
-    menuPosition.value = {
-      top: rect.bottom + window.scrollY,
-      left: rect.left + window.scrollX
-    }
-  }
-}
 
 const isItemSelected = (item: T) => {
   return selectedItems.value.some((i) => itemWithValue(i) === itemWithValue(item))
@@ -271,18 +184,13 @@ const clearSelected = () => {
   selectedItems.value = []
   search.value = ''
 }
-const oldData = computed(() => props.oldData)
 // watchDeep(() => oldData.value,() => {
 //     items.value [...oldData.value]
 // })
-const openedMenu = ref(null)
-onClickOutside(openedMenu, () => {
-  isOpen.value = false
-})
 </script>
 
 <template>
-  <div ref="menu" class="">
+  <div ref="menu" relative>
     <div class="relative">
       <div class="text-gray pointer-events-none absolute inset-y-0 start-0 flex items-center ps-5">
         <i :class="appendIcon" />
@@ -319,36 +227,23 @@ onClickOutside(openedMenu, () => {
           />
         </template>
       </BaseInput>
-      <div v-if="props.multiple" class="flex max-w-[full] mt-2 overflow-x-auto gap-2 scrollbar-hide">
-  <BaseTag
-    v-for="item in selectedItems"
-    :key="itemWithValue(item)"
-    color="primary"
-    variant="pastel"
-    class="flex shrink-0 items-center gap-2 text-lg"
-  >
-    <div>
-      <p>
-        {{ itemWithLabel(item) }}
-      </p>
-      <small v-if="props.itemSubtitle">
-        {{ itemWithSubtitle(item) }}
-      </small>
-    </div>
-
-    <Icon name="ph:x" class="size-3 cursor-pointer" @click="removeItem(item)" />
-  </BaseTag>
-</div>
-
+      <div v-if="props.multiple" class="mt-2 flex items-center gap-2">
+        <BaseTag
+          v-for="item in selectedItems"
+          :key="itemWithValue(item)"
+          color="primary"
+          variant="pastel"
+          class="flex items-center gap-1 text-lg"
+        >
+          {{ itemWithLabel(item) }}
+          <Icon name="ph:x" class="size-3" @click="removeItem(item)" />
+        </BaseTag>
+      </div>
     </div>
     <div
       v-if="isOpen"
-      class="max-h-[200px] rounded-box dark:bg-dark fixed z-[9999] flex flex-col overflow-y-auto rounded-xl border bg-white p-2 shadow dark:text-white"
-      :style="{ 
-        width: `${menuWidth}px`,
-        top: `${menuPosition.top}px`,
-        left: `${menuPosition.left}px`
-      }"
+      class="max-h-[200px] rounded-box dark:bg-dark absolute z-[99] flex flex-col overflow-y-auto rounded-xl border bg-white p-2 shadow dark:text-white"
+      :style="{ width: `${menuWidth}px` }"
     >
       <!-- Add create option when no exact match is found -->
       <div

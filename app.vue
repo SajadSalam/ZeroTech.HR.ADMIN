@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { useI18n } from 'vue-i18n'
+import { findFirstAccessiblePage } from '~/utils/navigation-helpers'
 import { useAuthStore } from './views/auth/store/auth'
 
 interface TairoConfig {
@@ -16,6 +17,7 @@ const app = useAppConfig() as AppConfig
 const auth = useAuthStore()
 const router = useRouter()
 
+
 const i18n = useI18n()
 onMounted(async () => {
     if (i18n.locale.value === 'en') {
@@ -27,21 +29,18 @@ onMounted(async () => {
     await auth.fetchUserPrivileges()
   }
 
-   // Route guard: redirect to hall page if user has hall data and is not already on that route
-    if (auth.isLogged && auth.userData.examCenter) {
-        const expectedRoute = `/examination-centers/${auth.userData.examCenter.id}`
+   // Route guard: redirect to examination center page if user has examCenter data and is not already on that route
+    if (auth.isLogged && auth.userData.examCenter && auth.userData.ownerId) {
+        const expectedRoute = `/examination-centers/${auth.userData.ownerId}`
         const currentRoute = router.currentRoute.value.path
         if (!currentRoute.includes(expectedRoute)) {
             router.push(expectedRoute + '/exams')
         }
     }
-    if (auth.isLogged && auth.userData.hall) {
-        const expectedRoute = `/examination-centers/${auth.userData.hall.examCenterId}/hall/${auth.userData.hall.id}`
-        const currentRoute = router.currentRoute.value.path
-        
-        if (currentRoute !== expectedRoute) {
-        router.push(expectedRoute)
-        }
+    // If user is on root path and has no specific examCenter, redirect to first accessible page
+    else if (auth.isLogged && router.currentRoute.value.path === '/') {
+        const firstAccessiblePage = await findFirstAccessiblePage()
+        router.push(firstAccessiblePage)
     }
 
    
