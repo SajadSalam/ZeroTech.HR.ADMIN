@@ -14,11 +14,11 @@ interface Props {
   fetchOnSearch?: boolean
   searchKey?: string
   multiple?: boolean
-  placeholder?: string
   modelValue?: TModel
   disabled?: boolean
   allowCreate?: boolean
   oldData?: T[]
+  placeholder?: string
 }
 const emits = defineEmits(['update:objectValue', 'update:modelValue', 'create:item'])
 const createNewItem = () => {
@@ -214,8 +214,8 @@ const clearSelected = () => {
         :icon="isAnySelected ? 's' : null"
         :error="error"
         :disabled="props.disabled"
-        :label="label"
         :placeholder="placeholder"
+        :label="label"
         @focus="isOpen = true"
       >
         <template #icon>
