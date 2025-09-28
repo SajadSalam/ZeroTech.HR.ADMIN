@@ -94,7 +94,7 @@ const { hasPrivilege } = useAuthStore()
                 <AppAutoCompleteField v-model="filters.topics" fetch-on-search search-key="name"
                     :placeholder="$t('topics')" get-url="/topics" item-label="name" item-value="id" multiple />
             </template>
-            <AppTable v-if="viewType === ViewType.Table" :title="$t('questions-bank')" :headers="tableHeader($t)"
+            <AppTable :is-loading="isLoading" v-if="viewType === ViewType.Table" :title="$t('questions-bank')" :headers="tableHeader($t)"
                 :items="questionBanks">
                 <template #data-id="data">
                     <span>{{ data.index + 1 }}</span>
