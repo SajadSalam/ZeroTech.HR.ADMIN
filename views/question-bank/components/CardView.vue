@@ -13,6 +13,8 @@ defineProps<{
 
 const emits = defineEmits<{
   (event: 'update:openEdit', questionBank: QuestionBankDto): void
+  (event: 'update:openAssignAuditor', questionBank: QuestionBankDto): void
+  (event: 'update:openAssignCreator', questionBank: QuestionBankDto): void
 }>()
 
 // Check user privileges
@@ -35,6 +37,7 @@ const openEdit = (questionBank: QuestionBankDto) => {
           <Icon name="tabler-packages" size="18" />
         </BaseIconBox>
         <span class="text-lg font-semibold">{{ questionBank.title }}</span>
+        
       </div>
       <AppCrudActions
         v-if="canManage"
@@ -50,27 +53,21 @@ const openEdit = (questionBank: QuestionBankDto) => {
     <div class="flex flex-col items-center justify-center text-center">
       <h1 class="my-10 text-3xl font-semibold">
         {{ questionBank.subject.name }}
+        
       </h1>
+      
       <div class="flex items-center gap-3">
-        <BaseTag
-          size="md"
-          class="pa-3 flex items-center gap-1 text-lg"
-          color="primary"
-          variant="pastel"
-        >
-          <Icon name="ph-book-open-duotone" size="18" class="text-primary" />
-          <span class="text-[14px]">{{ questionBank.totalQuestionCount }} Q</span>
-        </BaseTag>
+      
         <BaseButton
           v-if="hasPrivilege('ums:ems:question-bank:assign-auditors')"
           size="md"
           class="pa-3 flex items-center gap-1 text-lg"
           color="primary"
           variant="pastel"
-          @click="openAssignAuditor(questionBank)"
+          @click="emits('update:openAssignAuditor', questionBank)"
         >
           <Icon name="ph-seal-check-duotone" size="18" class="text-primary" />
-          <span class="text-[14px]">4 {{ $t('auditor') }}</span>
+          <span class="text-[14px]">{{ $t('auditors') }}</span>
         </BaseButton>
         <BaseButton
           v-if="hasPrivilege('ums:ems:question-bank:assign-creators')"
@@ -78,10 +75,10 @@ const openEdit = (questionBank: QuestionBankDto) => {
           class="pa-3 flex items-center gap-1 text-lg"
           color="primary"
           variant="pastel"
-          @click="openAssignCreator(questionBank)"
+          @click="emits('update:openAssignCreator', questionBank)"
         >
           <Icon name="ph-question-duotone" size="18" class="text-primary" />
-          <span class="text-[14px]">3 {{ $t('creator') }}</span>
+          <span class="text-[14px]">{{ $t('creators') }}</span>
         </BaseButton>
       </div>
     </div>
@@ -90,7 +87,6 @@ const openEdit = (questionBank: QuestionBankDto) => {
     <BaseButton
       color="primary"
       :to="`/question-bank/questions/${questionBank.id}`"
-      variant="pastel"
       class="mt-5 w-full"
     >
       {{ $t('open') }}

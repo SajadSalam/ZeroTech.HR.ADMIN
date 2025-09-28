@@ -143,7 +143,7 @@ const { hasPrivilege } = useAuthStore()
             </AppTable>
             <div v-else class="grid gap-2 md:grid-cols-3">
                 <CardView v-for="questionBank in questionBanks" :key="questionBank.id" :question-bank="questionBank"
-                    @update:open-edit="openEdit" />
+                    @update:open-edit="openEdit" @update:open-assign-auditor="openAssignAuditor" @update:open-assign-creator="openAssignCreator" />
             </div>
         </AppCrud>
     </div>
