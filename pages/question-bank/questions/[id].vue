@@ -205,15 +205,15 @@ const currentTopicName = computed(() => {
     <div class="rounded-lg bg-white p-5">
       <div class="flex items-center justify-between">
         <div>
-          <h1 class="fonte-bold text-3xl">
-            <span class="font-bold text-primary-500">
+          <div class="flex items-center fonte-bold text-3xl">
+            <p class="font-bold text-primary-500">
               {{ questionBankStore.selectedQuestionBank?.title || 'Questions' }}
-            </span>
+            </p>
 
-            <span class="ms-2 text-2xl text-muted-500">
+            <p class="ms-2 text-2xl text-muted-500">
               {{ $t('exam-question-form') }}
-            </span>
-          </h1>
+            </p>
+        </div>
           <p class="text-gray mt-1 text-xs">
             {{
               $t(
