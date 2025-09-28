@@ -756,5 +756,6 @@
   "assign-supervisors": "Assign Supervisor",
   "supervisors": "Supervisors",
   "test": "Test",
-  "import": "Import"
+  "import": "Import",
+  "please-select-file-and-question-type": "Please select file and question type"
 }

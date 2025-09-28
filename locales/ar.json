@@ -777,5 +777,6 @@
   "assign-supervisors": "تعيين المراقبين",
   "supervisors": "المراقبين المحددين",
   "test": "اختبار",
-  "import": "استيراد"
+  "import": "استيراد",
+  "please-select-file-and-question-type": "الرجاء تحديد ملف ونوع السؤال"
 }
