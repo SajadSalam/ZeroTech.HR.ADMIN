@@ -778,5 +778,6 @@
   "supervisors": "المراقبين المحددين",
   "test": "اختبار",
   "import": "استيراد",
-  "please-select-file-and-question-type": "الرجاء تحديد ملف ونوع السؤال"
+  "please-select-file-and-question-type": "الرجاء تحديد ملف ونوع السؤال",
+  "select-all": "تحديد الكل"
 }

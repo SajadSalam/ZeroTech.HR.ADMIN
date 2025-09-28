@@ -34,6 +34,7 @@ useHead({
 
 const colorMode = useColorMode()
 colorMode.value = 'light'
+colorMode.preference = 'light'
 
 
 </script>

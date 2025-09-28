@@ -757,5 +757,6 @@
   "supervisors": "Supervisors",
   "test": "Test",
   "import": "Import",
-  "please-select-file-and-question-type": "Please select file and question type"
+  "please-select-file-and-question-type": "Please select file and question type",
+  "select-all": "Select All"
 }

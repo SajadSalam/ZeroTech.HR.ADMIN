@@ -273,6 +273,7 @@ const updateExamType = (type: ExamType) => {
           item-label="name"
           :class="body.examType.$model != ExamType.Final ? 'col-span-2' : ''"
           item-value="id"
+          select-all
         />
         <AppAutoCompleteField
           v-if="body.examType.$model == ExamType.Final"
