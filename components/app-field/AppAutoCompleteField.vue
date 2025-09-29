@@ -249,7 +249,10 @@ const selectAllItems = () => {
     <div
       v-if="isOpen"
       class="max-h-[200px] rounded-box dark:bg-dark absolute z-[99] flex flex-col overflow-y-auto rounded-xl border bg-white p-2 shadow dark:text-white"
-      :style="{  }"
+      :style="{ 
+
+        width: menuWidth + 'px',
+       }"
     >
       <!-- Add create option when no exact match is found -->
       <div

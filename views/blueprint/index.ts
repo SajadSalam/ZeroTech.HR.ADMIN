@@ -67,6 +67,14 @@ export const tableCreateHeaders = (t: (key: string) => string) => {
       key: 'questionType',
       label: t('question-type'),
     },
+     {
+      key: 'knowledgeLevelId',
+      label: t('knowledge'),
+    },
+    {
+      key: 'difficulty',
+      label: t('difficulty'),
+    },  
     {
       key: 'numberOfQuestions',
       label: t('number-of-questions'),
@@ -75,14 +83,7 @@ export const tableCreateHeaders = (t: (key: string) => string) => {
       key: 'grade',
       label: t('grade-per-question'),
     },
-    {
-      key: 'knowledgeLevelId',
-      label: t('knowledge'),
-    },
-    {
-      key: 'difficulty',
-      label: t('difficulty'),
-    },
+   
   ]
 }
 

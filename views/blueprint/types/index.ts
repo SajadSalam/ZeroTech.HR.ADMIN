@@ -18,16 +18,15 @@ export type BlueprintDto = Blueprint & BaseDto
 export interface BlueprintQuestionBank {
   questionBankId: string
   topics: BlueprintTopic[]
-  questionBanks: QuestionBankDto[]
 }
 
 export interface BlueprintTopic {
   topicId: string
-  questionType: QuestionType
+  questionType: QuestionType | null
   numberOfQuestions: number
   grade: number
   knowledgeLevelId: string
-  difficulty: Difficulty
+  difficulty: Difficulty | null
 }
 export type BlueprintFilter = {
   search?: string | null
@@ -42,4 +41,34 @@ export enum DegreeDisplayType {
   Percentage = 'Percentage',
   Points = 'Points',
   Letters = 'Letters',
+}
+
+export interface QuestionBankBlueprintDetails {
+  title: string
+  subject: {
+    id: string
+    name: string
+    questionCount: number
+  }
+  topics: {
+    id: string
+    name: string
+    questionCount: number
+  }[]
+  questionTypes: {
+    topicId: string
+    questionType: number
+    questionCount: number
+  }[]
+  knowledgeLevels: {
+    id: string
+    name: string
+    questionType: number
+    questionCount: number
+  }[]
+  difficulties: {
+    knowledgeLevelId: string
+    difficulty: number
+    questionCount: number
+  }[]
 }
