@@ -127,7 +127,7 @@ const openExamDetails = (exam: Record<string, any>) => {
           {{ proficiencyExamGroupOptions($t).find((group) => group.value === item.proficiencyExamGroupId)?.label }}
         </template>
         <template #data-templateName="{ item }">
-          {{ item.examTemplate.name }}
+          {{ item.examTemplate ? item.examTemplate.name : '' }}
         </template>
         <template #data-examType="{ item }">
           {{ examTypesOptions($t).find((type) => type.value === item.examType)?.label }}
@@ -145,10 +145,10 @@ const openExamDetails = (exam: Record<string, any>) => {
           {{ Math.floor(Math.random() * 100) }}
         </template>
         <template #data-startDate="{ item }">
-          {{ item.startDate.split("T")[0] }}
+          {{ item.startDate ? item.startDate.split("T")[0] : '' }}
         </template>
         <template #data-endDate="{ item }">
-          {{ item.endDate.split("T")[0] }}
+          {{ item.endDate ? item.endDate.split("T")[0] : '' }}
         </template>
         <template #data-availableDays="{ item }">
             {{ item.availableDays?.map((day) => availableDaysOptions($t).find((option) => option.value === day)?.label).join(', ') }}

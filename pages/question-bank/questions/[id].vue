@@ -12,8 +12,6 @@ import { useQuestionBankStore } from '~/views/question-bank/store'
 import type { QuestionBankTopicDto } from '~/views/question-bank/types'
 import {
     AuditStatus,
-    Difficulty,
-    KnowledgeLevel,
     QuestionType,
     type Question,
 } from '~/views/question-bank/types/question'
@@ -207,15 +205,15 @@ const currentTopicName = computed(() => {
     <div class="rounded-lg bg-white p-5">
       <div class="flex items-center justify-between">
         <div>
-          <h1 class="fonte-bold text-3xl">
-            <span class="font-bold text-primary-500">
+          <div class="flex items-center fonte-bold text-3xl">
+            <p class="font-bold text-primary-500">
               {{ questionBankStore.selectedQuestionBank?.title || 'Questions' }}
-            </span>
+            </p>
 
-            <span class="ms-2 text-2xl text-muted-500">
+            <p class="ms-2 text-2xl text-muted-500">
               {{ $t('exam-question-form') }}
-            </span>
-          </h1>
+            </p>
+        </div>
           <p class="text-gray mt-1 text-xs">
             {{
               $t(
@@ -236,11 +234,12 @@ const currentTopicName = computed(() => {
             color="primary"
             :disabled="!isEditingAllowed"
             @click="questionBankStore.importDialogOpen = true"
+            v-if="hasPrivilege('ums:ems:question-bank:bulk-radio-upload')"
           >
             <Icon name="tabler-file-upload" size="20" />
             {{ $t('import-questions') }}
           </BaseButton>
-          <BaseButton color="primary" size="lg" @click="saveChanges">
+          <BaseButton color="primary" size="lg" @click="saveChanges" v-if="hasPrivilege('ums:ems:question:bulk-create')">
             <Icon name="tabler-file-check" size="20" />
             {{ $t('save-changes') }}
           </BaseButton>

@@ -60,6 +60,12 @@ export interface AssignDto {
   type: number
 }
 
+export interface ImportQuestionTypeOption {
+  label: string
+  value: QuestionType
+  subType?: string
+}
+
 export interface QuestionCustomAnswerProps {
   correctOptionIds?: string[]
   correctBoolean?: boolean
@@ -115,26 +121,42 @@ export const questionTypeMap: { [key: string]: QuestionType } = {
 export const importQuestionTypeOptions = (t: (key: string) => string) => {
   return [
     {
-      label: t('multiple-choice'),
-      value: QuestionType.MultipleChoice,
+      label: t('radio'),
+      value: QuestionType.Radio,
     },
     {
       label: t('fill-the-blank'),
       value: QuestionType.Blank,
     },
-
     {
       label: t('true-or-false'),
       value: QuestionType.TrueOrFalse,
+    },
+    {
+      label: t('dialogue-radio'),
+      value: QuestionType.Dialogue,
+      subType: 'radio',
+    },
+    {
+      label: t('dialogue-blank'),
+      value: QuestionType.Dialogue,
+      subType: 'blank',
     },
   ]
 }
 export const QUESTION_BANK_ROUTES = {
   BULK_UPLOAD: {
-    MULTIPLE_CHOICE: (questionBankId: string) =>
+    RADIO: (questionBankId: string) =>
       `/question-bank/${questionBankId}/bulk-radio-upload`,
     BLANK: (questionBankId: string) => `/question-bank/${questionBankId}/bulk-blank-upload`,
     TRUE_FALSE: (questionBankId: string) =>
       `/question-bank/${questionBankId}/bulk-true-false-upload`,
+    DIALOGUE_RADIO: (questionBankId: string) =>
+      `/question-bank/${questionBankId}/bulk-dialogue-radio-upload`,
+    DIALOGUE_BLANK: (questionBankId: string) =>
+      `/question-bank/${questionBankId}/bulk-dialogue-blank-upload`,
+  },
+  TEMPLATE_DOWNLOAD: {
+    ARABIC: (type: string) => `/questiontemplate/arabic/${type}`,
   },
 }

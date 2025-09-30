@@ -1,8 +1,8 @@
+import type { ImportQuestionTypeOption } from '~/views/question-bank/types'
 import type {
     Question,
     QuestionDto,
     QuestionFilters,
-    QuestionType,
 } from '~/views/question-bank/types/question'
 import { QuestionBankService } from '../service'
 import {
@@ -216,11 +216,22 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
   const importQuestions = async (
     questionBankId: string,
     file: File,
-    questionType: QuestionType
+    questionTypeOption: ImportQuestionTypeOption
   ) => {
     try {
       isLoading.value = true
-      await questionBankService.importQuestions(questionBankId, file, questionType)
+      await questionBankService.importQuestions(questionBankId, file, questionTypeOption)
+    } catch (error: any) {
+      throw error // Re-throw the error to handle it in the component
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const downloadTemplate = async (questionTypeOption: ImportQuestionTypeOption) => {
+    try {
+      isLoading.value = true
+      await questionBankService.downloadTemplate(questionTypeOption)
     } catch (error: any) {
       throw error // Re-throw the error to handle it in the component
     } finally {
@@ -264,5 +275,6 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
     removeTopic,
     importDialogOpen,
     importQuestions,
+    downloadTemplate,
   }
 })

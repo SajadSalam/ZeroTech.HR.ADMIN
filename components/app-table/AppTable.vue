@@ -210,9 +210,8 @@ defineExpose({
 table {
     border-collapse: separate;
     border-spacing: 0;
-    width: 100%;
     border-spacing: 0 4px;
-
+    overflow-x: auto;
     th {
         background: #000;
         border-inline-end: 1px solid #fff;
@@ -245,6 +244,7 @@ table {
     tr {
         margin: 4rem;
         background: rgba(235, 240, 245, 0.65);
+        overflow-x: auto;
     }
 
     // make tr striped
@@ -269,11 +269,9 @@ table {
         padding: .8rem;
         direction: auto;
         font-size: 14px;
-        max-width: 250px;
         overflow: hidden;
         white-space: nowrap;
         /* Prevent cell content wrapping */
-
         @media (max-width: 768px) {
             font-size: 12px;
             padding: 0.6rem 0.4rem;

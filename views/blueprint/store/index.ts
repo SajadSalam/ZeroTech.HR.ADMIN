@@ -1,6 +1,6 @@
 import type { BaseFilters } from '~/utils/types/ApiResponses'
 import { BlueprintService } from '../service'
-import type { Blueprint, BlueprintDto, BlueprintFilter } from '../types'
+import type { Blueprint, BlueprintDto, BlueprintFilter, QuestionBankBlueprintDetails } from '../types'
 const blueprintService = new BlueprintService()
 export const useBlueprintStore = defineStore('blueprint', () => {
   const blueprints = ref<BlueprintDto[]>([])
@@ -59,6 +59,17 @@ export const useBlueprintStore = defineStore('blueprint', () => {
       isLoading.value = false
     }
   }
+
+  const getQuestionBankBlueprintDetails = async (questionBankId: string): Promise<QuestionBankBlueprintDetails | null> => {
+    try {
+      isLoading.value = true
+      return await blueprintService.getQuestionBankBlueprintDetails(questionBankId)
+    } catch (error) {
+      return null
+    } finally {
+      isLoading.value = false
+    }
+  }
   return {
     blueprints,
     isCreateDialogOpen,
@@ -69,5 +80,6 @@ export const useBlueprintStore = defineStore('blueprint', () => {
     create,
     getById,
     deleteBlueprint,
+    getQuestionBankBlueprintDetails,
   }
 })

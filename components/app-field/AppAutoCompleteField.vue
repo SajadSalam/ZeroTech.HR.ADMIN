@@ -19,6 +19,7 @@ interface Props {
   allowCreate?: boolean
   oldData?: T[]
   placeholder?: string
+  selectAll?: boolean
 }
 const emits = defineEmits(['update:objectValue', 'update:modelValue', 'create:item'])
 const createNewItem = () => {
@@ -185,6 +186,10 @@ const clearSelected = () => {
   selectedItems.value = []
   search.value = ''
 }
+
+const selectAllItems = () => {
+  selectedItems.value = items.value
+}
 // watchDeep(() => oldData.value,() => {
 //     items.value [...oldData.value]
 // })
@@ -220,7 +225,7 @@ const clearSelected = () => {
       >
         <template #icon>
           <Icon
-            v-if="selectedItems.length > 0"
+            v-if="selectedItems.length > 0 && !props.disabled"
             name="ph-x"
             class="cursor-pointer text-red-500"
             size="20"
@@ -228,7 +233,7 @@ const clearSelected = () => {
           />
         </template>
       </BaseInput>
-      <div v-if="props.multiple" class="mt-2 flex items-center gap-2">
+      <div v-if="props.multiple" class="mt-2 flex flex-wrap items-center gap-2">
         <BaseTag
           v-for="item in selectedItems"
           :key="itemWithValue(item)"
@@ -244,7 +249,10 @@ const clearSelected = () => {
     <div
       v-if="isOpen"
       class="max-h-[200px] rounded-box dark:bg-dark absolute z-[99] flex flex-col overflow-y-auto rounded-xl border bg-white p-2 shadow dark:text-white"
-      :style="{ width: `${menuWidth}px` }"
+      :style="{ 
+
+        width: menuWidth + 'px',
+       }"
     >
       <!-- Add create option when no exact match is found -->
       <div
@@ -262,6 +270,11 @@ const clearSelected = () => {
           <Icon name="ph-plus" class="text-green-500" size="20" />
           <p>Create "{{ search }}"</p>
         </div>
+      </div>
+      <div v-if="props.selectAll">
+        <BaseButton size="sm" color="primary" variant="pastel" @click="selectAllItems">
+          {{ $t('select-all') }}
+        </BaseButton>
       </div>
       <div
         v-for="item in filteredItems"

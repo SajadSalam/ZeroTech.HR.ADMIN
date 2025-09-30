@@ -1,4 +1,4 @@
-import { findFirstAccessiblePage } from '~/utils/navigation-helpers'
+import { findFirstAccessiblePage, hasRouteAccess } from '~/utils/navigation-helpers'
 import { useAuthStore } from '~/views/auth/store/auth'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
@@ -44,5 +44,22 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   if (from.path === '/login' && to.path === '/') {
     const firstAccessiblePage = await findFirstAccessiblePage()
     return navigateTo(firstAccessiblePage)
+  }
+
+  // Check if user has access to the current page
+  // Skip access check for fallback routes to prevent infinite redirects
+  const isFallbackRoute = to.path === '/access-denied' || to.path === '/financial-dashboard'
+  
+  if (!isFallbackRoute) {
+    const hasAccess = await hasRouteAccess(to.path)
+    
+    if (!hasAccess) {
+      const firstAccessiblePage = await findFirstAccessiblePage()
+      
+      // Prevent infinite redirect by ensuring we don't redirect to the same page
+      if (firstAccessiblePage !== to.path) {
+        return navigateTo(firstAccessiblePage)
+      }
+    }
   }
 })
