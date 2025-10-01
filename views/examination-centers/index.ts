@@ -3,7 +3,7 @@ export const tableHeader = (t: (key: string) => string) => {
   return [
     {
       key: 'collegeName',
-      label: t('college-name'),
+      label: t('university'),
       icon: 'lucide:building-2',
     },
     {

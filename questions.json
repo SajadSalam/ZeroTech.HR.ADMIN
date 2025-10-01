@@ -1,0 +1,1202 @@
+[
+  {
+    "type": 6,
+    "title": "ما هو الاختصار المستخدم لحفظ ملف Excel؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + O", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Ctrl + S", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + N", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + P", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 1,
+    "topicId": "01998cd6-900a-729f-8b96-c4c9cceb1f59",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "أي من الدوال التالية تستخدم لحساب المتوسط في Excel؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "SUM()", "image": null, "order": 0},
+      {"isCorrect": true, "title": "AVERAGE()", "image": "", "order": 1},
+      {"isCorrect": false, "title": "COUNT()", "image": "", "order": 2},
+      {"isCorrect": false, "title": "MAX()", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 2,
+    "topicId": "01998cd6-900a-729f-8b96-c4c9cceb1f59",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "كيف يمكن تحديد نطاق من الخلايا في Excel؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "النقر على الخلية الأولى فقط", "image": null, "order": 0},
+      {"isCorrect": true, "title": "السحب من الخلية الأولى إلى الأخيرة", "image": "", "order": 1},
+      {"isCorrect": false, "title": "النقر المزدوج على الخلية", "image": "", "order": 2},
+      {"isCorrect": false, "title": "استخدام مفتاح Tab", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 3,
+    "topicId": "01998cd6-900a-729f-8b96-c4c9cceb1f59",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الرمز المستخدم في Excel لبداية الصيغة؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "=", "image": null, "order": 0},
+      {"isCorrect": true, "title": "=", "image": "", "order": 1},
+      {"isCorrect": false, "title": "+", "image": "", "order": 2},
+      {"isCorrect": false, "title": "@", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 4,
+    "topicId": "01998cd6-900a-729f-8b96-c4c9cceb1f59",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "أي من الدوال التالية تستخدم لحساب عدد الخلايا غير الفارغة؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "SUM()", "image": null, "order": 0},
+      {"isCorrect": true, "title": "COUNTA()", "image": "", "order": 1},
+      {"isCorrect": false, "title": "COUNT()", "image": "", "order": 2},
+      {"isCorrect": false, "title": "AVERAGE()", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 5,
+    "topicId": "01998cd6-900a-729f-8b96-c4c9cceb1f59",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "كيف يمكن إدراج صف جديد في Excel؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "النقر الأيمن على العمود", "image": null, "order": 0},
+      {"isCorrect": true, "title": "النقر الأيمن على رقم الصف واختيار إدراج", "image": "", "order": 1},
+      {"isCorrect": false, "title": "استخدام مفتاح Delete", "image": "", "order": 2},
+      {"isCorrect": false, "title": "النقر المزدوج على الصف", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 6,
+    "topicId": "01998cd6-900a-729f-8b96-c4c9cceb1f59",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار لفتح مربع الحوار 'البحث والاستبدال' في Excel؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + F", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Ctrl + H", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + G", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + R", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 7,
+    "topicId": "01998cd6-900a-729f-8b96-c4c9cceb1f59",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "أي من الدوال التالية تستخدم للبحث عن قيمة في جدول؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "SUMIF()", "image": null, "order": 0},
+      {"isCorrect": true, "title": "VLOOKUP()", "image": "", "order": 1},
+      {"isCorrect": false, "title": "COUNTIF()", "image": "", "order": 2},
+      {"isCorrect": false, "title": "AVERAGEIF()", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 8,
+    "topicId": "01998cd6-900a-729f-8b96-c4c9cceb1f59",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "كيف يمكن تثبيت صف أو عمود في Excel؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "من قائمة الصفحة الرئيسية", "image": null, "order": 0},
+      {"isCorrect": true, "title": "من قائمة عرض > تثبيت الأجزاء", "image": "", "order": 1},
+      {"isCorrect": false, "title": "من قائمة إدراج", "image": "", "order": 2},
+      {"isCorrect": false, "title": "من قائمة البيانات", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 9,
+    "topicId": "01998cd6-900a-729f-8b96-c4c9cceb1f59",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار لنسخ التنسيق في Excel؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + C", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Ctrl + Shift + C", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + V", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + X", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 10,
+    "topicId": "01998cd6-900a-729f-8b96-c4c9cceb1f59",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "أي من الدوال التالية تستخدم لحساب القيمة القصوى في نطاق؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "MIN()", "image": null, "order": 0},
+      {"isCorrect": true, "title": "MAX()", "image": "", "order": 1},
+      {"isCorrect": false, "title": "SUM()", "image": "", "order": 2},
+      {"isCorrect": false, "title": "AVERAGE()", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 11,
+    "topicId": "01998cd6-900a-729f-8b96-c4c9cceb1f59",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "كيف يمكن إنشاء مخطط في Excel؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "من قائمة الصفحة الرئيسية", "image": null, "order": 0},
+      {"isCorrect": true, "title": "من قائمة إدراج > مخططات", "image": "", "order": 1},
+      {"isCorrect": false, "title": "من قائمة البيانات", "image": "", "order": 2},
+      {"isCorrect": false, "title": "من قائمة مراجعة", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 12,
+    "topicId": "01998cd6-900a-729f-8b96-c4c9cceb1f59",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار لفتح مربع الحوار 'تنسيق الخلايا'؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + 1", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Ctrl + 1", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + 2", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + 3", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 13,
+    "topicId": "01998cd6-900a-729f-8b96-c4c9cceb1f59",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "أي من الدوال التالية تستخدم لحساب القيمة الدنيا في نطاق؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "MAX()", "image": null, "order": 0},
+      {"isCorrect": true, "title": "MIN()", "image": "", "order": 1},
+      {"isCorrect": false, "title": "SUM()", "image": "", "order": 2},
+      {"isCorrect": false, "title": "AVERAGE()", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 14,
+    "topicId": "01998cd6-900a-729f-8b96-c4c9cceb1f59",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "كيف يمكن ترتيب البيانات في Excel؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "من قائمة الصفحة الرئيسية", "image": null, "order": 0},
+      {"isCorrect": true, "title": "من قائمة البيانات > ترتيب", "image": "", "order": 1},
+      {"isCorrect": false, "title": "من قائمة إدراج", "image": "", "order": 2},
+      {"isCorrect": false, "title": "من قائمة مراجعة", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 15,
+    "topicId": "01998cd6-900a-729f-8b96-c4c9cceb1f59",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار لإدراج صف جديد في Excel؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + I", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Ctrl + Shift + +", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + R", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + D", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 16,
+    "topicId": "01998cd6-900a-729f-8b96-c4c9cceb1f59",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "أي من الدوال التالية تستخدم لحساب المجموع مع شرط؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "SUM()", "image": null, "order": 0},
+      {"isCorrect": true, "title": "SUMIF()", "image": "", "order": 1},
+      {"isCorrect": false, "title": "COUNT()", "image": "", "order": 2},
+      {"isCorrect": false, "title": "AVERAGE()", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 17,
+    "topicId": "01998cd6-900a-729f-8b96-c4c9cceb1f59",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "كيف يمكن حماية ورقة عمل في Excel؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "من قائمة الصفحة الرئيسية", "image": null, "order": 0},
+      {"isCorrect": true, "title": "من قائمة مراجعة > حماية الورقة", "image": "", "order": 1},
+      {"isCorrect": false, "title": "من قائمة إدراج", "image": "", "order": 2},
+      {"isCorrect": false, "title": "من قائمة البيانات", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 18,
+    "topicId": "01998cd6-900a-729f-8b96-c4c9cceb1f59",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار لفتح مربع الحوار 'البحث' في Excel؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + H", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Ctrl + F", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + G", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + R", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 19,
+    "topicId": "01998cd6-900a-729f-8b96-c4c9cceb1f59",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "أي من الدوال التالية تستخدم لحساب عدد الخلايا الفارغة؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "COUNT()", "image": null, "order": 0},
+      {"isCorrect": true, "title": "COUNTBLANK()", "image": "", "order": 1},
+      {"isCorrect": false, "title": "COUNTA()", "image": "", "order": 2},
+      {"isCorrect": false, "title": "SUM()", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 20,
+    "topicId": "01998cd6-900a-729f-8b96-c4c9cceb1f59",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار المستخدم لفتح مستند جديد في Word؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + O", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Ctrl + N", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + S", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + P", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 21,
+    "topicId": "543c5aee-53e9-8bd5-1c19-9c124a322ec7",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "كيف يمكن تغيير حجم الخط في Word؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "من قائمة إدراج", "image": null, "order": 0},
+      {"isCorrect": true, "title": "من شريط الأدوات أو قائمة الصفحة الرئيسية", "image": "", "order": 1},
+      {"isCorrect": false, "title": "من قائمة مراجعة", "image": "", "order": 2},
+      {"isCorrect": false, "title": "من قائمة عرض", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 22,
+    "topicId": "543c5aee-53e9-8bd5-1c19-9c124a322ec7",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار لنسخ النص في Word؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + V", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Ctrl + C", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + X", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + Z", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 23,
+    "topicId": "543c5aee-53e9-8bd5-1c19-9c124a322ec7",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "كيف يمكن إدراج جدول في Word؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "من قائمة الصفحة الرئيسية", "image": null, "order": 0},
+      {"isCorrect": true, "title": "من قائمة إدراج > جدول", "image": "", "order": 1},
+      {"isCorrect": false, "title": "من قائمة مراجعة", "image": "", "order": 2},
+      {"isCorrect": false, "title": "من قائمة عرض", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 24,
+    "topicId": "543c5aee-53e9-8bd5-1c19-9c124a322ec7",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار للبحث في Word؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + H", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Ctrl + F", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + G", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + R", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 25,
+    "topicId": "543c5aee-53e9-8bd5-1c19-9c124a322ec7",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "كيف يمكن تغيير اتجاه الصفحة إلى أفقي في Word؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "من قائمة الصفحة الرئيسية", "image": null, "order": 0},
+      {"isCorrect": true, "title": "من قائمة تخطيط الصفحة > اتجاه", "image": "", "order": 1},
+      {"isCorrect": false, "title": "من قائمة إدراج", "image": "", "order": 2},
+      {"isCorrect": false, "title": "من قائمة مراجعة", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 26,
+    "topicId": "543c5aee-53e9-8bd5-1c19-9c124a322ec7",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار لإلغاء آخر عملية في Word؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + Y", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Ctrl + Z", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + X", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + C", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 27,
+    "topicId": "543c5aee-53e9-8bd5-1c19-9c124a322ec7",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "كيف يمكن إدراج صورة في Word؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "من قائمة الصفحة الرئيسية", "image": null, "order": 0},
+      {"isCorrect": true, "title": "من قائمة إدراج > صور", "image": "", "order": 1},
+      {"isCorrect": false, "title": "من قائمة مراجعة", "image": "", "order": 2},
+      {"isCorrect": false, "title": "من قائمة عرض", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 28,
+    "topicId": "543c5aee-53e9-8bd5-1c19-9c124a322ec7",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار للبحث والاستبدال في Word؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + F", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Ctrl + H", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + G", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + R", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 29,
+    "topicId": "543c5aee-53e9-8bd5-1c19-9c124a322ec7",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "كيف يمكن تغيير لون النص في Word؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "من قائمة إدراج", "image": null, "order": 0},
+      {"isCorrect": true, "title": "من شريط الأدوات أو قائمة الصفحة الرئيسية", "image": "", "order": 1},
+      {"isCorrect": false, "title": "من قائمة مراجعة", "image": "", "order": 2},
+      {"isCorrect": false, "title": "من قائمة عرض", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 30,
+    "topicId": "543c5aee-53e9-8bd5-1c19-9c124a322ec7",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار لطباعة المستند في Word؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + S", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Ctrl + P", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + O", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + N", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 31,
+    "topicId": "543c5aee-53e9-8bd5-1c19-9c124a322ec7",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "كيف يمكن إدراج رقم الصفحة في Word؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "من قائمة الصفحة الرئيسية", "image": null, "order": 0},
+      {"isCorrect": true, "title": "من قائمة إدراج > رقم الصفحة", "image": "", "order": 1},
+      {"isCorrect": false, "title": "من قائمة مراجعة", "image": "", "order": 2},
+      {"isCorrect": false, "title": "من قائمة عرض", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 32,
+    "topicId": "543c5aee-53e9-8bd5-1c19-9c124a322ec7",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار لتحديد كل النص في Word؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + C", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Ctrl + A", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + V", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + X", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 33,
+    "topicId": "543c5aee-53e9-8bd5-1c19-9c124a322ec7",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "كيف يمكن تغيير محاذاة النص إلى الوسط في Word؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "من قائمة إدراج", "image": null, "order": 0},
+      {"isCorrect": true, "title": "من شريط الأدوات أو قائمة الصفحة الرئيسية", "image": "", "order": 1},
+      {"isCorrect": false, "title": "من قائمة مراجعة", "image": "", "order": 2},
+      {"isCorrect": false, "title": "من قائمة عرض", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 34,
+    "topicId": "543c5aee-53e9-8bd5-1c19-9c124a322ec7",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار لحفظ المستند في Word؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + P", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Ctrl + S", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + O", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + N", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 35,
+    "topicId": "543c5aee-53e9-8bd5-1c19-9c124a322ec7",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "كيف يمكن إدراج قائمة نقطية في Word؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "من قائمة إدراج", "image": null, "order": 0},
+      {"isCorrect": true, "title": "من شريط الأدوات أو قائمة الصفحة الرئيسية", "image": "", "order": 1},
+      {"isCorrect": false, "title": "من قائمة مراجعة", "image": "", "order": 2},
+      {"isCorrect": false, "title": "من قائمة عرض", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 36,
+    "topicId": "543c5aee-53e9-8bd5-1c19-9c124a322ec7",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار لفتح مستند موجود في Word؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + N", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Ctrl + O", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + S", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + P", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 37,
+    "topicId": "543c5aee-53e9-8bd5-1c19-9c124a322ec7",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "كيف يمكن تغيير نوع الخط في Word؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "من قائمة إدراج", "image": null, "order": 0},
+      {"isCorrect": true, "title": "من شريط الأدوات أو قائمة الصفحة الرئيسية", "image": "", "order": 1},
+      {"isCorrect": false, "title": "من قائمة مراجعة", "image": "", "order": 2},
+      {"isCorrect": false, "title": "من قائمة عرض", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 38,
+    "topicId": "543c5aee-53e9-8bd5-1c19-9c124a322ec7",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار لإدراج فاصل صفحة في Word؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + Enter", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Ctrl + Enter", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + Shift + Enter", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + Alt + Enter", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 39,
+    "topicId": "543c5aee-53e9-8bd5-1c19-9c124a322ec7",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "كيف يمكن إدراج تذييل في Word؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "من قائمة الصفحة الرئيسية", "image": null, "order": 0},
+      {"isCorrect": true, "title": "من قائمة إدراج > تذييل", "image": "", "order": 1},
+      {"isCorrect": false, "title": "من قائمة مراجعة", "image": "", "order": 2},
+      {"isCorrect": false, "title": "من قائمة عرض", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 40,
+    "topicId": "543c5aee-53e9-8bd5-1c19-9c124a322ec7",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو المكون الرئيسي في الكمبيوتر المسؤول عن معالجة البيانات؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "الذاكرة", "image": null, "order": 0},
+      {"isCorrect": true, "title": "المعالج (CPU)", "image": "", "order": 1},
+      {"isCorrect": false, "title": "القرص الصلب", "image": "", "order": 2},
+      {"isCorrect": false, "title": "لوحة المفاتيح", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 41,
+    "topicId": "fbb02ba6-b823-7d91-6b39-31ff2e7e0846",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "أي من أنظمة التشغيل التالية مفتوح المصدر؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Windows", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Linux", "image": "", "order": 1},
+      {"isCorrect": false, "title": "macOS", "image": "", "order": 2},
+      {"isCorrect": false, "title": "iOS", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 42,
+    "topicId": "fbb02ba6-b823-7d91-6b39-31ff2e7e0846",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار المستخدم لإغلاق نافذة نشطة في Windows؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Alt + Tab", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Alt + F4", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + Alt + Delete", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + W", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 43,
+    "topicId": "fbb02ba6-b823-7d91-6b39-31ff2e7e0846",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "أي من المكونات التالية يعتبر وحدة تخزين ثانوية؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "RAM", "image": null, "order": 0},
+      {"isCorrect": true, "title": "القرص الصلب", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Cache", "image": "", "order": 2},
+      {"isCorrect": false, "title": "ROM", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 44,
+    "topicId": "fbb02ba6-b823-7d91-6b39-31ff2e7e0846",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار لفتح مدير المهام في Windows؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + Alt + F4", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Ctrl + Shift + Esc", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Alt + Tab", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + Alt + Tab", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 45,
+    "topicId": "fbb02ba6-b823-7d91-6b39-31ff2e7e0846",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "أي من البرامج التالية يعتبر نظام تشغيل؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Microsoft Word", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Windows 11", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Google Chrome", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Adobe Photoshop", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 46,
+    "topicId": "fbb02ba6-b823-7d91-6b39-31ff2e7e0846",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار لتبديل بين النوافذ المفتوحة في Windows؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Alt + F4", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Alt + Tab", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + Tab", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Shift + Tab", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 47,
+    "topicId": "fbb02ba6-b823-7d91-6b39-31ff2e7e0846",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "أي من المكونات التالية مسؤول عن عرض الصور على الشاشة؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "المعالج", "image": null, "order": 0},
+      {"isCorrect": true, "title": "كارت الشاشة", "image": "", "order": 1},
+      {"isCorrect": false, "title": "الذاكرة", "image": "", "order": 2},
+      {"isCorrect": false, "title": "القرص الصلب", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 48,
+    "topicId": "fbb02ba6-b823-7d91-6b39-31ff2e7e0846",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار لفتح قائمة ابدأ في Windows؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + Esc", "image": null, "order": 0},
+      {"isCorrect": true, "title": "مفتاح Windows", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Alt + Esc", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + Alt + Esc", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 49,
+    "topicId": "fbb02ba6-b823-7d91-6b39-31ff2e7e0846",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "أي من أنواع الذاكرة التالية أسرع في الوصول؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "القرص الصلب", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Cache", "image": "", "order": 1},
+      {"isCorrect": false, "title": "RAM", "image": "", "order": 2},
+      {"isCorrect": false, "title": "ROM", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 50,
+    "topicId": "fbb02ba6-b823-7d91-6b39-31ff2e7e0846",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار لنسخ الملف أو المجلد في Windows؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + X", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Ctrl + C", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + V", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + Z", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 51,
+    "topicId": "fbb02ba6-b823-7d91-6b39-31ff2e7e0846",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "أي من أنظمة التشغيل التالية مخصص للأجهزة المحمولة؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Windows 11", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Android", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Linux", "image": "", "order": 2},
+      {"isCorrect": false, "title": "macOS", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 52,
+    "topicId": "fbb02ba6-b823-7d91-6b39-31ff2e7e0846",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار لفتح مستكشف الملفات في Windows؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + E", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Windows + E", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + F", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Alt + E", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 53,
+    "topicId": "fbb02ba6-b823-7d91-6b39-31ff2e7e0846",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "أي من المكونات التالية مسؤول عن تخزين البيانات بشكل دائم؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "RAM", "image": null, "order": 0},
+      {"isCorrect": true, "title": "القرص الصلب", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Cache", "image": "", "order": 2},
+      {"isCorrect": false, "title": "المعالج", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 54,
+    "topicId": "fbb02ba6-b823-7d91-6b39-31ff2e7e0846",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار لفتح إعدادات النظام في Windows؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + S", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Windows + I", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + I", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Alt + I", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 55,
+    "topicId": "fbb02ba6-b823-7d91-6b39-31ff2e7e0846",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "أي من البرامج التالية يعتبر مضاد فيروسات؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Microsoft Word", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Windows Defender", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Google Chrome", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Adobe Reader", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 56,
+    "topicId": "fbb02ba6-b823-7d91-6b39-31ff2e7e0846",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار لفتح نافذة جديدة في مستكشف الملفات؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Ctrl + N", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Ctrl + N", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + T", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Ctrl + W", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 57,
+    "topicId": "fbb02ba6-b823-7d91-6b39-31ff2e7e0846",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "أي من المكونات التالية مسؤول عن إدخال البيانات إلى الكمبيوتر؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "الشاشة", "image": null, "order": 0},
+      {"isCorrect": true, "title": "لوحة المفاتيح", "image": "", "order": 1},
+      {"isCorrect": false, "title": "الطابعة", "image": "", "order": 2},
+      {"isCorrect": false, "title": "السماعات", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 58,
+    "topicId": "fbb02ba6-b823-7d91-6b39-31ff2e7e0846",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "ما هو الاختصار لفتح قائمة السياق (النقر الأيمن)؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "Shift + F10", "image": null, "order": 0},
+      {"isCorrect": true, "title": "Shift + F10", "image": "", "order": 1},
+      {"isCorrect": false, "title": "Ctrl + F10", "image": "", "order": 2},
+      {"isCorrect": false, "title": "Alt + F10", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 59,
+    "topicId": "fbb02ba6-b823-7d91-6b39-31ff2e7e0846",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  },
+  {
+    "type": 6,
+    "title": "أي من المكونات التالية مسؤول عن إخراج الصوت من الكمبيوتر؟",
+    "correctBoolean": false,
+    "correctText": "",
+    "difficulty": 1,
+    "knowledgeLevel": null,
+    "isContentShown": true,
+    "options": [
+      {"isCorrect": false, "title": "الميكروفون", "image": null, "order": 0},
+      {"isCorrect": true, "title": "السماعات", "image": "", "order": 1},
+      {"isCorrect": false, "title": "لوحة المفاتيح", "image": "", "order": 2},
+      {"isCorrect": false, "title": "الشاشة", "image": "", "order": 3}
+    ],
+    "image": "",
+    "order": 60,
+    "topicId": "fbb02ba6-b823-7d91-6b39-31ff2e7e0846",
+    "clientId": "a7045f64-1c00-438b-b678-cd7b8843432e",
+    "knowledgeLevelId": "01998cd5-4f1b-719f-804a-001410f96bd2"
+  }
+]
