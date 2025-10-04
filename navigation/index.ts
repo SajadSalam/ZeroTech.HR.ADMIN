@@ -8,5 +8,10 @@ export default [
        name: 'الأقسام',
        icon: { name: 'ph-buildings-duotone', class: 'w-5 h-5' },
        to: '/departments',
+   },
+   {
+       name: 'أنواع الطلبات',
+       icon: { name: 'ph-file-text-duotone', class: 'w-5 h-5' },
+       to: '/request-types',
    }
 ]

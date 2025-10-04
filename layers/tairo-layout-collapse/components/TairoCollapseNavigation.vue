@@ -40,8 +40,8 @@ const authStore = useAuthStore()
                             @clicked="isOpen = true" />
                         <NuxtLink v-else-if="item.to" :to="item.to" :data-nui-tooltip="isOpen ? undefined : item.name"
                             data-nui-tooltip-position="end"
-                            exact-active-class="!bg-secondary-500 !bg-op-20 !border !border-secondary-500 !border-2  !text-secondary-500 font-bold"
-                            class="nui-focus flex cursor-pointer items-center gap-4 rounded-lg py-3 text-white transition-colors duration-300 hover:bg-muted-100 hover:text-muted-600 dark:text-muted-400/80 dark:hover:bg-muted-700/60 dark:hover:text-muted-200"
+                            exact-active-class="!bg-secondary-500  !bg-op-20 !border !border-secondary-500 !border-2  !text-secondary-500 font-bold"
+                            class="nui-focus flex cursor-pointer items-center gap-4 rounded-full py-3 text-white transition-colors duration-300 hover:bg-muted-100 hover:text-muted-600 dark:text-muted-400/80 dark:hover:bg-muted-700/60 dark:hover:text-muted-200"
                             :class="!isOpen ? 'justify-center px-1' : 'px-4'">
                             <Icon :name="item.icon.name" :class="item.icon.class" />
                             <span class="whitespace font-sans text-sm" :class="!isOpen ? 'hidden' : 'block'">
@@ -73,7 +73,7 @@ const authStore = useAuthStore()
                         @clicked="isOpen = true" />
                     <NuxtLink v-else-if="item.to" :to="item.to"
                         exact-active-class="!bg-secondary-500 !bg-op-20 !border !border-secondary-500 !border-2  !text-secondary-500"
-                        class="nui-focus flex cursor-pointer items-center gap-4 rounded-lg py-3 text-white transition-colors duration-300 hover:bg-muted-100 hover:text-muted-600 dark:text-muted-400/80 dark:hover:bg-muted-700/60 dark:hover:text-muted-200"
+                        class="nui-focus flex cursor-pointer items-center gap-4 rounded-full py-3 text-white transition-colors duration-300 hover:bg-muted-100 hover:text-muted-600 dark:text-muted-400/80 dark:hover:bg-muted-700/60 dark:hover:text-muted-200"
                         :class="!isOpen ? 'justify-center px-1' : 'px-4'">
                         <Icon :name="item.icon.name" :class="item.icon.class" />
                         <span class="whitespace-nowrap font-sans text-sm" :class="!isOpen ? 'hidden' : 'block'">
