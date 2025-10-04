@@ -15,11 +15,12 @@ const authStore = useAuthStore()
 </script>
 
 <template>
-    <div class="dark:bg-muted-800 border-muted-200 dark:border-muted-700 fixed start-0 top-0 z-[60] flex h-full flex-col border-r bg-#121420 transition-all duration-300"
+    <div class="sidebar-bg dark:bg-muted-800 border-muted-200 dark:border-muted-700 fixed start-0 top-0 z-[60] flex h-full flex-col border-r transition-all duration-300"
         :class="[
             !isOpen ? 'w-[80px]' : 'w-[250px]',
             isMobileOpen ? 'translate-x-0 lg:translate-x-0' : `translate-x-full lg:translate-x-0`,
-        ]">
+        ]"
+        >
         <!--Header-->
         <slot name="header">
             <component :is="resolveComponentOrNative(app.tairo?.collapse?.navigation?.header?.component)"
@@ -39,7 +40,7 @@ const authStore = useAuthStore()
                             @clicked="isOpen = true" />
                         <NuxtLink v-else-if="item.to" :to="item.to" :data-nui-tooltip="isOpen ? undefined : item.name"
                             data-nui-tooltip-position="end"
-                            exact-active-class="!bg-primary-gradient !text-white font-bold"
+                            exact-active-class="!bg-secondary-500 !bg-op-20 !border !border-secondary-500 !border-2  !text-secondary-500 font-bold"
                             class="nui-focus flex cursor-pointer items-center gap-4 rounded-lg py-3 text-white transition-colors duration-300 hover:bg-muted-100 hover:text-muted-600 dark:text-muted-400/80 dark:hover:bg-muted-700/60 dark:hover:text-muted-200"
                             :class="!isOpen ? 'justify-center px-1' : 'px-4'">
                             <Icon :name="item.icon.name" :class="item.icon.class" />
@@ -71,7 +72,7 @@ const authStore = useAuthStore()
                     <TairoCollapseNavigationCollapseLinks v-else-if="item.children" :item="item" :expanded="isOpen"
                         @clicked="isOpen = true" />
                     <NuxtLink v-else-if="item.to" :to="item.to"
-                        exact-active-class="!bg-primary-gradient !text-white font-bold"
+                        exact-active-class="!bg-secondary-500 !bg-op-20 !border !border-secondary-500 !border-2  !text-secondary-500"
                         class="nui-focus flex cursor-pointer items-center gap-4 rounded-lg py-3 text-white transition-colors duration-300 hover:bg-muted-100 hover:text-muted-600 dark:text-muted-400/80 dark:hover:bg-muted-700/60 dark:hover:text-muted-200"
                         :class="!isOpen ? 'justify-center px-1' : 'px-4'">
                         <Icon :name="item.icon.name" :class="item.icon.class" />
@@ -99,3 +100,9 @@ const authStore = useAuthStore()
         </slot>
     </div>
 </template>
+<style lang="scss">
+.sidebar-bg {
+    background-image: url('/sidebar-bg.svg');
+
+}
+</style>

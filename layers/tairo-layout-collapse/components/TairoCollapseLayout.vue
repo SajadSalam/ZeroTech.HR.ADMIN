@@ -97,24 +97,8 @@ v-if="toolbarEnabled" :collapse="props.collapse"
 </template>
 <style lang="scss">
 .bg {
-  background-color: #f2f5f9;
+  background-color: rgba(237, 240, 242, 1);
   position: relative;
   z-index: 1;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url(/logo.png);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    opacity: .1;
-    pointer-events: none;
-    z-index: -1;
-  }
 }
 </style>
