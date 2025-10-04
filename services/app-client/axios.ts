@@ -1,12 +1,17 @@
 import axios from 'axios'
 import { useAppToaster } from '../toaster/toaster'
 
-// export const baseURL = 'http://localhost:1337/'
+export const baseURL = 'http://localhost:5244/'
 // export const baseURL = ' '
-export const baseURL = import.meta.env.VITE_BASE_URL
+// export const baseURL = import.meta.env.VITE_BASE_URL
 
 const axiosIns = axios.create({
     baseURL: `${baseURL}api`,
+    headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    },
 })
 
 // ℹ️ Add request interceptor to send the authorization header on each subsequent request after login

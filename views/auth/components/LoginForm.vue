@@ -2,14 +2,13 @@
 import AppInputField from '~/components/app-field/AppInputField.vue'
 import { requiredValidator } from '~/services/validation'
 import { Validator } from '~/services/validator'
-import type { LoginBody, MeResponse } from '../types/index'
 import { useAuthStore } from '../store/auth'
-import { useI18n } from 'vue-i18n'
+import type { LoginBody, MeResponse } from '../types/index'
 
 const body = ref<LoginBody>({
   loginIdentifier: '',
   password: '',
-  rememberMe: false,
+  rememberMe: true,
 })
 const isError = ref(false)
 const isLoading = ref(false)
@@ -54,7 +53,6 @@ const login = async () => {
   }
 }
 
-const i18n = useI18n()
 
 onMounted(() => {})
 </script>
@@ -80,17 +78,6 @@ onMounted(() => {})
         class="rounded-full"
       />
       
-      <div class="flex items-center gap-2">
-        <input
-          id="rememberMe"
-          v-model="body.rememberMe"
-          type="checkbox"
-          class="rounded border-gray-300 text-primary focus:ring-primary"
-        />
-        <label for="rememberMe" class="text-sm text-gray-700">
-          {{ $t('remember-me') }}
-        </label>
-      </div>
       
       <p v-if="isError" class="text-red text-sm">
         {{ $t('username-or-password-is-incorrect') }}
