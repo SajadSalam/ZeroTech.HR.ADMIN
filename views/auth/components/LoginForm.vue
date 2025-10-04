@@ -35,16 +35,8 @@ const login = async () => {
       const userData = JSON.parse(userDataStr) as MeResponse
       // Check roles array for navigation
       const userRoles = userData.roles?.map((role: any) => role.name) || []
-      
-      if (userRoles.includes('SuperAdmin')) {
         window.location.href = '/'
-      } else if(userRoles.includes('Award Manager')) {
-        window.location.href = '/awards'
-      } else if(userRoles.includes('Award Audit Committee')) {
-        window.location.href = '/applicants'
-      } else {
-        window.location.href = '/applicants'
-      }
+     
     }
   } catch (error) {
     isError.value = true
