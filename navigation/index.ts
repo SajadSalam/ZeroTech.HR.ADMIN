@@ -18,5 +18,10 @@ export default [
        name: 'فئات الطلبات',
        icon: { name: 'ph-folder-duotone', class: 'w-5 h-5' },
        to: '/request-categories',
+   },
+   {
+       name: 'سلاسل الموافقات',
+       icon: { name: 'ph-flow-arrow-duotone', class: 'w-5 h-5' },
+       to: '/approval-chains',
    }
 ]
