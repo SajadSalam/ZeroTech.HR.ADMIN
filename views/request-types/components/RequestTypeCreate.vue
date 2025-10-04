@@ -260,33 +260,71 @@ watch(
           />
         </div>
 
+        <!-- Restrictions -->
+        <div class="border-t pt-4">
+          <h4 class="text-lg font-medium text-gray-900 dark:text-white mb-4">القيود والصلاحيات</h4>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <AppAutoCompleteField
+              v-model="body.allowedDepartmentIds.$model"
+              label="الأقسام المسموحة"
+              placeholder="اختر الأقسام..."
+              get-url="/api/Department"
+              item-label="name"
+              item-value="id"
+              fetch-on-search
+              search-key="name"
+              multiple
+            />
+            <AppAutoCompleteField
+              v-model="body.allowedRoleIds.$model"
+              label="الأدوار المسموحة"
+              placeholder="اختر الأدوار..."
+              get-url="/roles"
+              item-label="name"
+              item-value="id"
+              fetch-on-search
+              search-key="name"
+              multiple
+            />
+          </div>
+          
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+            إذا لم يتم تحديد أي قيود، سيكون نوع الطلب متاحاً لجميع المستخدمين
+          </p>
+        </div>
+
         <!-- JSON Fields -->
-        <AppTextAreaField
-          v-model="body.validationRules.$model"
-          :errors="body.validationRules.$errors"
-          size="md"
-          label="قواعد التحقق (JSON)"
-          rows="3"
-          placeholder='{"maxConsecutiveDays": 14}'
-        />
+        <div class="border-t pt-4">
+          <h4 class="text-lg font-medium text-gray-900 dark:text-white mb-4">الإعدادات المتقدمة</h4>
+          
+          <AppTextAreaField
+            v-model="body.validationRules.$model"
+            :errors="body.validationRules.$errors"
+            size="md"
+            label="قواعد التحقق (JSON)"
+            rows="3"
+            placeholder='{"maxConsecutiveDays": 14}'
+          />
 
-        <AppTextAreaField
-          v-model="body.customFields.$model"
-          :errors="body.customFields.$errors"
-          size="md"
-          label="الحقول المخصصة (JSON)"
-          rows="3"
-          placeholder='[{"name":"reason","type":"text","required":true}]'
-        />
+          <AppTextAreaField
+            v-model="body.customFields.$model"
+            :errors="body.customFields.$errors"
+            size="md"
+            label="الحقول المخصصة (JSON)"
+            rows="3"
+            placeholder='[{"name":"reason","type":"text","required":true}]'
+          />
 
-        <AppTextAreaField
-          v-model="body.notificationSettings.$model"
-          :errors="body.notificationSettings.$errors"
-          size="md"
-          label="إعدادات الإشعارات (JSON)"
-          rows="3"
-          placeholder='{"notifyManager": true, "notifyHR": false}'
-        />
+          <AppTextAreaField
+            v-model="body.notificationSettings.$model"
+            :errors="body.notificationSettings.$errors"
+            size="md"
+            label="إعدادات الإشعارات (JSON)"
+            rows="3"
+            placeholder='{"notifyManager": true, "notifyHR": false}'
+          />
+        </div>
       </div>
     </div>
     <template #actions>
