@@ -1,10 +1,15 @@
 import type { BaseFilters } from '~/utils/types/ApiResponses'
 import type { BaseDto } from '~/utils/types/base-dto'
+import type { RequestCategoryDto } from '~/views/request-categories/types'
 
 export type Category = {
   id: number
   name: string
   code: string
+  colorCode?: string
+  iconClass?: string
+  displayOrder?: number
+  isEnabled: boolean
 }
 
 export type Department = {

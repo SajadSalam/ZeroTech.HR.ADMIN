@@ -116,7 +116,7 @@ watch(
             :errors="body.categoryId.$errors"
             size="md"
             label="الفئة"
-            get-url="/categories"
+            get-url="/RequestCategory/enabled"
             item-label="name"
             item-value="id"
             required
@@ -269,14 +269,14 @@ watch(
               v-model="body.allowedDepartmentIds.$model"
               label="الأقسام المسموحة"
               placeholder="اختر الأقسام..."
-              get-url="/api/Department"
+              get-url="/Department"
               item-label="name"
               item-value="id"
               fetch-on-search
               search-key="name"
               multiple
             />
-            <AppAutoCompleteField
+            <!-- <AppAutoCompleteField
               v-model="body.allowedRoleIds.$model"
               label="الأدوار المسموحة"
               placeholder="اختر الأدوار..."
@@ -286,7 +286,7 @@ watch(
               fetch-on-search
               search-key="name"
               multiple
-            />
+            /> -->
           </div>
           
           <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">

@@ -141,7 +141,7 @@ const clearResults = () => {
               v-model="selectedDepartmentId"
               label="اختر القسم"
               placeholder="ابحث عن قسم..."
-              get-url="/api/Department"
+              get-url="/Department"
               item-label="name"
               item-value="id"
               fetch-on-search

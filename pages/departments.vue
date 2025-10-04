@@ -59,7 +59,7 @@ watch(
         <AppAutoCompleteField
           v-model="filters.parentDepartmentId"
           placeholder="القسم الأب"
-          get-url="/api/Department"
+          get-url="/Department"
           item-label="name"
           item-value="id"
         />

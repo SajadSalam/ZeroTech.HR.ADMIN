@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { useRequestTypeStore } from '../store'
+import { useRequestCategoryStore } from '~/views/request-categories/store'
 import type { RequestTypeDto } from '../types'
+import type { RequestCategoryDto } from '~/views/request-categories/types'
 
 const requestTypeStore = useRequestTypeStore()
+const requestCategoryStore = useRequestCategoryStore()
 
-const categories = ref<any[]>([])
+const categories = ref<RequestCategoryDto[]>([])
 const selectedCategoryId = ref<number | null>(null)
 const categoryRequestTypes = ref<RequestTypeDto[]>([])
 const isLoading = ref(false)
@@ -13,18 +16,8 @@ const isLoadingCategories = ref(false)
 const loadCategories = async () => {
   try {
     isLoadingCategories.value = true
-    // This would typically come from a categories API
-    // For now, we'll extract unique categories from request types
-    await requestTypeStore.getRequestTypes()
-    const uniqueCategories = new Map()
-    
-    requestTypeStore.requestTypes.forEach(rt => {
-      if (rt.category && !uniqueCategories.has(rt.category.id)) {
-        uniqueCategories.set(rt.category.id, rt.category)
-      }
-    })
-    
-    categories.value = Array.from(uniqueCategories.values())
+    await requestCategoryStore.getRequestCategoriesWithCounts()
+    categories.value = requestCategoryStore.requestCategoriesWithCounts
   } catch (error) {
     console.error('Error loading categories:', error)
   } finally {
@@ -44,17 +37,10 @@ const loadRequestTypesByCategory = async (categoryId: number) => {
   }
 }
 
-const getEnabledCount = (categoryId: number) => {
-  return requestTypeStore.requestTypes.filter(rt => 
-    rt.categoryId === categoryId && rt.isEnabled
-  ).length
+const getEnabledCount = (category: RequestCategoryDto) => {
+  return category.requestTypeCount || 0
 }
 
-const getTotalCount = (categoryId: number) => {
-  return requestTypeStore.requestTypes.filter(rt => 
-    rt.categoryId === categoryId
-  ).length
-}
 
 onMounted(() => {
   loadCategories()
@@ -92,31 +78,37 @@ onMounted(() => {
           
           <div class="space-y-2">
             <div class="flex items-center justify-between text-sm">
-              <span class="text-gray-600 dark:text-gray-400">المجموع:</span>
-              <span class="font-medium">{{ getTotalCount(category.id) }}</span>
+              <span class="text-gray-600 dark:text-gray-400">عدد الأنواع:</span>
+              <span class="font-medium">{{ getEnabledCount(category) }}</span>
             </div>
             <div class="flex items-center justify-between text-sm">
-              <span class="text-gray-600 dark:text-gray-400">المفعل:</span>
-              <span class="font-medium text-success-600">{{ getEnabledCount(category.id) }}</span>
-            </div>
-            <div class="flex items-center justify-between text-sm">
-              <span class="text-gray-600 dark:text-gray-400">غير المفعل:</span>
-              <span class="font-medium text-danger-600">{{ getTotalCount(category.id) - getEnabledCount(category.id) }}</span>
+              <span class="text-gray-600 dark:text-gray-400">الحالة:</span>
+              <BaseBadge
+                :color="category.isEnabled ? 'success' : 'muted'"
+                variant="pastel"
+                size="xs"
+              >
+                {{ category.isEnabled ? 'مفعل' : 'غير مفعل' }}
+              </BaseBadge>
             </div>
           </div>
           
-          <!-- Progress Bar -->
-          <div class="mt-4">
-            <div class="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 mb-1">
-              <span>نسبة التفعيل</span>
-              <span>{{ Math.round((getEnabledCount(category.id) / getTotalCount(category.id)) * 100) }}%</span>
+          <!-- Category Visual Elements -->
+          <div v-if="category.colorCode || category.iconClass" class="mt-4 flex items-center gap-2">
+            <div 
+              v-if="category.colorCode"
+              class="w-6 h-6 rounded-lg flex items-center justify-center text-white"
+              :style="{ backgroundColor: category.colorCode }"
+            >
+              <Icon 
+                v-if="category.iconClass"
+                :name="category.iconClass" 
+                class="size-3"
+              />
             </div>
-            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-              <div
-                class="bg-success-500 h-2 rounded-full transition-all duration-300"
-                :style="{ width: `${(getEnabledCount(category.id) / getTotalCount(category.id)) * 100}%` }"
-              ></div>
-            </div>
+            <span v-if="category.description" class="text-xs text-gray-500 truncate">
+              {{ category.description }}
+            </span>
           </div>
         </div>
       </div>

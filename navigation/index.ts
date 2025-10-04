@@ -13,5 +13,10 @@ export default [
        name: 'أنواع الطلبات',
        icon: { name: 'ph-file-text-duotone', class: 'w-5 h-5' },
        to: '/request-types',
+   },
+   {
+       name: 'فئات الطلبات',
+       icon: { name: 'ph-folder-duotone', class: 'w-5 h-5' },
+       to: '/request-categories',
    }
 ]

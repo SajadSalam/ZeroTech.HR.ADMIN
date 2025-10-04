@@ -3,6 +3,7 @@ import type { PaginatedResponse } from '~/utils/types/ApiResponses'
 import type { RequestType, RequestTypeDto, RequestTypeFilters, RequestTypeCreateDto, RequestTypeUpdateDto } from '../types'
 
 interface IRequestTypeService {
+  get: (filters: RequestTypeFilters) => Promise<PaginatedResponse<RequestTypeDto>>
   getAll: () => Promise<RequestTypeDto[]>
   getEnabled: () => Promise<RequestTypeDto[]>
   getById: (id: number) => Promise<RequestTypeDto>
@@ -18,6 +19,28 @@ interface IRequestTypeService {
 }
 
 export class RequestTypeService implements IRequestTypeService {
+  async get(filters: RequestTypeFilters): Promise<PaginatedResponse<RequestTypeDto>> {
+    try {
+      const params = new URLSearchParams()
+      
+      if (filters.pageNumber) params.append('pageNumber', filters.pageNumber.toString())
+      if (filters.pageSize) params.append('pageSize', filters.pageSize.toString())
+      if (filters.name) params.append('name', filters.name)
+      if (filters.code) params.append('code', filters.code)
+      if (filters.categoryId) params.append('categoryId', filters.categoryId.toString())
+      if (filters.isEnabled !== undefined && filters.isEnabled !== null) params.append('isEnabled', filters.isEnabled.toString())
+      if (filters.requiresApproval !== undefined && filters.requiresApproval !== null) params.append('requiresApproval', filters.requiresApproval.toString())
+      if (filters.affectsAttendance !== undefined && filters.affectsAttendance !== null) params.append('affectsAttendance', filters.affectsAttendance.toString())
+      if (filters.affectsPayroll !== undefined && filters.affectsPayroll !== null) params.append('affectsPayroll', filters.affectsPayroll.toString())
+
+      const response = await axios.get<PaginatedResponse<RequestTypeDto>>(`/RequestType?${params.toString()}`)
+      return response.data
+    } catch (error) {
+      console.error('Error fetching request types:', error)
+      throw error
+    }
+  }
+
   async getAll(): Promise<RequestTypeDto[]> {
     const response = await axios.get<RequestTypeDto[]>('/RequestType')
     return response.data
@@ -77,3 +100,5 @@ export class RequestTypeService implements IRequestTypeService {
     await axios.delete(`/RequestType/${id}`)
   }
 }
+
+export const requestTypeService = new RequestTypeService()

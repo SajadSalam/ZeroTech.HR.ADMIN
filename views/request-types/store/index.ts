@@ -1,7 +1,5 @@
-import { RequestTypeService } from '../service'
+import { requestTypeService } from '../service'
 import type { RequestType, RequestTypeDto, RequestTypeFilters, RequestTypeCreateDto, RequestTypeUpdateDto } from '../types'
-
-const requestTypeService = new RequestTypeService()
 
 export const useRequestTypeStore = defineStore('requestType', () => {
   const requestTypes = ref<RequestTypeDto[]>([])
@@ -27,12 +25,12 @@ export const useRequestTypeStore = defineStore('requestType', () => {
   const getRequestTypes = async () => {
     try {
       isLoading.value = true
-      const response = await requestTypeService.getAll()
-      requestTypes.value = response
-      // Since API doesn't return paginated response for getAll, we'll simulate pagination
-      totalPages.value = Math.ceil(response.length / filters.value.pageSize)
+      const response = await requestTypeService.get(filters.value)
+      requestTypes.value = response.data
+      totalPages.value = response.pagesCount
     } catch (error) {
       console.error('Error fetching request types:', error)
+      throw error
     } finally {
       isLoading.value = false
     }

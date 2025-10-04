@@ -141,7 +141,7 @@ watch(
             :errors="body.categoryId.$errors"
             size="md"
             label="الفئة"
-            get-url="/categories"
+            get-url="/RequestCategory/enabled"
             item-label="name"
             item-value="id"
             required

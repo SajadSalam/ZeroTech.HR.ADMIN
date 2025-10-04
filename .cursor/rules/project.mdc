@@ -25,7 +25,6 @@ const getEntities = async () => {
 getEntities()
 watch(filters, () => { getEntities() }, { deep: true })
 
-const { hasPrivilege } = useAuthStore()
 </script>
 
 <template>
@@ -36,7 +35,6 @@ const { hasPrivilege } = useAuthStore()
       :pagination="true"
       :total-pages="entityStore.totalPages"
       title="Arabic Title"
-      :hide-create="!hasPrivilege('permission:path')"
       @update:current-page="filters.pageNumber = $event"
     >
       <template #filters>
@@ -52,8 +50,6 @@ const { hasPrivilege } = useAuthStore()
         <template #data-actions="{ item }">
           <AppCrudActions
             :item="item"
-            :hide-update="!hasPrivilege('update:permission')"
-            :hide-delete="!hasPrivilege('delete:permission')"
             :edit-button-action="() => {
               entityStore.selectedEntity = item
               entityStore.selectedEntityId = item.id
@@ -237,10 +233,6 @@ import { DepartmentDto, DepartmentFilters } from '~/views/departments/types'
 
 ## Security Rules
 
-### 1. Privilege Checking
-- Always check privileges using `hasPrivilege()`
-- Hide UI elements based on permissions
-- Use descriptive permission strings
 
 ### 2. Data Validation
 - Validate on both client and expect server validation

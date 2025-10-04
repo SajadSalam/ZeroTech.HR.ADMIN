@@ -146,7 +146,7 @@ const { hasPrivilege } = useAuthStore()
           <AppAutoCompleteField
             v-model="filters.categoryId"
             placeholder="الفئة"
-            get-url="/categories"
+            get-url="/RequestCategory/enabled"
             item-label="name"
             item-value="id"
           />
@@ -190,9 +190,21 @@ const { hasPrivilege } = useAuthStore()
           </template>
 
           <template #data-category="{ item }">
-            <span class="text-muted-800 dark:text-muted-100">
-              {{ item.category?.name }}
-            </span>
+            <div v-if="item.category" class="flex items-center gap-2">
+              <div 
+                class="w-6 h-6 rounded-lg flex items-center justify-center text-white text-xs"
+                :style="{ backgroundColor: item.category.colorCode || '#4CAF50' }"
+              >
+                <Icon 
+                  :name="item.category.iconClass || 'fas fa-folder'" 
+                  class="size-3"
+                />
+              </div>
+              <span class="text-muted-800 dark:text-muted-100">
+                {{ item.category.name }}
+              </span>
+            </div>
+            <span v-else class="text-muted-500">-</span>
           </template>
 
           <template #data-isEnabled="{ item }">
