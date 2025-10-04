@@ -2,9 +2,7 @@
 import { FileService } from '~/services/app-client/fileService'
 import AppFileUploaderButton from './AppFileUploaderButton.vue'
 import AppImagePreviewModal from '../AppImagePreviewModal.vue'
-import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
 
 const props = defineProps<{
   input: string
@@ -37,7 +35,7 @@ watch(fileModel, async (value: File | null) => {
     try {
       isUploading.value = true
       useToast({
-        message: t('image_uploading'),
+        message: 'image_uploading',
         isError: false,
       })
 
@@ -47,12 +45,12 @@ watch(fileModel, async (value: File | null) => {
 
       // Show success notification
       useToast({
-        message: t('image_upload_success'),
+        message: 'image_upload_success',
         isError: false,
       })
     } catch {
       useToast({
-        message: t('image_upload_failed'),
+        message: 'image_upload_failed',
         isError: true,
       })
     } finally {
@@ -83,7 +81,7 @@ const removeImage = () => {
   <div class="flex w-full items-center gap-2">
     <BaseInput
       v-model="input"
-      :placeholder="placeholder || $t('enter-the-text')"
+        :placeholder="placeholder || 'enter-the-text'"
       :size="size || 'md'"
       :classes="{
         wrapper: 'w-full',

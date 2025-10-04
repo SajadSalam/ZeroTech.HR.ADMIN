@@ -15,7 +15,7 @@ const props = defineProps({
 <template>
   <TairoTableRow :hoverable="false">
     <TairoTableCell class="!rounded" :colspan="props.cols">
-      <BasePlaceholderPage :title="$t(props.title)" :subtitle="$t(props.subtitle)" />
+      <BasePlaceholderPage :title="props.title" :subtitle="props.subtitle" />
     </TairoTableCell>
   </TairoTableRow>
 </template>

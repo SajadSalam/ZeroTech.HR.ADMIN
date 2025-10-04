@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
 
 interface Props {
   size: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'
@@ -7,8 +6,7 @@ interface Props {
   loading?: boolean
   overflowY?: 'auto' | 'visible' // New prop for overflow-y
 }
-const i18n = useI18n()
-const title = computed(() => props.title ?? i18n.t('add'))
+const title = computed(() => props.title ?? 'اضافة')
 const props = withDefaults(defineProps<Props>(), {
   size: 'md',
   title: 'Add',
@@ -27,7 +25,7 @@ const hasSlot = (name: string) => !!slots[name]
     :open="isDialogOpen"
     :size="size"
     :overflow="props.overflowY"
-    :dir="$i18n.locale === 'ar' ? 'rtl' : 'ltr'"
+    dir="rtl"
     class="w-[100px] !bg-white dark:!bg-[#010518] dark:text-white"
     @close="isDialogOpen = true"
   >

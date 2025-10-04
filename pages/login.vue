@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
+
 import LoginImage from '~/assets/images/login-bg.jpg'
 import ToseelLogo from '~/components/global/ToseelLogo.vue'
 import LoginForm from '~/views/auth/components/LoginForm.vue'
@@ -19,24 +19,23 @@ useHead({
   title: 'تسجيل الدخول',
 })
 
-const i18n = useI18n()
 </script>
 
 <template>
   <div>
     <div
       class="grid h-screen w-screen grid-cols-1 md:grid-cols-[1.5fr_2fr] overflow-hidden"
-      :dir="i18n.locale.value === 'ar' ? 'rtl' : 'ltr'"
+      dir="rtl"
     >
       <div
         class="bg-[#EDF0F2] md:rounded-lt-3xl md:rounded-lb-3xl flex flex-col justify-center gap-7 px-6 py-10 md:px-14 md:py-20"
       >
         <div class="flex flex-col gap-5 rounded-3xl bg-white p-6 md:p-10">
           <span class="l text-center text-3xl md:text-4xl font-bold text-black">
-            <p>{{ $t('login') }}</p>
+            <p>تسجيل الدخول</p>
           </span>
           <p class="l text-center text-sm text-muted-500">
-            {{ $t('enter-your-email-below-to-login-to-your-account') }}
+            قم بإدخال بريدك الإلكتروني أدناه لتسجيل الدخول إلى حسابك
           </p>
           <LoginForm />
           <div class="grow" />

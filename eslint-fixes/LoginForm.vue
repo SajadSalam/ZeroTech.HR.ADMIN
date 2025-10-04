@@ -4,7 +4,6 @@ import { requiredValidator } from '~/services/validation'
 import { Validator } from '~/services/validator'
 import type { LoginBody } from '~/views/auth/types'
 import { useAuthStore } from '~/views/auth/store/auth'
-import { useI18n } from 'vue-i18n'
 
 const body = ref<LoginBody>({
   identifier: '',
@@ -37,7 +36,6 @@ const login = async () => {
   }
 }
 
-const i18n = useI18n()
 
 onMounted(() => {})
 </script>
@@ -49,8 +47,8 @@ onMounted(() => {})
         v-model="validator.validation.value.identifier.$model"
         :errors="validator.validation.value.identifier.$errors"
         rounded="lg"
-        :placeholder="$t('fill-username')"
-        :label="$t('username')"
+        placeholder="ادخل اسم المستخدم"
+        label="اسم المستخدم"
         class="rounded-full"
       />
       <AppInputField
@@ -58,19 +56,18 @@ onMounted(() => {})
         :errors="validator.validation.value.password.$errors"
         type="password"
         rounded="lg"
-        :placeholder="$t('password')"
-        :label="$t('password')"
+        placeholder="ادخل كلمة المرور"
+        label="كلمة المرور"
         class="rounded-full"
       />
       <p v-if="isError" class="text-red text-sm">
-        {{ $t('username-or-password-is-incorrect') }}
+        اسم المستخدم أو كلمة المرور غير صحيحة
       </p>
 
       <div class="flex w-full flex-col items-center gap-3">
         <BaseButton :loading="isLoading" type="submit" class="w-full" color="primary">
-          {{ $t('login') }}
+          تسجيل الدخول
         </BaseButton>
-        <ChangeLocale />
       </div>
     </div>
   </form>

@@ -90,7 +90,7 @@ const iconClasses = computed(() => {
 
 <template>
     <BaseCard
-        :dir="$i18n.locale === 'ar' ? 'rtl' : 'ltr'"
+        dir="rtl"
         class="!bg-primary-900 pointer-events-auto relative !z-[12000] flex !border-0 shadow-md overflow-hidden focus-within:!border-0"
         :class="wrapperClasses"
     >

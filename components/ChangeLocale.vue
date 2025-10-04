@@ -1,5 +1,5 @@
 <template>
-    <BaseButton
+    <!-- <BaseButton
       color="muted"
       @click="changeLocale"
       variant="pastel"
@@ -7,7 +7,7 @@
     >
       <Icon name="mdi-translate" size="20" ></Icon>
       {{$i18n.locale === 'en' ? 'English' : 'العربية'}}
-    </BaseButton>
+    </BaseButton> -->
   </template>
   
   <script lang="ts" setup>

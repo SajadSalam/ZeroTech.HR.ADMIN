@@ -1,7 +1,6 @@
 import viteSvgLoader from 'vite-svg-loader'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'url'
-import VueI18nVitePlugin from '@intlify/unplugin-vue-i18n/vite'
 export default defineNuxtConfig({
     typescript: {
         shim: false
@@ -14,7 +13,6 @@ export default defineNuxtConfig({
     build: {
         transpile: [
             '@vuepic/vue-datepicker',
-            'vue-i18n'
         ],
     },
 
@@ -39,11 +37,7 @@ export default defineNuxtConfig({
     vite: {
         plugins: [
             viteSvgLoader(),
-            VueI18nVitePlugin({
-                include: [
-                    resolve(dirname(fileURLToPath(import.meta.url)), './locales/*.json')
-                ]
-            })
+          
         ], // Correctly include the vite-svg-loader plugin
     },
     app: {

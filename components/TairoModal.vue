@@ -112,15 +112,15 @@ const dialogClasses = computed(() => {
     appear
     :show="props.open"
     as="template"
-    :dir="$i18n.locale === 'ar' ? 'rtl' : 'ltr'"
+    dir="rtl"
   >
     <div
       class="fixed inset-0 z-[25] flex items-center justify-center"
-      :dir="$i18n.locale === 'ar' ? 'rtl' : 'ltr'"
+      dir="rtl"
     >
       <Dialog
         class="relative z-[25]"
-        :dir="$i18n.locale === 'ar' ? 'rtl' : 'ltr'"
+        dir="rtl"
         as="div"
         @close="emit('close')"
       >

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useAuthStore } from '~/views/auth/store/auth'
 import { useCollapse } from '../composables/collapse'
-import { useI18n } from 'vue-i18n'
 const { isOpen, isMobileOpen, menuItems } = useCollapse()
 const app = useAppConfig()
 
@@ -12,14 +11,14 @@ const endMenuItems = computed(() =>
     menuItems.value?.filter((sidebar) => sidebar.position === 'end')
 )
 const authStore = useAuthStore()
-const { locale } = useI18n()
+
 </script>
 
 <template>
     <div class="dark:bg-muted-800 border-muted-200 dark:border-muted-700 fixed start-0 top-0 z-[60] flex h-full flex-col border-r bg-#121420 transition-all duration-300"
         :class="[
             !isOpen ? 'w-[80px]' : 'w-[250px]',
-            isMobileOpen ? 'translate-x-0 lg:translate-x-0' : `${locale != 'ar' ? '-' : ''}translate-x-full lg:translate-x-0`,
+            isMobileOpen ? 'translate-x-0 lg:translate-x-0' : `translate-x-full lg:translate-x-0`,
         ]">
         <!--Header-->
         <slot name="header">
@@ -45,7 +44,7 @@ const { locale } = useI18n()
                             :class="!isOpen ? 'justify-center px-1' : 'px-4'">
                             <Icon :name="item.icon.name" :class="item.icon.class" />
                             <span class="whitespace font-sans text-sm" :class="!isOpen ? 'hidden' : 'block'">
-                                {{ $t(item.name) }}
+                                {{ item.name }}
                             </span>
                         </NuxtLink>
                         <div v-else-if="item.divider"
@@ -55,7 +54,7 @@ const { locale } = useI18n()
                             :class="!isOpen ? 'justify-center px-1' : 'px-4'" @click="item.click">
                             <Icon :name="item.icon.name" :class="item.icon.class" />
                             <span class="whitespace-nowrap font-sans text-sm" :class="!isOpen ? 'hidden' : 'block'">
-                                {{ $t(item.name) }}
+                                {{ item.name }}
                             </span>
                         </button>
                     </li>
@@ -77,7 +76,7 @@ const { locale } = useI18n()
                         :class="!isOpen ? 'justify-center px-1' : 'px-4'">
                         <Icon :name="item.icon.name" :class="item.icon.class" />
                         <span class="whitespace-nowrap font-sans text-sm" :class="!isOpen ? 'hidden' : 'block'">
-                            {{ $t(item.name) }}
+                            {{ item.name }}
                         </span>
                     </NuxtLink>
                     <div v-else-if="item.divider"
@@ -87,7 +86,7 @@ const { locale } = useI18n()
                         :class="!isOpen ? 'justify-center px-1' : 'px-4'" @click="item.click">
                         <Icon :name="item.icon.name" :class="item.icon.class" />
                         <span class="whitespace-nowrap font-sans text-sm" :class="!isOpen ? 'hidden' : 'block'">
-                            {{ $t(item.name) }}
+                            {{ item.name }}
                         </span>
                     </button>
                 </li>

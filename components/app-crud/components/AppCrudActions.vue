@@ -29,7 +29,7 @@ const onDelete = (currentItem: Item) => {
   <div class="flex items-center justify-center gap-1">
     <BaseButtonIcon
       v-if="!hideUpdate"
-      :data-nui-tooltip="$t('edit')"
+      data-nui-tooltip="تعديل"
       :disabled="isEditDisabled"
       variant="pastel"
       class="size-9"
@@ -42,7 +42,7 @@ const onDelete = (currentItem: Item) => {
     </BaseButtonIcon>
     <BaseButtonIcon
       v-if="!hideDelete"
-      :data-nui-tooltip="$t('delete')"
+      data-nui-tooltip="حذف"
       :disabled="isDeleteDisabled"
       variant="pastel"
       class="size-9"

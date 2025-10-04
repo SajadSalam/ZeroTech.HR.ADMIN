@@ -50,7 +50,7 @@ const authStore = useAuthStore()
                     isActive && 'text-primary-500', 
                     !props.expanded ? 'hidden' : 'block',
                 ]">
-                    {{ $t(item.name) }}
+                    {{ item.name }}
                 </span>
             </div>
             <span class=" items-center justify-center" :class="!props.expanded ? 'hidden' : 'flex'">
@@ -73,7 +73,7 @@ const authStore = useAuthStore()
                         <Icon :name="child.icon.name" :class="child.icon.class" class="shrink-0" />
                         <span class="whitespace-nowrap font-sans text-[0.85rem]"
                             :class="[!props.expanded ? 'hidden' : 'block']">
-                            {{ $t(child.name) }}
+                            {{ child.name }}
                         </span>
                     </NuxtLink>
                 </li>

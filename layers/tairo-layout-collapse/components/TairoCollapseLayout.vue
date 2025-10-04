@@ -59,7 +59,7 @@ const mainClass = computed(() => {
 </script>
 
 <template>
-  <div class="bg-white dark:bg-muted-900" :dir="$i18n.locale === 'ar' ? 'rtl' : 'ltr'">
+  <div class="bg-white dark:bg-muted-900" dir="rtl">
     <slot name="navigation">
       <TairoCollapseNavigation v-if="collapseEnabled" />
       <div

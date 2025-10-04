@@ -243,7 +243,7 @@ const oldData = computed(() => props.oldData)
     </div>
     <div
       v-if="isOpen"
-      class="max-h-200px rounded-box dark:bg-dark absolute z-[99] flex flex-col overflow-y-auto rounded-xl border bg-white p-2 shadow dark:text-white"
+      class="max-h-[200px] rounded-box dark:bg-dark absolute z-[99] flex flex-col overflow-y-auto rounded-xl border bg-white p-2 shadow dark:text-white"
       :style="{ width: `${menuWidth}px` }"
     >
       <!-- Add create option when no exact match is found -->
@@ -292,7 +292,7 @@ const oldData = computed(() => props.oldData)
         class="pa-3 flex items-center justify-center text-center"
       >
         <p class="text-gray-500 dark:text-gray-400">
-          {{ $t('no-data-found') }}
+          لا يوجد نتائج
         </p>
       </div>
     </div>

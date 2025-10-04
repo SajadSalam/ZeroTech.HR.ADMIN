@@ -49,13 +49,13 @@ const isFiltersOpen = ref(false)
       </BaseButtonIcon>
       <BaseButton v-if="!hideCreate" class="gap-1" color="primary" @click="addBtnAction">
         <Icon name="ph-plus-circle-duotone" size="20" />
-        {{ addButtonText || $t('add') }}
+        {{ addButtonText || 'إضافة' }}
       </BaseButton>
     </div>
   </div>
   <transition name="slide-fade">
     <div v-if="isFiltersOpen" class="pa-5 my-2 rounded-lg bg-white">
-      <h1 class="mb-2 text-lg font-bold">{{ $t('filters_title') }}</h1>
+      <h1 class="mb-2 text-lg font-bold">فلترة البيانات</h1>
       <slot name="additional-filters" />
     </div>
   </transition>

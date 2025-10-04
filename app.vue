@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { useI18n } from 'vue-i18n'
 import { useAuthStore } from './views/auth/store/auth'
 
 interface TairoConfig {
@@ -15,7 +14,6 @@ interface AppConfig {
 const app = useAppConfig() as AppConfig
 const auth = useAuthStore()
 
-const i18n = useI18n()
 useHead({
   titleTemplate: (titleChunk) => {
     //
@@ -23,8 +21,8 @@ useHead({
     return titleChunk ? `${titleChunk} - ${app.tairo?.title}` : `${app.tairo?.title}`
   },
   htmlAttrs: {
-    lang: i18n.locale.value,
-    dir: i18n.locale.value === 'ar' ? 'rtl' : 'ltr',
+    lang: 'ar',
+    dir: 'rtl',
   },
   link: [
     {
@@ -38,10 +36,10 @@ useHead({
 useColorMode().value = 'light'
 useColorMode().preference = 'light'
 
-const authStore = useAuthStore()
-onMounted(async () => {
-  await authStore.me()
-})
+// const authStore = useAuthStore()
+// onMounted(async () => {
+//   await authStore.me()
+// })
 </script>
 
 <template>

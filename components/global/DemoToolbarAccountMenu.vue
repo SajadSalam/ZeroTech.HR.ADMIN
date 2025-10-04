@@ -96,7 +96,7 @@ const role = computed(() => {
                                 <h6
                                     class="font-heading text-muted-800 text-xs font-medium leading-none dark:text-white"
                                 >
-                                    {{ $t('logout') }}
+                                    تسجيل الخروج
                                 </h6>
                             </div>
                         </BaseButton>

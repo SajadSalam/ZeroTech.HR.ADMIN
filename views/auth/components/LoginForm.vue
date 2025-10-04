@@ -64,8 +64,8 @@ onMounted(() => {})
         v-model="validator.validation.value.loginIdentifier.$model"
         :errors="validator.validation.value.loginIdentifier.$errors"
         rounded="lg"
-        :placeholder="$t('fill-username')"
-        :label="$t('username')"
+        placeholder="ادخل اسم المستخدم"
+        label="اسم المستخدم"
         class="rounded-full"
       />
       <AppInputField
@@ -73,19 +73,19 @@ onMounted(() => {})
         :errors="validator.validation.value.password.$errors"
         type="password"
         rounded="lg"
-        :placeholder="$t('password')"
-        :label="$t('password')"
+        placeholder="ادخل كلمة المرور"
+        label="كلمة المرور"
         class="rounded-full"
       />
       
       
       <p v-if="isError" class="text-red text-sm">
-        {{ $t('username-or-password-is-incorrect') }}
+        اسم المستخدم أو كلمة المرور غير صحيحة
       </p>
 
       <div class="flex w-full flex-col items-center gap-3">
         <BaseButton :loading="isLoading" type="submit" class="w-full" color="primary">
-          {{ $t('login') }}
+          تسجيل الدخول
         </BaseButton>
       </div>
     </div>
