@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useAppToaster } from '../toaster/toaster'
+import { useToast } from '~/composables/toaster'
 
 export const baseURL = 'http://localhost:5244/'
 // export const baseURL = ' '
@@ -35,6 +35,24 @@ axiosIns.interceptors.request.use((config) => {
 
     return config
 })
+const getSuccessMessage = (method: string) => {
+    const locale = localStorage.getItem('locale') || 'ar'
+    
+    const messages = {
+        en: {
+            post: 'Data added successfully',
+            put: 'Data updated successfully',
+            delete: 'Data deleted successfully'
+        },
+        ar: {
+            post: 'تمت إضافة البيانات بنجاح',
+            put: 'تم التعديل بنجاح',
+            delete: 'تم حذف البيانات بنجاح'
+        }
+    }
+    
+    return messages[locale as keyof typeof messages]?.[method as keyof typeof messages.en] || 'Success'
+}
 
 // ℹ️ Add response interceptor to handle 401 
 axiosIns.interceptors.response.use(
@@ -42,18 +60,14 @@ axiosIns.interceptors.response.use(
         // Check for post, put, delete methods and status 200
         if (response.status === 200) {
             if (response.config.url !== '/file/multi') {
-                switch (response.config.method) {
-                    case 'post':
-                        useAppToaster().show('success', 'تمت إضافة البيانات بنجاح')
-                        break
-                    case 'put':
-                        useAppToaster().show('success', 'تم التعديل بنجاح.')
-                        break
-                    case 'delete':
-                        useAppToaster().show('success', 'تم حذف البيانات بنجاح')
-                        break
-                    default:
-                        break
+                const method = response.config.method
+                if (method && ['post', 'put', 'delete'].includes(method)) {
+                    useToast(
+                        {
+                            title: getSuccessMessage(method),
+                            isError: false
+                        }
+                    )
                 }
             }
         }
@@ -61,7 +75,20 @@ axiosIns.interceptors.response.use(
     },
     (error) => {
         // Handle error
-      //  useAppToaster().show('danger', "حدث خطأ ما")
+       // Handle error
+        if(error.response.data.message){
+            useToast({
+                title: error.response.data.message,
+                message: error.response.data.message,
+                isError: true
+            })
+        } else {
+            useToast({
+                title: 'حدث خطا',
+                message: "حدث خطأ , يرجى المحاولة مرة أخرى",
+                isError: true
+            })
+        }
         // if (!error.response || error.response.status === 401) {
         //
         //   useAppUserStore().user = {}

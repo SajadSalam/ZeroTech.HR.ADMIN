@@ -215,13 +215,14 @@ table {
     border-spacing: 0 4px;
 
     th {
-        background: #121420;
+        background: #698596;
         color: #fff;
         font-size: 14px;
         text-align: center !important;
         font-weight: bold;
         padding: 14px;
         white-space: nowrap;
+        border: 1px solid #fff;
 
         @media (max-width: 768px) {
             font-size: 12px;
@@ -235,11 +236,13 @@ table {
     }
 
     th:first-child {
-        border-start-start-radius: 8px;
+        border-start-start-radius: 1000px;
+        border-end-start-radius: 1000px;
     }
 
     th:last-child {
-        border-start-end-radius: 8px;
+        border-start-end-radius: 1000px;
+        border-end-end-radius: 1000px;
     }
 
     tr {

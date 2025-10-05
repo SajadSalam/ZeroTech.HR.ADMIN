@@ -111,7 +111,7 @@ watch(() => approvalChainStore.isCreateDialogOpen, (val: boolean) => {
             v-model="body.requestTypeId.$model"
             label="نوع الطلب"
             placeholder="اختر نوع الطلب"
-            get-url="/RequestType/enabled"
+            get-url="/RequestType"
             item-label="name"
             item-value="id"
             fetch-on-search

@@ -23,11 +23,11 @@ const authStore = useAuthStore()
         >
         <!--Header-->
         <slot name="header">
-            <component :is="resolveComponentOrNative(app.tairo?.collapse?.navigation?.header?.component)"
+            <component class="my-10" :is="resolveComponentOrNative(app.tairo?.collapse?.navigation?.header?.component)"
                 v-if="app.tairo?.collapse?.navigation?.header?.component" :is-open="isOpen" />
         </slot>
         <!--Body-->
-        <div class="relative flex w-full grow flex-col py-6"
+        <div class="relative flex w-full grow flex-col py-10"
             :class="!isOpen ? 'px-4' : 'nui-slimscroll overflow-y-auto px-6'">
             <!--Menu-->
             <ul v-if="startMenuItems?.length" class="space-y-2">
