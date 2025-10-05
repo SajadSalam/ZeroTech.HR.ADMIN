@@ -3,11 +3,11 @@ const props = defineProps({
   cols: Number,
   title: {
     type: String,
-    default: 'no-data-found',
+    default: 'لا يوجد بيانات',
   },
   subtitle: {
     type: String,
-    default: 'no-data-found-subtitle',
+    default: 'قم بإضافة بيانات للعرض',
   },
 })
 </script>

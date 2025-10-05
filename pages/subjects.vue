@@ -43,7 +43,6 @@ watch(
   { deep: true }
 )
 const openEdit = (item: SubjectDto) => {}
-const { hasPrivilege } = useAuthStore()
 </script>
 
 <template>
@@ -54,7 +53,6 @@ const { hasPrivilege } = useAuthStore()
       :pagination="true"
       :total-pages="subjectStore.totalPages"
       :title="$t('subjects')"
-      :hide-create="!hasPrivilege('ums:ems:subjects:create')"
       @update:current-page="filters.pageNumber = $event"
     >
       <template #filters>
@@ -76,8 +74,6 @@ const { hasPrivilege } = useAuthStore()
         <template #data-actions="{ item }">
           <AppCrudActions
             :item="item"
-            :hide-update="!hasPrivilege('ums:ems:subjects:update')"
-            :hide-delete="!hasPrivilege('ums:ems:subjects:delete')"
             :edit-button-action="
               () => {
                 subjectStore.selectedSubject = item

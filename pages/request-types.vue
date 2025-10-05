@@ -70,7 +70,6 @@ watch(
   { deep: true }
 )
 
-const { hasPrivilege } = useAuthStore()
 </script>
 
 <template>
