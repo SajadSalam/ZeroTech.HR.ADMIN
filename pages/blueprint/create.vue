@@ -64,7 +64,7 @@ const validator = new Validator<Blueprint>(
 const body = validator.validation
 const questionBanks = ref<QuestionBankDto[]>([])
 const questionBankDetails = ref<{ [questionBankId: string]: QuestionBankBlueprintDetails }>({})
-
+const isLoading = ref(false)
 // Computed refs for type safety
 const questionBanksList = computed(() => body.value.questionBanks.$model as BlueprintQuestionBank[])
 
@@ -259,6 +259,7 @@ const submit = async () => {
     const isValid = await body.value.$validate()
     if (!isValid) return
     
+    
     // Validate question counts
     if (!validateQuestionCounts()) return
     
@@ -274,9 +275,14 @@ const submit = async () => {
         return;
     }
     try {
+        isLoading.value = true
         await blueprintStore.create(validator.extractBody())
         router.push('/blueprint')
-    } catch (error) { }
+    } catch (error) { 
+        console.error(error)
+    } finally {
+        isLoading.value = false
+    }
 }
 </script>
 <template>
@@ -527,8 +533,8 @@ const submit = async () => {
         </div>
     </div>
 
-    <BaseButton color="primary" class="w-full gap-1" @click="submit">
-        <Icon name="ph:upload-simple-duotone" class="size-5" />
+    <BaseButton :loading="isLoading" :disabled="isLoading" color="primary" class="w-full mb-10 gap-1" @click="submit">
+        <Icon name="ph:check-circle-duotone" class="size-5" />
         {{ $t('save-change') }}
     </BaseButton>
 </template>

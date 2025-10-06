@@ -59,13 +59,7 @@ const validationErrors = computed(() => {
     errors.push('يجب تحديد 2 مراقبين على الاقل للقاعة')
   }
   
-  const primaryCount = selectedSupervisors.value.filter(s => s.isPrimary).length
-  if (primaryCount === 0) {
-    errors.push('يجب تحديد مراقب اساسي واحد على الاقل')
-  } else if (primaryCount > 1) {
-    errors.push('يجب تحديد مراقب اساسي واحد فقط')
-  }
-  
+
   return errors
 })
 
@@ -114,6 +108,10 @@ const saveAssign = async () => {
         isPrimary: supervisor.isPrimary,
         notes: null
     }))
+
+    if (supervisors.length > 0) {
+        supervisors[0].isPrimary = true
+    }
 
     await hallsStore.assignMultipleSupervisors(hallsStore.selectedHall.id, { supervisors })
     hallsStore.isAssignSupervisorDialogOpen = false
@@ -283,14 +281,7 @@ watch(
         </div>
         
         <div class="flex items-center gap-3">
-          <div class="flex items-center gap-2">
-            <BaseCheckbox
-              :model-value="supervisor.isPrimary"
-              color="primary"
-              @update:model-value="() => togglePrimary(supervisor.employeeId)"
-            />
-            <label class="text-sm font-medium">مراقب اساسي</label>
-          </div>
+         
           
           <Icon 
             name="ph-x" 

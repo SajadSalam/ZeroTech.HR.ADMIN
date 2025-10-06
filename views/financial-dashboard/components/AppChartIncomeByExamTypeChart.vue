@@ -23,7 +23,7 @@
         <div v-for="(d,i) in data" :key="d.examType" class="flex items-center gap-2">
             <div :class="`w-4 h-4 rounded-full`" :style="{ backgroundColor: chartOptions.colors[i] }"></div>
             <span class="text-[#615E83] text-sm font-medium">
-                {{ d.examType == "English" ? t('english') : d.examType == "Arabic" ? t('arabic') : t('computer') }}
+               {{ d.examType == 1 ? t('english') : d.examType == 2 ? t('arabic') : t('computer') }}
             </span>
         </div>
       </div>

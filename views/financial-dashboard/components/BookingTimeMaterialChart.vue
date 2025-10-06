@@ -34,6 +34,14 @@ const props = defineProps<Props>()
 
 // Chart data
 const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
+const fullMonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+// Exam type names mapping
+const examTypeNames: Record<number, string> = {
+  1: 'اختبار اللغة الإنجليزية',
+  2: 'اختبار اللغة العربية',
+  3: 'اختبار الحاسب الآلي'
+}
 
 // Transform API data to chart format
 const transformDataToChartSeries = (apiData: MonthlyIncome[] | null) => {
@@ -41,46 +49,65 @@ const transformDataToChartSeries = (apiData: MonthlyIncome[] | null) => {
     // Return empty data arrays if no data provided
     return [
       {
-        name: 'الايرادات الكلية',
+        name: examTypeNames[1],
+        type: 'line',
+        data: Array(12).fill(0)
+      },
+      {
+        name: examTypeNames[2],
+        type: 'line',
+        data: Array(12).fill(0)
+      },
+      {
+        name: examTypeNames[3],
         type: 'line',
         data: Array(12).fill(0)
       },
     ]
   }
 
-  // Create arrays for 12 months, initialized with 0
-  const allData = Array(12).fill(0)
+  // Create arrays for each exam type (3 types), 12 months each
+  const examType1Data = Array(12).fill(0)
+  const examType2Data = Array(12).fill(0)
+  const examType3Data = Array(12).fill(0)
 
-  // Helper to resolve month index from string like 'JAN' or number-like values
-  const getMonthIndex = (m: unknown): number => {
-    if (typeof m === 'number') {
-      return m >= 1 && m <= 12 ? m - 1 : -1
-    }
-    if (typeof m === 'string') {
-      const num = Number(m)
-      if (!Number.isNaN(num)) {
-        return num >= 1 && num <= 12 ? num - 1 : -1
-      }
-      const abbr = m.trim().slice(0, 3).toUpperCase()
-      return months.indexOf(abbr)
-    }
-    return -1
+  // Helper to resolve month index from full month name
+  const getMonthIndex = (monthName: string): number => {
+    const idx = fullMonthNames.findIndex(m => m.toLowerCase() === monthName.toLowerCase())
+    return idx >= 0 ? idx : -1
   }
 
   // Fill data arrays with API data
   apiData.forEach(item => {
-    const idx = getMonthIndex((item as any).month)
+    const idx = getMonthIndex(item.month)
     if (idx >= 0 && idx < 12) {
-      allData[idx] = item.income
+      item.examTypeIncomes.forEach(examTypeIncome => {
+        if (examTypeIncome.examType === 1) {
+          examType1Data[idx] = examTypeIncome.income
+        } else if (examTypeIncome.examType === 2) {
+          examType2Data[idx] = examTypeIncome.income
+        } else if (examTypeIncome.examType === 3) {
+          examType3Data[idx] = examTypeIncome.income
+        }
+      })
     }
   })
 
-
   return [
     {
-      name: 'الايرادات الكلية',
+      name: examTypeNames[1],
       type: 'line',
-      data: allData
+      data: examType1Data
+    },
+    {
+      name: examTypeNames[2],
+      type: 'line',
+      data: examType2Data
+    },
+    {
+      name: examTypeNames[3],
+      type: 'line',
+      data: examType3Data
     },
   ]
 }
@@ -172,7 +199,22 @@ const chartOptions: ApexOptions = {
     }
   },
   legend: {
-    show: false // Using custom legend
+    show: true,
+    position: 'top',
+    horizontalAlign: 'right',
+    fontFamily: 'Tajawal, sans-serif',
+    fontSize: '12px',
+    fontWeight: 400,
+    labels: {
+      colors: '#474B4E'
+    },
+    markers: {
+      offsetX: -5
+    },
+    itemMargin: {
+      horizontal: 15,
+      vertical: 5
+    }
   },
   tooltip: {
     enabled: true,

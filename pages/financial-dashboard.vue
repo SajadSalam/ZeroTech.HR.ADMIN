@@ -75,6 +75,9 @@ onMounted(async () => {
             <div class="col-span-1">
                 <IncomeByGovernorateChart :totalPercentage="financialDashboard?.totalIncome ?? 0" :data="financialDashboard?.bookingPercentageByGovernorate" />
             </div>
+            <div class="col-span-2">
+                <!--  -->
+            </div>
         </div>
     </div>
 </template>

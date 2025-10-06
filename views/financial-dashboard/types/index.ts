@@ -1,4 +1,3 @@
-import type { ProficiencyExamGroup } from "~/views/exams/types";
 
 export interface FinancialDashboardResponse {
     totalIncome:                    number;
@@ -27,6 +26,12 @@ export interface IncomeByExamType {
 }
 
 export interface MonthlyIncome {
-    month:  string;
-    income: number;
+    month:            string;
+    totalIncome:      number;
+    examTypeIncomes:  ExamTypeIncome[];
+}
+
+export interface ExamTypeIncome {
+    examType: number;
+    income:   number;
 }

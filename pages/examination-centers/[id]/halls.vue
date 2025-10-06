@@ -80,10 +80,6 @@ onMounted(() => {
       <InfoLabel :label="$t('number-of-students')" color="primary" icon="ph:folder-notch-open-duotone"
           :value="statistics.numberOfStudents">
       </InfoLabel>
-
-      <InfoLabel :label="$t('amount')" color="warning" icon="ph:arrows-clockwise-duotone"
-          :value="statistics.amount">
-      </InfoLabel>
     </div>
     
     <HallView />
