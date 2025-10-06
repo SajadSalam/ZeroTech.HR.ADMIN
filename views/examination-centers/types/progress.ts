@@ -9,8 +9,8 @@ export interface ProgressStatistics {
     examStartDate:          string;
     examTime:               string;
     remainingStartExamTime: string;
-    remainingTimeToStartExam: number;
-    remainingTimeToEndExam: number;
+    remainingTimeToStartExam: number | string; // in seconds (API may return as string)
+    remainingTimeToEndExam: number | string; // in seconds (API may return as string)
 }
 
 export const progressHeaders = (t: any) => [

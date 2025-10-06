@@ -5,9 +5,9 @@ definePageMeta({
 import { useI18n } from 'vue-i18n'
 import ExamTimer from '~/components/ExamTimer.vue'
 import type { BaseFilters } from '~/utils/types/ApiResponses'
+import BlacklistStudent from '~/views/examination-centers/componets/BlacklistStudent.vue'
 import GenerateOTP from '~/views/examination-centers/componets/GenerateOTP.vue'
 import SupervisorOTP from '~/views/examination-centers/componets/SupervisorOTP.vue'
-import BlacklistStudent from '~/views/examination-centers/componets/BlacklistStudent.vue'
 import { useExaminationCenters } from '~/views/examination-centers/store'
 import { examPresentStatus, examStudentStatus, progressHeaders, type ProgressStatistics, type ProgressStudent } from '~/views/examination-centers/types/progress'
 import type { StudentTicket, StudentTicketFilters } from '~/views/examination-centers/types/ticket'
@@ -86,19 +86,40 @@ let progressInterval: NodeJS.Timeout | null = null
 onMounted(async () => {
     statistics.value = await examinationCenterStore.getHallStatistics(id as string)
     const now = new Date()
+    
     if(Number(statistics.value.remainingTimeToStartExam) > 0){
-        examEndTime.value = new Date(now.getTime() + statistics.value.remainingTimeToStartExam * 60 * 1000)
+        // Convert seconds to milliseconds by multiplying by 1000
+        const secondsToStart = Number(statistics.value.remainingTimeToStartExam)
+        examEndTime.value = new Date(now.getTime() + secondsToStart * 1000)
+        
         isStartExam.value = true
     } else {
         isStartExam.value = false
-        examEndTime.value = new Date(now.getTime() + statistics.value.remainingTimeToEndExam * 60 * 1000)
-
+        // Convert seconds to milliseconds by multiplying by 1000
+        const secondsToEnd = Number(statistics.value.remainingTimeToEndExam)
+        const millisecondsToAdd = secondsToEnd * 1000
+        examEndTime.value = new Date(now.getTime() + millisecondsToAdd)
+        
+        // Calculate what the timer should show
+        const hoursExpected = Math.floor(secondsToEnd / 3600)
+        const minutesExpected = Math.floor((secondsToEnd % 3600) / 60)
+        const secondsExpected = Math.floor(secondsToEnd % 60)
+        console.log('🔍 Debug - Expected timer display:', { hours: hoursExpected, minutes: minutesExpected, seconds: secondsExpected })
     }
     getProgressStudents()
 
-    // Set up interval to refresh progress students every 30 seconds
-    progressInterval = setInterval(() => {
+    // Set up interval to refresh progress students and statistics every 5 seconds
+    progressInterval = setInterval(async () => {
         getProgressStudents()
+        statistics.value = await examinationCenterStore.getHallStatistics(id as string)
+        // const now = new Date()
+        // if(Number(statistics.value.remainingTimeToStartExam) > 0){
+        //     examEndTime.value = new Date(now.getTime() + Number(statistics.value.remainingTimeToStartExam) * 1000)
+        //     isStartExam.value = true
+        // } else {
+        //     isStartExam.value = false
+        //     examEndTime.value = new Date(now.getTime() + Number(statistics.value.remainingTimeToEndExam) * 1000)
+        // }
     }, 5000)
 })
 
