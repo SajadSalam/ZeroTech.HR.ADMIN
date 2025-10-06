@@ -1,3 +1,4 @@
+import { defineStore } from 'pinia'
 import type { ImportQuestionTypeOption } from '~/views/question-bank/types'
 import type {
     Question,
@@ -120,6 +121,30 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
       const response = await questionBankService.getDetailed(id)
       selectedQuestionBank.value = response
     } catch (error) {
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const getQuestionBankQuestions = async (
+    questionBankId: string,
+    pageNumber: number,
+    pageSize: number,
+    topicId?: string
+  ) => {
+    try {
+      isLoading.value = true
+      const response = await questionBankService.getQuestionBankQuestions(
+        questionBankId,
+        pageNumber,
+        pageSize,
+        topicId
+      )
+      questions.value = response.data
+      totalPages.value = response.pagesCount
+      return response
+    } catch (error) {
+      throw error
     } finally {
       isLoading.value = false
     }
@@ -260,6 +285,7 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
     isAddTopicOpen,
     getQuestionBanks,
     getQuestionBank,
+    getQuestionBankQuestions,
     createQuestionBank,
     saveQuestions,
     updateQuestionBank,

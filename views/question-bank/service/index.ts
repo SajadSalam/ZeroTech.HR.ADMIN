@@ -25,6 +25,8 @@ interface IQuestionBankService {
 
   getQuestions(filters: BaseFilters): Promise<PaginatedResponse<QuestionDto>>
 
+  getQuestionBankQuestions(questionBankId: string, pageNumber: number, pageSize: number, topicId?: string): Promise<PaginatedResponse<QuestionDto>>
+
   approveQuestion(questionId: string): Promise<QuestionDto>
 
   rejectQuestion(questionId: string, body: { rejectReason?: string | null }): Promise<QuestionDto>
@@ -105,6 +107,34 @@ export class QuestionBankService implements IQuestionBankService {
     const response = await axios.get<PaginatedResponse<QuestionDto>>('/question', {
       params: filters,
     })
+    return response.data
+  }
+
+  /**
+   * Retrieves a paginated list of questions for a specific question bank.
+   * @param questionBankId - The ID of the question bank.
+   * @param pageNumber - The page number to retrieve.
+   * @param pageSize - The number of questions per page.
+   * @param topicId - Optional topic ID to filter questions by topic.
+   * @returns A promise that resolves to a paginated response of questions.
+   */
+  async getQuestionBankQuestions(
+    questionBankId: string,
+    pageNumber: number,
+    pageSize: number,
+    topicId?: string
+  ): Promise<PaginatedResponse<QuestionDto>> {
+    const params: any = {
+      pageNumber,
+      pageSize,
+    }
+    if (topicId) {
+      params.topicId = topicId
+    }
+    const response = await axios.get<PaginatedResponse<QuestionDto>>(
+      `/question-bank/${questionBankId}/questions`,
+      { params }
+    )
     return response.data
   }
 

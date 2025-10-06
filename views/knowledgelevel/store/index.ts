@@ -18,13 +18,19 @@ export const useKnowledgelevelStore = defineStore('knowledgelevel', () => {
   const totalPages = ref(0)
 
   const getKnowledgelevels = async (knowledgelevelFilters: KnowledgelevelFilters) => {
+    if(knowledgelevels.value.length > 0 && JSON.stringify(knowledgelevels.value) !== JSON.stringify(knowledgelevelFilters)) {
+      filters.value = knowledgelevelFilters
+      return knowledgelevels.value
+    }
     try {
       isLoading.value = true
       const response = await knowledgelevelService.get(knowledgelevelFilters)
+      filters.value = knowledgelevelFilters
       knowledgelevels.value = response.data.map((knowledgelevel) => ({
         ...knowledgelevel,
       }))
       totalPages.value = response.pagesCount
+      return knowledgelevels.value
     } catch (error) {
     } finally {
       isLoading.value = false

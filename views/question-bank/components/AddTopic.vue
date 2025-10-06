@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useQuestionBankStore } from '../store/index'
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
-import type { QuestionBankTopicUpdate } from '../types'
+import { useQuestionBankStore } from '~/views/question-bank/store/index'
 import { useSubjectStore } from '~/views/subjects/store'
 import { useTopicStore } from '~/views/topics/store'
+import type { QuestionBankTopicUpdate } from '../types'
 
 const questionBankStore = useQuestionBankStore()
 const subjectStore = useSubjectStore()
@@ -33,7 +33,6 @@ const topics = computed(() => topicsStore.topics)
 watch(
   () => questionBankStore.isAddTopicOpen,
   () => {
-    subjectId.value = ''
     body.value.topicId = ''
   }
 )

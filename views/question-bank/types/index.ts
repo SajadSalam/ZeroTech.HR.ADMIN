@@ -38,7 +38,7 @@ export type QuestionBankTopicUpdate = {
   topicId: string
 }
 export type QuestionBankDetailedDto = QuestionBankDto & {
-  questions: (Question & BaseDto)[]
+  questions?: (Question & BaseDto)[]
 }
 export type QuestionBankFilters = {
   search: string | null

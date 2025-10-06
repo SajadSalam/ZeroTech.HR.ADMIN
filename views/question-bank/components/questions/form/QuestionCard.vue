@@ -8,6 +8,7 @@ import { difficultyOptions } from '~/views/question-bank'
 import { questionTypeOptions } from '~/views/question-bank/types/index'
 import { AuditStatus, type Question } from '~/views/question-bank/types/question'
 import QuestionForm from './QuestionForm.vue'
+import { useKnowledgelevelStore } from '../../../../knowledgelevel/store'
 const props = defineProps<{
   index: number
   isEvaluation?: boolean
@@ -18,6 +19,9 @@ const props = defineProps<{
 const emit = defineEmits(['removeQuestion', 'duplicate'])
 const element = defineModel<Question>()
 const { t } = useI18n()
+
+const knowledgeLevelStore = useKnowledgelevelStore()
+const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
 </script>
 
 <template>
@@ -54,7 +58,7 @@ const { t } = useI18n()
           v-model="modelValue.knowledgeLevelId"
           :placeholder="$t('select-a-knowledge')"
           :disabled="isEvaluation"
-          get-url="/knowledgelevel"
+          :items="knowledgeLevels"
           item-label="name"
           item-value="id"
         />
