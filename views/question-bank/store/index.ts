@@ -150,15 +150,13 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
     }
   }
 
-  const saveQuestions = async (questionBankId: string, questions: Question[]) => {
+  const saveQuestions = async (questionBankId: string, questions: Question[], toBeDeletedIds: string[] = []) => {
     try {
       isLoading.value = true
       await questionBankService.saveQuestions(
         questionBankId,
-        questions.map((x, index) => ({
-          ...x,
-          order: index + 1,
-        }))
+        questions,
+        toBeDeletedIds
       )
     } catch (error) {
     } finally {

@@ -30,6 +30,8 @@ const route = useRoute()
 const { hasPrivilege } = useAuthStore()
 
 const questions = ref<Question[]>([])
+const originalQuestionsSnapshot = ref<Map<string, string>>(new Map()) // clientId -> JSON snapshot
+const toBeDeletedIds = ref<string[]>([]) // Track IDs of questions to be deleted
 const creationStartDate = ref<string | null>(null) // Start date for question creation
 const creationEndDate = ref<string | null>(null) // End date for question creation
 const isEditingAllowed = ref<boolean>(true) // Flag to check if editing is allowed
@@ -108,6 +110,13 @@ const dragOptions = {
 }
 
 const removeQuestion = (clientId: string) => {
+  const questionToRemove = questions.value.find((x) => x.clientId === clientId)
+  
+  // If the question has an ID (it exists in the database), add it to toBeDeletedIds
+  if (questionToRemove?.id) {
+    toBeDeletedIds.value.push(questionToRemove.id)
+  }
+  
   questions.value = questions.value.filter((x) => x.clientId != clientId)
 }
 
@@ -119,6 +128,10 @@ const fetchQuestions = async () => {
       pageSize.value,
       selectedTab.value
     )
+    
+    // Clear toBeDeletedIds and original snapshot when fetching new questions
+    toBeDeletedIds.value = []
+    originalQuestionsSnapshot.value.clear()
     
     questions.value =
       response.data.map((x: Question) => {
@@ -139,6 +152,15 @@ const fetchQuestions = async () => {
             clientId: generateGuid(),
           }
         }) || []
+      }
+    })
+
+    // Create snapshot of original questions (for questions that exist in DB)
+    // Exclude UI-only fields from snapshot
+    questions.value.forEach((q: Question) => {
+      if (q.id && q.clientId) {
+        const { isContentShown, ...rest } = q
+        originalQuestionsSnapshot.value.set(q.clientId, JSON.stringify(rest))
       }
     })
 
@@ -206,7 +228,44 @@ const saveChanges = async () => {
     return
   }
 
-  questionBankStore.saveQuestions(route.params.id as string, questions.value)
+  // Helper function to create comparable snapshot (excluding UI-only fields)
+  const createComparableSnapshot = (q: Question) => {
+    const { isContentShown, ...rest } = q
+    return JSON.stringify(rest)
+  }
+
+  // Filter to only send new or modified questions, then set order
+  const questionsToSave = questions.value
+    .map((q: Question, index: number) => {
+      // Check if question should be included
+      let shouldInclude = false
+      
+      // Include if it's a new question (no id)
+      if (!q.id) {
+        shouldInclude = true
+      } else if (q.clientId) {
+        // Check if it's been modified (compare with original snapshot)
+        const originalSnapshot = originalQuestionsSnapshot.value.get(q.clientId)
+        if (!originalSnapshot) {
+          shouldInclude = true // If no snapshot, treat as new
+        } else {
+          // Compare current state with original snapshot
+          const currentSnapshot = createComparableSnapshot(q)
+          shouldInclude = currentSnapshot !== originalSnapshot
+        }
+      }
+      
+      // Return question with updated order if it should be included
+      return shouldInclude ? { ...q, order: index + 1 } : null
+    })
+    .filter((q): q is Question => q !== null)
+
+  console.log('Questions to save:', questionsToSave.length, 'out of', questions.value.length)
+  console.log('New questions:', questionsToSave.filter(q => !q.id).length)
+  console.log('Modified questions:', questionsToSave.filter(q => q.id).length)
+  console.log('To be deleted:', toBeDeletedIds.value.length)
+
+  questionBankStore.saveQuestions(route.params.id as string, questionsToSave, toBeDeletedIds.value)
 }
 
 const updateQuestion = (updatedQuestion: Question) => {

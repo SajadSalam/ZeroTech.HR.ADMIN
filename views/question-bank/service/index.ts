@@ -21,7 +21,7 @@ interface IQuestionBankService {
   delete: (id: string) => Promise<void>
   getDetailed: (id: string) => Promise<QuestionBankDetailedDto>
 
-  saveQuestions(questionBankId: string, questions: Question[]): Promise<void>
+  saveQuestions(questionBankId: string, questions: Question[], toBeDeletedIds?: string[]): Promise<void>
 
   getQuestions(filters: BaseFilters): Promise<PaginatedResponse<QuestionDto>>
 
@@ -142,10 +142,15 @@ export class QuestionBankService implements IQuestionBankService {
    * Saves multiple questions to a question bank.
    * @param questionBankId - The ID of the question bank.
    * @param questions - The list of questions to save.
+   * @param toBeDeletedIds - Optional array of question IDs to be deleted.
    * @returns A promise that resolves when the questions are saved.
    */
-  async saveQuestions(questionBankId: string, questions: Question[]): Promise<void> {
-    const response = await axios.post<void>('/question/' + questionBankId + '/multi', questions)
+  async saveQuestions(questionBankId: string, questions: Question[], toBeDeletedIds: string[] = []): Promise<void> {
+    const payload = {
+      questions,
+      toBeDeletedIds
+    }
+    const response = await axios.post<void>('/question/' + questionBankId + '/multi', payload)
     return response.data
   }
 
