@@ -12,13 +12,14 @@ import { useQuestionBankStore } from '~/views/question-bank/store'
 import type { QuestionBankTopicDto } from '~/views/question-bank/types'
 import {
     AuditStatus,
+    Difficulty,
     QuestionType,
     type Question,
 } from '~/views/question-bank/types/question'
+import { useKnowledgelevelStore } from '../../../views/knowledgelevel/store'
 const { t } = useI18n()
 const toaster = useAppToaster()
 
-const showImportModal = ref(false)
 
 definePageMeta({
   title: 'questions-editor',
@@ -29,9 +30,17 @@ const route = useRoute()
 const { hasPrivilege } = useAuthStore()
 
 const questions = ref<Question[]>([])
+const originalQuestionsSnapshot = ref<Map<string, string>>(new Map()) // clientId -> JSON snapshot
+const toBeDeletedIds = ref<string[]>([]) // Track IDs of questions to be deleted
 const creationStartDate = ref<string | null>(null) // Start date for question creation
 const creationEndDate = ref<string | null>(null) // End date for question creation
 const isEditingAllowed = ref<boolean>(true) // Flag to check if editing is allowed
+
+// Pagination state
+const pageNumber = ref(1)
+const pageSize = ref(10)
+const totalQuestions = ref(0)
+const totalPages = ref(0)
 
 const filteredQuestions = computed({
   get() {
@@ -80,15 +89,15 @@ const addQuestion = () => {
     return
   }
   questions.value.push({
-    type: null,
+    type: QuestionType.Radio,
     title: '',
     correctBoolean: false,
     correctText: '',
-    difficulty: null,
-    knowledgeLevel: null,
+    difficulty: Difficulty.Easy,
+    knowledgeLevelId: '',
     isContentShown: true,
     options: [],
-    image: '',
+    image: null,
     order: questions.value.length + 1,
     topicId: selectedTab.value,
     // generate a random guid
@@ -97,57 +106,114 @@ const addQuestion = () => {
 }
 const dragOptions = {
   animation: 200,
-  onEnd: (event: any) => {},
+  onEnd: () => {},
 }
 
 const removeQuestion = (clientId: string) => {
+  const questionToRemove = questions.value.find((x) => x.clientId === clientId)
+  
+  // If the question has an ID (it exists in the database), add it to toBeDeletedIds
+  if (questionToRemove?.id) {
+    toBeDeletedIds.value.push(questionToRemove.id)
+  }
+  
   questions.value = questions.value.filter((x) => x.clientId != clientId)
 }
-const fetchQuestionBank = async () => {
-  await questionBankStore.getQuestionBank(route.params.id as string)
-  questions.value =
-    questionBankStore.selectedQuestionBank?.questions.map((x: Question) => {
-      return {
-        ...x,
-        isContentShown: true,
-        order: x.order,
-        clientId: generateGuid(),
-      }
-    }) || []
+
+const fetchQuestions = async () => {
+  try {
+    const response = await questionBankStore.getQuestionBankQuestions(
+      route.params.id as string,
+      pageNumber.value,
+      pageSize.value,
+      selectedTab.value
+    )
+    
+    // Clear toBeDeletedIds and original snapshot when fetching new questions
+    toBeDeletedIds.value = []
+    originalQuestionsSnapshot.value.clear()
+    
+    questions.value =
+      response.data.map((x: Question) => {
+        return {
+          ...x,
+          isContentShown: true,
+          order: x.order,
+          clientId: generateGuid(),
+        }
+      }) || []
 
     questions.value.forEach((x: Question) => {
       if (x.type === QuestionType.Dialogue) {
-        x.subQuestions = x.subQuestions.map(( subQuestion: Question,index: number) => {
+        x.subQuestions = x.subQuestions?.map((subQuestion: Question, index: number) => {
           return {
             ...subQuestion,
             order: index + 1,
             clientId: generateGuid(),
           }
-        })
+        }) || []
       }
     })
-  topicTabs.value = questionBankStore.selectedQuestionBank?.questionBankTopics.map(
-    (x: QuestionBankTopicDto) => {
-      return { label: x.topic.name, value: x.topicId }
-    }
-  ) as { label: string; value: string }[]
-  selectedTab.value = topicTabs.value[0].value
+
+    // Create snapshot of original questions (for questions that exist in DB)
+    // Exclude UI-only fields from snapshot
+    questions.value.forEach((q: Question) => {
+      if (q.id && q.clientId) {
+        const { isContentShown, ...rest } = q
+        originalQuestionsSnapshot.value.set(q.clientId, JSON.stringify(rest))
+      }
+    })
+
+    totalPages.value = response.pagesCount
+    // Calculate approximate total based on page count and page size
+    totalQuestions.value = response.pagesCount * pageSize.value
+  } catch (error) {
+    console.error('Error fetching questions:', error)
+  }
+}
+
+const fetchQuestionBank = async () => {
+  await questionBankStore.getQuestionBank(route.params.id as string)
+  
+  topicTabs.value = questionBankStore.selectedQuestionBank?.questionBankTopics
+    .filter((x: QuestionBankTopicDto) => x.topic !== null && x.topic.name !== null)
+    .map((x: QuestionBankTopicDto) => {
+      return { label: x.topic!.name!, value: x.topicId }
+    }) || []
+  
+  if (topicTabs.value.length > 0) {
+    selectedTab.value = topicTabs.value[0].value
+  }
 
   // Fetch creationStartDate and creationEndDate from the Question Bank
   creationStartDate.value = questionBankStore.selectedQuestionBank?.creationStartDate || null
   creationEndDate.value = questionBankStore.selectedQuestionBank?.creationEndDate || null
 
   validateEditingRules()
+  
+  // Fetch questions after question bank metadata is loaded
+  if (selectedTab.value) {
+    await fetchQuestions()
+  }
 }
 const topicTabs = ref<{ label: string; value: string }[]>([])
 const selectedTab = ref<string>('')
-// watchDeep(
-//     () => questionBankStore.selectedQuestionBank,
-//     () => {
-//         fetchQuestionBank()
-//     },
-// )
-onMounted(() => {
+
+// Watch for tab changes to fetch questions for the selected topic
+watch(selectedTab, (newValue, oldValue) => {
+  if (newValue && newValue !== oldValue) {
+    pageNumber.value = 1 // Reset to first page when changing topics
+    fetchQuestions()
+  }
+})
+
+const handlePageChange = (newPage: number) => {
+  pageNumber.value = newPage
+  fetchQuestions()
+}
+const knowledgeLevelStore = useKnowledgelevelStore()
+onMounted(async () => {
+  await knowledgeLevelStore.getKnowledgelevels({pageNumber: 1, pageSize: 100})
   fetchQuestionBank()
 })
 const saveChanges = async () => {
@@ -162,7 +228,44 @@ const saveChanges = async () => {
     return
   }
 
-  questionBankStore.saveQuestions(route.params.id as string, questions.value)
+  // Helper function to create comparable snapshot (excluding UI-only fields)
+  const createComparableSnapshot = (q: Question) => {
+    const { isContentShown, ...rest } = q
+    return JSON.stringify(rest)
+  }
+
+  // Filter to only send new or modified questions, then set order
+  const questionsToSave = questions.value
+    .map((q: Question, index: number) => {
+      // Check if question should be included
+      let shouldInclude = false
+      
+      // Include if it's a new question (no id)
+      if (!q.id) {
+        shouldInclude = true
+      } else if (q.clientId) {
+        // Check if it's been modified (compare with original snapshot)
+        const originalSnapshot = originalQuestionsSnapshot.value.get(q.clientId)
+        if (!originalSnapshot) {
+          shouldInclude = true // If no snapshot, treat as new
+        } else {
+          // Compare current state with original snapshot
+          const currentSnapshot = createComparableSnapshot(q)
+          shouldInclude = currentSnapshot !== originalSnapshot
+        }
+      }
+      
+      // Return question with updated order if it should be included
+      return shouldInclude ? { ...q, order: index + 1 } : null
+    })
+    .filter((q): q is Question => q !== null)
+
+  console.log('Questions to save:', questionsToSave.length, 'out of', questions.value.length)
+  console.log('New questions:', questionsToSave.filter(q => !q.id).length)
+  console.log('Modified questions:', questionsToSave.filter(q => q.id).length)
+  console.log('To be deleted:', toBeDeletedIds.value.length)
+
+  questionBankStore.saveQuestions(route.params.id as string, questionsToSave, toBeDeletedIds.value)
 }
 
 const updateQuestion = (updatedQuestion: Question) => {
@@ -297,12 +400,24 @@ const currentTopicName = computed(() => {
             :index="data.index"
             :topic-name="currentTopicName"
             @remove-question="removeQuestion(data.element.clientId)"
-            @update:model-value="(updatedQuestion: Question) => updateQuestion(updatedQuestion)"
+            @update:model-value="(updatedQuestion?: Question) => updatedQuestion && updateQuestion(updatedQuestion)"
           />
         </div>
       </template>
     </draggable>
-    <CardNoData v-if="questions.length === 0" />
+    <CardNoData v-if="filteredQuestions.length === 0" />
+    
+    <!-- Pagination Controls -->
+    <div v-if="totalPages > 1" class="flex justify-center my-5">
+      <BasePagination
+        :current-page="pageNumber"
+        :item-per-page="pageSize"
+        :total-items="totalQuestions"
+        no-router
+        @update:current-page="handlePageChange"
+      />
+    </div>
+    
     <div class="w-[75%] start-75 fixed bottom-5">
       <BaseButton class="w-full" color="primary" size="lg"  @click="addQuestion">
         <Icon name="tabler-plus" size="20" />
@@ -312,7 +427,7 @@ const currentTopicName = computed(() => {
   </div>
   <AppLoading v-else />
   <DeleteTopic @update="fetchQuestionBank()" />
-  <AddTopic @update="fetchQuestionBank()" :subject-id="questionBankStore.selectedQuestionBank?.subject.id" />
+  <AddTopic @update="fetchQuestionBank()" :subject-id="questionBankStore.selectedQuestionBank?.subject?.id || ''" />
   <ImportQuestions
     :question-bank-id="route.params.id as string"
     :topic-id="selectedTab"

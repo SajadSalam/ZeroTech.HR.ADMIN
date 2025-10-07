@@ -21,9 +21,11 @@ interface IQuestionBankService {
   delete: (id: string) => Promise<void>
   getDetailed: (id: string) => Promise<QuestionBankDetailedDto>
 
-  saveQuestions(questionBankId: string, questions: Question[]): Promise<void>
+  saveQuestions(questionBankId: string, questions: Question[], toBeDeletedIds?: string[]): Promise<void>
 
   getQuestions(filters: BaseFilters): Promise<PaginatedResponse<QuestionDto>>
+
+  getQuestionBankQuestions(questionBankId: string, pageNumber: number, pageSize: number, topicId?: string): Promise<PaginatedResponse<QuestionDto>>
 
   approveQuestion(questionId: string): Promise<QuestionDto>
 
@@ -109,13 +111,46 @@ export class QuestionBankService implements IQuestionBankService {
   }
 
   /**
+   * Retrieves a paginated list of questions for a specific question bank.
+   * @param questionBankId - The ID of the question bank.
+   * @param pageNumber - The page number to retrieve.
+   * @param pageSize - The number of questions per page.
+   * @param topicId - Optional topic ID to filter questions by topic.
+   * @returns A promise that resolves to a paginated response of questions.
+   */
+  async getQuestionBankQuestions(
+    questionBankId: string,
+    pageNumber: number,
+    pageSize: number,
+    topicId?: string
+  ): Promise<PaginatedResponse<QuestionDto>> {
+    const params: any = {
+      pageNumber,
+      pageSize,
+    }
+    if (topicId) {
+      params.topicId = topicId
+    }
+    const response = await axios.get<PaginatedResponse<QuestionDto>>(
+      `/question-bank/${questionBankId}/questions`,
+      { params }
+    )
+    return response.data
+  }
+
+  /**
    * Saves multiple questions to a question bank.
    * @param questionBankId - The ID of the question bank.
    * @param questions - The list of questions to save.
+   * @param toBeDeletedIds - Optional array of question IDs to be deleted.
    * @returns A promise that resolves when the questions are saved.
    */
-  async saveQuestions(questionBankId: string, questions: Question[]): Promise<void> {
-    const response = await axios.post<void>('/question/' + questionBankId + '/multi', questions)
+  async saveQuestions(questionBankId: string, questions: Question[], toBeDeletedIds: string[] = []): Promise<void> {
+    const payload = {
+      questions,
+      toBeDeletedIds
+    }
+    const response = await axios.post<void>('/question/' + questionBankId + '/multi', payload)
     return response.data
   }
 
