@@ -73,7 +73,7 @@ onMounted(async () => {
                 <BookingTimeMaterialChart :data="financialDashboard?.monthlyIncome" />
             </div>
             <div class="col-span-1">
-                <IncomeByGovernorateChart :totalPercentage="financialDashboard?.totalIncome ?? 0" :data="financialDashboard?.bookingPercentageByGovernorate" />
+                <IncomeByGovernorateChart :totalIncome="financialDashboard?.totalIncome ?? 0" :data="financialDashboard?.bookingPercentageByGovernorate" />
             </div>
             <div class="col-span-2">
                 <!--  -->
