@@ -795,5 +795,6 @@
   "import": "استيراد",
   "please-select-file-and-question-type": "الرجاء تحديد ملف ونوع السؤال",
   "select-all": "تحديد الكل",
-  "available": "متاح"
+  "available": "متاح",
+  "creation-start-date-before-creation-end-date": "يجب أن يكون تاريخ البدء قبل تاريخ الانتهاء"
 }

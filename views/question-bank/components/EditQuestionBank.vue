@@ -7,6 +7,7 @@ import { createValidator } from '~/services/validationWithI18n'
 import { Validator } from '~/services/validator'
 import { useQuestionBankStore } from '../store/index'
 import type { QuestionBank } from '../types'
+import { useToast } from '~/composables/toaster'
 
 const questionBankStore = useQuestionBankStore()
 const { t } = useI18n()
@@ -37,12 +38,22 @@ watchDeep(questionBank, (value) => {
 })
 
 const updateQuestionBank = async () => {
-    console.log('updateQuestionBank')
+    const bodyData = validator.extractBody()
+    if(bodyData.creationStartDate && bodyData.creationEndDate) {
+        // check if creationStartDate is before creationEndDate
+        if(new Date(bodyData.creationStartDate) > new Date(bodyData.creationEndDate)) {
+            useToast({
+                message: t('creation-start-date-before-creation-end-date'),
+                isError: true,
+            })
+            return
+        }
+    }
     try {
         questionBankStore.isLoading = true
         const isValid = await body.value.$validate()
         if (!isValid) return
-        await questionBankStore.updateQuestionBank(validator.extractBody())
+        await questionBankStore.updateQuestionBank(bodyData)
         validator.resetBody()
         questionBankStore.isEditDialogOpen = false
     } catch (error) {
