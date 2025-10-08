@@ -7,8 +7,8 @@ import type { QuestionGrades } from '~/views/evaluations/types'
 import { difficultyOptions } from '~/views/question-bank'
 import { questionTypeOptions } from '~/views/question-bank/types/index'
 import { AuditStatus, type Question } from '~/views/question-bank/types/question'
-import QuestionForm from './QuestionForm.vue'
 import { useKnowledgelevelStore } from '../../../../knowledgelevel/store'
+import QuestionForm from './QuestionForm.vue'
 const props = defineProps<{
   index: number
   isEvaluation?: boolean
@@ -25,7 +25,7 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
 </script>
 
 <template>
-  <BaseCard class="pa-5 my-4 rounded-lg !border-0 !border-s-4 !border-primary-500">
+  <BaseCard class="pa-5 my-4 rounded-lg !border-0 !border-s-4 !border-primary-500" :key="modelValue.id">
     <div class="flex items-center justify-between gap-2">
       <div class="flex items-center gap-2">
         <Icon name="ph-dots-nine-bold" size="20" />
@@ -44,6 +44,8 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
           :placeholder="$t('select-a-question-type')"
           item-label="label"
           item-value="value"
+          :id="`${modelValue?.id}-type`"
+          :key="`${modelValue?.id}-type`"
           :disabled="isEvaluation"
         />
         <AppAutoCompleteField
@@ -51,12 +53,14 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
           :items="difficultyOptions($t)"
           :placeholder="$t('select-a-difficulty')"
           item-label="label"
+          :key="`${modelValue.id}-difficulty`"
           :disabled="isEvaluation"
           item-value="value"
         />
         <AppAutoCompleteField
           v-model="modelValue.knowledgeLevelId"
           :placeholder="$t('select-a-knowledge')"
+          :key="modelValue.id"
           :disabled="isEvaluation"
           :items="knowledgeLevels"
           item-label="name"
