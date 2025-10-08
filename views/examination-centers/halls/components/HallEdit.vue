@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import AppInputField from '~/components/app-field/AppInputField.vue'
 import { createValidator } from '~/services/validationWithI18n'
 import { Validator } from '~/services/validator'
@@ -15,7 +14,6 @@ const selectedHall = computed(() => hallStore.selectedHall)
 const validator = new Validator<HallCreateDto>(
   {
     name: '',
-    examCenterId: '',
     capacity: 0,
   },
   {
@@ -33,12 +31,10 @@ const body = validator.validation
 const isLoading = computed(() => {
   return hallStore.isLoading
 })
-const {id} = useRoute().params
 const updateHall = async () => {
   const isValid = await body.value.$validate()
   if (!isValid) return
   const extractedBody = validator.extractBody()
-  extractedBody.examCenterId = id as string
   await hallStore.updateHall(extractedBody)
   validator.resetBody()
   hallStore.isEditDialogOpen = false
@@ -53,6 +49,7 @@ watch(
       validator.fillBody({
         name: selectedHall.value?.name as string,
         capacity: selectedHall.value?.capacity as number,
+        examCenterId: selectedHall.value?.examCenterId as string,
       })
     }
   }

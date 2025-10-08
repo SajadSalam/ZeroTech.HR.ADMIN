@@ -3,13 +3,12 @@ import AppCrudActions from '~/components/app-crud/components/AppCrudActions.vue'
 import AppTable from '~/components/app-table/AppTable.vue'
 import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
 import type { BaseFilters } from '~/utils/types/ApiResponses'
-import { useAuthStore } from '~/views/auth/store/auth'
 import { tableHeader } from '~/views/examination-centers/halls'
 import AssignSupervisor from '~/views/examination-centers/halls/components/AssignSupervisor.vue'
 import CreateHall from '~/views/examination-centers/halls/components/HallCreate.vue'
 import EditHall from '~/views/examination-centers/halls/components/HallEdit.vue'
 import { useHallStore } from '~/views/examination-centers/halls/store'
-import type { Hall, HallDto } from '~/views/examination-centers/halls/types'
+import type { HallDto } from '~/views/examination-centers/halls/types'
 
 definePageMeta({
   title: 'examination-centers',
@@ -45,6 +44,7 @@ watch(
   { deep: true }
 )
 const openEdit = (item: HallDto) => {
+  hallsStore.selectedHallId = item.id
   hallsStore.selectedHall = item
   hallsStore.isEditDialogOpen = true
 }
@@ -55,7 +55,6 @@ const openAssignSupervisor = (item: HallDto) => {
 const deleteHall = async (item: HallDto) => {
   await hallsStore.deleteHall(item.id)
 }
-const { hasPrivilege } = useAuthStore()
 </script>
 
 <template>
