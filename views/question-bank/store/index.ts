@@ -100,6 +100,7 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
       await questionBankService.update(selectedQuestionBankId.value!, data)
       await getQuestionBanks(filters.value)
     } catch (error) {
+      throw error
     } finally {
       isLoading.value = false
     }
