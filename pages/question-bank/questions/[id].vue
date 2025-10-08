@@ -167,11 +167,16 @@ const fetchQuestions = async () => {
     totalPages.value = response.pagesCount
     // Calculate approximate total based on page count and page size
     totalQuestions.value = response.pagesCount * pageSize.value
+  
+    // force re-render
+    nextTick(() => {
+      forceUpdate.value++
+    })
   } catch (error) {
     console.error('Error fetching questions:', error)
   }
 }
-
+const forceUpdate = ref(0   )
 const fetchQuestionBank = async () => {
   await questionBankStore.getQuestionBank(route.params.id as string)
   
@@ -259,12 +264,6 @@ const saveChanges = async () => {
       return shouldInclude ? { ...q, order: index + 1 } : null
     })
     .filter((q): q is Question => q !== null)
-
-  console.log('Questions to save:', questionsToSave.length, 'out of', questions.value.length)
-  console.log('New questions:', questionsToSave.filter(q => !q.id).length)
-  console.log('Modified questions:', questionsToSave.filter(q => q.id).length)
-  console.log('To be deleted:', toBeDeletedIds.value.length)
-
   questionBankStore.saveQuestions(route.params.id as string, questionsToSave, toBeDeletedIds.value)
 }
 
@@ -304,7 +303,7 @@ const currentTopicName = computed(() => {
 })
 </script>
 <template>
-  <div v-if="!questionBankStore.isLoading" class="min-h-screen mb-30">
+  <div v-if="!questionBankStore.isLoading" class="min-h-screen mb-30" :key="forceUpdate">
     <div class="rounded-lg bg-white p-5">
       <div class="flex items-center justify-between">
         <div>
@@ -398,6 +397,7 @@ const currentTopicName = computed(() => {
             :only-view="data.element.auditStatus == AuditStatus.Approved"
             :model-value="questions.find((x) => x.clientId === data.element.clientId)"
             :index="data.index"
+            :key="data.element.id"
             :topic-name="currentTopicName"
             @remove-question="removeQuestion(data.element.clientId)"
             @update:model-value="(updatedQuestion?: Question) => updatedQuestion && updateQuestion(updatedQuestion)"
