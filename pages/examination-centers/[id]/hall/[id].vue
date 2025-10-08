@@ -209,11 +209,11 @@ const endExam = (student: ProgressStudent) => {
             :value="statistics.totalStudentInExam">
         </InfoLabel>
 
-        <InfoLabel :label="$t('present-students')" color="warning" icon="ph:user-minus-duotone"
+        <InfoLabel :label="$t('present-students')" color="warning" icon="ph:user-plus-duotone"
             :value="statistics.totalCheckedInStudent">
         </InfoLabel>
 
-        <InfoLabel :label="$t('absent-students')" color="primary" icon="ph:user-plus-duotone"
+        <InfoLabel :label="$t('absent-students')" color="primary" icon="ph:user-minus-duotone"
             :value="statistics.totalAbsentStudent">
         </InfoLabel>
 
