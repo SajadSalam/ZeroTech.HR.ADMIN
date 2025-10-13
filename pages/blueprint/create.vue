@@ -30,8 +30,8 @@ const router = useRouter()
 const validator = new Validator<Blueprint>(
     {
         questionBanks: [],
-        displayResult: false,
-        moveBetweenQuestion: false,
+        displayResult: true,
+        moveBetweenQuestion: true,
         name: '',
         successGrade: 0,
         maximumGrade: 0,
