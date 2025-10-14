@@ -106,7 +106,7 @@ export const tableDetailHeaders = (t: (key: string) => string) => {
       label: t('grade-per-question'),
     },
     {
-      key: 'knowledgeLevelId',
+      key: 'knowledgeLevelName',
       label: t('knowledge'),
     },
     {
