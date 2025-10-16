@@ -26,6 +26,11 @@ export default [
        to: '/zones',
    },
    {
+       name: 'جداول العمل',
+       icon: { name: 'ph-calendar-duotone', class: 'w-5 h-5' },
+       to: '/work-schedules',
+   },
+   {
     name: 'المستخدمين',
     icon: { name: 'ph-users-duotone', class: 'w-5 h-5' },
     to: '/users',

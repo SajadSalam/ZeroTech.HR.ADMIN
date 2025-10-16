@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RouteLocationRaw } from 'vue-router'
+import type { RouteLocationRaw } from 'vue-router';
 
 const props = defineProps<{
   /**
@@ -50,26 +50,26 @@ const props = defineProps<{
       <div class="flex w-1/2 flex-col gap-1 p-2">
         <div class="relative">
           <div class="flex w-full rounded-lg p-2">
-            <BaseIconBox size="xs" variant="pastel" color="primary" rounded="none" mask="blob">
+            <BaseIconBox size="sm" variant="pastel" color="primary" rounded="none" mask="blob">
               <Icon name="ph:house-duotone" class="size-4" />
             </BaseIconBox>
             <div class="ms-2">
               <BaseHeading
                 as="h4"
-                size="xs"
+                size="sm"
                 weight="semibold"
                 lead="tight"
                 class="text-muted-800 dark:text-white"
               >
                 {{ props.title }}
               </BaseHeading>
-              <BaseText size="xs" class="text-muted-400">
+              <BaseText size="sm" class="text-muted-400">
                 {{ props.subtitle }}
               </BaseText>
             </div>
           </div>
         </div>
-        <BaseText size="xs" lead="tight" class="line-clamp-3 ps-2 text-muted-400">
+        <BaseText size="sm" lead="tight" class="line-clamp-3 ps-2 text-muted-400">
           {{ props.text }}
         </BaseText>
       </div>
@@ -104,14 +104,14 @@ const props = defineProps<{
       <div class="flow-root rounded-md transition duration-150 ease-in-out focus:outline-none">
         <BaseHeading
           as="h4"
-          size="xs"
+          size="sm"
           weight="semibold"
           class="text-muted-800 dark:text-white"
           lead="tight"
         >
           {{ props.footerTitle }}
         </BaseHeading>
-        <BaseText size="xs" class="text-muted-400">
+        <BaseText size="sm" class="text-muted-400">
           {{ props.footerText }}
         </BaseText>
       </div>

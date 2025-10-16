@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useRequestTypeStore } from '../store'
 import { useRequestCategoryStore } from '~/views/request-categories/store'
-import type { RequestTypeDto } from '../types'
 import type { RequestCategoryDto } from '~/views/request-categories/types'
+import { useRequestTypeStore } from '../store'
+import type { RequestTypeDto } from '../types'
 
 const requestTypeStore = useRequestTypeStore()
 const requestCategoryStore = useRequestCategoryStore()
@@ -86,7 +86,7 @@ onMounted(() => {
               <BaseBadge
                 :color="category.isEnabled ? 'success' : 'muted'"
                 variant="pastel"
-                size="xs"
+                size="sm"
               >
                 {{ category.isEnabled ? 'مفعل' : 'غير مفعل' }}
               </BaseBadge>
@@ -155,7 +155,7 @@ onMounted(() => {
                 <BaseBadge
                   :color="requestType.isEnabled ? 'success' : 'danger'"
                   variant="pastel"
-                  size="xs"
+                  size="sm"
                 >
                   {{ requestType.isEnabled ? 'مفعل' : 'غير مفعل' }}
                 </BaseBadge>
@@ -166,7 +166,7 @@ onMounted(() => {
               </p>
               
               <div class="flex items-center gap-2 mb-3">
-                <BaseBadge color="primary" variant="pastel" size="xs">
+                <BaseBadge color="primary" variant="pastel" size="sm">
                   {{ requestType.code }}
                 </BaseBadge>
                 <span v-if="requestType.displayOrder" class="text-xs text-gray-500">

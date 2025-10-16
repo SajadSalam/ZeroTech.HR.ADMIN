@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
+import AppCrudActions from '~/components/app-crud/components/AppCrudActions.vue'
 import AppTable from '~/components/app-table/AppTable.vue'
-import { useDepartmentStore } from '~/views/departments/store'
+import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
 import { tableHeader } from '~/views/departments'
 import DepartmentCreate from '~/views/departments/components/DepartmentCreate.vue'
-import AppCrudActions from '~/components/app-crud/components/AppCrudActions.vue'
 import DepartmentEdit from '~/views/departments/components/DepartmentEdit.vue'
-import type { DepartmentDto, DepartmentFilters } from '~/views/departments/types'
-import { useAuthStore } from '~/views/auth/store/auth'
+import { useDepartmentStore } from '~/views/departments/store'
+import type { DepartmentFilters } from '~/views/departments/types'
 
 definePageMeta({
   title: 'الأقسام',
@@ -66,7 +65,7 @@ watch(
         <AppAutoCompleteField
           v-model="filters.managerId"
           placeholder="المدير"
-          get-url="/users"
+          get-url="/user"
           item-label="fullName"
           item-value="id"
         />

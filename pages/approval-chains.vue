@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
+import AppCrudActions from '~/components/app-crud/components/AppCrudActions.vue'
 import AppTable from '~/components/app-table/AppTable.vue'
-import { useApprovalChainStore } from '~/views/approval-chains/store'
+import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
 import { tableHeader } from '~/views/approval-chains'
 import ApprovalChainCreate from '~/views/approval-chains/components/ApprovalChainCreate.vue'
-import AppCrudActions from '~/components/app-crud/components/AppCrudActions.vue'
 import ApprovalChainEdit from '~/views/approval-chains/components/ApprovalChainEdit.vue'
 import ApprovalChainTimeline from '~/views/approval-chains/components/ApprovalChainTimeline.vue'
+import { useApprovalChainStore } from '~/views/approval-chains/store'
 import type { ApprovalChainDto, ApprovalChainFilters } from '~/views/approval-chains/types'
-import { useAuthStore } from '~/views/auth/store/auth'
 
 definePageMeta({
   title: 'سلاسل الموافقات',
@@ -165,7 +164,7 @@ watch(filters, () => { getApprovalChains() }, { deep: true })
         <template #data-actions="{ item }">
           <div class="flex items-center gap-2">
             <BaseButton
-              size="xs"
+              size="sm"
               variant="outline"
               @click="viewTimeline(item)"
             >

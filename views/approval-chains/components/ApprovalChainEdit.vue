@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import AppInputField from '~/components/app-field/AppInputField.vue'
 import AppTextAreaField from '~/components/app-field/AppTextAreaField.vue'
-import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import { requiredValidator } from '~/services/validation'
 import { Validator } from '~/services/validator'
 import { useApprovalChainStore } from '../store'
@@ -191,7 +191,7 @@ watch(() => approvalChainStore.isEditDialogOpen, (val: boolean) => {
             v-model="body.escalationUserId.$model"
             label="مستخدم التصعيد"
             placeholder="اختر المستخدم للتصعيد"
-            get-url="/users"
+            get-url="/user"
             item-label="username"
             item-value="id"
             fetch-on-search

@@ -17,7 +17,7 @@ const props = withDefaults(
       <BaseHeading v-if="props.label" tag="h3" size="md" weight="medium" lead="none">
         {{ props.label }}
       </BaseHeading>
-      <BaseText v-if="props.sublabel" size="xs" class="text-muted-400">
+      <BaseText v-if="props.sublabel" size="sm" class="text-muted-400">
         {{ props.sublabel }}
       </BaseText>
     </legend>

@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
+import AppCrudActions from '~/components/app-crud/components/AppCrudActions.vue'
 import AppTable from '~/components/app-table/AppTable.vue'
-import { useZoneStore } from '~/views/zones/store'
+import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
 import { tableHeader } from '~/views/zones'
 import ZoneCreate from '~/views/zones/components/ZoneCreate.vue'
-import AppCrudActions from '~/components/app-crud/components/AppCrudActions.vue'
 import ZoneEdit from '~/views/zones/components/ZoneEdit.vue'
 import ZoneMapViewer from '~/views/zones/components/ZoneMapViewer.vue'
+import { useZoneStore } from '~/views/zones/store'
 import type { ZoneDto, ZoneFilters } from '~/views/zones/types'
-import { useAuthStore } from '~/views/auth/store/auth'
 
 definePageMeta({
   title: 'إدارة المناطق',
@@ -189,7 +188,7 @@ watch(filters, () => { getZones() }, { deep: true })
         <template #data-actions="{ item }">
           <div class="flex items-center gap-2">
             <BaseButton
-              size="xs"
+              size="sm"
               variant="outline"
               @click="viewZoneOnMap(item)"
             >

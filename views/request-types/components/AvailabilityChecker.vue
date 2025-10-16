@@ -113,7 +113,7 @@ const clearResults = () => {
               v-model="selectedUserId"
               label="اختر المستخدم"
               placeholder="ابحث عن مستخدم..."
-              get-url="/users"
+              get-url="/user"
               item-label="fullName"
               item-value="id"
               fetch-on-search
@@ -229,13 +229,13 @@ const clearResults = () => {
                 {{ requestType.description }}
               </p>
               <div class="flex items-center gap-2 mt-2">
-                <BaseBadge color="primary" variant="pastel" size="xs">
+                <BaseBadge color="primary" variant="pastel" size="sm">
                   {{ requestType.code }}
                 </BaseBadge>
                 <BaseBadge
                   :color="requestType.isEnabled ? 'success' : 'danger'"
                   variant="pastel"
-                  size="xs"
+                  size="sm"
                 >
                   {{ requestType.isEnabled ? 'مفعل' : 'غير مفعل' }}
                 </BaseBadge>

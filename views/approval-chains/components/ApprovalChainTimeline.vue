@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useApprovalChainStore } from '../store'
-import ApprovalStepManager from './ApprovalStepManager.vue'
+import type { ApprovalStepDto, TimelineStepStatus } from '../types'
 import ApprovalStepForm from './ApprovalStepForm.vue'
-import type { ApprovalChainDto, ApprovalStepDto, TimelineStepStatus } from '../types'
+import ApprovalStepManager from './ApprovalStepManager.vue'
 
 const approvalChainStore = useApprovalChainStore()
 
@@ -330,17 +330,17 @@ const closeDialog = () => {
                       </div>
                       <div class="space-y-1">
                         <div v-if="step.allowsAutoApproval" class="text-xs">
-                          <BaseBadge color="success" variant="pastel" size="xs">
+                          <BaseBadge color="success" variant="pastel" size="sm">
                             موافقة تلقائية
                           </BaseBadge>
                         </div>
                         <div v-if="step.allowsParallelApproval" class="text-xs">
-                          <BaseBadge color="info" variant="pastel" size="xs">
+                          <BaseBadge color="info" variant="pastel" size="sm">
                             موافقة متوازية
                           </BaseBadge>
                         </div>
                         <div v-if="step.timeoutAction" class="text-xs">
-                          <BaseBadge color="warning" variant="pastel" size="xs">
+                          <BaseBadge color="warning" variant="pastel" size="sm">
                             {{ formatTimeoutAction(step.timeoutAction) }}
                           </BaseBadge>
                         </div>

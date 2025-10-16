@@ -156,7 +156,7 @@ const moveStepDown = async (step: ApprovalStepDto) => {
             <!-- Move Up -->
             <BaseButton
               v-if="step.stepOrder > 1"
-              size="xs"
+              size="sm"
               variant="outline"
               @click="moveStepUp(step)"
             >
@@ -166,7 +166,7 @@ const moveStepDown = async (step: ApprovalStepDto) => {
             <!-- Move Down -->
             <BaseButton
               v-if="step.stepOrder < approvalSteps.length"
-              size="xs"
+              size="sm"
               variant="outline"
               @click="moveStepDown(step)"
             >
@@ -175,7 +175,7 @@ const moveStepDown = async (step: ApprovalStepDto) => {
 
             <!-- Edit -->
             <BaseButton
-              size="xs"
+              size="sm"
               variant="outline"
               color="primary"
               @click="editStep(step)"
@@ -185,7 +185,7 @@ const moveStepDown = async (step: ApprovalStepDto) => {
 
             <!-- Delete -->
             <BaseButton
-              size="xs"
+              size="sm"
               variant="outline"
               color="danger"
               @click="deleteStep(step.id)"
@@ -205,14 +205,14 @@ const moveStepDown = async (step: ApprovalStepDto) => {
                 v-if="step.isRequired"
                 color="danger"
                 variant="pastel"
-                size="xs"
+                size="sm"
               >
                 مطلوب
               </BaseBadge>
               <BaseBadge
                 :color="step.isActive ? 'success' : 'muted'"
                 variant="pastel"
-                size="xs"
+                size="sm"
               >
                 {{ step.isActive ? 'نشط' : 'غير نشط' }}
               </BaseBadge>
@@ -253,7 +253,7 @@ const moveStepDown = async (step: ApprovalStepDto) => {
               :key="approver"
               color="info"
               variant="pastel"
-              size="xs"
+              size="sm"
             >
               {{ approver }}
             </BaseBadge>
@@ -266,7 +266,7 @@ const moveStepDown = async (step: ApprovalStepDto) => {
             v-if="step.allowsAutoApproval"
             color="success"
             variant="pastel"
-            size="xs"
+            size="sm"
           >
             <Icon name="ph:robot-duotone" class="size-3 mr-1" />
             موافقة تلقائية
@@ -275,7 +275,7 @@ const moveStepDown = async (step: ApprovalStepDto) => {
             v-if="step.allowsParallelApproval"
             color="info"
             variant="pastel"
-            size="xs"
+            size="sm"
           >
             <Icon name="ph:arrows-horizontal-duotone" class="size-3 mr-1" />
             موافقة متوازية
@@ -284,7 +284,7 @@ const moveStepDown = async (step: ApprovalStepDto) => {
             v-if="step.sendReminders"
             color="warning"
             variant="pastel"
-            size="xs"
+            size="sm"
           >
             <Icon name="ph:bell-duotone" class="size-3 mr-1" />
             تذكيرات
@@ -293,7 +293,7 @@ const moveStepDown = async (step: ApprovalStepDto) => {
             v-if="step.escalationUserId"
             color="danger"
             variant="pastel"
-            size="xs"
+            size="sm"
           >
             <Icon name="ph:warning-duotone" class="size-3 mr-1" />
             تصعيد

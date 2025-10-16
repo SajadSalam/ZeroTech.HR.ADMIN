@@ -50,7 +50,7 @@ const props = withDefaults(
     <div class="relative mb-1">
       <div class="flex w-full">
         <BaseIconBox
-          size="xs"
+          size="sm"
           variant="pastel"
           rounded="none"
           mask="blob"
@@ -62,20 +62,20 @@ const props = withDefaults(
         <div class="ms-2">
           <BaseHeading
             as="h4"
-            size="xs"
+            size="sm"
             weight="semibold"
             lead="tight"
             class="text-muted-800 dark:text-white"
           >
             {{ props.title }}
           </BaseHeading>
-          <BaseText size="xs" class="text-muted-400">
+          <BaseText size="sm" class="text-muted-400">
             {{ props.subtitle }}
           </BaseText>
         </div>
       </div>
     </div>
-    <BaseText size="xs" lead="snug" class="text-muted-400">
+    <BaseText size="sm" lead="snug" class="text-muted-400">
       {{ props.text }}
     </BaseText>
   </div>

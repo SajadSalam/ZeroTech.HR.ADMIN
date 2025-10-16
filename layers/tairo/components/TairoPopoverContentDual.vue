@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RouteLocationRaw } from 'vue-router'
+import type { RouteLocationRaw } from 'vue-router';
 
 const props = defineProps<{
   /**
@@ -75,24 +75,24 @@ const props = defineProps<{
         >
           <BaseIconBox
             v-if="stat.icon && !stat.image"
-            size="xs"
+            size="sm"
             class="me-2 bg-primary-100 text-primary-500 dark:bg-primary-600 dark:text-white"
             color="none"
           >
             <Icon :name="stat.icon" class="size-4" />
           </BaseIconBox>
-          <BaseAvatar v-if="stat.image && !stat.icon" :src="stat.image" size="xs" class="me-2" />
+          <BaseAvatar v-if="stat.image && !stat.icon" :src="stat.image" size="sm" class="me-2" />
           <div>
             <BaseHeading
               as="h4"
-              size="xs"
+              size="sm"
               weight="semibold"
               lead="tight"
               class="text-muted-800 dark:text-white"
             >
               {{ stat.title }}
             </BaseHeading>
-            <BaseText size="xs" class="text-muted-400">
+            <BaseText size="sm" class="text-muted-400">
               {{ stat.subtitle }}
             </BaseText>
           </div>
@@ -104,14 +104,14 @@ const props = defineProps<{
           <div>
             <BaseHeading
               as="h4"
-              size="xs"
+              size="sm"
               weight="semibold"
               lead="tight"
               class="text-muted-800 dark:text-white"
             >
               {{ props.title }}
             </BaseHeading>
-            <BaseText size="xs" class="text-muted-400">
+            <BaseText size="sm" class="text-muted-400">
               {{ props.subtitle }}
             </BaseText>
           </div>
@@ -125,14 +125,14 @@ const props = defineProps<{
       <div class="flow-root rounded-md transition duration-150 ease-in-out focus:outline-none">
         <BaseHeading
           as="h4"
-          size="xs"
+          size="sm"
           weight="semibold"
           class="text-muted-800 dark:text-white"
           lead="tight"
         >
           {{ props.footerTitle }}
         </BaseHeading>
-        <BaseText size="xs" class="text-muted-400">
+        <BaseText size="sm" class="text-muted-400">
           {{ props.footerText }}
         </BaseText>
       </div>
