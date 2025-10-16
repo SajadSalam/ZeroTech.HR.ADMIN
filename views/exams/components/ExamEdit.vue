@@ -45,17 +45,7 @@ const createValidator = (exam: Partial<ExamEdit>) =>
 const validator = ref(createValidator({}))
 const body = computed(() => validator.value.validation)
 
-const hasExamStarted = computed(() => {
-  const date = examObject.value?.startDate
-  const time = examObject.value?.startTime
-  if (!date || !time) return false
 
-  const datePart = date.split('T')[0]
-  const isoDateTime = `${datePart}T${time}:00`
-  const examStart = new Date(isoDateTime)
-
-  return !isNaN(examStart.getTime()) && new Date() >= examStart
-})
 
 const fetchExamDetails = async () => {
   try {
@@ -103,10 +93,6 @@ const update = async () => {
 };
 
 const cancelExam = async () => {
-  if (hasExamStarted.value) {
-    useToast({ message: t('exam_already_started_no_changes'), isError: true })
-    return
-  }
 
   await examStore.cancelExam(props.examId.toString())
   emit('update:modelValue', false)
