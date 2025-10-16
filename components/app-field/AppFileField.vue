@@ -49,7 +49,7 @@ const preview = async (file: File) => {
 <template>
   <div>
     <div
-      class="dark:border-#E0E0E024 dark:hover:border-#E0E0E044 dark:focus:border-#E0E0E044 bg-#0E1224 group cursor-pointer rounded-lg border-[2px] border-dashed border-muted-300 p-3 transition-colors duration-300 hover:border-muted-400"
+      class="dark:border-#E0E0E024 dark:hover:border-#E0E0E044 dark:focus:border-#E0E0E044 bg-#F9FAFB group cursor-pointer rounded-lg border-[2px] border-dashed border-muted-300 p-3 transition-colors duration-300 hover:border-muted-400"
       tabindex="0"
       role="button"
       @click="open"
@@ -58,13 +58,11 @@ const preview = async (file: File) => {
         <div class="flex items-center justify-center rounded-xl bg-primary-500/35 p-2">
           <Icon name="solar-file-download-linear" class="size-6 text-primary-500" />
         </div>
-        <h4 class="text-base text-muted-400">اسحب وافلت الملف</h4>
-
         <label
           for="file"
           class="cursor-pointer text-sm text-muted-400 transition-colors duration-300 group-hover:text-primary-500 group-focus:text-primary-500"
         >
-          او انفر لرفع الملف
+           انفر لرفع الملف
         </label>
       </div>
     </div>

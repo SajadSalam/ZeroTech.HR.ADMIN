@@ -65,7 +65,7 @@ const error = computed(() => {
     <!-- Date Picker Input -->
     <template v-else-if="props.type === 'date'">
       <div class="flex flex-col justify-between">
-        <span v-if="props.label" class="dp__label">
+        <span v-if="props.label" class="dp__label mb-2">
           {{ props.label }}
         </span>
 
@@ -84,7 +84,7 @@ const error = computed(() => {
     </template>
     <template v-else-if="props.type === 'time'">
       <div class="flex flex-col justify-between">
-        <span v-if="props.label" class="dp__label">
+        <span v-if="props.label" class="dp__label mb-2">
           {{ props.label }}
         </span>
         <flat-pickr
