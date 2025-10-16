@@ -29,7 +29,7 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
     <div class="flex items-center justify-between gap-2">
       <div class="flex items-center gap-2">
         <Icon name="ph-dots-nine-bold" size="20" />
-        <h1 class="text-2xl font-bold">{{ $t('question') }} {{ index + 1 }}</h1>
+        <h1 class="text-2xl font-bold">{{ $t('question') }} {{ modelValue?.sequence }}</h1>
         <span
           v-if="topicName"
           class="border-s-2 border-primary-300 ps-2 text-sm font-medium text-primary-600"
