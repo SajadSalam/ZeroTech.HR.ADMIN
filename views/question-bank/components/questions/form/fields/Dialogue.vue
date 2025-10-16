@@ -10,6 +10,7 @@ import { Difficulty, QuestionType, type Question } from '~/views/question-bank/t
 import Matching from './Matching.vue'
 import MultiItems from './MultiItems.vue'
 import Reorder from './Reorder.vue'
+import { useKnowledgelevelStore } from '~/views/knowledgelevel/store'
 
 const { t } = useI18n()
 
@@ -41,7 +42,7 @@ const addSubQuestion = () => {
     type: QuestionType.MultipleChoice,
     options: [
       {
-        id: crypto.randomUUID(),
+        // id: crypto.randomUUID(),
         title: '',
         alternateTitle: '',
         isAlternateTitleShown: false,
@@ -136,6 +137,9 @@ const watchSubQuestionType = (subQuestion: Question, newType: QuestionType) => {
     subQuestion.orderItems = []
   }
 }
+
+const knowledgeLevelStore = useKnowledgelevelStore()
+const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
 </script>
 
 <template>
@@ -210,7 +214,7 @@ const watchSubQuestionType = (subQuestion: Question, newType: QuestionType) => {
            v-model="modelValue.subQuestions![index].knowledgeLevelId"
            :placeholder="$t('select-a-knowledge')"
            :disabled="isEvaluation"
-           get-url="/knowledgelevel"
+           :items="knowledgeLevels"
            item-label="name"
            item-value="id"
          />
