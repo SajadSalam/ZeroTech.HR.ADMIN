@@ -6,14 +6,30 @@ export default [
        to: '/departments',
    },
    {
-       name: 'أنواع الطلبات',
-       icon: { name: 'ph-file-text-duotone', class: 'w-5 h-5' },
-       to: '/request-types',
-   },
-   {
-       name: 'فئات الطلبات',
-       icon: { name: 'ph-folder-duotone', class: 'w-5 h-5' },
-       to: '/request-categories',
+       name: 'إدارة الطلبات',
+       icon: { name: 'ph-clipboard-text-duotone', class: 'w-5 h-5' },
+       children: [
+           {
+               name: 'جميع الطلبات',
+               icon: { name: 'ph-list-duotone', class: 'w-5 h-5' },
+               to: '/requests',
+           },
+           {
+               name: 'الموافقات المعلقة',
+               icon: { name: 'ph-clock-duotone', class: 'w-5 h-5' },
+               to: '/pending-approvals',
+           },
+           {
+               name: 'أنواع الطلبات',
+               icon: { name: 'ph-file-text-duotone', class: 'w-5 h-5' },
+               to: '/request-types',
+           },
+           {
+               name: 'فئات الطلبات',
+               icon: { name: 'ph-folder-duotone', class: 'w-5 h-5' },
+               to: '/request-categories',
+           },
+       ]
    },
    {
        name: 'سلاسل الموافقات',

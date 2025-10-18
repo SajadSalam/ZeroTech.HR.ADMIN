@@ -14,6 +14,7 @@ export interface AuthResponse {
 }
 
 export interface User {
+  employeeId: number
   username: string
   email: string
   firstName: string
