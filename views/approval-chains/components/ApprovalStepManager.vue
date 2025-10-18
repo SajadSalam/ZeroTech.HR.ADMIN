@@ -201,21 +201,21 @@ const moveStepDown = async (step: ApprovalStepDto) => {
           <div>
             <div class="text-xs font-medium text-muted-500 mb-1">الحالة</div>
             <div class="flex gap-1">
-              <BaseBadge
+              <BaseTag
                 v-if="step.isRequired"
                 color="danger"
                 variant="pastel"
                 size="sm"
               >
                 مطلوب
-              </BaseBadge>
-              <BaseBadge
+              </BaseTag>
+              <BaseTag
                 :color="step.isActive ? 'success' : 'muted'"
                 variant="pastel"
                 size="sm"
               >
                 {{ step.isActive ? 'نشط' : 'غير نشط' }}
-              </BaseBadge>
+              </BaseTag>
             </div>
           </div>
 
@@ -248,7 +248,7 @@ const moveStepDown = async (step: ApprovalStepDto) => {
         <div v-if="getApprovers(step).length > 0">
           <div class="text-xs font-medium text-muted-500 mb-2">قائمة المعتمدين</div>
           <div class="flex flex-wrap gap-1">
-            <BaseBadge
+            <BaseTag
               v-for="approver in getApprovers(step)"
               :key="approver"
               color="info"
@@ -256,13 +256,13 @@ const moveStepDown = async (step: ApprovalStepDto) => {
               size="sm"
             >
               {{ approver }}
-            </BaseBadge>
+            </BaseTag>
           </div>
         </div>
 
         <!-- Settings -->
         <div class="mt-4 flex flex-wrap gap-2">
-          <BaseBadge
+          <BaseTag
             v-if="step.allowsAutoApproval"
             color="success"
             variant="pastel"
@@ -270,8 +270,8 @@ const moveStepDown = async (step: ApprovalStepDto) => {
           >
             <Icon name="ph:robot-duotone" class="size-3 mr-1" />
             موافقة تلقائية
-          </BaseBadge>
-          <BaseBadge
+          </BaseTag>
+          <BaseTag
             v-if="step.allowsParallelApproval"
             color="info"
             variant="pastel"
@@ -279,8 +279,8 @@ const moveStepDown = async (step: ApprovalStepDto) => {
           >
             <Icon name="ph:arrows-horizontal-duotone" class="size-3 mr-1" />
             موافقة متوازية
-          </BaseBadge>
-          <BaseBadge
+          </BaseTag>
+          <BaseTag
             v-if="step.sendReminders"
             color="warning"
             variant="pastel"
@@ -288,8 +288,8 @@ const moveStepDown = async (step: ApprovalStepDto) => {
           >
             <Icon name="ph:bell-duotone" class="size-3 mr-1" />
             تذكيرات
-          </BaseBadge>
-          <BaseBadge
+          </BaseTag>
+          <BaseTag
             v-if="step.escalationUserId"
             color="danger"
             variant="pastel"
@@ -297,7 +297,7 @@ const moveStepDown = async (step: ApprovalStepDto) => {
           >
             <Icon name="ph:warning-duotone" class="size-3 mr-1" />
             تصعيد
-          </BaseBadge>
+          </BaseTag>
         </div>
 
         <!-- Connection Line (except for last step) -->

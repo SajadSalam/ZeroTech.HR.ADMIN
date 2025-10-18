@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useRequestTypeStore } from '../store'
-import type { RequestTypeDto } from '../types'
+import { useRequestTypeStore } from '../store';
+import type { RequestTypeDto } from '../types';
 
 interface Props {
   requestTypeId: number
@@ -81,13 +81,13 @@ watch(() => props.requestTypeId, () => {
         </div>
       </div>
       <div class="flex items-center gap-2">
-        <BaseBadge
+        <BaseTag
           :color="requestType.isEnabled ? 'success' : 'danger'"
           variant="pastel"
           size="lg"
         >
           {{ requestType.isEnabled ? 'مفعل' : 'غير مفعل' }}
-        </BaseBadge>
+        </BaseTag>
         <BaseButton
           size="sm"
           variant="outline"
@@ -105,7 +105,7 @@ watch(() => props.requestTypeId, () => {
         <div class="space-y-2">
           <div class="flex justify-between">
             <span class="text-gray-600 dark:text-gray-400">الرمز:</span>
-            <BaseBadge color="primary" variant="pastel" size="sm">{{ requestType.code }}</BaseBadge>
+            <BaseTag color="primary" variant="pastel" size="sm">{{ requestType.code }}</BaseTag>
           </div>
           <div class="flex justify-between">
             <span class="text-gray-600 dark:text-gray-400">الفئة:</span>

@@ -4,8 +4,8 @@ import AppTextAreaField from '~/components/app-field/AppTextAreaField.vue'
 import { requiredValidator } from '~/services/validation'
 import { Validator } from '~/services/validator'
 import { useZoneStore } from '../store'
-import ZoneMap from './ZoneMap.vue'
 import type { ZoneCreateDto } from '../types'
+import ZoneMap from './ZoneMap.vue'
 
 const zoneStore = useZoneStore()
 
@@ -197,13 +197,13 @@ watch(() => zoneStore.isCreateDialogOpen, (val: boolean) => {
               </p>
             </div>
             <div>
-              <BaseBadge
+              <BaseTag
                 :color="currentPolygon.length >= 3 ? 'success' : 'warning'"
                 variant="pastel"
                 size="sm"
               >
                 {{ currentPolygon.length >= 3 ? 'صحيح' : 'غير مكتمل' }}
-              </BaseBadge>
+              </BaseTag>
             </div>
           </div>
         </div>

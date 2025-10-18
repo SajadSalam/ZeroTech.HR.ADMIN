@@ -33,8 +33,6 @@ const validator = new Validator<ApprovalStepCreateDto | ApprovalStepUpdateDto>(
     escalationUserId: undefined,
     activationConditions: '',
     isActive: true,
-    roleIds: [],
-    userIds: [],
   },
   {
     name: {
@@ -57,13 +55,14 @@ const timeoutActions = [
   { value: 'Notify', label: 'إشعار فقط' },
 ]
 
+const route = useRoute()
 const saveStep = async () => {
   const isValid = await body.value.$validate()
   if (!isValid) return
   
   try {
     const stepData = validator.extractBody()
-    stepData.approvalChainId = Number(approvalChainStore.selectedApprovalChainId)
+    stepData.approvalChainId = Number(route.params.id)
     
     if (isEditing.value && selectedStep.value) {
       await approvalChainStore.updateApprovalStep(selectedStep.value.id, stepData as ApprovalStepUpdateDto)
@@ -309,39 +308,6 @@ const saveStep = async () => {
         </div>
       </div>
 
-      <!-- Approvers -->
-      <div class="space-y-4">
-        <h3 class="text-lg font-semibold text-muted-800 dark:text-muted-100">
-          المعتمدون
-        </h3>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <AppAutoCompleteField
-            v-model="body.roleIds.$model"
-            label="الأدوار المعتمدة"
-            placeholder="اختر الأدوار..."
-            get-url="/roles"
-            item-label="name"
-            item-value="id"
-            fetch-on-search
-            search-key="name"
-            multiple
-          />
-
-          <AppAutoCompleteField
-            v-model="body.userIds.$model"
-            label="المستخدمون المعتمدون"
-            placeholder="اختر المستخدمين..."
-            get-url="/user"
-            item-label="username"
-            item-value="id"
-            fetch-on-search
-            search-key="username"
-            multiple
-          />
-        </div>
-      </div>
-
       <!-- Advanced Settings -->
       <div class="space-y-4">
         <h3 class="text-lg font-semibold text-muted-800 dark:text-muted-100">
@@ -378,9 +344,9 @@ const saveStep = async () => {
           </div>
           <div class="flex items-center justify-between text-sm">
             <span class="text-muted-600 dark:text-muted-400">الترتيب:</span>
-            <BaseBadge color="primary" variant="pastel" size="sm">
+            <BaseTag color="primary" variant="pastel" size="sm">
               {{ body.stepOrder.$model || 1 }}
-            </BaseBadge>
+            </BaseTag>
           </div>
           <div class="flex items-center justify-between text-sm">
             <span class="text-muted-600 dark:text-muted-400">الحد الأقصى:</span>
@@ -389,21 +355,21 @@ const saveStep = async () => {
           <div class="flex items-center justify-between text-sm">
             <span class="text-muted-600 dark:text-muted-400">الحالة:</span>
             <div class="flex gap-1">
-              <BaseBadge
+              <BaseTag
                 v-if="body.isRequired.$model"
                 color="danger"
                 variant="pastel"
                 size="sm"
               >
                 مطلوب
-              </BaseBadge>
-              <BaseBadge
+              </BaseTag>
+              <BaseTag
                 :color="body.isActive.$model ? 'success' : 'muted'"
                 variant="pastel"
                 size="sm"
               >
                 {{ body.isActive.$model ? 'نشط' : 'غير نشط' }}
-              </BaseBadge>
+              </BaseTag>
             </div>
           </div>
         </div>

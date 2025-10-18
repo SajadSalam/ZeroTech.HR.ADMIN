@@ -1,5 +1,5 @@
 import { requestTypeService } from '../service'
-import type { RequestType, RequestTypeDto, RequestTypeFilters, RequestTypeCreateDto, RequestTypeUpdateDto } from '../types'
+import type { RequestTypeCreateDto, RequestTypeDto, RequestTypeFilters, RequestTypeUpdateDto } from '../types'
 
 export const useRequestTypeStore = defineStore('requestType', () => {
   const requestTypes = ref<RequestTypeDto[]>([])
@@ -22,30 +22,55 @@ export const useRequestTypeStore = defineStore('requestType', () => {
   const totalPages = ref(0)
   const enabledRequestTypes = ref<RequestTypeDto[]>([])
 
+  // Track ongoing requests to prevent multiple simultaneous calls
+  let getRequestTypesPromise: Promise<void> | null = null
+  let getEnabledRequestTypesPromise: Promise<void> | null = null
+
   const getRequestTypes = async () => {
-    try {
-      isLoading.value = true
-      const response = await requestTypeService.get(filters.value)
-      requestTypes.value = response.data
-      totalPages.value = response.pagesCount
-    } catch (error) {
-      console.error('Error fetching request types:', error)
-      throw error
-    } finally {
-      isLoading.value = false
+    // If there's already a request in progress, return that promise
+    if (getRequestTypesPromise) {
+      return getRequestTypesPromise
     }
+
+    getRequestTypesPromise = (async () => {
+      try {
+        isLoading.value = true
+        const response = await requestTypeService.get(filters.value)
+        requestTypes.value = response.data
+        totalPages.value = response.pagesCount
+      } catch (error) {
+        console.error('Error fetching request types:', error)
+        throw error
+      } finally {
+        isLoading.value = false
+        getRequestTypesPromise = null // Reset the promise
+      }
+    })()
+
+    return getRequestTypesPromise
   }
 
   const getEnabledRequestTypes = async () => {
-    try {
-      isLoading.value = true
-      const response = await requestTypeService.getEnabled()
-      enabledRequestTypes.value = response
-    } catch (error) {
-      console.error('Error fetching enabled request types:', error)
-    } finally {
-      isLoading.value = false
+    // If there's already a request in progress, return that promise
+    if (getEnabledRequestTypesPromise) {
+      return getEnabledRequestTypesPromise
     }
+
+    getEnabledRequestTypesPromise = (async () => {
+      try {
+        isLoading.value = true
+        const response = await requestTypeService.getEnabled()
+        enabledRequestTypes.value = response
+      } catch (error) {
+        console.error('Error fetching enabled request types:', error)
+        throw error
+      } finally {
+        isLoading.value = false
+        getEnabledRequestTypesPromise = null // Reset the promise
+      }
+    })()
+
+    return getEnabledRequestTypesPromise
   }
 
   const getRequestTypeById = async (id: number) => {

@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import { useApprovalChainStore } from '../store'
-import type { ApprovalStepDto, TimelineStepStatus } from '../types'
-import ApprovalStepForm from './ApprovalStepForm.vue'
-import ApprovalStepManager from './ApprovalStepManager.vue'
+import ApprovalStepForm from '~/views/approval-chains/components/ApprovalStepForm.vue'
+import ApprovalStepManager from '~/views/approval-chains/components/ApprovalStepManager.vue'
+import { useApprovalChainStore } from '~/views/approval-chains/store'
+import type { ApprovalStepDto, TimelineStepStatus } from '~/views/approval-chains/types'
 
+definePageMeta({
+  title: 'تفاصيل سلسلة الموافقات',
+  description: 'عرض تفاصيل سلسلة الموافقات والمخطط الزمني',
+})
+
+const route = useRoute()
+const router = useRouter()
 const approvalChainStore = useApprovalChainStore()
 
 const activeTab = ref<'timeline' | 'manage'>('timeline')
@@ -84,20 +91,78 @@ const formatTimeoutAction = (action?: string) => {
   }
 }
 
-// Close dialog
-const closeDialog = () => {
-  approvalChainStore.isDetailsDialogOpen = false
+// Navigate back to approval chains list
+const goBack = () => {
+  router.push('/approval-chains')
 }
+
+// Navigate to edit page
+const editApprovalChain = () => {
+  if (selectedChain.value) {
+    approvalChainStore.selectedApprovalChain = selectedChain.value
+    approvalChainStore.selectedApprovalChainId = selectedChain.value.id
+    approvalChainStore.isEditDialogOpen = true
+  }
+}
+
+// Load approval chain data
+const loadApprovalChain = async () => {
+  const id = route.params.id as string
+  if (id) {
+    try {
+      await approvalChainStore.getApprovalChainById(id)
+      await approvalChainStore.getApprovalSteps(Number(id))
+    } catch (error) {
+      console.error('Error loading approval chain:', error)
+      // Redirect to 404 or approval chains list if not found
+      router.push('/approval-chains')
+    }
+  }
+}
+
+// Load data on mount
+onMounted(() => {
+  loadApprovalChain()
+})
+
+// Watch route changes
+watch(() => route.params.id, () => {
+  loadApprovalChain()
+})
 </script>
 
 <template>
-  <AppDialog
-    v-model="approvalChainStore.isDetailsDialogOpen"
-    title="تفاصيل سلسلة الموافقات"
-    size="4xl"
-    overflow-y="visible"
-  >
-    <div v-if="selectedChain" class="space-y-6">
+  <div class="space-y-6">
+    <!-- Header with Back Button -->
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <BaseButton
+          size="sm"
+          variant="outline"
+          @click="goBack"
+        >
+          <Icon name="ph:arrow-right-duotone" class="size-4 mr-2" />
+          العودة للقائمة
+        </BaseButton>
+        <h1 class="text-2xl font-bold text-muted-800 dark:text-muted-100">
+          تفاصيل سلسلة الموافقات
+        </h1>
+      </div>
+      <BaseButton
+        v-if="selectedChain"
+        color="primary"
+        @click="editApprovalChain"
+      >
+        <Icon name="ph:pencil-duotone" class="size-4 mr-2" />
+        تعديل
+      </BaseButton>
+    </div>
+
+    <div v-if="isLoading && !selectedChain" class="flex items-center justify-center p-12">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+    </div>
+
+    <div v-else-if="selectedChain" class="space-y-6">
       <!-- Tab Navigation -->
       <div class="border-b border-muted-200 dark:border-muted-700">
         <nav class="flex space-x-8">
@@ -135,13 +200,13 @@ const closeDialog = () => {
               {{ selectedChain.description }}
             </p>
           </div>
-          <BaseBadge
+          <BaseTag
             :color="selectedChain.isActive ? 'success' : 'muted'"
             variant="pastel"
             size="lg"
           >
             {{ selectedChain.isActive ? 'نشط' : 'غير نشط' }}
-          </BaseBadge>
+          </BaseTag>
         </div>
         
         <!-- Chain Info Grid -->
@@ -183,7 +248,7 @@ const closeDialog = () => {
 
         <!-- Chain Settings -->
         <div class="mt-4 flex flex-wrap gap-2">
-          <BaseBadge
+          <BaseTag
             v-if="selectedChain.allowsParallelApproval"
             color="info"
             variant="pastel"
@@ -191,8 +256,8 @@ const closeDialog = () => {
           >
             <Icon name="ph:arrows-horizontal-duotone" class="size-3 mr-1" />
             موافقة متوازية
-          </BaseBadge>
-          <BaseBadge
+          </BaseTag>
+          <BaseTag
             v-if="selectedChain.allowsStepSkipping"
             color="warning"
             variant="pastel"
@@ -200,8 +265,8 @@ const closeDialog = () => {
           >
             <Icon name="ph:skip-forward-duotone" class="size-3 mr-1" />
             تخطي الخطوات
-          </BaseBadge>
-          <BaseBadge
+          </BaseTag>
+          <BaseTag
             v-if="selectedChain.timeoutAction"
             color="muted"
             variant="pastel"
@@ -209,7 +274,7 @@ const closeDialog = () => {
           >
             <Icon name="ph:timer-duotone" class="size-3 mr-1" />
             {{ formatTimeoutAction(selectedChain.timeoutAction) }}
-          </BaseBadge>
+          </BaseTag>
         </div>
       </div>
 
@@ -269,21 +334,21 @@ const closeDialog = () => {
                       </p>
                     </div>
                     <div class="flex items-center gap-2">
-                      <BaseBadge
+                      <BaseTag
                         :color="getStatusColor(getStepStatus(step, index))"
                         variant="pastel"
                         size="sm"
                       >
                         {{ getStatusText(getStepStatus(step, index)) }}
-                      </BaseBadge>
-                      <BaseBadge
+                      </BaseTag>
+                      <BaseTag
                         v-if="step.isRequired"
                         color="danger"
                         variant="pastel"
                         size="sm"
                       >
                         مطلوب
-                      </BaseBadge>
+                      </BaseTag>
                     </div>
                   </div>
                   
@@ -330,19 +395,19 @@ const closeDialog = () => {
                       </div>
                       <div class="space-y-1">
                         <div v-if="step.allowsAutoApproval" class="text-xs">
-                          <BaseBadge color="success" variant="pastel" size="sm">
+                          <BaseTag color="success" variant="pastel" size="sm">
                             موافقة تلقائية
-                          </BaseBadge>
+                          </BaseTag>
                         </div>
                         <div v-if="step.allowsParallelApproval" class="text-xs">
-                          <BaseBadge color="info" variant="pastel" size="sm">
+                          <BaseTag color="info" variant="pastel" size="sm">
                             موافقة متوازية
-                          </BaseBadge>
+                          </BaseTag>
                         </div>
                         <div v-if="step.timeoutAction" class="text-xs">
-                          <BaseBadge color="warning" variant="pastel" size="sm">
+                          <BaseTag color="warning" variant="pastel" size="sm">
                             {{ formatTimeoutAction(step.timeoutAction) }}
-                          </BaseBadge>
+                          </BaseTag>
                         </div>
                       </div>
                     </div>
@@ -390,25 +455,20 @@ const closeDialog = () => {
       </div>
     </div>
 
-    <template #actions>
-      <BaseButton color="muted" @click="closeDialog">
-        إغلاق
+    <div v-else class="text-center p-12">
+      <Icon name="ph:warning-duotone" class="size-12 text-muted-400 mb-4" />
+      <h3 class="text-lg font-semibold text-muted-800 dark:text-muted-100 mb-2">
+        سلسلة الموافقات غير موجودة
+      </h3>
+      <p class="text-muted-600 dark:text-muted-400 mb-4">
+        لم يتم العثور على سلسلة الموافقات المطلوبة
+      </p>
+      <BaseButton @click="goBack">
+        العودة للقائمة
       </BaseButton>
-      <BaseButton
-        color="primary"
-        @click="() => {
-          approvalChainStore.selectedApprovalChain = selectedChain
-          approvalChainStore.selectedApprovalChainId = selectedChain?.id || null
-          approvalChainStore.isEditDialogOpen = true
-          approvalChainStore.isDetailsDialogOpen = false
-        }"
-      >
-        <Icon name="ph:pencil-duotone" class="size-4 mr-2" />
-        تعديل
-      </BaseButton>
-    </template>
-  </AppDialog>
+    </div>
 
-  <!-- Step Form Dialog -->
-  <ApprovalStepForm />
+    <!-- Step Form Dialog -->
+    <ApprovalStepForm />
+  </div>
 </template>

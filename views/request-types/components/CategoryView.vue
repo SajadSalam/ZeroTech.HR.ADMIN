@@ -71,9 +71,9 @@ onMounted(() => {
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
               {{ category.name }}
             </h3>
-            <BaseBadge color="primary" variant="pastel" size="sm">
+            <BaseTag color="primary" variant="pastel" size="sm">
               {{ category.code }}
-            </BaseBadge>
+            </BaseTag>
           </div>
           
           <div class="space-y-2">
@@ -83,13 +83,13 @@ onMounted(() => {
             </div>
             <div class="flex items-center justify-between text-sm">
               <span class="text-gray-600 dark:text-gray-400">الحالة:</span>
-              <BaseBadge
+              <BaseTag
                 :color="category.isEnabled ? 'success' : 'muted'"
                 variant="pastel"
                 size="sm"
               >
                 {{ category.isEnabled ? 'مفعل' : 'غير مفعل' }}
-              </BaseBadge>
+              </BaseTag>
             </div>
           </div>
           
@@ -152,13 +152,13 @@ onMounted(() => {
                 <h4 class="font-medium text-gray-900 dark:text-white truncate">
                   {{ requestType.name }}
                 </h4>
-                <BaseBadge
+                <BaseTag
                   :color="requestType.isEnabled ? 'success' : 'danger'"
                   variant="pastel"
                   size="sm"
                 >
                   {{ requestType.isEnabled ? 'مفعل' : 'غير مفعل' }}
-                </BaseBadge>
+                </BaseTag>
               </div>
               
               <p v-if="requestType.description" class="text-sm text-gray-600 dark:text-gray-400 mb-3">
@@ -166,9 +166,9 @@ onMounted(() => {
               </p>
               
               <div class="flex items-center gap-2 mb-3">
-                <BaseBadge color="primary" variant="pastel" size="sm">
+                <BaseTag color="primary" variant="pastel" size="sm">
                   {{ requestType.code }}
-                </BaseBadge>
+                </BaseTag>
                 <span v-if="requestType.displayOrder" class="text-xs text-gray-500">
                   ترتيب: {{ requestType.displayOrder }}
                 </span>

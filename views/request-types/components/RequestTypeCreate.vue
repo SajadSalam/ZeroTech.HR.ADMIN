@@ -280,7 +280,7 @@ watch(
               v-model="body.allowedRoleIds.$model"
               label="الأدوار المسموحة"
               placeholder="اختر الأدوار..."
-              get-url="/roles"
+              get-url="/role"
               item-label="name"
               item-value="id"
               fetch-on-search

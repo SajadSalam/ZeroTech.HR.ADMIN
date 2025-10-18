@@ -169,7 +169,7 @@ const clearResults = () => {
               v-model="selectedRoleId"
               label="اختر الدور"
               placeholder="ابحث عن دور..."
-              get-url="/roles"
+              get-url="/role"
               item-label="name"
               item-value="id"
               fetch-on-search
@@ -229,16 +229,16 @@ const clearResults = () => {
                 {{ requestType.description }}
               </p>
               <div class="flex items-center gap-2 mt-2">
-                <BaseBadge color="primary" variant="pastel" size="sm">
+                <BaseTag color="primary" variant="pastel" size="sm">
                   {{ requestType.code }}
-                </BaseBadge>
-                <BaseBadge
+                </BaseTag>
+                <BaseTag
                   :color="requestType.isEnabled ? 'success' : 'danger'"
                   variant="pastel"
                   size="sm"
                 >
                   {{ requestType.isEnabled ? 'مفعل' : 'غير مفعل' }}
-                </BaseBadge>
+                </BaseTag>
               </div>
               <div class="flex items-center gap-4 mt-2 text-xs text-gray-500">
                 <div class="flex items-center gap-1">

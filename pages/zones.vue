@@ -132,13 +132,13 @@ watch(filters, () => { getZones() }, { deep: true })
         </template>
 
         <template #data-zoneType="{ item }">
-          <BaseBadge
+          <BaseTag
             color="primary"
             variant="pastel"
             size="sm"
           >
             {{ getZoneTypeLabel(item.zoneType) }}
-          </BaseBadge>
+          </BaseTag>
         </template>
 
         <template #data-description="{ item }">
@@ -156,33 +156,33 @@ watch(filters, () => { getZones() }, { deep: true })
         </template>
 
         <template #data-priority="{ item }">
-          <BaseBadge
+          <BaseTag
             :color="getPriorityColor(item.priority)"
             variant="pastel"
             size="sm"
           >
             {{ item.priority || '-' }}
-          </BaseBadge>
+          </BaseTag>
         </template>
 
         <template #data-isOperational="{ item }">
-          <BaseBadge
+          <BaseTag
             :color="item.isOperational ? 'success' : 'warning'"
             variant="pastel"
             size="sm"
           >
             {{ item.isOperational ? 'تشغيلي' : 'غير تشغيلي' }}
-          </BaseBadge>
+          </BaseTag>
         </template>
 
         <template #data-isActive="{ item }">
-          <BaseBadge
+          <BaseTag
             :color="item.isActive ? 'success' : 'muted'"
             variant="pastel"
             size="sm"
           >
             {{ item.isActive ? 'نشط' : 'غير نشط' }}
-          </BaseBadge>
+          </BaseTag>
         </template>
 
         <template #data-actions="{ item }">

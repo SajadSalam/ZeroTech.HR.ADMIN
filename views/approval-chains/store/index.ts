@@ -2,13 +2,13 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { approvalChainService } from '../service'
 import type {
-  ApprovalChainDto,
-  ApprovalChainCreateDto,
-  ApprovalChainUpdateDto,
-  ApprovalChainFilters,
-  ApprovalStepDto,
-  ApprovalStepCreateDto,
-  ApprovalStepUpdateDto,
+    ApprovalChainCreateDto,
+    ApprovalChainDto,
+    ApprovalChainFilters,
+    ApprovalChainUpdateDto,
+    ApprovalStepCreateDto,
+    ApprovalStepDto,
+    ApprovalStepUpdateDto,
 } from '../types'
 
 export const useApprovalChainStore = defineStore('approvalChain', () => {
@@ -26,7 +26,6 @@ export const useApprovalChainStore = defineStore('approvalChain', () => {
   })
   const isCreateDialogOpen = ref(false)
   const isEditDialogOpen = ref(false)
-  const isDetailsDialogOpen = ref(false)
   const selectedApprovalChainId = ref<string | number | null>(null)
   const selectedApprovalChain = ref<ApprovalChainDto | null>(null)
   const totalPages = ref(0)
@@ -199,11 +198,6 @@ export const useApprovalChainStore = defineStore('approvalChain', () => {
     selectedApprovalChainId.value = approvalChain?.id || null
   }
 
-  const openDetailsDialog = async (approvalChain: ApprovalChainDto) => {
-    setSelectedApprovalChain(approvalChain)
-    await getApprovalSteps(Number(approvalChain.id))
-    isDetailsDialogOpen.value = true
-  }
 
   const openStepDialog = (step?: ApprovalStepDto) => {
     selectedStep.value = step || null
@@ -225,11 +219,9 @@ export const useApprovalChainStore = defineStore('approvalChain', () => {
     deleteApprovalChain,
     isCreateDialogOpen,
     isEditDialogOpen,
-    isDetailsDialogOpen,
     selectedApprovalChainId,
     selectedApprovalChain,
     setSelectedApprovalChain,
-    openDetailsDialog,
     totalPages,
     
     // Step management

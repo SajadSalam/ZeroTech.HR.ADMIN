@@ -5,7 +5,6 @@ import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
 import { tableHeader } from '~/views/approval-chains'
 import ApprovalChainCreate from '~/views/approval-chains/components/ApprovalChainCreate.vue'
 import ApprovalChainEdit from '~/views/approval-chains/components/ApprovalChainEdit.vue'
-import ApprovalChainTimeline from '~/views/approval-chains/components/ApprovalChainTimeline.vue'
 import { useApprovalChainStore } from '~/views/approval-chains/store'
 import type { ApprovalChainDto, ApprovalChainFilters } from '~/views/approval-chains/types'
 
@@ -35,7 +34,7 @@ const getApprovalChains = async () => {
 }
 
 const viewTimeline = (approvalChain: ApprovalChainDto) => {
-  approvalChainStore.openDetailsDialog(approvalChain)
+  navigateTo(`/approval-chain/${approvalChain.id}`)
 }
 
 getApprovalChains()
@@ -128,13 +127,13 @@ watch(filters, () => { getApprovalChains() }, { deep: true })
         </template>
 
         <template #data-priority="{ item }">
-          <BaseBadge
+          <BaseTag
             color="primary"
             variant="pastel"
             size="sm"
           >
             {{ item.priority || 0 }}
-          </BaseBadge>
+          </BaseTag>
         </template>
 
         <template #data-stepsCount="{ item }">
@@ -152,13 +151,13 @@ watch(filters, () => { getApprovalChains() }, { deep: true })
         </template>
 
         <template #data-isActive="{ item }">
-          <BaseBadge
+          <BaseTag
             :color="item.isActive ? 'success' : 'muted'"
             variant="pastel"
             size="sm"
           >
             {{ item.isActive ? 'نشط' : 'غير نشط' }}
-          </BaseBadge>
+          </BaseTag>
         </template>
 
         <template #data-actions="{ item }">
@@ -187,6 +186,5 @@ watch(filters, () => { getApprovalChains() }, { deep: true })
     
     <ApprovalChainCreate />
     <ApprovalChainEdit />
-    <ApprovalChainTimeline />
   </div>
 </template>

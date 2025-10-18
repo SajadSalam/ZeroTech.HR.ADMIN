@@ -88,9 +88,9 @@ watch(
         </template>
 
         <template #data-code="{ item }">
-          <BaseBadge color="primary" variant="pastel" size="sm">
+          <BaseTag color="primary" variant="pastel" size="sm">
             {{ item.code }}
-          </BaseBadge>
+          </BaseTag>
         </template>
 
         <template #data-manager="{ item }">

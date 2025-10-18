@@ -2,6 +2,7 @@
 import DotLoading from '~/components/global/DotLoading.vue';
 import { fakeData } from '~/views/employees';
 import Attachments from '~/views/employees/components/Attachments.vue';
+import EmployeeDetailSection from '~/views/employees/components/EmployeeDetailSection.vue';
 import UploadFiles from '~/views/employees/components/dialogs/UploadFiles.vue';
 import Leaves from '~/views/employees/components/Leaves.vue';
 import ProfileHeader from '~/views/employees/components/ProfileHeader.vue';
@@ -70,6 +71,7 @@ onMounted(async () => {
 <template>
     <div class="flex flex-col gap-4 mb-4" v-if="!isLoading">
         <ProfileHeader :profileData="employee" />
+        <EmployeeDetailSection :employee="employee" />
         <StatsCard :stats="personalInfo" title="المعلومات الشخصية" :span="4" />
         <StatsCard :stats="employeeInfo" title="المعلومات الوظيفية" :span="4" />
         <!-- <StatsCard :stats="salaryInfo" title="الراتب و المستحقات" :span="3" /> -->

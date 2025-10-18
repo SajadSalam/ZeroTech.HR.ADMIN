@@ -154,24 +154,24 @@ const handleDelete = async (id: number) => {
 
         <!-- Schedule Type -->
         <template #data-type="{ item }">
-          <BaseBadge
+          <BaseTag
             :color="item.isGeneralTemplate ? 'info' : 'primary'"
             variant="pastel"
             size="sm"
           >
             {{ formatScheduleType(item) }}
-          </BaseBadge>
+          </BaseTag>
         </template>
 
         <!-- Flexibility -->
         <template #data-flexibility="{ item }">
-          <BaseBadge
+          <BaseTag
             :color="item.isFlexible ? 'success' : 'muted'"
             variant="pastel"
             size="sm"
           >
             {{ formatFlexibility(item) }}
-          </BaseBadge>
+          </BaseTag>
         </template>
 
         <!-- Total Weekly Hours -->

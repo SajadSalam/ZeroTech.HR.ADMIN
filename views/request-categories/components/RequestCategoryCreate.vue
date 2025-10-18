@@ -153,13 +153,13 @@ watch(() => requestCategoryStore.isCreateDialogOpen, (val: boolean) => {
             {{ body.code.$model || 'CATEGORY_CODE' }}
           </div>
         </div>
-        <BaseBadge
+        <BaseTag
           :color="body.isEnabled.$model ? 'success' : 'muted'"
           variant="pastel"
           size="sm"
         >
           {{ body.isEnabled.$model ? 'مفعل' : 'غير مفعل' }}
-        </BaseBadge>
+        </BaseTag>
       </div>
     </div>
 

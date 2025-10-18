@@ -28,13 +28,13 @@ const closeDialog = () => {
           </div>
           <div>
             <div class="text-sm font-medium text-muted-700 dark:text-muted-300">الحالة</div>
-            <BaseBadge
+            <BaseTag
               :color="selectedZone.isActive ? 'success' : 'muted'"
               variant="pastel"
               size="sm"
             >
               {{ selectedZone.isActive ? 'نشط' : 'غير نشط' }}
-            </BaseBadge>
+            </BaseTag>
           </div>
           <div>
             <div class="text-sm font-medium text-muted-700 dark:text-muted-300">المساحة</div>

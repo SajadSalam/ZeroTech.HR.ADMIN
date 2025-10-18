@@ -48,12 +48,28 @@ const timeoutActions = [
 ]
 
 const createApprovalChain = async () => {
-  const isValid = await body.value.$validate()
-  console.log(body.value.$errors)
-  if (!isValid) return
+//   const isValid = await body.value.$validate()
+//   console.log(body.value.$errors)
+//   if (!isValid) return
   
   try {
-    await approvalChainStore.createApprovalChain(validator.extractBody())
+    const bodyData = validator.extractBody()
+    if(!bodyData.priority) {
+        bodyData.priority = 1
+    }
+    //allowsParallelApproval
+    if(!bodyData.allowsParallelApproval) {
+        bodyData.allowsParallelApproval = false
+    }
+    //allowsStepSkipping
+    if(!bodyData.allowsStepSkipping) {
+        bodyData.allowsStepSkipping = false
+    }
+    //isActive
+    if(!bodyData.isActive) {
+        bodyData.isActive = true
+    }
+    await approvalChainStore.createApprovalChain(bodyData as ApprovalChainCreateDto)
     validator.resetBody()
     approvalChainStore.isCreateDialogOpen = false
   } catch (error) {
@@ -236,9 +252,9 @@ watch(() => approvalChainStore.isCreateDialogOpen, (val: boolean) => {
           </div>
           <div class="flex items-center justify-between text-sm">
             <span class="text-muted-600 dark:text-muted-400">الأولوية:</span>
-            <BaseBadge color="primary" variant="pastel" size="sm">
+            <BaseTag color="primary" variant="pastel" size="sm">
               {{ body.priority.$model || 1 }}
-            </BaseBadge>
+            </BaseTag>
           </div>
           <div class="flex items-center justify-between text-sm">
             <span class="text-muted-600 dark:text-muted-400">الحد الأقصى:</span>
@@ -246,13 +262,13 @@ watch(() => approvalChainStore.isCreateDialogOpen, (val: boolean) => {
           </div>
           <div class="flex items-center justify-between text-sm">
             <span class="text-muted-600 dark:text-muted-400">الحالة:</span>
-            <BaseBadge
+            <BaseTag
               :color="body.isActive.$model ? 'success' : 'muted'"
               variant="pastel"
               size="sm"
             >
               {{ body.isActive.$model ? 'نشط' : 'غير نشط' }}
-            </BaseBadge>
+            </BaseTag>
           </div>
         </div>
       </div>

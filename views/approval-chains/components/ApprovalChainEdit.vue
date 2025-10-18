@@ -253,9 +253,9 @@ watch(() => approvalChainStore.isEditDialogOpen, (val: boolean) => {
           </div>
           <div class="flex items-center justify-between text-sm">
             <span class="text-muted-600 dark:text-muted-400">الأولوية:</span>
-            <BaseBadge color="primary" variant="pastel" size="sm">
+            <BaseTag color="primary" variant="pastel" size="sm">
               {{ body.priority.$model || 1 }}
-            </BaseBadge>
+            </BaseTag>
           </div>
           <div class="flex items-center justify-between text-sm">
             <span class="text-muted-600 dark:text-muted-400">الحد الأقصى:</span>
@@ -263,13 +263,13 @@ watch(() => approvalChainStore.isEditDialogOpen, (val: boolean) => {
           </div>
           <div class="flex items-center justify-between text-sm">
             <span class="text-muted-600 dark:text-muted-400">الحالة:</span>
-            <BaseBadge
+            <BaseTag
               :color="body.isActive.$model ? 'success' : 'muted'"
               variant="pastel"
               size="sm"
             >
               {{ body.isActive.$model ? 'نشط' : 'غير نشط' }}
-            </BaseBadge>
+            </BaseTag>
           </div>
         </div>
       </div>
