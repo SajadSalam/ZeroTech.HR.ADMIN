@@ -5,6 +5,7 @@ definePageMeta({
 import { useI18n } from 'vue-i18n'
 import ExamTimer from '~/components/ExamTimer.vue'
 import type { BaseFilters } from '~/utils/types/ApiResponses'
+import { useAuthStore } from '~/views/auth/store/auth'
 import BlacklistStudent from '~/views/examination-centers/componets/BlacklistStudent.vue'
 import GenerateOTP from '~/views/examination-centers/componets/GenerateOTP.vue'
 import SupervisorOTP from '~/views/examination-centers/componets/SupervisorOTP.vue'
@@ -137,6 +138,7 @@ const endExam = (student: ProgressStudent) => {
     examinationCenterStore.selectedStudentForBlacklist = student
     examinationCenterStore.isBlacklistStudentDialogOpen = true
 }
+const authStore = useAuthStore()
 </script>
 
 <template>
@@ -173,7 +175,9 @@ const endExam = (student: ProgressStudent) => {
                             {{ $t('hall') }}
                         </p>
                         <h1 class="text-xl font-bold">
-                            {{ statistics.hallName }}
+                            {{ statistics.hallName }} - 
+                            <!-- {{ statistics}} -->
+                              {{ authStore.userData.hall.examCenter.name }}
                         </h1>
                     </div>
                 </div>
