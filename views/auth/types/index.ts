@@ -4,6 +4,13 @@ interface GovernorateDto {
   name: string
 }
 
+export interface Hall {
+    id: number
+    name: string
+    examCenterId: number
+    examCenter: ExamCenter
+}
+
 export interface ExamCenter {
     name:                    string;
     isActive:                boolean;
@@ -49,6 +56,7 @@ export interface AuthResponse {
   systems: number[]
   organizationalStructure: Organization
   examCenter: ExamCenter
+  hall: Hall
 }
 
 export interface Role {
