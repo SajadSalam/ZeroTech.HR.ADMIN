@@ -26,7 +26,7 @@
         <!-- Center Content -->
         <div class="absolute inset-2 top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center">
           <span class="text-[#1E1B39] text-[20px] font-bold">{{ totalRegistered.toLocaleString() }}</span>
-          <span class="text-[#9291A5] text-sm font-normal mb-2">العدد الكلي للممتحنين</span>
+          <span class="text-[#9291A5] text-sm font-normal mb-2 text-center">العدد الكلي <br>للطلاب المسجلين</span>
         </div>
       </div>
 
