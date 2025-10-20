@@ -12,7 +12,13 @@
         <AppChartHallAttendanceBarChart />
       </div>
       <div class="col-span-1">
-        <AppChartAttendanceDonutChart />
+        <AppChartAttendanceDonutChart 
+          v-if="registeredStudentsStatistics"
+          :data="registeredStudentsStatistics" 
+        />
+        <div v-else class="flex items-center justify-center h-64 bg-white rounded-3xl">
+          <span class="text-gray-500">لا توجد بيانات للعرض</span>
+        </div>
       </div>
       
     </div>
@@ -20,5 +26,11 @@
 </template>
 
 <script setup lang="ts">
+import type { RegisteredStudentsStatistics } from '~/views/home/types/counts';
 
+interface Props {
+  registeredStudentsStatistics?: RegisteredStudentsStatistics | null
+}
+
+const props = defineProps<Props>()
 </script>

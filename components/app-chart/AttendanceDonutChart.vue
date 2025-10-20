@@ -25,7 +25,7 @@
         
         <!-- Center Content -->
         <div class="absolute inset-2 top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center">
-          <span class="text-[#1E1B39] text-[20px] font-bold">1323209</span>
+          <span class="text-[#1E1B39] text-[20px] font-bold">{{ totalRegistered.toLocaleString() }}</span>
           <span class="text-[#9291A5] text-sm font-normal mb-2">العدد الكلي للممتحنين</span>
         </div>
       </div>
@@ -38,7 +38,7 @@
 
             <span class="text-[#615E83] text-[22px] font-medium">الحضور</span>
           </div>
-          <span class="text-[#9291A5] text-lg font-normal">410</span>
+          <span class="text-[#9291A5] text-lg font-normal">{{ chartData.presenced }}</span>
 
         </div>
         
@@ -47,7 +47,7 @@
             <div class="w-[14px] h-[14px] bg-[#CDD2E5] rounded-2xl"></div>
             <span class="text-[#615E83] text-[22px] font-medium">الغياب</span>
           </div>
-          <span class="text-[#9291A5] text-lg font-normal">142</span>
+          <span class="text-[#9291A5] text-lg font-normal">{{ chartData.absenced }}</span>
 
         </div>
       </div>
@@ -56,15 +56,35 @@
 </template>
 
 <script setup lang="ts">
-import type { ApexOptions } from 'apexcharts'
+import type { ApexOptions } from 'apexcharts';
+import type { RegisteredStudentsStatistics } from '~/views/home/types/counts';
 
-// Chart data
-const chartData = {
-  series: [410, 142, 657], // الحضور، الغياب، remaining to total 1209
+interface Props {
+  data: RegisteredStudentsStatistics
 }
 
+const props = defineProps<Props>()
+
+// Chart data - computed from API data
+const chartData = computed(() => {
+  const presenced = props.data.totalStudentsPresencedInExams || 0
+  const absenced = props.data.totalStudentsAbsencedInExams || 0
+  const booked = props.data.totalStudentsBookedExams || 0
+  const scheduled = booked - (presenced + absenced) // المجدولين = المحجوزين - (الحضور + الغياب)
+  
+  return {
+    series: [presenced, absenced, scheduled],
+    presenced,
+    absenced,
+    booked
+  }
+})
+
+// Total registered students
+const totalRegistered = computed(() => props.data.totalRegisteredStudents || 0)
+
 // Chart options
-const chartOptions: ApexOptions = {
+const chartOptions = computed<ApexOptions>(() => ({
   chart: {
     type: 'donut',
     fontFamily: 'Tajawal, sans-serif',
@@ -94,7 +114,8 @@ const chartOptions: ApexOptions = {
     },
     y: {
       formatter: (value: number) => {
-        const percentage = ((value / 1209) * 100).toFixed(0)
+        const total = chartData.value.booked || 1
+        const percentage = ((value / total) * 100).toFixed(1)
         return `${value} (${percentage}%)`
       }
     }
@@ -105,7 +126,7 @@ const chartOptions: ApexOptions = {
       return Math.round(val) + '%'
     },
     style: {
-      fontSize: '17px',
+      fontSize: '14px',
       fontFamily: 'Inter, sans-serif',
       fontWeight: 700,
       colors: ['#FFFFFF', '#050F2A', '#050F2A']
@@ -117,7 +138,7 @@ const chartOptions: ApexOptions = {
   plotOptions: {
     pie: {
       donut: {
-        size: '45%',
+        size: '60%',
         labels: {
           show: false // We're using custom center content
         }
@@ -146,7 +167,7 @@ const chartOptions: ApexOptions = {
       }
     }
   }]
-}
+}))
 </script>
 
 <style scoped>

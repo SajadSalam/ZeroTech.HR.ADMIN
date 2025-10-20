@@ -91,12 +91,12 @@ const defaultNavigation = [
         privilege: 'ums:ems:exam:view-any',
       },
 
-      {
-        name: 'evaluations',
-        icon: { name: 'ph-user-list-duotone', class: 'w-5 h-5' },
-        to: '/evaluations',
-        privilege: 'ums:ems:exam:view-any',
-      },
+    //   {
+    //     name: 'evaluations',
+    //     icon: { name: 'ph-user-list-duotone', class: 'w-5 h-5' },
+    //     to: '/evaluations',
+    //     privilege: 'ums:ems:exam:view-any',
+    //   },
     ],
   },
 

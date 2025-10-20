@@ -13,6 +13,7 @@ export interface Counts {
     proficiencyExamGroupChartData: ProficiencyExamGroupChartData;
     governorateBookingChartData:   GovernorateBookingChartData;
     superadminCurrentExamsTable:   SuperadminCurrentExamsTable;
+    registeredStudentsStatistics:  RegisteredStudentsStatistics;
 }
 
 export interface ExamCentersAcceptanceStatus {
@@ -69,4 +70,14 @@ export interface CurrentExam {
     examEndTime:            Date;
     completedStudentsCount: number;
     activeStudentsCount:    number;
+}
+
+export interface RegisteredStudentsStatistics {
+    totalRegisteredStudents:               number;
+    totalStudentsBookedExams:              number;
+    totalStudentsPresencedInExams:         number;
+    totalStudentsAbsencedInExams:          number;
+    totalStudentsBookedExamsRatio:         number;
+    totalStudentsPresencedInExamsRatio:    number;
+    totalStudentsAbsencedInExamsRatio:     number;
 }
