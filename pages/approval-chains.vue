@@ -6,11 +6,14 @@ import { tableHeader } from '~/views/approval-chains'
 import ApprovalChainCreate from '~/views/approval-chains/components/ApprovalChainCreate.vue'
 import ApprovalChainEdit from '~/views/approval-chains/components/ApprovalChainEdit.vue'
 import { useApprovalChainStore } from '~/views/approval-chains/store'
-import type { ApprovalChainDto, ApprovalChainFilters } from '~/views/approval-chains/types'
+import type {
+    ApprovalChainDto,
+    ApprovalChainFilters,
+} from '~/views/approval-chains/types'
 
 definePageMeta({
-  title: 'سلاسل الموافقات',
-  description: 'إدارة سلاسل الموافقات في النظام',
+    title: 'سلاسل الموافقات',
+    description: 'إدارة سلاسل الموافقات في النظام',
 })
 
 const approvalChainStore = useApprovalChainStore()
@@ -19,18 +22,18 @@ const appTableStore = useAppTableStore()
 const isLoading = computed(() => approvalChainStore.isLoading)
 const approvalChains = computed(() => approvalChainStore.approvalChains || [])
 const filters = computed<ApprovalChainFilters>({
-  get() {
-    return approvalChainStore.filters
-  },
-  set(value) {
-    approvalChainStore.filters = value
-  },
+    get() {
+        return approvalChainStore.filters
+    },
+    set(value) {
+        approvalChainStore.filters = value
+    },
 })
 
 const getApprovalChains = async () => {
-  appTableStore.setLoading(true)
-  await approvalChainStore.getApprovalChains()
-  appTableStore.setLoading(false)
+    appTableStore.setLoading(true)
+    await approvalChainStore.getApprovalChains()
+    appTableStore.setLoading(false)
 }
 
 const viewTimeline = (approvalChain: ApprovalChainDto) => {
@@ -38,93 +41,102 @@ const viewTimeline = (approvalChain: ApprovalChainDto) => {
 }
 
 getApprovalChains()
-watch(filters, () => { getApprovalChains() }, { deep: true })
+watch(
+    filters,
+    () => {
+        getApprovalChains()
+    },
+    { deep: true }
+)
 </script>
 
 <template>
-  <div>
-    <AppCrud
-      add-button-text="إضافة سلسلة موافقات جديدة"
-      :add-btn-action="() => (approvalChainStore.isCreateDialogOpen = true)"
-      :pagination="true"
-      :total-pages="approvalChainStore.totalPages"
-      title="سلاسل الموافقات"
-      @update:current-page="filters.pageNumber = $event"
-    >
-      <template #filters>
-        <BaseInput 
-          v-model="filters.name" 
-          placeholder="البحث بالاسم" 
-        />
-        <AppAutoCompleteField
-          v-model="filters.requestTypeId"
-          placeholder="نوع الطلب"
-          get-url="/RequestType/enabled"
-          item-label="name"
-          item-value="id"
-          fetch-on-search
-          search-key="name"
-        />
-        <AppAutoCompleteField
-          v-model="filters.departmentId"
-          placeholder="القسم"
-          get-url="/Department"
-          item-label="name"
-          item-value="id"
-          fetch-on-search
-          search-key="name"
-        />
-        <BaseSelect
-          v-model="filters.isActive"
-          placeholder="الحالة"
+    <div>
+        <AppCrud
+            add-button-text="إضافة سلسلة موافقات جديدة"
+            :add-btn-action="
+                () => (approvalChainStore.isCreateDialogOpen = true)
+            "
+            :pagination="true"
+            :total-pages="approvalChainStore.totalPages"
+            title="سلاسل الموافقات"
+            @update:current-page="filters.pageNumber = $event"
         >
-          <option :value="undefined">جميع الحالات</option>
-          <option :value="true">نشط</option>
-          <option :value="false">غير نشط</option>
-        </BaseSelect>
-      </template>
-      
-      <AppTable
-        title="قائمة سلاسل الموافقات"
-        :headers="tableHeader()"
-        :items="approvalChains"
-        :is-loading="isLoading"
-      >
-        <template #data-name="{ item }">
-          <div class="flex flex-col">
-            <button
-              class="font-medium text-muted-800 dark:text-muted-100 hover:text-primary-600 text-left"
-              @click="viewTimeline(item)"
+            <template #filters>
+                <BaseInput v-model="filters.name" placeholder="البحث بالاسم" />
+                <AppAutoCompleteField
+                    v-model="filters.requestTypeId"
+                    placeholder="نوع الطلب"
+                    get-url="/RequestType/enabled"
+                    item-label="name"
+                    item-value="id"
+                    fetch-on-search
+                    search-key="name"
+                />
+                <AppAutoCompleteField
+                    v-model="filters.departmentId"
+                    placeholder="القسم"
+                    get-url="/Department"
+                    item-label="name"
+                    item-value="id"
+                    fetch-on-search
+                    search-key="name"
+                />
+                <BaseSelect v-model="filters.isActive" placeholder="الحالة">
+                    <option :value="undefined">جميع الحالات</option>
+                    <option :value="true">نشط</option>
+                    <option :value="false">غير نشط</option>
+                </BaseSelect>
+            </template>
+
+            <AppTable
+                title="قائمة سلاسل الموافقات"
+                :headers="tableHeader()"
+                :items="approvalChains"
+                :is-loading="isLoading"
             >
-              {{ item.name }}
-            </button>
-            <span v-if="item.description" class="text-xs text-muted-500 mt-1">
-              {{ item.description }}
-            </span>
-          </div>
-        </template>
+                <template #data-name="{ item }">
+                    <div class="flex flex-col">
+                        <button
+                            class="font-medium text-muted-800 dark:text-muted-100 hover:text-primary-600 text-left"
+                            @click="viewTimeline(item)"
+                        >
+                            {{ item.name }}
+                        </button>
+                        <span
+                            v-if="item.description"
+                            class="text-xs text-muted-500 mt-1"
+                        >
+                            {{ item.description }}
+                        </span>
+                    </div>
+                </template>
 
-        <template #data-requestType="{ item }">
-          <div class="flex flex-col">
-            <span class="font-medium text-muted-800 dark:text-muted-100">
-              {{ item.requestType.name }}
-            </span>
-            <span class="text-xs text-muted-500">
-              {{ item.requestType.code }}
-            </span>
-          </div>
-        </template>
+                <template #data-requestType="{ item }">
+                    <div class="flex flex-col">
+                        <span
+                            class="font-medium text-muted-800 dark:text-muted-100"
+                        >
+                            {{ item.requestType.name }}
+                        </span>
+                        <span class="text-xs text-muted-500">
+                            {{ item.requestType.code }}
+                        </span>
+                    </div>
+                </template>
 
-        <template #data-department="{ item }">
-          <div class="flex flex-col">
-            <span class="font-medium text-muted-800 dark:text-muted-100">
-              {{ item.department.name }}
-            </span>
-            <span class="text-xs text-muted-500">
-              {{ item.department.code }}
-            </span>
-          </div>
-        </template>
+                <template #data-department="{ item }">
+                    <div class="flex flex-col">
+                        <span
+                            class="font-medium text-muted-800 dark:text-muted-100"
+                        >
+                            {{ item.department.name }}
+                        </span>
+                        <span class="text-xs text-muted-500">
+                            {{ item.department.code }}
+                        </span>
+                    </div>
+                </template>
 
         <template #data-priority="{ item }">
           <BaseTag
@@ -136,19 +148,27 @@ watch(filters, () => { getApprovalChains() }, { deep: true })
           </BaseTag>
         </template>
 
-        <template #data-stepsCount="{ item }">
-          <div class="flex items-center gap-2">
-            <Icon name="ph:list-duotone" class="size-4 text-muted-500" />
-            <span class="font-medium">{{ item.approvalSteps?.length || 0 }}</span>
-          </div>
-        </template>
+                <template #data-stepsCount="{ item }">
+                    <div class="flex items-center gap-2">
+                        <Icon
+                            name="ph:list-duotone"
+                            class="size-4 text-muted-500"
+                        />
+                        <span class="font-medium">{{
+                            item.approvalSteps?.length || 0
+                        }}</span>
+                    </div>
+                </template>
 
-        <template #data-maxCompletionHours="{ item }">
-          <div class="flex items-center gap-1">
-            <Icon name="ph:clock-duotone" class="size-4 text-muted-500" />
-            <span>{{ item.maxCompletionHours || '-' }}</span>
-          </div>
-        </template>
+                <template #data-maxCompletionHours="{ item }">
+                    <div class="flex items-center gap-1">
+                        <Icon
+                            name="ph:clock-duotone"
+                            class="size-4 text-muted-500"
+                        />
+                        <span>{{ item.maxCompletionHours || '-' }}</span>
+                    </div>
+                </template>
 
         <template #data-isActive="{ item }">
           <BaseTag

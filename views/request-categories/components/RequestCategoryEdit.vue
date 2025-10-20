@@ -48,7 +48,7 @@ const updateRequestCategory = async () => {
 watch(() => requestCategoryStore.isEditDialogOpen, (val: boolean) => {
   if (val && requestCategoryStore.selectedRequestCategory) {
     const category = requestCategoryStore.selectedRequestCategory
-    validator.setBody({
+    validator.fillBody({
       id: category.id,
       name: category.name,
       description: category.description || '',

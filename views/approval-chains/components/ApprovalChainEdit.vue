@@ -64,7 +64,7 @@ const updateApprovalChain = async () => {
 watch(() => approvalChainStore.isEditDialogOpen, (val: boolean) => {
   if (val && approvalChainStore.selectedApprovalChain) {
     const chain = approvalChainStore.selectedApprovalChain
-    validator.setBody({
+    validator.fillBody({
       id: chain.id,
       requestTypeId: chain.requestTypeId,
       departmentId: chain.departmentId,

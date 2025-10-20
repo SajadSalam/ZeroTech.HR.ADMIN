@@ -60,6 +60,28 @@ const items = computed({
 const searchKey = computed(() => props.searchKey || 'name')
 const selectedItems = ref<T[]>([])
 
+// const getValueFromModel = async (v: any) => {
+//     if (!props.getUrl || !props.fetchOnSearch) return
+//     if (typeof v != 'object') {
+//         const newVal = await axiosInstance.get(props.getUrl + '/' + v)
+//         modelValue.value = newVal.data
+//     } else if (Array.isArray(v) && v.some((i: any) => typeof i != 'object')) {
+//         const newArray = await axiosInstance.get(props.getUrl + '/' + v)
+//         modelValue.value = newArray.data
+//     }
+// }
+
+// watch(
+//     () => modelValue.value,
+//     (v) => {
+//         if (v == 0) return
+//         if (!v || v == undefined || v == null) modelValue.value = undefined
+//         else if (!modelValue.value && v) modelValue.value = v
+//         if (v || v == 0) getValueFromModel(v)
+//     },
+//     { immediate: true, deep: true }
+// )
+
 function itemWithLabel(item: T): string {
   if (!item || !item[props.itemLabel! as keyof T]) return modelValue.value as string
   if (typeof item === 'string') return item

@@ -24,17 +24,17 @@ const validator = new Validator<ApprovalChainCreateDto>(
     timeoutAction: 'Escalate',
     escalationUserId: undefined,
   },
-  {
-    requestTypeId: {
-      required: requiredValidator('نوع الطلب مطلوب'),
-    },
-    departmentId: {
-      required: requiredValidator('القسم مطلوب'),
-    },
-    name: {
-      required: requiredValidator('اسم السلسلة مطلوب'),
-    },
-  }
+  // {
+  //   requestTypeId: {
+  //     required: requiredValidator('نوع الطلب مطلوب'),
+  //   },
+  //   departmentId: {
+  //     required: requiredValidator('القسم مطلوب'),
+  //   },
+  //   name: {
+  //     required: requiredValidator('اسم السلسلة مطلوب'),
+  //   },
+  // }
 )
 
 const body = validator.validation

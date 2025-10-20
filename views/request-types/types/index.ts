@@ -58,6 +58,7 @@ export type RequestType = {
   displayOrder?: number | null
   colorCode?: string | null
   iconClass?: string | null
+
 }
 
 export type RequestTypeDto = BaseDto & {
@@ -94,6 +95,15 @@ export type RequestTypeDto = BaseDto & {
 export type RequestTypeCreateDto = RequestType & {
   allowedDepartmentIds?: number[]
   allowedRoleIds?: number[]
+  isEnabled?: boolean
+  requiresApproval?: boolean
+  allowsAttachments?: boolean
+  requiresAttachments?: boolean
+  affectsAttendance?: boolean
+  affectsPayroll?: boolean
+  isPaidTime?: boolean
+  validationRules?: string
+  customFields?: string
 }
 
 export type RequestTypeUpdateDto = RequestType & {
