@@ -95,11 +95,11 @@ export const availableDaysOptions = (t: (key: string) => string) => {
 
 export const examTypesOptions = (t: (key: string) => string) => {
   return [
-    // { 
-    //     label: t('final'),
-    //      value: ExamType.Final,
-    //      description:t('final-description')
-    // },
+    { 
+        label: t('final'),
+         value: ExamType.Final,
+         description:t('final-description')
+    },
     { 
         label: t('evaulation-proficiency'),
          value: ExamType.EvaluationProficiency,

@@ -58,12 +58,12 @@ const defaultNavigation = [
         to: '/knowledgelevel',
         privilege: 'ums:ems:knowledgelevel:view-any',
       },
-    //   {
-    //     name: 'groups',
-    //     icon: { name: 'ph-list-checks-duotone', class: 'w-5 h-5' },
-    //     to: '/groups',
-    //     privilege: 'ums:ems:groups:view-any',
-    //   },
+      {
+        name: 'groups',
+        icon: { name: 'ph-list-checks-duotone', class: 'w-5 h-5' },
+        to: '/groups',
+        privilege: 'ums:ems:groups:view-any',
+      },
     ],
   },
    {
@@ -91,12 +91,12 @@ const defaultNavigation = [
         privilege: 'ums:ems:exam:view-any',
       },
 
-    //   {
-    //     name: 'evaluations',
-    //     icon: { name: 'ph-user-list-duotone', class: 'w-5 h-5' },
-    //     to: '/evaluations',
-    //     privilege: 'ums:ems:exam:view-any',
-    //   },
+      {
+        name: 'evaluations',
+        icon: { name: 'ph-user-list-duotone', class: 'w-5 h-5' },
+        to: '/evaluations',
+        privilege: 'ums:ems:exam:view-any',
+      },
     ],
   },
 
