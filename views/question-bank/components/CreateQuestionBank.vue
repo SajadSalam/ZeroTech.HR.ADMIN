@@ -135,7 +135,7 @@ watch(
           item-value="id"
           class="col-span-2"
         />
-        <!-- <AppAutoCompleteField
+        <AppAutoCompleteField
           v-model="body.categories.$model"
           fetch-on-search
           search-key="name"
@@ -145,7 +145,7 @@ watch(
           item-label="name"
           item-value="id"
           class="col-span-2"
-        /> -->
+        />
       </div>
       <h1>
         {{ $t('fill-creation-period-dates-optional') }}

@@ -18,7 +18,7 @@ export const useKnowledgelevelStore = defineStore('knowledgelevel', () => {
   const totalPages = ref(0)
 
   const getKnowledgelevels = async (knowledgelevelFilters: KnowledgelevelFilters) => {
-    if(knowledgelevels.value.length > 0 && JSON.stringify(knowledgelevels.value) !== JSON.stringify(knowledgelevelFilters)) {
+    if(knowledgelevels.value.length > 0 && JSON.stringify(filters.value) !== JSON.stringify(knowledgelevelFilters)) {
       filters.value = knowledgelevelFilters
       return knowledgelevels.value
     }

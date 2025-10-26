@@ -45,17 +45,7 @@ const createValidator = (exam: Partial<ExamEdit>) =>
 const validator = ref(createValidator({}))
 const body = computed(() => validator.value.validation)
 
-const hasExamStarted = computed(() => {
-  const date = examObject.value?.startDate
-  const time = examObject.value?.startTime
-  if (!date || !time) return false
 
-  const datePart = date.split('T')[0]
-  const isoDateTime = `${datePart}T${time}:00`
-  const examStart = new Date(isoDateTime)
-
-  return !isNaN(examStart.getTime()) && new Date() >= examStart
-})
 
 const fetchExamDetails = async () => {
   try {
@@ -88,51 +78,10 @@ watch(
 )
 
 const update = async () => {
-  if (hasExamStarted.value) {
-    useToast({ message: t('exam_already_started_no_changes'), isError: true })
-    return
-  }
+
 
   if (!validator.value) {
     return;
-  }
-  // Check for date and time validation
-  if (
-    body.value.startDate.$model &&
-    body.value.endDate.$model &&
-    body.value.startTime.$model &&
-    body.value.endTime.$model
-  ) {
-    const startDateTime = new Date(
-      `${body.value.startDate.$model}T${body.value.startTime.$model}`
-    );
-
-    const endDateTime = new Date(
-      `${body.value.endDate.$model}T${body.value.endTime.$model}`
-    );
-
-    // Validate dates
-    if (endDateTime < startDateTime) {
-      useToast({
-        message: t("end_before_start_date_error"),
-        isError: true,
-      });
-      return;
-    }
-
-    // Validate times on same day
-    if (body.value.startDate.$model === body.value.endDate.$model) {
-      const startTime = body.value.startTime.$model;
-      const endTime = body.value.endTime.$model;
-
-      if (startTime >= endTime) {
-        useToast({
-          message: t("same_day_time_error"),
-          isError: true,
-        });
-        return;
-      }
-    }
   }
 
   const isValid = await body.value.$validate();
@@ -144,10 +93,6 @@ const update = async () => {
 };
 
 const cancelExam = async () => {
-  if (hasExamStarted.value) {
-    useToast({ message: t('exam_already_started_no_changes'), isError: true })
-    return
-  }
 
   await examStore.cancelExam(props.examId.toString())
   emit('update:modelValue', false)
@@ -170,7 +115,7 @@ const cancelExam = async () => {
           :label="$t('start-date')"
           :placeholder="$t('enter-start-date')"
           type="date"
-          :disabled="hasExamStarted"
+          
         />
         <AppFieldAppInputField
           v-model="body.endDate.$model"
@@ -178,7 +123,7 @@ const cancelExam = async () => {
           :label="$t('end-date')"
           :placeholder="$t('enter-end-date')"
           type="date"
-          :disabled="hasExamStarted"
+          
         />
       </div>
 
@@ -189,7 +134,7 @@ const cancelExam = async () => {
           :label="$t('start-time')"
           :placeholder="$t('enter-start-time')"
           type="time"
-          :disabled="hasExamStarted"
+          
         />
         <AppFieldAppInputField
           v-model="body.endTime.$model"
@@ -197,7 +142,7 @@ const cancelExam = async () => {
           :label="$t('end-time')"
           :placeholder="$t('enter-end-time')"
           type="time"
-          :disabled="hasExamStarted"
+          
         />
       </div>
 
@@ -207,13 +152,13 @@ const cancelExam = async () => {
           :errors="body.enterTimeAllowed.$errors"
           :label="$t('enterance-time-allowed-in-minutes')"
           :placeholder="$t('enter-enterance-time-allowed')"
-          :disabled="hasExamStarted"
+          
         />
       </div>
     </div>
 
     <template #actions>
-      <BaseButton color="danger" :disabled="hasExamStarted" @click="cancelExam">
+      <BaseButton color="danger"  @click="cancelExam">
         {{ $t('cancel_exam') }}
       </BaseButton>
       <BaseButton color="primary" :loading="examStore.isLoading" class="gap-5" @click="update">

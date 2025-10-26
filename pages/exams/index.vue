@@ -7,8 +7,7 @@ import ExamDetails from '~/views/exams/components/ExamDetails.vue'
 import ExamEdit from '~/views/exams/components/ExamEdit.vue'
 import { tableHeaders } from '~/views/exams/index'
 import { useExamStore } from '~/views/exams/store/index'
-import { examStatusOptions,availableDaysOptions,  examTypesOptions, proficiencyExamGroupOptions, type ExamFilters } from '~/views/exams/types/index'
-import { useToast } from '~/composables/toaster'
+import { availableDaysOptions, examStatusOptions, examTypesOptions, proficiencyExamGroupOptions, type ExamFilters } from '~/views/exams/types/index'
 
 definePageMeta({
   title: 'exams-page',
@@ -73,13 +72,6 @@ const openExamDetails = (exam: Record<string, any>) => {
           v-model="filters.examTemplateId"
         />
         <AppAutoCompleteField
-          :placeholder="$t('status')"
-          :items="examStatusOptions($t)"
-          item-label="label"
-          item-value="value"
-          v-model="filters.status"
-        />
-        <AppAutoCompleteField
           :placeholder="$t('exam-type')"
           :items="examTypesOptions($t)"
           item-label="label"
@@ -98,8 +90,8 @@ const openExamDetails = (exam: Record<string, any>) => {
                  isUpdateDialogOpen = true;
                   examId = data.item.id;
                 }
-              "
-              :hide-delete="!hasPrivilege('ums:ems:exam:delete')"
+              "r
+              :hide-delete="true"
               :hide-update="!hasPrivilege('ums:ems:exam:update')"
             />
             <BaseButtonIcon

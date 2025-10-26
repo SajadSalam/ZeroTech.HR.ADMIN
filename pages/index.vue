@@ -33,17 +33,7 @@ const asyncData = async () => {
 onMounted(async () => {
     await asyncData()
 })
-const fields = reactive({
-  first: '',
-})
 
-const frameworks = [
-  'Nuxt',
-  'Vue.js',
-  'React.js',
-  'Angular',
-  'Alpine.js',
-]
 </script>
 
 <template>
@@ -122,7 +112,9 @@ const frameworks = [
 
         <!-- Attendance Charts Section -->
         <div class="w-full">
-            <AppChartAttendanceChartsLayout />
+            <AppChartAttendanceChartsLayout 
+                :registered-students-statistics="counts?.registeredStudentsStatistics" 
+            />
         </div>
     </div>
 </template>

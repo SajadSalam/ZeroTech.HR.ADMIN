@@ -2,6 +2,7 @@
 import { useI18n } from 'vue-i18n'
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import AppInputField from '~/components/app-field/AppInputField.vue'
+import axiosIns from '~/services/app-client/axios'
 import { useAppToaster } from '~/services/toaster/toaster'
 import { createValidator } from '~/services/validationWithI18n'
 import { Validator } from '~/services/validator'
@@ -9,12 +10,10 @@ import { tableCreateHeaders } from '~/views/blueprint/index'
 import { useBlueprintStore } from '~/views/blueprint/store'
 import type { Blueprint, BlueprintQuestionBank, QuestionBankBlueprintDetails } from '~/views/blueprint/types/index'
 import { difficultyOptions } from '~/views/question-bank'
-import { useQuestionBankStore } from '~/views/question-bank/store'
 import {
     questionTypeOptions,
     type QuestionBankDto,
 } from '~/views/question-bank/types/index'
-import { Difficulty } from '~/views/question-bank/types/question'
 const { useToast } = useAppToaster()
 
 definePageMeta({
@@ -23,15 +22,14 @@ definePageMeta({
 })
 
 const { t } = useI18n()
-const questionBankStore = useQuestionBankStore()
 const blueprintStore = useBlueprintStore()
 const router = useRouter()
 
 const validator = new Validator<Blueprint>(
     {
         questionBanks: [],
-        displayResult: false,
-        moveBetweenQuestion: false,
+        displayResult: true,
+        moveBetweenQuestion: true,
         name: '',
         successGrade: 0,
         maximumGrade: 0,
@@ -65,6 +63,8 @@ const body = validator.validation
 const questionBanks = ref<QuestionBankDto[]>([])
 const questionBankDetails = ref<{ [questionBankId: string]: QuestionBankBlueprintDetails }>({})
 const isLoading = ref(false)
+// Store real-time question counts from API
+const realQuestionCounts = ref<{ [key: string]: number }>({})
 // Computed refs for type safety
 const questionBanksList = computed(() => body.value.questionBanks.$model as BlueprintQuestionBank[])
 
@@ -77,10 +77,46 @@ const addTopic = (index: number) => {
         numberOfQuestions: 1,
         grade: 1,
     })
+    // Fetch initial count for the new topic
+    const newTopicIndex = questionBanksList.value[index].topics.length - 1
+    nextTick(() => {
+        fetchRealQuestionCount(index, newTopicIndex)
+    })
 }
 
 const removeTopic = (questionBankIndex: number, topicIndex: number) => {
     questionBanksList.value[questionBankIndex].topics.splice(topicIndex, 1)
+    // Fetch updated count
+    nextTick(() => {
+        fetchRealQuestionCount(questionBankIndex, topicIndex)
+    })
+}
+
+// Fetch real question count from API
+const fetchRealQuestionCount = async (questionBankIndex: number, topicIndex: number) => {
+    const topic = questionBanksList.value[questionBankIndex].topics[topicIndex]
+    const questionBankId = questionBanksList.value[questionBankIndex].questionBankId
+    
+    // Create unique key for this topic's count
+    const key = `${questionBankId}-${topicIndex}`
+    
+    // Build params object, only including defined values
+    const params: any = {
+        questionBankId
+    }
+    
+    if (topic.topicId) params.topicId = topic.topicId
+    if (topic.questionType !== null && topic.questionType !== undefined) params.type = topic.questionType
+    if (topic.knowledgeLevelId) params.knowledgeLevelId = topic.knowledgeLevelId
+    if (topic.difficulty !== null && topic.difficulty !== undefined) params.difficulty = topic.difficulty
+    
+    try {
+        const response = await axiosIns.get('/question-bank/question-count', { params })
+        realQuestionCounts.value[key] = response.data.count || 0
+    } catch (error) {
+        console.error('Error fetching question count:', error)
+        realQuestionCounts.value[key] = 0
+    }
 }
 
 // Handle cascading resets when selections change
@@ -90,6 +126,8 @@ const onTopicChange = (questionBankIndex: number, topicIndex: number) => {
     topic.questionType = null
     topic.knowledgeLevelId = ''
     topic.difficulty = null
+    // Fetch updated count
+    fetchRealQuestionCount(questionBankIndex, topicIndex)
 }
 
 const onQuestionTypeChange = (questionBankIndex: number, topicIndex: number) => {
@@ -97,12 +135,21 @@ const onQuestionTypeChange = (questionBankIndex: number, topicIndex: number) => 
     // Reset dependent fields without setting default values
     topic.knowledgeLevelId = ''
     topic.difficulty = null
+    // Fetch updated count
+    fetchRealQuestionCount(questionBankIndex, topicIndex)
 }
 
 const onKnowledgeLevelChange = (questionBankIndex: number, topicIndex: number) => {
     const topic = questionBanksList.value[questionBankIndex].topics[topicIndex]
     // Reset dependent fields without setting default values
     topic.difficulty = null
+    // Fetch updated count
+    fetchRealQuestionCount(questionBankIndex, topicIndex)
+}
+
+const onDifficultyChange = (questionBankIndex: number, topicIndex: number) => {
+    // Fetch updated count when difficulty changes
+    fetchRealQuestionCount(questionBankIndex, topicIndex)
 }
 
 watchDeep(
@@ -161,7 +208,7 @@ const getQuestionTypesByTopicId = (questionBankId: string, topicId: string) => {
         }))
 }
 
-const getKnowledgeLevelsByQuestionType = (questionBankId: string, topicId: string, questionType: number) => {
+const getKnowledgeLevelsByQuestionType = (questionBankId: string, topicId: string, questionType: number | null) => {
     const details = questionBankDetails.value[questionBankId]
     if (!details || !topicId || questionType === null) return []
     
@@ -187,31 +234,45 @@ const getDifficultiesByKnowledgeLevel = (questionBankId: string, knowledgeLevelI
         }))
 }
 
-// Get current available question count based on selections
-const getCurrentQuestionCount = (questionBankId: string, topicId: string, questionType: number | null, knowledgeLevelId: string, difficulty: number | null): number => {
+// Get current available question count - use real API count when available
+const getCurrentQuestionCount = (questionBankIndex: number, topicIndex: number): number => {
+    const questionBankId = questionBanksList.value[questionBankIndex]?.questionBankId
+    if (!questionBankId) return 0
+    
+    const key = `${questionBankId}-${topicIndex}`
+    
+    // Return real count from API if available
+    if (realQuestionCounts.value[key] !== undefined) {
+        return realQuestionCounts.value[key]
+    }
+    
+    // Fallback to static count from details
+    const topic = questionBanksList.value[questionBankIndex]?.topics[topicIndex]
+    if (!topic) return 0
+    
     const details = questionBankDetails.value[questionBankId]
     if (!details) return 0
     
-    if (!topicId) {
+    if (!topic.topicId) {
         return details.subject.questionCount
     }
     
-    if (questionType === null) {
-        const topic = details.topics.find(t => t.id === topicId)
-        return topic?.questionCount || 0
+    if (topic.questionType === null) {
+        const topicData = details.topics.find(t => t.id === topic.topicId)
+        return topicData?.questionCount || 0
     }
     
-    if (!knowledgeLevelId) {
-        const questionTypeData = details.questionTypes.find(qt => qt.topicId === topicId && qt.questionType === questionType)
+    if (!topic.knowledgeLevelId) {
+        const questionTypeData = details.questionTypes.find(qt => qt.topicId === topic.topicId && qt.questionType === topic.questionType)
         return questionTypeData?.questionCount || 0
     }
     
-    if (difficulty === null) {
-        const knowledgeLevel = details.knowledgeLevels.find(kl => kl.id === knowledgeLevelId && kl.questionType === questionType)
+    if (topic.difficulty === null) {
+        const knowledgeLevel = details.knowledgeLevels.find(kl => kl.id === topic.knowledgeLevelId && kl.questionType === topic.questionType)
         return knowledgeLevel?.questionCount || 0
     }
     
-    const difficultyData = details.difficulties.find(d => d.knowledgeLevelId === knowledgeLevelId && d.difficulty === difficulty)
+    const difficultyData = details.difficulties.find(d => d.knowledgeLevelId === topic.knowledgeLevelId && d.difficulty === topic.difficulty)
     return difficultyData?.questionCount || 0
 }
 
@@ -229,15 +290,11 @@ const calculateTotalGrade = (): number => {
 
 // Validation for question count limits
 const validateQuestionCounts = (): boolean => {
-    for (const questionBank of questionBanksList.value) {
-        for (const topic of questionBank.topics) {
-            const availableCount = getCurrentQuestionCount(
-                questionBank.questionBankId,
-                topic.topicId,
-                topic.questionType,
-                topic.knowledgeLevelId,
-                topic.difficulty
-            )
+    for (let questionBankIndex = 0; questionBankIndex < questionBanksList.value.length; questionBankIndex++) {
+        const questionBank = questionBanksList.value[questionBankIndex]
+        for (let topicIndex = 0; topicIndex < questionBank.topics.length; topicIndex++) {
+            const topic = questionBank.topics[topicIndex]
+            const availableCount = getCurrentQuestionCount(questionBankIndex, topicIndex)
             
             if (topic.numberOfQuestions > availableCount) {
                 useToast({
@@ -347,22 +404,22 @@ const submit = async () => {
                             </div>
                             <div class="text-right">
                                 <p class="text-lg font-bold" :class="{
-                                    'text-green-600': getCurrentQuestionCount(questionBank.questionBankId, topic.topicId, topic.questionType, topic.knowledgeLevelId, topic.difficulty) >= topic.numberOfQuestions,
-                                    'text-red-600': getCurrentQuestionCount(questionBank.questionBankId, topic.topicId, topic.questionType, topic.knowledgeLevelId, topic.difficulty) < topic.numberOfQuestions,
+                                    'text-green-600': getCurrentQuestionCount(questionBankIndex, topicIndex) >= topic.numberOfQuestions,
+                                    'text-red-600': getCurrentQuestionCount(questionBankIndex, topicIndex) < topic.numberOfQuestions,
                                     'text-blue-600': !topic.topicId
                                 }">
-                                    {{ getCurrentQuestionCount(questionBank.questionBankId, topic.topicId, topic.questionType, topic.knowledgeLevelId, topic.difficulty) }}
+                                    {{ getCurrentQuestionCount(questionBankIndex, topicIndex) }}
                                 </p>
                                 <p class="text-xs text-gray-500">{{ $t('available') }}</p>
                                 <p v-if="topic.numberOfQuestions > 0" class="text-xs" :class="{
-                                    'text-green-600': getCurrentQuestionCount(questionBank.questionBankId, topic.topicId, topic.questionType, topic.knowledgeLevelId, topic.difficulty) >= topic.numberOfQuestions,
-                                    'text-red-600': getCurrentQuestionCount(questionBank.questionBankId, topic.topicId, topic.questionType, topic.knowledgeLevelId, topic.difficulty) < topic.numberOfQuestions
+                                    'text-green-600': getCurrentQuestionCount(questionBankIndex, topicIndex) >= topic.numberOfQuestions,
+                                    'text-red-600': getCurrentQuestionCount(questionBankIndex, topicIndex) < topic.numberOfQuestions
                                 }">
                                     {{ $t('requested') }}: {{ topic.numberOfQuestions }}
                                 </p>
                             </div>
                         </div>
-                        <div v-if="topic.topicId && getCurrentQuestionCount(questionBank.questionBankId, topic.topicId, topic.questionType, topic.knowledgeLevelId, topic.difficulty) < topic.numberOfQuestions" 
+                        <div v-if="topic.topicId && getCurrentQuestionCount(questionBankIndex, topicIndex) < topic.numberOfQuestions" 
                              class="mt-2 p-2 bg-red-50 border border-red-200 rounded text-red-700 text-xs">
                             <Icon name="ph:warning" class="inline mr-1" />
                             {{ $t('insufficient-questions-warning') }}
@@ -408,7 +465,8 @@ const submit = async () => {
                                 questionBanksList[questionBankIndex].topics[index].knowledgeLevelId
                             )"
                             item-label="label" item-value="value" :placeholder="$t('select-a-difficulty')"
-                            :disabled="!questionBanksList[questionBankIndex].topics[index].knowledgeLevelId" />
+                            :disabled="!questionBanksList[questionBankIndex].topics[index].knowledgeLevelId"
+                            @update:model-value="onDifficultyChange(questionBankIndex, index)" />
                        
                     </div>
                 </template>
@@ -419,24 +477,18 @@ const submit = async () => {
                             type="number" required :placeholder="$t('number-of-questions')" 
                             :class="{
                                 'border-red-300 focus:border-red-500': questionBanksList[questionBankIndex].topics[index].topicId && 
-                                    getCurrentQuestionCount(questionBank.questionBankId, questionBanksList[questionBankIndex].topics[index].topicId, questionBanksList[questionBankIndex].topics[index].questionType, questionBanksList[questionBankIndex].topics[index].knowledgeLevelId, questionBanksList[questionBankIndex].topics[index].difficulty) < questionBanksList[questionBankIndex].topics[index].numberOfQuestions
+                                    getCurrentQuestionCount(questionBankIndex, index) < questionBanksList[questionBankIndex].topics[index].numberOfQuestions
                             }" />
                         <div v-if="questionBanksList[questionBankIndex].topics[index].topicId" 
                              class="flex items-center justify-between text-xs">
                             <span :class="{
-                                'text-green-600': getCurrentQuestionCount(questionBank.questionBankId, questionBanksList[questionBankIndex].topics[index].topicId, questionBanksList[questionBankIndex].topics[index].questionType, questionBanksList[questionBankIndex].topics[index].knowledgeLevelId, questionBanksList[questionBankIndex].topics[index].difficulty) >= questionBanksList[questionBankIndex].topics[index].numberOfQuestions,
-                                'text-red-600': getCurrentQuestionCount(questionBank.questionBankId, questionBanksList[questionBankIndex].topics[index].topicId, questionBanksList[questionBankIndex].topics[index].questionType, questionBanksList[questionBankIndex].topics[index].knowledgeLevelId, questionBanksList[questionBankIndex].topics[index].difficulty) < questionBanksList[questionBankIndex].topics[index].numberOfQuestions,
-                                'text-gray-500': getCurrentQuestionCount(questionBank.questionBankId, questionBanksList[questionBankIndex].topics[index].topicId, questionBanksList[questionBankIndex].topics[index].questionType, questionBanksList[questionBankIndex].topics[index].knowledgeLevelId, questionBanksList[questionBankIndex].topics[index].difficulty) >= questionBanksList[questionBankIndex].topics[index].numberOfQuestions
+                                'text-green-600': getCurrentQuestionCount(questionBankIndex, index) >= questionBanksList[questionBankIndex].topics[index].numberOfQuestions,
+                                'text-red-600': getCurrentQuestionCount(questionBankIndex, index) < questionBanksList[questionBankIndex].topics[index].numberOfQuestions,
+                                'text-gray-500': getCurrentQuestionCount(questionBankIndex, index) >= questionBanksList[questionBankIndex].topics[index].numberOfQuestions
                             }">
-                                {{ $t('available') }}: {{ getCurrentQuestionCount(
-                                    questionBank.questionBankId,
-                                    questionBanksList[questionBankIndex].topics[index].topicId,
-                                    questionBanksList[questionBankIndex].topics[index].questionType,
-                                    questionBanksList[questionBankIndex].topics[index].knowledgeLevelId,
-                                    questionBanksList[questionBankIndex].topics[index].difficulty
-                                ) }}
+                                {{ $t('available') }}: {{ getCurrentQuestionCount(questionBankIndex, index) }}
                             </span>
-                            <span v-if="getCurrentQuestionCount(questionBank.questionBankId, questionBanksList[questionBankIndex].topics[index].topicId, questionBanksList[questionBankIndex].topics[index].questionType, questionBanksList[questionBankIndex].topics[index].knowledgeLevelId, questionBanksList[questionBankIndex].topics[index].difficulty) < questionBanksList[questionBankIndex].topics[index].numberOfQuestions"
+                            <span v-if="getCurrentQuestionCount(questionBankIndex, index) < questionBanksList[questionBankIndex].topics[index].numberOfQuestions"
                                   class="text-red-600 font-medium">
                                 {{ $t('exceeds-limit') }}
                             </span>
@@ -444,8 +496,14 @@ const submit = async () => {
                     </div>
                 </template>
                 <template #data-grade="{ index }">
-                    <AppInputField v-model="questionBanksList[questionBankIndex].topics[index].grade"
+                    <div class="flex items-center gap-2">
+                        <AppInputField v-model="questionBanksList[questionBankIndex].topics[index].grade"
                         type="number" required :placeholder="$t('grade')" />
+                        <BaseButton @click="removeTopic(questionBankIndex, index)" color="danger" size="sm" variant="pastel">
+                            <Icon name="ph:trash"></Icon>
+                            حذف
+                        </BaseButton>
+                    </div>
                 </template>
             </AppTable>
             <div class="flex justify-end">
