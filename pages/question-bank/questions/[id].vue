@@ -417,7 +417,7 @@ const currentTopicName = computed(() => {
       />
     </div>
     
-    <div  v-if="hasPrivilege('ums:ems:question-bank:bulk-radio-upload')" class="w-[75%] start-75 fixed bottom-5">
+    <div  v-if="hasPrivilege('ums:ems:question:bulk-create')" class="w-[75%] start-75 fixed bottom-5">
       <BaseButton class="w-full" color="primary" size="lg"  @click="addQuestion">
         <Icon name="tabler-plus" size="20" />
         {{ $t('add-questions') }}
