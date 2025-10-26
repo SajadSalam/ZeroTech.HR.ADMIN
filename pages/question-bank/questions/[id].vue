@@ -12,7 +12,6 @@ import { useQuestionBankStore } from '~/views/question-bank/store'
 import type { QuestionBankTopicDto } from '~/views/question-bank/types'
 import {
     AuditStatus,
-    Difficulty,
     QuestionType,
     type Question,
 } from '~/views/question-bank/types/question'
@@ -89,11 +88,11 @@ const addQuestion = () => {
     return
   }
   questions.value.push({
-    type: QuestionType.Radio,
+    type: null,
     title: '',
     correctBoolean: false,
     correctText: '',
-    difficulty: Difficulty.Easy,
+    difficulty: null,
     knowledgeLevelId: '',
     isContentShown: true,
     options: [],
@@ -418,7 +417,7 @@ const currentTopicName = computed(() => {
       />
     </div>
     
-    <div class="w-[75%] start-75 fixed bottom-5">
+    <div  v-if="hasPrivilege('ums:ems:question-bank:bulk-radio-upload')" class="w-[75%] start-75 fixed bottom-5">
       <BaseButton class="w-full" color="primary" size="lg"  @click="addQuestion">
         <Icon name="tabler-plus" size="20" />
         {{ $t('add-questions') }}
