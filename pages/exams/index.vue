@@ -72,13 +72,6 @@ const openExamDetails = (exam: Record<string, any>) => {
           v-model="filters.examTemplateId"
         />
         <AppAutoCompleteField
-          :placeholder="$t('status')"
-          :items="examStatusOptions($t)"
-          item-label="label"
-          item-value="value"
-          v-model="filters.status"
-        />
-        <AppAutoCompleteField
           :placeholder="$t('exam-type')"
           :items="examTypesOptions($t)"
           item-label="label"
