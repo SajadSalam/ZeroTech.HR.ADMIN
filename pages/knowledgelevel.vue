@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import AppCrudActions from '~/components/app-crud/components/AppCrudActions.vue'
-import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import AppTable from '~/components/app-table/AppTable.vue'
 import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
-import { useAuthStore } from '~/views/auth/store/auth'
 import { tableHeader } from '~/views/knowledgelevel'
 import KnowledgelevelCreate from '~/views/knowledgelevel/components/KnowledgelevelCreate.vue'
 import KnowledgelevelEdit from '~/views/knowledgelevel/components/KnowledgelevelEdit.vue'
@@ -36,17 +34,14 @@ getKnowledgelevel()
 watch(
   filters,
   () => {
+    console.log('filters', filters.value)
     getKnowledgelevel()
   },
   { deep: true }
 )
-const openEdit = (item: KnowledgelevelDto) => {}
 
-const deleteKnowledgelevel = async (item: KnowledgelevelDto) => {
-  await knowledgelevelStore.deleteKnowledgelevel(item.id)
-}
 // const { hasPrivilege } = useAuthStore()
-const hasPrivilege = (privilege: string) => true
+const hasPrivilege = () => true
 </script>
 
 <template>
@@ -55,10 +50,10 @@ const hasPrivilege = (privilege: string) => true
       v-model:current-page="filters.pageNumber"
       :add-button-text="$t('create-knowledgelevel')"
       :add-btn-action="() => (knowledgelevelStore.isCreateDialogOpen = true)"
-      :pagination="true"
       :total-pages="knowledgelevelStore.totalPages"
       :title="$t('knowledgelevel')"
       :hide-create="!hasPrivilege('ums:ems:knowledgelevel:create')"
+      pagination
     >
       <!-- Search filter -->
       <template #filters>
