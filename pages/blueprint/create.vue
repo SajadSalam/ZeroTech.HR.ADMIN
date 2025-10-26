@@ -10,7 +10,6 @@ import { tableCreateHeaders } from '~/views/blueprint/index'
 import { useBlueprintStore } from '~/views/blueprint/store'
 import type { Blueprint, BlueprintQuestionBank, QuestionBankBlueprintDetails } from '~/views/blueprint/types/index'
 import { difficultyOptions } from '~/views/question-bank'
-import { useQuestionBankStore } from '~/views/question-bank/store'
 import {
     questionTypeOptions,
     type QuestionBankDto,
@@ -85,6 +84,13 @@ const addTopic = (index: number) => {
     })
 }
 
+const removeTopic = (questionBankIndex: number, topicIndex: number) => {
+    questionBanksList.value[questionBankIndex].topics.splice(topicIndex, 1)
+    // Fetch updated count
+    nextTick(() => {
+        fetchRealQuestionCount(questionBankIndex, topicIndex)
+    })
+}
 
 // Fetch real question count from API
 const fetchRealQuestionCount = async (questionBankIndex: number, topicIndex: number) => {
@@ -490,8 +496,14 @@ const submit = async () => {
                     </div>
                 </template>
                 <template #data-grade="{ index }">
-                    <AppInputField v-model="questionBanksList[questionBankIndex].topics[index].grade"
+                    <div class="flex items-center gap-2">
+                        <AppInputField v-model="questionBanksList[questionBankIndex].topics[index].grade"
                         type="number" required :placeholder="$t('grade')" />
+                        <BaseButton @click="removeTopic(questionBankIndex, index)" color="danger" size="sm" variant="pastel">
+                            <Icon name="ph:trash"></Icon>
+                            حذف
+                        </BaseButton>
+                    </div>
                 </template>
             </AppTable>
             <div class="flex justify-end">
