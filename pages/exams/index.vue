@@ -7,7 +7,7 @@ import ExamDetails from '~/views/exams/components/ExamDetails.vue'
 import ExamEdit from '~/views/exams/components/ExamEdit.vue'
 import { tableHeaders } from '~/views/exams/index'
 import { useExamStore } from '~/views/exams/store/index'
-import { availableDaysOptions, examStatusOptions, examTypesOptions, proficiencyExamGroupOptions, type ExamFilters } from '~/views/exams/types/index'
+import { ExamType, availableDaysOptions, examTypesOptions, proficiencyExamGroupOptions, type ExamFilters } from '~/views/exams/types/index'
 
 definePageMeta({
   title: 'exams-page',
@@ -112,6 +112,16 @@ const openExamDetails = (exam: Record<string, any>) => {
             >
              <Icon name="ph:question" class="me-2" size="18"></Icon>
                   {{ $t("questions") }}
+                </BaseButton>
+                <BaseButton 
+                variant="pastel"
+                color="warning"
+                v-if="data.item.examType === ExamType.Final"
+                :to="`/exams/${data.item.id}/students`"
+                class="border-warning-500 font-bold"
+            >
+             <Icon name="ph:question" class="me-2" size="18"></Icon>
+                  {{ $t("students") }}
                 </BaseButton>
           </div>
         </template>

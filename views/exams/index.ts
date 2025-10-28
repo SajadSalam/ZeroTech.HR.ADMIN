@@ -14,8 +14,8 @@ export const tableHeaders = (t: (key: string) => string) => {
       icon: 'lucide:file-text',
     },
     {
-      key: 'proficiencyExamGroupId',
-      label: t('proficiency-exam-group'),
+      key: 'examType',
+      label: t('exam-type'),
       icon: 'lucide:align-horizontal-distribute-center',
     },
     {
