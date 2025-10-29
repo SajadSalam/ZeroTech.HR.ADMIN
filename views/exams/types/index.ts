@@ -19,9 +19,9 @@ export interface Exam {
   examCenters: string[] | null
   instructions: string | null
   // EvaluationProficiency specific fields
-  price?: number | null
-  retryPrice?: number | null
-  proficiencyExamGroupId?: ProficiencyExamGroup | null
+  price: number | null
+  retryPrice: number | null
+  proficiencyExamGroupId: ProficiencyExamGroup | null
 }
 export enum AvailableDays {
   Sunday = 0,
@@ -49,6 +49,7 @@ export type ExamDetailed = ExamDto & {
 
 export type ExamCreate = Exam & {
   examGroups: string[] | null
+  availableDays: AvailableDays[]
 }
 export type ExamFilters = {
   search: string | null
