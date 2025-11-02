@@ -28,7 +28,6 @@ definePageMeta({
 
 const questionBankStore = useQuestionBankStore()
 const appTableStore = useAppTableStore()
-const isLoading = computed(() => questionBankStore.isLoading)
 const questions = computed(() => questionBankStore.questions || [])
 const filters = computed<QuestionFilters>({
   get() {
@@ -110,7 +109,7 @@ const { hasPrivilege } = useAuthStore()
       </template>
       <AppTable title="Questions" :headers="questionsTableHeaders($t)" :items="questions">
         <template #data-index="data">
-            {{ data.index + 1 }}
+            {{ (data.index + 1) + (filters.pageNumber - 1) * filters.pageSize }}
         </template>
         <template #data-actions="{ item }">
           <div class="flex items-center justify-center gap-3">
@@ -153,7 +152,7 @@ const { hasPrivilege } = useAuthStore()
             </BaseButton>
           </div>
         </template>
-        <template #data-usedTimes="{ item }">
+        <template #data-usedTimes="">
           {{ Math.floor(Math.random() * 100) }}
         </template>
         <template #data-type="{ item }">
