@@ -5,13 +5,10 @@ import {
     type QuestionFilters,
 } from '~/views/question-bank/types/question'
 
-import AppCrudActions from '~/components/app-crud/components/AppCrudActions.vue'
 import CreateQuestionBank from '~/views/question-bank/components/CreateQuestionBank.vue'
 import {
     difficultyOptions,
-    knowledgeLevelOptions,
     questionsTableHeaders,
-    tableHeader,
 } from '~/views/question-bank/index'
 
 import { useQuestionBankStore } from '~/views/question-bank/store/index'
@@ -22,8 +19,6 @@ import RejectDialog from '~/views/question-bank/components/RejectDialog.vue'
 import ViewQuestion from '~/views/question-bank/components/ViewQuestion.vue'
 import {
     questionTypeOptions,
-    type QuestionBankDto,
-    type QuestionBankFilters,
 } from '~/views/question-bank/types/index'
 
 definePageMeta({
@@ -114,6 +109,9 @@ const { hasPrivilege } = useAuthStore()
         />
       </template>
       <AppTable title="Questions" :headers="questionsTableHeaders($t)" :items="questions">
+        <template #data-index="data">
+            {{ data.index + 1 }}
+        </template>
         <template #data-actions="{ item }">
           <div class="flex items-center justify-center gap-3">
             <BaseButtonIcon

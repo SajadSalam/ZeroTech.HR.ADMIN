@@ -87,7 +87,7 @@ const addQuestion = () => {
     })
     return
   }
-  questions.value.push({
+  questions.value.unshift({
     type: null,
     title: '',
     correctBoolean: false,
