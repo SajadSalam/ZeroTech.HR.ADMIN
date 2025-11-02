@@ -114,7 +114,7 @@ const downloadTemplate = async () => {
         })
         return
     }
-    const selectedTemplate = importQuestionTypeOptions(t).find(x => x.value === selectedQuestionType.value?.value) as ImportQuestionTypeOption
+    const selectedTemplate = importQuestionTypeOptions(t).find(x => x.value === selectedQuestionType.value) as ImportQuestionTypeOption
 
     try {
         isDownloadingTemplate.value = true
