@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { helpers, requiredIf } from '@vuelidate/validators'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { useI18n } from 'vue-i18n'
@@ -6,13 +7,13 @@ import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vu
 import { createValidator } from '~/services/validationWithI18n'
 import { Validator } from '~/services/validator'
 import { useExamStore } from '../store/index'
-import { ExamType, examTypesOptions, proficiencyExamGroupOptions, type ExamCreate, availableDaysOptions } from '../types/index'
+import { ExamType, availableDaysOptions, examTypesOptions, proficiencyExamGroupOptions, type ExamCreate } from '../types/index'
 
 const examStore = useExamStore()
 
 const { isCreateDialogOpen } = storeToRefs(examStore)
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const editorModules = {
   toolbar: [
     [{ direction: 'rtl' }, { direction: 'ltr' }],
@@ -25,26 +26,33 @@ const editorModules = {
     matchVisual: false,
   },
 }
+// Create formData separately so we can reference it in validation rules
+const formData = reactive<ExamCreate>({
+  duration: null,
+  title: null,
+  examTemplateId: null,
+  startDate: null,
+  startTime: null,
+  endDate: null,
+  endTime: null,
+  examType: null,
+  // required only when exam type is not final
+  examCenters: [],
+  enterTimeAllowed: null,
+  // required only when exam type is final
+  examGroups: [],
+  instructions: '',
+  // required only when exam type is EvaluationProficiency
+  price: 30000,
+  // required only when exam type is EvaluationProficiency
+  retryPrice: 20000,
+  // required only when exam type is EvaluationProficiency
+  proficiencyExamGroupId: null,
+  availableDays: [],
+})
+
 const validator = new Validator<ExamCreate>(
-  {
-    duration: null,
-    title: null,
-    examTemplateId: null,
-    startDate: null,
-    startTime: null,
-    endDate: null,
-    endTime: null,
-    examType: null,
-    examCenters: [],
-    enterTimeAllowed: null,
-    examGroups: [],
-    instructions: '',
-    // EvaluationProficiency specific fields
-    price: 30000,
-    retryPrice: 20000,
-    proficiencyExamGroupId: null,
-    availableDays: [],
-  },
+  formData,
   {
     title: {
       required: createValidator(t, 'title', 'required'),
@@ -73,7 +81,37 @@ const validator = new Validator<ExamCreate>(
       minValue: createValidator(t, 'duration', 'minValue', 1),
     },
     enterTimeAllowed: {
+      required: createValidator(t, 'enterance-time-allowed', 'required'),
       minValue: createValidator(t, 'enterance-time-allowed', 'minValue', 1),
+    },
+    examCenters: {
+      required: createValidator(t, 'exam-centers', 'required'),
+    },
+    examGroups: {
+      requiredIfFinal: helpers.withMessage(
+        () => t('validation.required', { field: t('groups') }),
+        requiredIf(computed(() => formData.examType === ExamType.Final))
+      ),
+    },
+    price: {
+      requiredIfProficiency: helpers.withMessage(
+        () => t('validation.required', { field: t('price') }),
+        requiredIf(computed(() => formData.examType === ExamType.EvaluationProficiency))
+      ),
+      minValue: createValidator(t, 'price', 'minValue', 0),
+    },
+    retryPrice: {
+      requiredIfProficiency: helpers.withMessage(
+        () => t('validation.required', { field: t('retry-price') }),
+        requiredIf(computed(() => formData.examType === ExamType.EvaluationProficiency))
+      ),
+      minValue: createValidator(t, 'retry-price', 'minValue', 0),
+    },
+    proficiencyExamGroupId: {
+      requiredIfProficiency: helpers.withMessage(
+        () => t('validation.required', { field: t('proficiency-exam-group') }),
+        requiredIf(computed(() => formData.examType === ExamType.EvaluationProficiency))
+      ),
     },
     availableDays: {
       required: createValidator(t, 'available-days', 'required'),
@@ -134,17 +172,6 @@ const submit = async () => {
     if (endTime <= startTime) {
       useToast({
         message: t('end-time-before-start-time'),
-        isError: true,
-      })
-      return
-    }
-  }
-
-  // Check for EvaluationProficiency specific validation
-  if (body.value.examType.$model === ExamType.EvaluationProficiency) {
-    if (!body.value.proficiencyExamGroupId?.$model) {
-      useToast({
-        message: t('proficiency-exam-group-required'),
         isError: true,
       })
       return

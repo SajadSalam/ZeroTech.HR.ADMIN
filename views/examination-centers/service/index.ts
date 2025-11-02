@@ -30,7 +30,7 @@ export class ExaminationCenterService implements IExaminationCenterService {
   }
 
   async delete(id: string): Promise<void> {
-    await axios.delete(`/examcenter/${id}`)
+    await axios.delete(`/exam-center/${id}`)
   }
 
   async getById(id: string): Promise<ExaminationCenterDto> {

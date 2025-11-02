@@ -40,8 +40,25 @@ interface IQuestionBankService {
   addTopic(questionBankId: string, topic: QuestionBankTopicUpdate): Promise<boolean>
 
   removeTopic(questionBankId: string, topicId: string): Promise<boolean>
-  importQuestions(questionBankId: string, file: File, questionTypeOption: ImportQuestionTypeOption): Promise<void>
+  importQuestions(questionBankId: string, file: File, questionTypeOption: ImportQuestionTypeOption): Promise<ImportQuestionResponse>
   downloadTemplate(questionTypeOption: ImportQuestionTypeOption): Promise<void>
+}
+
+export interface ImportQuestionError {
+  rowNumber: number
+  questionTitle: string
+  errorMessage: string
+  errorMessageAr: string
+  errorDetails: string
+  field: string
+}
+
+export interface ImportQuestionResponse {
+  totalRows: number
+  successCount: number
+  errorCount: number
+  errors: ImportQuestionError[]
+  hasErrors: boolean
 }
 
 export class QuestionBankService implements IQuestionBankService {
@@ -218,7 +235,7 @@ export class QuestionBankService implements IQuestionBankService {
     questionBankId: string,
     file: File,
     questionTypeOption: ImportQuestionTypeOption
-  ): Promise<void> {
+  ): Promise<ImportQuestionResponse> {
     const formData = new FormData()
     formData.append('file', file)
 
@@ -253,11 +270,13 @@ export class QuestionBankService implements IQuestionBankService {
       }
     }
 
-    await axios.post(uploadRoute, formData, {
+    const response = await axios.post<ImportQuestionResponse>(uploadRoute, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     })
+    
+    return response.data
   }
 
   async downloadTemplate(questionTypeOption: ImportQuestionTypeOption): Promise<void> {

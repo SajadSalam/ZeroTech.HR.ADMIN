@@ -6,7 +6,6 @@ import {
     QuestionType,
     type Question,
 } from '~/views/question-bank/types/question'
-import type { QuestionBankDto } from './types'
 
 export const tableHeader = (t: (key: string) => string) => {
   return [
@@ -64,6 +63,7 @@ export const tableHeader = (t: (key: string) => string) => {
 }
 export const questionsTableHeaders = (t: (key: string) => string) => {
   return [
+    { label: '#', key: 'index',icon: '' },
     { label: t('type'), key: 'type',icon: 'lucide:file-text' },
     { label: t('title'), key: 'title',icon: 'lucide:file-text' },
     { label: t('difficulty'), key: 'difficulty',icon: 'lucide:align-center-vertical' },

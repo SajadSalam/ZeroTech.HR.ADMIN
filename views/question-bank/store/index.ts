@@ -243,8 +243,10 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
     questionTypeOption: ImportQuestionTypeOption
   ) => {
     try {
+        console.log(questionBankId, file, questionTypeOption)
       isLoading.value = true
-      await questionBankService.importQuestions(questionBankId, file, questionTypeOption)
+      const response = await questionBankService.importQuestions(questionBankId, file, questionTypeOption)
+      return response
     } catch (error: any) {
       throw error // Re-throw the error to handle it in the component
     } finally {
