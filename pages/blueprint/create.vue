@@ -14,7 +14,6 @@ import {
     questionTypeOptions,
     type QuestionBankDto,
 } from '~/views/question-bank/types/index'
-const { useToast } = useAppToaster()
 
 definePageMeta({
     title: 'blueprints',
