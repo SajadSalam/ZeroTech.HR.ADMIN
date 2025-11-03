@@ -103,6 +103,7 @@ const isQuestionHaveMultipleItems = (question: Question) => {
   )
 }
 
+
 // Watch for sub-question type changes to initialize appropriate data
 const watchSubQuestionType = (subQuestion: Question, newType: QuestionType) => {
   if (!subQuestion.options) {
@@ -143,10 +144,10 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
 </script>
 
 <template>
-  <div class="w-full"> 
+  <div class="w-full "> 
     <div class="mb-4 flex items-center justify-between">
       <h1 class="text-lg font-semibold">
-        {{ $t('sub-questions') }}
+        <!-- {{ $t('sub-questions') }} -->
       </h1>
       <BaseButton
         v-if="!isEvaluation"
@@ -163,7 +164,7 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
     <div
       v-for="(subQuestion, index) in modelValue?.subQuestions"
       :key="subQuestion.id || index"
-      class="mb-6 rounded-lg border border-gray-200 p-4 w-full"
+      class="mb-6 rounded-lg border p-4 w-full  bg-[#F8F8F8] border-blue-500 "
     >
       <!-- Sub-question header -->
       <div class="mb-4 flex items-center justify-between">
@@ -211,13 +212,13 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
            :disabled="isEvaluation"
          />
             <AppAutoCompleteField
-           v-model="modelValue.subQuestions![index].knowledgeLevelId"
-           :placeholder="$t('select-a-knowledge')"
-           :disabled="isEvaluation"
-           :items="knowledgeLevels"
-           item-label="name"
-           item-value="id"
-         />
+              v-model="modelValue.subQuestions![index].knowledgeLevelId"
+              :placeholder="$t('select-a-knowledge')"
+              :disabled="isEvaluation"
+              :items="knowledgeLevels"
+              item-label="name"
+              item-value="id"
+            />
        </div>
 
        <!-- Sub-question title and content -->
