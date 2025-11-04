@@ -52,8 +52,11 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
       </div>
 
       <div class="w-[50%]" v-if="element.isContentShown">
-        <h1  class="text-2xl font-bold">
+        <h1 v-if="element.type !== QuestionType.Dialogue" class="text-2xl font-bold">
           {{ $t('question-answers') }} 
+        </h1>
+        <h1 v-else class="text-2xl font-bold">
+          {{ $t('sub-questions') }} 
         </h1>
         
 

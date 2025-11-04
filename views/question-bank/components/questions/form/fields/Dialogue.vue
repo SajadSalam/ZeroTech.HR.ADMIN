@@ -27,6 +27,8 @@ if (!modelValue.value?.subQuestions) {
   modelValue.value!.subQuestions = []
 }
 
+
+
 const addSubQuestion = () => {
   if (!modelValue.value?.subQuestions) {
     modelValue.value!.subQuestions = []
@@ -59,12 +61,18 @@ const addSubQuestion = () => {
     topicId: modelValue.value.topicId,
     parentQuestionId: modelValue.value.id,
     isContentShown: true,
+    isSubQuestionContent: true,
     matchingPairs: [],
     orderItems: [],
-    subQuestions: []
+    subQuestions: [],
+    isActive : false,
   }
 
   modelValue.value?.subQuestions.push(newSubQuestion)
+
+  modelValue.value.subQuestions.forEach(q => {
+    if (q.isActive === undefined) q.isActive = false
+  })
 }
 
 const removeSubQuestion = (index: number) => {
@@ -141,6 +149,29 @@ const watchSubQuestionType = (subQuestion: Question, newType: QuestionType) => {
 
 const knowledgeLevelStore = useKnowledgelevelStore()
 const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
+
+
+// Called on focus entering the sub-question wrapper
+const handleFocusIn = (e: FocusEvent, subQuestion: Question) => {
+  // mark active immediately
+  subQuestion.isActive = true
+}
+
+// Called on focus leaving the sub-question wrapper
+const handleFocusOut = (e: FocusEvent, subQuestion: Question) => {
+  // capture the container element right away
+  const container = e.currentTarget as HTMLElement | null
+
+  // Small delay so document.activeElement is updated (browser timing)
+  setTimeout(() => {
+    // if container exists and active element is NOT inside it, clear isActive
+    if (!container || !container.contains(document.activeElement)) {
+      subQuestion.isActive = false
+    }
+  }, 0)
+}
+
+
 </script>
 
 <template>
@@ -161,15 +192,41 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
       </BaseButton>
     </div>
 
-    <div
-      v-for="(subQuestion, index) in modelValue?.subQuestions"
-      :key="subQuestion.id || index"
-      class="mb-6 rounded-lg border p-4 w-full  bg-[#F8F8F8] border-blue-500 "
-    >
+    
+
+      <div
+        v-for="(subQuestion, index) in modelValue?.subQuestions"
+        :key="subQuestion.id || index"
+        @focusin="(e) => handleFocusIn(e, subQuestion)"
+        @focusout="(e) => handleFocusOut(e, subQuestion)"
+        :class="[
+          'mb-3 rounded-lg p-4 w-full  transition-all duration-300 relative',
+          subQuestion.isActive
+            ? 'bg-[#F8F8F8] border border-blue-500'
+            : 'bg-white '
+        ]"
+      >
+
+      <hr class="absolute bottom-0  w-[95%] my-0 mx-auto bg-blue-700 ">
+
+
       <!-- Sub-question header -->
       <div class="mb-4 flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <Icon name="ph-dots-nine-bold" size="20" />
+          <BaseButtonIcon
+            color="muted"
+            variant="outline"
+            class="rounded-full"
+            @click="subQuestion.isSubQuestionContent = !subQuestion.isSubQuestionContent"
+          >
+            <Icon
+              name="tabler-chevron-down"
+              size="20"
+              class="transition-all duration-500 "
+              :class="!subQuestion.isSubQuestionContent ? 'rotate-180 transform' : ''"
+            />
+          </BaseButtonIcon>
+          <!-- <Icon name="ph-dots-nine-bold" size="20" /> -->
           <h2 class="text-lg font-medium">{{ $t('sub-question') }} {{ index + 1 }}</h2>
         </div>
         <div v-if="!isEvaluation" class="flex items-center gap-2">
@@ -191,6 +248,35 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
           </BaseButton>
         </div>
       </div>
+
+      <div class="" v-if="!subQuestion.isSubQuestionContent">
+
+      <!-- Sub-question title and content -->
+      <AppInputWithFile
+         v-model:input="modelValue.subQuestions![index].title"
+         v-model:file="modelValue.subQuestions![index].image"
+         :disabled="isEvaluation"
+         :label="$t('sub-question-title')"
+         class="mb-4"
+         type="text"
+       />
+
+       <!-- Alternate title section -->
+       <div class="mb-4">
+         <BaseCheckbox
+           v-model="modelValue.subQuestions![index].isAlternateTitleShown"
+           :disabled="isEvaluation"
+           :label="$t('show-alternate-title')"
+           class="mb-2"
+         />
+         <AppInputField
+           v-if="subQuestion.isAlternateTitleShown"
+           v-model="modelValue.subQuestions![index].alternateTitle"
+           :disabled="isEvaluation"
+           :label="$t('alternate-title')"
+           :placeholder="$t('enter-alternate-title')"
+         />
+       </div>
 
        <!-- Sub-question type and difficulty selectors -->
        <div class="mb-4 grid gap-3 md:grid-cols-3">
@@ -221,32 +307,8 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
             />
        </div>
 
-       <!-- Sub-question title and content -->
-       <AppInputWithFile
-         v-model:input="modelValue.subQuestions![index].title"
-         v-model:file="modelValue.subQuestions![index].image"
-         :disabled="isEvaluation"
-         :label="$t('sub-question-title')"
-         class="mb-4"
-         type="text"
-       />
-
-       <!-- Alternate title section -->
-       <div class="mb-4">
-         <BaseCheckbox
-           v-model="modelValue.subQuestions![index].isAlternateTitleShown"
-           :disabled="isEvaluation"
-           :label="$t('show-alternate-title')"
-           class="mb-2"
-         />
-         <AppInputField
-           v-if="subQuestion.isAlternateTitleShown"
-           v-model="modelValue.subQuestions![index].alternateTitle"
-           :disabled="isEvaluation"
-           :label="$t('alternate-title')"
-           :placeholder="$t('enter-alternate-title')"
-         />
-       </div>
+       
+       <hr/>
 
        <!-- Sub-question specific form fields based on type -->
        <div class="sub-question-content">
@@ -303,7 +365,9 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
            :is-evaluation="isEvaluation"
          />
        </div>
+      </div>
     </div>
+
 
     <!-- Empty state -->
     <div
@@ -323,6 +387,8 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
         {{ $t('add-first-sub-question') }}
       </BaseButton>
     </div>
+
+
   </div>
 </template>
 

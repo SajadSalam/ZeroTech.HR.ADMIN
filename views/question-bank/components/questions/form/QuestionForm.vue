@@ -225,6 +225,7 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
         v-model="element"
         :is-evaluation="isEvaluation"
       />
+
     </div>
   </div>
 </template>

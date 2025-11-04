@@ -17,6 +17,7 @@ export interface Question {
   knowledgeLevelSimplifiedIntId?: number
   difficulty: Difficulty
   isContentShown?: boolean
+  isSubQuestionContent?: boolean
   matchingPairs?: MatchingItem[]
   orderItems?: OrderItem[]
   createdBy?: string
@@ -28,6 +29,7 @@ export interface Question {
   topicId: string
   clientId?: string
   parentQuestionId?: string
+  isActive: boolean
   subQuestions?: Question[]
 }
 export interface MatchingItem {
