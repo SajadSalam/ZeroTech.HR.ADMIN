@@ -151,20 +151,16 @@ const knowledgeLevelStore = useKnowledgelevelStore()
 const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
 
 
-// Called on focus entering the sub-question wrapper
 const handleFocusIn = (e: FocusEvent, subQuestion: Question) => {
-  // mark active immediately
+  // mark active 
   subQuestion.isActive = true
 }
 
-// Called on focus leaving the sub-question wrapper
 const handleFocusOut = (e: FocusEvent, subQuestion: Question) => {
-  // capture the container element right away
   const container = e.currentTarget as HTMLElement | null
 
-  // Small delay so document.activeElement is updated (browser timing)
   setTimeout(() => {
-    // if container exists and active element is NOT inside it, clear isActive
+    // clear isActive
     if (!container || !container.contains(document.activeElement)) {
       subQuestion.isActive = false
     }
