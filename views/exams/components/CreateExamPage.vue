@@ -272,7 +272,7 @@ function onSelectedAvailableDays(items) {
                         <div class="grid gap-5 md:grid-cols-2">
                             <AppAutoCompleteField v-model="body.examTemplateId.$model" fetch-on-search
                                 search-key="search" :errors="body.examTemplateId.$errors" :label="$t('blueprint')"
-                                :placeholder="$t('blueprint')" get-url="/examtemplate" item-label="" item-value="id" />
+                                :placeholder="$t('blueprint')" get-url="/examtemplate" item-label="name" item-value="id" />
                             <AppAutoCompleteField v-model="body.examType.$model" :items="examTypesOptions($t)"
                                 item-label="label" item-value="value" :errors="body.examType.$errors"
                                 :label="$t('exam-type')" :placeholder="$t('exam-type')" />
