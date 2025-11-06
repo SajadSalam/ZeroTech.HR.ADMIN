@@ -7,7 +7,7 @@ export const useGroupStore = defineStore('group', () => {
   const groups = ref<GroupDto[]>([])
   const isLoading = ref(false)
   const filters = ref<GroupsFilters>({
-    pageSize: 10,
+    pageSize: 50,
     pageNumber: 1,
     orginizations: null,
     search: null,

@@ -6,7 +6,7 @@ export const useTopicStore = defineStore('topic', () => {
   const topics = ref<TopicDto[]>([])
   const isLoading = ref(false)
   const filters = ref<TopicFilters>({
-    pageSize: 10,
+    pageSize: 50,
     pageNumber: 1,
     subjectId: null,
     name: null,

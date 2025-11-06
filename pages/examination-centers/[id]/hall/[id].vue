@@ -67,7 +67,7 @@ const { t } = useI18n()
 
 const filters = ref<BaseFilters>({
     pageNumber: 1,
-    pageSize: 10,
+    pageSize: 50,
 })
 const total = ref(0)
 

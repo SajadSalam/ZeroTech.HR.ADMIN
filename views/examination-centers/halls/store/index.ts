@@ -6,7 +6,7 @@ export const useHallStore = defineStore('hall', () => {
   const halls = ref<HallDto[]>([])
   const isLoading = ref(false)
   const filters = ref<HallFilters>({
-    pageSize: 10,
+    pageSize: 50,
     pageNumber: 1,
     examCenterId: null,
     name: null,

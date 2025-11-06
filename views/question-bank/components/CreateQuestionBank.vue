@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import AppInputField from '~/components/app-field/AppInputField.vue'
 
-import { useQuestionBankStore } from '../store/index'
+import { useI18n } from 'vue-i18n'
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
+import { createValidator } from '~/services/validationWithI18n'
+import { Validator } from '~/services/validator'
 import { useSubjectStore } from '~/views/subjects/store'
 import { useTopicStore } from '~/views/topics/store'
-import type { QuestionBankCreateDto } from '../types'
 import type { TopicDto } from '~/views/topics/types'
-import { Validator } from '~/services/validator'
-import { createValidator } from '~/services/validationWithI18n'
-import { useI18n } from 'vue-i18n'
+import { useQuestionBankStore } from '../store/index'
+import type { QuestionBankCreateDto } from '../types'
 
 const questionBankStore = useQuestionBankStore()
 const subjectStore = useSubjectStore()
@@ -54,7 +54,7 @@ watch(() => subjectValidation.value.subjectId.$model, (value: string | null) => 
     topicsStore.getTopics({ 
       subjectId: value,
       pageNumber: 1,
-      pageSize: 100
+      pageSize: 500
     })
   }
 })

@@ -1,14 +1,12 @@
 <script lang="ts" setup>
-import type { BaseFilters } from '~/utils/types/ApiResponses'
 import { useI18n } from 'vue-i18n'
+import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
+import ExamCurve from '~/views/exams/components/ExamCurve.vue'
 import { useExamStore } from '~/views/exams/store'
 import type { ExamDetailed } from '~/views/exams/types'
-import type { QuestionDto } from '~/views/question-bank/types/question'
 import { tableHeaders } from '~/views/students'
 import type { Student, StudentFilters } from '~/views/students/types'
 import { StudentStatus } from '~/views/students/types'
-import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
-import ExamCurve from '~/views/exams/components/ExamCurve.vue'
 
 definePageMeta({
   title: 'student-page',
@@ -25,7 +23,7 @@ const exam = ref<ExamDetailed | null>(null)
 const students = ref<Student[]>([])
 const total = ref(0)
 const filters = ref<StudentFilters>({
-  pageSize: 10,
+  pageSize: 50,
   pageNumber: 1,
   search: '',
   universityIDNumber: '',

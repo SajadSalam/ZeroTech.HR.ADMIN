@@ -26,7 +26,7 @@ const addTopic = () => {
 }
 watch(subjectId, (value: string) => {
   if (value) {
-    topicsStore.getTopics({ subjectId: value, pageNumber: 1, pageSize: 100 })
+    topicsStore.getTopics({ subjectId: value, pageNumber: 1, pageSize: 500 })
   }
 })
 const topics = computed(() => topicsStore.topics)

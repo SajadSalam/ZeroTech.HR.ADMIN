@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import type { BaseFilters, PaginatedResponse } from '~/utils/types/ApiResponses'
 import { ExaminationCenterService } from '../service'
-import type { ExamCenterStatistics, ExaminationCenter, ExaminationCenterDto, OtpResponse, DeactivationRequest, DeactivationResponse, DeactivationPeriod } from '../types'
+import type { DeactivationPeriod, DeactivationRequest, DeactivationResponse, ExamCenterStatistics, ExaminationCenter, ExaminationCenterDto, OtpResponse } from '../types'
 import type { ProgressStatistics, ProgressStudent } from '../types/progress'
 import type { StudentTicket } from '../types/ticket'
 const examinationCenterService = new ExaminationCenterService()
@@ -22,7 +22,7 @@ export const useExaminationCenters = defineStore('examinationCenters', () => {
   const deactivationResponse = ref<DeactivationResponse | null>(null)
   const filters = ref<BaseFilters>({
     search: '',
-    pageSize: 10,
+    pageSize: 50,
     pageNumber: 1,
   })
   const totalPages = ref(0)

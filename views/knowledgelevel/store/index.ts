@@ -7,7 +7,7 @@ export const useKnowledgelevelStore = defineStore('knowledgelevel', () => {
   const knowledgelevels = ref<KnowledgelevelDto[]>([])
   const isLoading = ref(false)
   const filters = ref<KnowledgelevelFilters>({
-    pageSize: 10,
+    pageSize: 50,
     pageNumber: 1,
     name: null,
   })

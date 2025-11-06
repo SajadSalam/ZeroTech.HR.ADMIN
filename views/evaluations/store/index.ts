@@ -1,13 +1,13 @@
 import type { BaseFilters } from '~/utils/types/ApiResponses'
-import type { EvaluationDto, EvaluationFitlers } from '../types'
 import { EvaluationService } from '../service'
+import type { EvaluationDto, EvaluationFitlers } from '../types'
 
 const evaluationService = new EvaluationService()
 export const useEvaluationStore = defineStore('evaluation', () => {
   const evaluations = ref<EvaluationDto[]>([])
   const isLoading = ref(false)
   const filters = ref<EvaluationFitlers>({
-    pageSize: 10,
+    pageSize: 50,
     pageNumber: 1,
     studentFullName: null,
     minDate: null,

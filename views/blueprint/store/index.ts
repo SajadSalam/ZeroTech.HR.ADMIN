@@ -8,7 +8,7 @@ export const useBlueprintStore = defineStore('blueprint', () => {
   const totalPages = ref(0)
   const isLoading = ref(false)
   const filters = ref<BlueprintFilter>({
-    pageSize: 10,
+    pageSize: 50,
     pageNumber: 1,
     search: null,
     questionBankId: null,

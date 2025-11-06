@@ -6,7 +6,7 @@ export const useSubjectStore = defineStore('subject', () => {
   const subjects = ref<SubjectDto[]>([])
   const isLoading = ref(false)
   const filters = ref<SubjectFilters>({
-    pageSize: 10,
+    pageSize: 50,
     pageNumber: 1,
     name: null,
   })

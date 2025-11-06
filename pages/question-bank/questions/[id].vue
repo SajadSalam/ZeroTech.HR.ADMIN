@@ -217,7 +217,7 @@ const handlePageChange = (newPage: number) => {
 }
 const knowledgeLevelStore = useKnowledgelevelStore()
 onMounted(async () => {
-  await knowledgeLevelStore.getKnowledgelevels({pageNumber: 1, pageSize: 100})
+  await knowledgeLevelStore.getKnowledgelevels({pageNumber: 1, pageSize: 500})
   fetchQuestionBank()
 })
 const saveChanges = async () => {

@@ -27,7 +27,7 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
   const selectedTopic = ref<QuestionBankTopicDto | null>(null)
   const isLoading = ref(false)
   const filters = ref<QuestionBankFilters>({
-    pageSize: 10,
+    pageSize: 50,
     pageNumber: 1,
     search: null,
     subjectId: null,
@@ -52,7 +52,7 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
     difficulty: null,
     knowledgeLevelId: null,
     pageNumber: 1,
-    pageSize: 10,
+    pageSize: 50,
     title: null,
     topicId: null,
     type: null,

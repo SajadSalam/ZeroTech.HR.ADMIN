@@ -5,8 +5,8 @@ import axios from '~/services/app-client/axios'
 import type { BaseFilters } from '~/utils/types/ApiResponses'
 import { useExaminationCenters } from '~/views/examination-centers/store'
 import { tableHeaders } from '~/views/exams/index'
-import { StudentTicketStatus } from '../types/ticket'
 import type { StudentTicket, StudentTicketFilters } from '../types/ticket'
+import { StudentTicketStatus } from '../types/ticket'
 
 const examinationCenterStore = useExaminationCenters()
 const isLoading = computed(() => examinationCenterStore.isLoading)
@@ -17,7 +17,7 @@ const filters = ref<StudentTicketFilters>({
     studentId: '',
     studentName: '',
     pageNumber: 1,
-    pageSize: 10,
+    pageSize: 50,
 })
 
 const { id, examId } = useRoute().params

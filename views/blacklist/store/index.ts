@@ -7,7 +7,7 @@ export const useBlacklistStore = defineStore('blacklist', () => {
   const blacklistEntries = ref<BlacklistDto[]>([])
   const isLoading = ref(false)
   const filters = ref<BlacklistFilters>({
-    pageSize: 10,
+    pageSize: 50,
     pageNumber: 1,
     externalStudentName: null,
     examCenterName: null,

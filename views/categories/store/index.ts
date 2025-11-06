@@ -6,7 +6,7 @@ export const useCategoryStore = defineStore('category', () => {
   const category = ref<CategoryDto[]>([])
   const isLoading = ref(false)
   const filters = ref<CategoryFilters>({
-    pageSize: 10,
+    pageSize: 50,
     pageNumber: 1,
     name: null,
   })

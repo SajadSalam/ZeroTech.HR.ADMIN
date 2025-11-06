@@ -1,15 +1,15 @@
 import type { BaseFilters } from '~/utils/types/ApiResponses'
+import type { QuestionDto } from '~/views/questions/types'
 import type { StudentFilters } from '~/views/students/types'
 import { ExamService } from '../service'
 import { type Exam, type ExamCreate, type ExamDto, type ExamFilters } from '../types'
-import type { QuestionDto } from '~/views/questions/types'
 
 const examService = new ExamService()
 export const useExamStore = defineStore('exam', () => {
     const exams = ref<ExamDto[]>([])
     const isLoading = ref(false)
     const filters = ref<ExamFilters>({
-        pageSize: 10,
+        pageSize: 50,
         pageNumber: 1,
         examTemplateId: null,
         type: null,
