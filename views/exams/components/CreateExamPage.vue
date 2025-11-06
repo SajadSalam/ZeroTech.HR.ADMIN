@@ -188,23 +188,10 @@ const submit = async () => {
     try {
         await examStore.createExam(validator.extractBody())
         validator.resetBody()
+        router.push('/exams')
         isCreateDialogOpen.value = false
     } catch (error) { }
 }
-// watch(
-//   ()=> true,
-//   (val: boolean) => {
-//     if (val) {
-//       validator.resetBody()
-//       body.value.examType.$model = examTypesOptions(t)[0].value;
-//       body.value.price.$model = 30000;
-//       body.value.retryPrice.$model = 20000;
-
-//     }
-//   }
-// )
-
-
 // Automatically set endDate = startDate + 1 day
 watch(() => formData.startDate, (newStartDate) => {
   if (!newStartDate) {

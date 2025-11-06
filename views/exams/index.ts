@@ -34,11 +34,6 @@ export const tableHeaders = (t: (key: string) => string) => {
       icon: 'lucide:clock',
     },
     {
-      key: 'groups',
-      label: t('groups'),
-      icon: 'lucide:file-text',
-    },
-    {
       key: 'actions',
       label: t('actions'),
       icon: 'lucide:more-vertical',
