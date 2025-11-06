@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import OrganizationalStructureDialog from '~/views/groups/componets/OrganizationalStructureDialog.vue'
+import DialogBlueprint from './DialogBlueprint.vue'
 
 interface Props {
   title?: string
@@ -11,6 +12,7 @@ interface Props {
   startDate?: string | Date
   endDate?: string | Date
   availableDays?: null | string[]
+  blueprintId?: null | number
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -22,11 +24,12 @@ const props = withDefaults(defineProps<Props>(), {
   endTime: '--:--',
   startDate: '',
   endDate: '',
-  availableDays:  null
+  availableDays:  null,
+  blueprintId:null
 })
 
 const isDialogGroupOpen = ref(false)
-const isDialogExamsOpen = ref(false)
+const isDialogBlueprint = ref(false)
 const isDialogDaysOpen = ref(false)
 
 
@@ -93,35 +96,26 @@ const formatDate = (date: string | Date) => {
                 <div class="w-10 h-10 bg-[#F3F3F3] rounded-full flex items-center justify-center mb-3">
                     <Icon name="majesticons:list-box" class="text-[#9F9E9E] w-5 h-5" />
                 </div>
-                <h1 class="text-lg font-bold text-[#0F172A] mb-1">{{$t('exam-centers')}}</h1>
+                <h1 class="text-lg font-bold text-[#0F172A] mb-1">{{$t('blueprint')}}</h1>
 
-                <p v-if="examCenters?.length" class="text-sm text-[#64748B] mb-3">
-                    <span v-for="(examCenter, index) in examCenters.slice(0, 2)" :key="index">
-                        {{ examCenter.name }}<span v-if="index < 1 && examCenters.length > 2">, </span>
-                    </span>
-
-                    <span
-                        v-if="examCenters.length > 2"
-                        class="text-primary"
-                    >
-                        ... (+{{ examCenters.length - 2 }})
-                    </span>
-                </p>
-                <p v-else class="text-sm text-gray-400 ">{{ $t('no-exam-centers-selected') }}</p>
+                
+                <p class="text-sm text-gray-400 ">{{ blueprintId ? "يوجد نموذج محدد انقر للعرض" : $t('no-blueprint') }}</p>
 
                 <div class="w-full flex justify-end">
-                    <button @click="isDialogExamsOpen = true" class="bg-[#2C64E31C] text-primary px-4 rounded-2xl text-sm h-[28px]  font-bold text-left">
+                    <button @click="isDialogBlueprint = true" class="bg-[#2C64E31C] text-primary px-4 rounded-2xl text-sm h-[28px]  font-bold text-left">
                       {{ $t('see-more') }}
                     </button>
                 </div>
 
-                <!-- Dialog for viewing all structures -->
-                <OrganizationalStructureDialog
-                    v-if="examCenters && examCenters?.length > 0"
-                    v-model="isDialogExamsOpen"
-                    :title="$t('groups')"
-                    :groups="examCenters"
+                <DialogBlueprint
+                v-if="blueprintId"
+                    v-model="isDialogBlueprint"
+                    :blueprint-id="blueprintId"
+                    
+
                 />
+
+                
             </div>
         </div>
 
@@ -183,22 +177,7 @@ const formatDate = (date: string | Date) => {
           </div>
         </div>
 
-        <!-- Available Days -->
-        <div class="flex items-start gap-3 rounded-xl border border-[#E2E8F0] p-4">
-            <div class="flex-1">
-                <div class="w-10 h-10 bg-[#F3F3F3] rounded-full flex items-center justify-center mb-3">
-                    <Icon name="ph:calendar-duotone" class="text-[#9F9E9E] w-5 h-5" />
-                </div>
-                <h1 class="text-lg font-bold text-[#0F172A] mb-1">{{$t('available-days')}}</h1>
-                <p v-if="availableDays?.length" class="text-sm text-[#64748B] mb-3">
-                    <span v-for="(day, index) in availableDays" :key="index">
-                        {{ day.label }}<span >, </span>
-                    </span>
-                </p>
-                <p v-else class="text-sm text-gray-400 ">{{ $t('no-select-available-days') }}</p>
-                
-            </div>
-        </div>
+        
       </div>
 
       

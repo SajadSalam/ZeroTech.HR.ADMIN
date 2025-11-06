@@ -7,7 +7,7 @@ import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vu
 import { createValidator } from '~/services/validationWithI18n'
 import { Validator } from '~/services/validator'
 import { useExamStore } from '../store/index'
-import { ExamType, availableDaysOptions, examTypesOptions, proficiencyExamGroupOptions, type ExamCreate } from '../types/index'
+import { AvailableDays, ExamType, availableDaysOptions, examTypesOptions, proficiencyExamGroupOptions, type ExamCreate } from '../types/index'
 import ExamCardCreationResult from './ExamCardCreationResult.vue'
 
 
@@ -203,6 +203,20 @@ const submit = async () => {
 //     }
 //   }
 // )
+
+
+// Automatically set endDate = startDate + 1 day
+watch(() => formData.startDate, (newStartDate) => {
+  if (!newStartDate) {
+    formData.endDate = null
+    return
+  }
+
+  const start = new Date(newStartDate)
+  start.setDate(start.getDate() + 1) // add 1 day
+  formData.endDate = start.toISOString().split('T')[0] // keep as YYYY-MM-DD
+})
+
 const updateInstructions = (content: string) => {
     // Remove HTML tags and trim whitespace to check if content is empty
     // const plainText = content.replace(/<[^>]*>/g, '').trim();
@@ -218,6 +232,10 @@ const updateExamType = (type: ExamType) => {
 
 onMounted(() => {
     body.value.examType.$model = examTypesOptions(t)[0].value
+
+    body.value.availableDays.$model = availableDaysOptions(t)
+        .filter(day => day.value !== AvailableDays.Friday)
+        .map(day => day.value)
 })
 
 
@@ -240,7 +258,7 @@ function onSelectedAvailableDays(items) {
 </script>
 
 <template>
-    <div class="w-full h-screen grid grid-cols-1 lg:grid-cols-3 gap-6 p-6 " >
+    <div class="w-full h-screen grid grid-cols-1 lg:grid-cols-3 gap-6 py-6 " >
         <div class="relative mb-6 col-span-2">
             <!-- Tabs -->
             <div class="flex gap-2 absolute -top-10 right-4">
@@ -272,10 +290,17 @@ function onSelectedAvailableDays(items) {
                         <div class="grid gap-5 md:grid-cols-2">
                             <AppAutoCompleteField v-model="body.examTemplateId.$model" fetch-on-search
                                 search-key="search" :errors="body.examTemplateId.$errors" :label="$t('blueprint')"
-                                :placeholder="$t('blueprint')" get-url="/examtemplate" item-label="" item-value="id" />
-                            <AppAutoCompleteField v-model="body.examType.$model" :items="examTypesOptions($t)"
+                                :placeholder="$t('blueprint')" get-url="/examtemplate" item-label="name" item-value="id" />
+                            <!-- <AppAutoCompleteField v-model="body.examType.$model" :items="examTypesOptions($t)"
                                 item-label="label" item-value="value" :errors="body.examType.$errors"
-                                :label="$t('exam-type')" :placeholder="$t('exam-type')" />
+                                :label="$t('exam-type')" :placeholder="$t('exam-type')" /> -->
+
+                            <AppAutoCompleteField v-model="body.examCenters.$model" :errors="body.examCenters.$errors"
+                                :label="$t('exam-centers')" :placeholder="$t('exam-centers')"
+                                item-subtitle="college.fullNameAr" get-url="/exam-center" search-key="search"
+                                fetch-on-search multiple item-label="name"
+                                :class="body.examType.$model != ExamType.Final ? 'col-span-2' : ''" item-value="id"
+                                select-all @update:object-value="onSeelectExamCenters" />
 
                         </div>
                         <!-- EvaluationProficiency specific fields -->
@@ -291,25 +316,20 @@ function onSelectedAvailableDays(items) {
                                 :label="$t('proficiency-exam-group')" />
                         </div>
                         <div class="grid gap-5 md:grid-cols-2">
-                            <AppAutoCompleteField v-model="body.examCenters.$model" :errors="body.examCenters.$errors"
-                                :label="$t('exam-centers')" :placeholder="$t('exam-centers')"
-                                item-subtitle="college.fullNameAr" get-url="/exam-center" search-key="search"
-                                fetch-on-search multiple item-label="name"
-                                :class="body.examType.$model != ExamType.Final ? 'col-span-2' : ''" item-value="id"
-                                select-all @update:object-value="onSeelectExamCenters" />
+                            
                             <AppAutoCompleteField v-if="body.examType.$model == ExamType.Final"
                                 v-model="body.examGroups.$model" fetch-on-search search-key="search"
                                 :errors="body.examGroups.$errors" :label="$t('groups')" :placeholder="$t('groups')"
                                 get-url="/groups" multiple item-label="name" item-value="id"
                                 @update:objectValue="onSelectedGroups" 
-                                />
-                        </div>
-                        <div class="grid gap-5 md:grid-cols-2">
+                            />
                             <AppFieldAppInputField v-model="body.startDate.$model" :errors="body.startDate.$errors"
-                                :label="$t('start-date')" :placeholder="$t('enter-start-date')" type="date" />
+                                    :label="$t('start-date')" :placeholder="$t('enter-start-date')" type="date" />
+                        </div>
+                        <!-- <div class="grid gap-5 md:grid-cols-2">
                             <AppFieldAppInputField v-model="body.endDate.$model" :errors="body.endDate.$errors"
                                 :label="$t('end-date')" :placeholder="$t('enter-end-date')" type="date" />
-                        </div>
+                        </div> -->
                         <div class="grid gap-5 md:grid-cols-2">
 
                             <AppFieldAppInputField v-model="body.startTime.$model" :errors="body.startTime.$errors"
@@ -318,12 +338,12 @@ function onSelectedAvailableDays(items) {
                                 :label="$t('end-time')" :placeholder="$t('enter-end-time')" type="time" />
 
                         </div>
-                        <div class="grid gap-5 md:grid-cols-2">
+                        <!-- <div class="grid gap-5 md:grid-cols-2">
                             <AppAutoCompleteField class="col-span-4" v-model="body.availableDays.$model"
                                 :errors="body.availableDays.$errors" :label="$t('available-days')"
                                 :placeholder="$t('available-days')" :items="availableDaysOptions($t)" item-label="label"
                                 item-value="value" multiple @update:object-value="onSelectedAvailableDays" />
-                        </div>
+                        </div> -->
                         <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
                             <AppFieldAppInputField v-model="body.duration.$model" :errors="body.duration.$errors"
                                 :label="$t('duration-in-minutes')" :placeholder="$t('enter-duration')" disabled />
@@ -369,7 +389,9 @@ function onSelectedAvailableDays(items) {
                 :end-time="body.endTime.$model ?? '09:00'" 
                 :start-date="body.startDate.$model ?? new Date('2026-01-01')" 
                 :end-date="body.endDate.$model ?? new Date('2026-01-01')"
-                :available-days="selectedAvailableDaysObjects" />
+                :available-days="selectedAvailableDaysObjects"
+                :blueprint-id="body.examTemplateId.$model"
+                />
 
         </div>
 

@@ -75,7 +75,7 @@ const type = computed(() => {
     <!-- Date Picker Input -->
     <template v-else-if="props.type === 'date'">
       <div class="flex flex-col justify-between">
-        <span v-if="props.label" class="dp__label">
+        <span v-if="props.label" class="dp__label p-1">
           {{ props.label }}
         </span>
 

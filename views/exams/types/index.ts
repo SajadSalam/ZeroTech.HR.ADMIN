@@ -101,11 +101,11 @@ export const examTypesOptions = (t: (key: string) => string) => {
         value: ExamType.Final,
         description:t('final-description')
     },
-    { 
-        label: t('evaulation-proficiency'),
-         value: ExamType.EvaluationProficiency,
-        description:t('evaulation-proficiency-description')
-     },
+    // { 
+    //     label: t('evaulation-proficiency'),
+    //      value: ExamType.EvaluationProficiency,
+    //     description:t('evaulation-proficiency-description')
+    //  },
   ]
 }
 
