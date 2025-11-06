@@ -8,12 +8,18 @@ export interface Counts {
     totalUpcomingExams:            number;
     todayTicketsToSeatsRatio:      number;
     currentActiveExams:            number;
+    totalGroups:                   number;
+    totalExaminedStudents:         number;
+    totalAbsentStudents:           number;
     examCentersAcceptanceStatus:   ExamCentersAcceptanceStatus;
     monthlyBookingStatistics:      MonthlyBookingStatistics;
     proficiencyExamGroupChartData: ProficiencyExamGroupChartData;
     governorateBookingChartData:   GovernorateBookingChartData;
     superadminCurrentExamsTable:   SuperadminCurrentExamsTable;
     registeredStudentsStatistics:  RegisteredStudentsStatistics;
+    passFailChartData:             PassFailChartData;
+    groupStudentCounts:            GroupStudentCount[];
+    collegeStudentCounts:          CollegeStudentCount[];
 }
 
 export interface ExamCentersAcceptanceStatus {
@@ -80,4 +86,31 @@ export interface RegisteredStudentsStatistics {
     totalStudentsBookedExamsRatio:         number;
     totalStudentsPresencedInExamsRatio:    number;
     totalStudentsAbsencedInExamsRatio:     number;
+}
+
+export interface PassFailData {
+    groupId: number | null;
+    groupName: string;
+    subjectId: number | null;
+    subjectName: string;
+    passed: number;
+    failed: number;
+}
+
+export interface PassFailChartData {
+    data: PassFailData[];
+    groups: { id: number; name: string }[];
+    subjects: { id: number; name: string }[];
+}
+
+export interface GroupStudentCount {
+    groupId: number;
+    groupName: string;
+    studentCount: number;
+}
+
+export interface CollegeStudentCount {
+    collegeId: number;
+    collegeName: string;
+    studentCount: number;
 }

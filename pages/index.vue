@@ -61,27 +61,19 @@ onMounted(async () => {
             </div>
 
         </div>
-        <!-- Second Row of InfoLabel Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-            <InfoLabelGradient label="عدد مراكز الامتحان الكلي" :value="counts?.totalActiveExamCenters ?? 0" icon="ph:buildings-fill" color="primary"
+        <!-- Info Label Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+            <InfoLabelGradient label="عدد المجموعات" :value="counts?.totalGroups ?? 0" icon="ph:users-three-fill" color="primary"
                 variant="gradient" />
 
-            <InfoLabelGradient label="عدد القاعات الكلية" :value="counts?.totalHalls ?? 0" icon="ph:door-fill" color="primary"
+            <InfoLabelGradient label="عدد الكلي للطلاب الممتحنين" :value="counts?.totalExaminedStudents ?? 0" icon="ph:student-fill" color="primary"
                 variant="default" />
 
-            <InfoLabelGradient label="اجمالي المسجلين" :value="counts?.totalActiveExternalStudents ?? 0" icon="ph:student-fill" color="primary"
-                variant="default" />
-
-            <InfoLabelGradient label="عدد المقاعد الكلية" :value="counts?.totalHallSeatsCapacity ?? 0" icon="ph:chair-fill" color="primary"
+            <InfoLabelGradient label="عدد الكلي للطلاب المتغيبين" :value="counts?.totalAbsentStudents ?? 0" icon="ph:user-minus-fill" color="primary"
                 variant="default" />
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 mb-6">
-            <!-- <InfoLabel label="مبلغ رسوم الامتحانات المدفوعة" value="204,000,000 د.ع" icon="ph:money-fill"
-                color="primary" :no-counting="true" /> -->
-
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-6">
             <InfoLabel label="عدد الامتحانات القادمة" :value="counts?.totalUpcomingExams ?? 0" icon="ph:calendar-plus-fill" color="primary" />
-
-            <InfoLabel label="نسبة انشغال المقاعد" :value="counts?.todayTicketsToSeatsRatio ?? 0" icon="ph:chair-fill" color="primary" />
 
             <InfoLabel label="الامتحانات الجارية حاليا" :value="counts?.currentActiveExams ?? 0" icon="ph:play-circle-fill" color="primary" />
         </div>
@@ -90,7 +82,7 @@ onMounted(async () => {
 
         <div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-6 mb-6">
             <!-- Hall Distribution Chart -->
-            <div class="col-span-1">
+            <!-- <div class="col-span-1">
                 <AppChartExamCenterActivationChart 
                     v-if="counts?.examCentersAcceptanceStatus" 
                     :data="counts.examCentersAcceptanceStatus" 
@@ -98,11 +90,11 @@ onMounted(async () => {
                 <div v-else class="flex items-center justify-center h-64 bg-gray-100 rounded-lg">
                     <span class="text-gray-500">لا توجد بيانات للعرض</span>
                 </div>
-            </div>
-            <div class="col-span-2">
-                <AppChartBookingTimeMaterialChart 
-                    v-if="proficiencyExamGroupChartData" 
-                    :data="proficiencyExamGroupChartData" 
+            </div> -->
+            <div class="col-span-3">
+                <AppChartCollegeStudentCountsChart 
+                    v-if="counts?.collegeStudentCounts" 
+                    :data="counts.collegeStudentCounts" 
                 />
                 <div v-else class="flex items-center justify-center h-64 bg-gray-100 rounded-lg">
                     <span class="text-gray-500">لا توجد بيانات للعرض</span>
@@ -113,7 +105,9 @@ onMounted(async () => {
         <!-- Attendance Charts Section -->
         <div class="w-full">
             <AppChartAttendanceChartsLayout 
-                :registered-students-statistics="counts?.registeredStudentsStatistics" 
+                :registered-students-statistics="counts?.registeredStudentsStatistics"
+                :pass-fail-chart-data="counts?.passFailChartData"
+                :group-student-counts="counts?.groupStudentCounts"
             />
         </div>
     </div>
