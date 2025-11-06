@@ -190,6 +190,8 @@ const clearSelected = () => {
 const selectAllItems = () => {
   selectedItems.value = items.value
 }
+
+
 // watchDeep(() => oldData.value,() => {
 //     items.value [...oldData.value]
 // })

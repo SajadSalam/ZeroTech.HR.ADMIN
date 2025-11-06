@@ -9,6 +9,7 @@ interface Props {
   pagination?: boolean
   totalPages?: number
   hideCreate?: boolean
+  createLink?:string
   addBtnAction?: () => void
 }
 const props = defineProps<Props>()
@@ -47,10 +48,20 @@ const isFiltersOpen = ref(false)
       >
         <Icon name="carbon:filter-edit" size="23" />
       </BaseButtonIcon>
-      <BaseButton v-if="!hideCreate" class="gap-1" color="primary" @click="addBtnAction">
+      <BaseButton v-if="!hideCreate && !props.createLink" class="gap-1" color="primary" @click="addBtnAction">
         <Icon name="ph-plus-circle-duotone" size="20" />
         {{ addButtonText || $t('add') }}
       </BaseButton>
+      <NuxtLink
+          v-if="!hideCreate && props.createLink"
+          :to="props.createLink"
+          class="flex items-center gap-1 btn btn-primary"
+        >
+        <BaseButton v-if="!hideCreate && props.createLink" class="gap-1" color="primary" @click="addBtnAction">
+          <Icon name="ph-plus-circle-duotone" size="20" />
+          {{ addButtonText || $t('add') }}
+        </BaseButton>
+      </NuxtLink>
     </div>
   </div>
   <transition name="slide-fade">
