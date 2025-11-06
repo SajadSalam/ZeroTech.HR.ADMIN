@@ -105,7 +105,7 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
       </div>
 
 
-      <div class="w-full flex items-center gap-2 p-2 ">
+      <div class="w-full  p-2 gap-4 grid grid-cols-3">
         <AppAutoCompleteField
           v-model="element.type"
           :items="questionTypeOptions($t)"
@@ -134,7 +134,7 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
           item-label="name"
           item-value="id"
         />
-        <BaseTag
+        <!-- <BaseTag
           variant="pastel"
           :color="
             element.auditStatus != AuditStatus.Pending
@@ -146,7 +146,7 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
           so
         >
           {{ $t(AuditStatus[element.auditStatus ?? 1]) }}
-        </BaseTag>
+        </BaseTag> -->
         <!-- <BaseButtonIcon
           color="muted"
           variant="outline"
@@ -190,19 +190,26 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
         :label="$t('answer')"
         :disabled="isEvaluation"
       />
-      <div v-if="element.type === QuestionType.TrueOrFalse" class="mt-5 flex items-center gap-5">
-        <BaseRadio
+      <div v-if="element.type === QuestionType.TrueOrFalse" class="mt-5 flex flex-col gap-5">
+        <p >
+          <span class="font-bold"> {{$t('note')}} : </span>
+          {{ $t('select-the-correct-answer') }}
+        </p>
+        <div class="flex items-center gap-5 mt-5">
+
+          <BaseRadio
           v-model="element.correctBoolean"
           :label="$t('true')"
           :value="true"
           :disabled="isEvaluation"
-        />
-        <BaseRadio
+          />
+          <BaseRadio
           v-model="element.correctBoolean"
           :label="$t('false')"
           :value="false"
           :disabled="isEvaluation"
-        />
+          />
+        </div>
         <!-- <BaseListbox
                   v-model="element.correctBoolean"
                   :items="[true, false]"
