@@ -5,31 +5,41 @@
 
     <!-- Charts Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-6">
-      <!-- Donut Chart -->
-       
-      <!-- Bar Chart -->
+      <!-- Bar Chart - Student counts per group -->
       <div class="col-span-2">
-        <AppChartHallAttendanceBarChart />
-      </div>
-      <div class="col-span-1">
-        <AppChartAttendanceDonutChart 
-          v-if="registeredStudentsStatistics"
-          :data="registeredStudentsStatistics" 
+        <AppChartGroupStudentCountsChart 
+          v-if="groupStudentCounts"
+          :data="groupStudentCounts"
         />
         <div v-else class="flex items-center justify-center h-64 bg-white rounded-3xl">
           <span class="text-gray-500">لا توجد بيانات للعرض</span>
         </div>
       </div>
       
+      <!-- Donut Chart - Pass/Fail -->
+      <div class="col-span-1">
+        <AppChartPassFailStudentsChart 
+          v-if="passFailChartData"
+          :data="passFailChartData.data"
+          :groups="passFailChartData.groups"
+          :subjects="passFailChartData.subjects"
+        />
+        <div v-else class="flex items-center justify-center h-64 bg-white rounded-3xl">
+          <span class="text-gray-500">لا توجد بيانات للعرض</span>
+        </div>
+      </div>
     </div>
+
   </div>
 </template>
 
 <script setup lang="ts">
-import type { RegisteredStudentsStatistics } from '~/views/home/types/counts';
+import type { GroupStudentCount, PassFailChartData, RegisteredStudentsStatistics } from '~/views/home/types/counts';
 
 interface Props {
   registeredStudentsStatistics?: RegisteredStudentsStatistics | null
+  passFailChartData?: PassFailChartData | null
+  groupStudentCounts?: GroupStudentCount[] | null
 }
 
 const props = defineProps<Props>()
