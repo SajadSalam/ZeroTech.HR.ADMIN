@@ -5,18 +5,18 @@ const defaultNavigation = [
     to: '/',
     privilege: 'ums:ems:statistics:superadmin',
   },
-  {
-    name: 'financial-dashboard',
-    icon: { name: 'ph-chart-pie-duotone', class: 'w-5 h-5' },
-    to: '/financial-dashboard',
-    privilege: 'ums:ems:statistics:superadmin',
-  },
-  {
-    name: 'blacklist',
-    icon: { name: 'ph-user-minus-duotone', class: 'w-5 h-5' },
-    to: '/blacklist',
-    privilege: 'ums:ems:external-student-blacklist:view-any',
-  },
+//   {
+//     name: 'financial-dashboard',
+//     icon: { name: 'ph-chart-pie-duotone', class: 'w-5 h-5' },
+//     to: '/financial-dashboard',
+//     privilege: 'ums:ems:statistics:superadmin',
+//   },
+//   {
+//     name: 'blacklist',
+//     icon: { name: 'ph-user-minus-duotone', class: 'w-5 h-5' },
+//     to: '/blacklist',
+//     privilege: 'ums:ems:external-student-blacklist:view-any',
+//   },
   {
     name: 'questions-management',
     icon: { name: 'ph-folders-duotone', class: 'w-5 h-5' },
