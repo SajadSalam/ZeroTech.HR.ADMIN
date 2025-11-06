@@ -28,31 +28,49 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
 <template>
   <BaseCard class="pa-5 my-4 rounded-lg !border-0 !border-s-4 !border-primary-500" :key="modelValue.id">
     <div class="flex items-center justify-between gap-2">
-      <div class="flex items-center gap-2">
-        <BaseButtonIcon
-          color="muted"
-          variant="outline"
-          @click="element.isContentShown = !element.isContentShown"
+      <div class="flex justify-between w-[50%]">
+          <div class="flex items-center gap-2">
+
+            <BaseButtonIcon
+                color="muted"
+                variant="outline"
+                @click="element.isContentShown = !element.isContentShown"
+                >
+                <Icon
+                name="tabler-chevron-down"
+                size="20"
+                class="transition-all duration-500"
+                :class="element.isContentShown ? 'rotate-180 transform' : ''"
+                />
+              </BaseButtonIcon>
+              <Icon name="ph-dots-nine-bold" size="20" />
+              <h1 class="text-2xl font-bold">{{ $t('question') }} {{ modelValue?.sequence }}</h1>
+              <span
+              v-if="topicName"
+              class="border-s-2 border-primary-300 ps-2 text-sm font-medium text-primary-600"
+              >
+              {{ topicName }}
+            </span>
+        </div>
+        <div class="">
+          <BaseTag
+          variant="pastel"
+          :color="
+            element.auditStatus != AuditStatus.Pending
+              ? element.auditStatus == AuditStatus.Rejected
+                ? 'danger'
+                : 'success'
+              : 'warning'
+          "
+          so
         >
-          <Icon
-            name="tabler-chevron-down"
-            size="20"
-            class="transition-all duration-500"
-            :class="element.isContentShown ? 'rotate-180 transform' : ''"
-          />
-        </BaseButtonIcon>
-        <Icon name="ph-dots-nine-bold" size="20" />
-        <h1 class="text-2xl font-bold">{{ $t('question') }} {{ modelValue?.sequence }}</h1>
-        <span
-          v-if="topicName"
-          class="border-s-2 border-primary-300 ps-2 text-sm font-medium text-primary-600"
-        >
-          {{ topicName }}
-        </span>
+          {{ $t(AuditStatus[element.auditStatus ?? 1]) }}
+        </BaseTag>
+        </div>
       </div>
 
-      <div class="w-[50%]" v-if="element.isContentShown">
-        <h1 v-if="element.type !== QuestionType.Dialogue" class="text-2xl font-bold">
+      <div class="w-[50%] " v-if="element.isContentShown">
+        <h1 v-if="element.type !== QuestionType.Dialogue" class="text-2xl font-bold mx-4">
           {{ $t('question-answers') }} 
         </h1>
         <h1 v-else class="text-2xl font-bold">
@@ -64,13 +82,15 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
     </div>
 
     <div
-      class="pa-0 mt-3 max-h-0 overflow-hidden transition-all duration-500"
+      class="pa-0 mt-3 max-h-0 overflow-hidden transition-all duration-500 relative"
       :class="{
         'max-h-full': element.isContentShown,
         hidden: !element.isContentShown,
       }"
     >
+      <hr class=" absolute top-0 bg-gray-100 w-full rotate-90">
       <QuestionForm v-model="element" :is-evaluation="isEvaluation" />
+
 
       
       <div v-if="!isEvaluation" class="flex justify-end gap-2 mt-8">

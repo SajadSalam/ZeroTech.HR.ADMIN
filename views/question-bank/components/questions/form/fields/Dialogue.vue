@@ -198,7 +198,7 @@ const handleFocusOut = (e: FocusEvent, subQuestion: Question) => {
         :class="[
           'mb-3 rounded-lg p-4 w-full  transition-all duration-300 relative',
           subQuestion.isActive
-            ? 'bg-[#F8F8F8] border border-blue-500'
+            ? 'bg-[#F8F8F8] border border-red-50'
             : 'bg-white '
         ]"
       >
