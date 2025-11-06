@@ -51,8 +51,8 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
         </span>
       </div>
 
-      <div class="w-[50%]" v-if="element.isContentShown">
-        <h1 v-if="element.type !== QuestionType.Dialogue" class="text-2xl font-bold">
+      <div class="w-[50%] " v-if="element.isContentShown">
+        <h1 v-if="element.type !== QuestionType.Dialogue" class="text-2xl font-bold mx-4">
           {{ $t('question-answers') }} 
         </h1>
         <h1 v-else class="text-2xl font-bold">
@@ -64,13 +64,15 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
     </div>
 
     <div
-      class="pa-0 mt-3 max-h-0 overflow-hidden transition-all duration-500"
+      class="pa-0 mt-3 max-h-0 overflow-hidden transition-all duration-500 relative"
       :class="{
         'max-h-full': element.isContentShown,
         hidden: !element.isContentShown,
       }"
     >
+      <hr class=" absolute top-0 bg-gray-100 w-full rotate-90">
       <QuestionForm v-model="element" :is-evaluation="isEvaluation" />
+
 
       
       <div v-if="!isEvaluation" class="flex justify-end gap-2 mt-8">

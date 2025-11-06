@@ -87,7 +87,7 @@ const changeCorrect = (item: any) => {
     <BaseButton
       v-if="!isEvaluation"
       variant="outline"
-      color="info"
+      color="danger"
       size="sm"
       class="mt-2 py-4"
       @click="addItem"
