@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { baseURL } from '~/services/app-client/axios'
 
 const props = defineProps<{
@@ -49,7 +49,7 @@ const preview = async (file: File) => {
 <template>
   <div>
     <div
-      class="dark:border-#E0E0E024 dark:hover:border-#E0E0E044 dark:focus:border-#E0E0E044 bg-#0E1224 group cursor-pointer rounded-lg border-[2px] border-dashed border-muted-300 p-3 transition-colors duration-300 hover:border-muted-400"
+      class="border-#E0E0E024 hover:border-#E0E0E044 focus:border-#E0E0E044 bg-#F8F8F8 group cursor-pointer rounded-lg border-[2px] border-dashed border-muted-300 p-3 transition-colors duration-300 hover:border-muted-400"
       tabindex="0"
       role="button"
       @click="open"

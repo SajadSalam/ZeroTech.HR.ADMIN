@@ -27,6 +27,8 @@ if (!modelValue.value?.subQuestions) {
   modelValue.value!.subQuestions = []
 }
 
+
+
 const addSubQuestion = () => {
   if (!modelValue.value?.subQuestions) {
     modelValue.value!.subQuestions = []
@@ -59,12 +61,18 @@ const addSubQuestion = () => {
     topicId: modelValue.value.topicId,
     parentQuestionId: modelValue.value.id,
     isContentShown: true,
+    isSubQuestionContent: true,
     matchingPairs: [],
     orderItems: [],
-    subQuestions: []
+    subQuestions: [],
+    isActive : false,
   }
 
   modelValue.value?.subQuestions.push(newSubQuestion)
+
+  modelValue.value.subQuestions.forEach(q => {
+    if (q.isActive === undefined) q.isActive = false
+  })
 }
 
 const removeSubQuestion = (index: number) => {
@@ -103,6 +111,7 @@ const isQuestionHaveMultipleItems = (question: Question) => {
   )
 }
 
+
 // Watch for sub-question type changes to initialize appropriate data
 const watchSubQuestionType = (subQuestion: Question, newType: QuestionType) => {
   if (!subQuestion.options) {
@@ -140,13 +149,32 @@ const watchSubQuestionType = (subQuestion: Question, newType: QuestionType) => {
 
 const knowledgeLevelStore = useKnowledgelevelStore()
 const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
+
+
+const handleFocusIn = (e: FocusEvent, subQuestion: Question) => {
+  // mark active 
+  subQuestion.isActive = true
+}
+
+const handleFocusOut = (e: FocusEvent, subQuestion: Question) => {
+  const container = e.currentTarget as HTMLElement | null
+
+  setTimeout(() => {
+    // clear isActive
+    if (!container || !container.contains(document.activeElement)) {
+      subQuestion.isActive = false
+    }
+  }, 0)
+}
+
+
 </script>
 
 <template>
-  <div class="w-full"> 
+  <div class="w-full "> 
     <div class="mb-4 flex items-center justify-between">
       <h1 class="text-lg font-semibold">
-        {{ $t('sub-questions') }}
+        <!-- {{ $t('sub-questions') }} -->
       </h1>
       <BaseButton
         v-if="!isEvaluation"
@@ -160,15 +188,41 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
       </BaseButton>
     </div>
 
-    <div
-      v-for="(subQuestion, index) in modelValue?.subQuestions"
-      :key="subQuestion.id || index"
-      class="mb-6 rounded-lg border border-gray-200 p-4 w-full"
-    >
+    
+
+      <div
+        v-for="(subQuestion, index) in modelValue?.subQuestions"
+        :key="subQuestion.id || index"
+        @focusin="(e) => handleFocusIn(e, subQuestion)"
+        @focusout="(e) => handleFocusOut(e, subQuestion)"
+        :class="[
+          'mb-3 rounded-lg p-4 w-full  transition-all duration-300 relative',
+          subQuestion.isActive
+            ? 'bg-[#F8F8F8] border border-blue-500'
+            : 'bg-white '
+        ]"
+      >
+
+      <hr class="absolute bottom-0  w-[95%] my-0 mx-auto bg-blue-700 ">
+
+
       <!-- Sub-question header -->
       <div class="mb-4 flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <Icon name="ph-dots-nine-bold" size="20" />
+          <BaseButtonIcon
+            color="muted"
+            variant="outline"
+            class="rounded-full"
+            @click="subQuestion.isSubQuestionContent = !subQuestion.isSubQuestionContent"
+          >
+            <Icon
+              name="tabler-chevron-down"
+              size="20"
+              class="transition-all duration-500 "
+              :class="!subQuestion.isSubQuestionContent ? 'rotate-180 transform' : ''"
+            />
+          </BaseButtonIcon>
+          <!-- <Icon name="ph-dots-nine-bold" size="20" /> -->
           <h2 class="text-lg font-medium">{{ $t('sub-question') }} {{ index + 1 }}</h2>
         </div>
         <div v-if="!isEvaluation" class="flex items-center gap-2">
@@ -191,37 +245,10 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
         </div>
       </div>
 
-       <!-- Sub-question type and difficulty selectors -->
-       <div class="mb-4 grid gap-3 md:grid-cols-3">
-         <AppAutoCompleteField
-           v-model="modelValue.subQuestions![index].type"
-           :items="questionTypeOptions($t).filter(opt => opt.value !== QuestionType.Dialogue)"
-           :placeholder="$t('select-a-question-type')"
-           item-label="label"
-           item-value="value"
-           :disabled="isEvaluation"
-           @update:model-value="(newValue) => watchSubQuestionType(modelValue.subQuestions![index], newValue)"
-         />
-         <AppAutoCompleteField
-           v-model="modelValue.subQuestions![index].difficulty"
-           :items="difficultyOptions($t)"
-           :placeholder="$t('select-a-difficulty')"
-           item-label="label"
-           item-value="value"
-           :disabled="isEvaluation"
-         />
-            <AppAutoCompleteField
-           v-model="modelValue.subQuestions![index].knowledgeLevelId"
-           :placeholder="$t('select-a-knowledge')"
-           :disabled="isEvaluation"
-           :items="knowledgeLevels"
-           item-label="name"
-           item-value="id"
-         />
-       </div>
+      <div class="" v-if="!subQuestion.isSubQuestionContent">
 
-       <!-- Sub-question title and content -->
-       <AppInputWithFile
+      <!-- Sub-question title and content -->
+      <AppInputWithFile
          v-model:input="modelValue.subQuestions![index].title"
          v-model:file="modelValue.subQuestions![index].image"
          :disabled="isEvaluation"
@@ -246,6 +273,38 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
            :placeholder="$t('enter-alternate-title')"
          />
        </div>
+
+       <!-- Sub-question type and difficulty selectors -->
+       <div class="mb-4 grid gap-3 md:grid-cols-3">
+         <AppAutoCompleteField
+           v-model="modelValue.subQuestions![index].type"
+           :items="questionTypeOptions($t).filter(opt => opt.value !== QuestionType.Dialogue)"
+           :placeholder="$t('select-a-question-type')"
+           item-label="label"
+           item-value="value"
+           :disabled="isEvaluation"
+           @update:model-value="(newValue) => watchSubQuestionType(modelValue.subQuestions![index], newValue)"
+         />
+         <AppAutoCompleteField
+           v-model="modelValue.subQuestions![index].difficulty"
+           :items="difficultyOptions($t)"
+           :placeholder="$t('select-a-difficulty')"
+           item-label="label"
+           item-value="value"
+           :disabled="isEvaluation"
+         />
+            <AppAutoCompleteField
+              v-model="modelValue.subQuestions![index].knowledgeLevelId"
+              :placeholder="$t('select-a-knowledge')"
+              :disabled="isEvaluation"
+              :items="knowledgeLevels"
+              item-label="name"
+              item-value="id"
+            />
+       </div>
+
+       
+       <hr/>
 
        <!-- Sub-question specific form fields based on type -->
        <div class="sub-question-content">
@@ -302,7 +361,9 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
            :is-evaluation="isEvaluation"
          />
        </div>
+      </div>
     </div>
+
 
     <!-- Empty state -->
     <div
@@ -322,6 +383,8 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
         {{ $t('add-first-sub-question') }}
       </BaseButton>
     </div>
+
+
   </div>
 </template>
 

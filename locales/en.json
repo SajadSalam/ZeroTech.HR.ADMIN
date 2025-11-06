@@ -591,7 +591,6 @@
   "all-questions-failed-to-import": "All questions failed to import. Please check the errors below",
   "import-summary": "Import Summary",
   "total-rows": "Total Rows",
-  "successful": "Successful",
   "failed": "Failed",
   "import-errors": "Import Errors",
   "try-again": "Try Again",
@@ -732,8 +731,6 @@
   "supervisor-otp-code": "Supervisor OTP Code",
   "supervisor-otp-instructions": "Share this code with the supervisor for authentication",
   "generate-new-otp": "Generate New OTP",
-  "try-again": "Try Again",
-  "close": "Close",
   "mark-as-cheating": "Mark as Cheating",
   "blacklist-student": "Blacklist Student",
   "student-details": "Student Details",
@@ -784,5 +781,6 @@
   "please-select-file-and-question-type": "Please select file and question type",
   "select-all": "Select All",
   "available": "available",
-  "creation-start-date-before-creation-end-date": "Start date must be before end date"
+  "creation-start-date-before-creation-end-date": "Start date must be before end date",
+  "create-exams-with-filters": "Create new exam by entering the fields"
 }

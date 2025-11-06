@@ -56,7 +56,7 @@ const openExamDetails = (exam: Record<string, any>) => {
       pagination
       v-model:current-page="filters.pageNumber"
       :total-pages="examStore.totalPages"
-      :add-btn-action="() => (examStore.isCreateDialogOpen = true)"
+      create-link="/exams/create-exam"  
       :add-button-text="$t('create-exams')"
       :hide-create="!hasPrivilege('ums:ems:exam:create')"
     >
@@ -158,7 +158,7 @@ const openExamDetails = (exam: Record<string, any>) => {
       </AppTable>
     </AppCrud>
   </div>
-  <ExamCreate />
+  <!-- <ExamCreate /> -->
   <ExamDetails v-model="isExamDialogOpen" :examId="examId" />
   <ExamEdit v-model="isUpdateDialogOpen" :examId="examId" />
 </template>

@@ -38,9 +38,6 @@ const changeCorrect = (item: any) => {
 
 <template>
   <div>
-    <h1 class="my-3">
-      {{ $t('question-answers') }}
-    </h1>
     <div
       v-for="(item, index) in modelValue?.options"
       :key="`option-${index}`"
@@ -58,6 +55,7 @@ const changeCorrect = (item: any) => {
         <BaseButtonIcon
           :color="item.isCorrect ? 'success' : 'none'"
           variant="outline"
+          class="border mx-1"
           :disabled="isEvaluation"
           @click="changeCorrect(item)"
         >
@@ -66,6 +64,7 @@ const changeCorrect = (item: any) => {
         <BaseButtonIcon
           :color="!item.isCorrect ? 'danger' : 'none'"
           variant="outline"
+          class="border mx-1"
           :disabled="isEvaluation"
           @click="changeCorrect(item)"
         >
@@ -75,12 +74,12 @@ const changeCorrect = (item: any) => {
           v-if="!isEvaluation"
           color="danger"
           variant="outline"
-          class="mx-2"
+          class="mx-2 "
           size="sm"
           @click="removeItem(index)"
         >
-          <Icon name="tabler-circle-x" class="me-1 text-danger-500" size="20" />
-          <span class="text-nowrap text-xs">{{ $t('delete-option') }}</span>
+          <Icon name="tabler:trash" class=" text-danger-500" size="20" />
+          <!-- <span class="text-nowrap text-xs">{{ $t('delete-option') }}</span> -->
         </BaseButton>
       </div>
     </div>
@@ -88,9 +87,9 @@ const changeCorrect = (item: any) => {
     <BaseButton
       v-if="!isEvaluation"
       variant="outline"
-      color="primary"
+      color="info"
       size="sm"
-      class="mt-5"
+      class="mt-2 py-4"
       @click="addItem"
     >
       <Icon name="tabler-plus" size="20" />

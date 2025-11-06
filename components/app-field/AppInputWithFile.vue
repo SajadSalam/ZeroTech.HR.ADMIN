@@ -99,7 +99,7 @@ const removeImage = () => {
       :placeholder="placeholder || $t('enter-the-text')"
       :size="size || 'md'"
       :classes="{
-        wrapper: 'w-full',
+        wrapper: 'w-full ',
       }"
       :disabled="disabled"
     />

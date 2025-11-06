@@ -28,7 +28,7 @@ const alphabetIndex = (index: number) => {
 </script>
 
 <template>
-  <div>
+  <div class="bg-[#F8F8F8] border-blue-500">
     <h1 class="my-3">
       {{ $t('question-answers') }}
     </h1>

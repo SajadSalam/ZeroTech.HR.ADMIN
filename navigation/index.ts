@@ -66,12 +66,12 @@ const defaultNavigation = [
       },
     ],
   },
-   {
-        name: 'examination-centers-management',
-        icon: { name: 'ph-building-duotone', class: 'w-5 h-5' },
-        to: '/examination-centers',
-        privilege: 'ums:ems:examcenter:view-any',
-      },
+//    {
+//         name: 'examination-centers-management',
+//         icon: { name: 'ph-building-duotone', class: 'w-5 h-5' },
+//         to: '/examination-centers',
+//         privilege: 'ums:ems:examcenter:view-any',
+//       },
   {
     name: 'exams-management',
     icon: { name: 'ph-list-checks-duotone', class: 'w-5 h-5' },
