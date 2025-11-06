@@ -391,6 +391,7 @@ function onSelectedAvailableDays(items) {
                 :end-date="body.endDate.$model ?? new Date('2026-01-01')"
                 :available-days="selectedAvailableDaysObjects"
                 :blueprint-id="body.examTemplateId.$model"
+                :duration="body.duration.$model"
                 />
 
         </div>

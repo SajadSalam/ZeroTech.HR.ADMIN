@@ -13,6 +13,7 @@ interface Props {
   endDate?: string | Date
   availableDays?: null | string[]
   blueprintId?: null | number
+  duration?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -169,9 +170,9 @@ const formatDate = (date: string | Date) => {
               <div class="w-10 h-10 bg-[#F3F3F3] rounded-full flex items-center justify-center mb-3">
                 <Icon name="ph:calendar-blank-duotone" class="text-[#9F9E9E] w-5 h-5" />
               </div>
-              <h1 class="text-lg font-bold text-gray-800 mb-2">{{ $t('end-date') }}</h1>
+              <h1 class="text-lg font-bold text-gray-800 mb-2">{{ $t('duration') }}</h1>
               <span class="inline-block py-1.5 text-blue-600 text-sm font-bold">
-                {{ endDate ? formatDate(endDate) : '--/--/----' }}
+                {{ duration }} {{ $t('minute') }}
               </span>
             </div>
           </div>
