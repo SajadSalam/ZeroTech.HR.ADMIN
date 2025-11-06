@@ -41,7 +41,7 @@ const formatDate = (date: string | Date) => {
 </script>
 
 <template>
-    <div class="w-full max-w-[374px] bg-white rounded-xl shadow-sm border border-gray-200 p-6 font-sans">
+    <div class="w-full bg-white rounded-xl shadow-sm border border-gray-300 border-solid p-6 font-sans">
       <!-- Header Section -->
       <div class="flex items-start gap-3 mb-4">
         <div>
@@ -54,7 +54,7 @@ const formatDate = (date: string | Date) => {
       <!-- Content Items -->
       <div class="space-y-5">
         <!-- Groups -->
-        <div v-if="groups" class="flex items-start gap-3 rounded-xl border border-[#E2E8F0] p-4">
+        <div v-if="groups" class="flex items-start gap-3 rounded-xl border border-[#E2E8F0] border-solid p-4">
             <div class="flex-1">
                 <div class="w-10 h-10 bg-[#F3F3F3] rounded-full flex items-center justify-center mb-3">
                     <Icon name="majesticons:box" class="text-[#9F9E9E] w-5 h-5" />
@@ -91,7 +91,7 @@ const formatDate = (date: string | Date) => {
         </div>
   
         <!-- Exam Centers -->
-        <div v-if="examCenters" class="flex items-start gap-3 rounded-xl border border-[#E2E8F0] p-4">
+        <div v-if="examCenters" class="flex items-start gap-3 rounded-xl border border-[#E2E8F0] border-solid p-4">
             <div class="flex-1">
                 <div class="w-10 h-10 bg-[#F3F3F3] rounded-full flex items-center justify-center mb-3">
                     <Icon name="majesticons:list-box" class="text-[#9F9E9E] w-5 h-5" />
@@ -122,7 +122,7 @@ const formatDate = (date: string | Date) => {
         <!-- Time Cards in Same Row -->
         <div v-if="startTime || endTime" class="grid grid-cols-2 gap-4">
           <!-- Start Time Card -->
-          <div class="rounded-xl border border-[#E2E8F0] p-4">
+          <div class="rounded-xl border border-[#E2E8F0] border-solid p-4">
             <div class="flex flex-col">
               <div class="w-10 h-10 bg-[#F3F3F3] rounded-full flex items-center justify-center mb-3">
                 <Icon name="ph:clock-duotone" class="text-[#9F9E9E] w-5 h-5" />
@@ -135,7 +135,7 @@ const formatDate = (date: string | Date) => {
           </div>
 
           <!-- End Time Card -->
-          <div class="rounded-xl border border-[#E2E8F0] p-4">
+          <div class="rounded-xl border border-[#E2E8F0] border-solid p-4">
             <div class="flex flex-col">
               <div class="w-10 h-10 bg-[#F3F3F3] rounded-full flex items-center justify-center mb-3">
                 <Icon name="ph:clock-duotone" class="text-[#9F9E9E] w-5 h-5" />
@@ -151,7 +151,7 @@ const formatDate = (date: string | Date) => {
         <!-- Date Cards in Same Row -->
         <div v-if="startDate || endDate" class="grid grid-cols-2 gap-4">
           <!-- Start Date Card -->
-          <div class="rounded-xl border border-[#E2E8F0] p-4">
+          <div class="rounded-xl border border-[#E2E8F0] border-solid p-4">
             <div class="flex flex-col">
               <div class="w-10 h-10 bg-[#F3F3F3] rounded-full flex items-center justify-center mb-3">
                 <Icon name="ph:calendar-blank-duotone" class="text-[#9F9E9E] w-5 h-5" />
@@ -164,7 +164,7 @@ const formatDate = (date: string | Date) => {
           </div>
 
           <!-- End Date Card -->
-          <div class="rounded-xl border border-[#E2E8F0] p-4">
+          <div class="rounded-xl border border-[#E2E8F0] border-solid p-4">
             <div class="flex flex-col">
               <div class="w-10 h-10 bg-[#F3F3F3] rounded-full flex items-center justify-center mb-3">
                 <Icon name="ph:calendar-blank-duotone" class="text-[#9F9E9E] w-5 h-5" />

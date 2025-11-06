@@ -258,7 +258,7 @@ function onSelectedAvailableDays(items) {
 </script>
 
 <template>
-    <div class="w-full h-screen grid grid-cols-1 lg:grid-cols-3 gap-6 py-6 " >
+    <div class="w-full h-screen grid grid-cols-1 lg:grid-cols-3 gap-6  " >
         <div class="relative mb-6 col-span-2">
             <!-- Tabs -->
             <div class="flex gap-2 absolute -top-10 right-4">
@@ -372,8 +372,8 @@ function onSelectedAvailableDays(items) {
                     </div>
                 </div>
 
-                <BaseButton color="primary" :loading="examStore.isLoading" class="gap-1 m-2 w-full" @click="submit">
-                    <Icon name="ph:upload-simple-duotone" class="size-5" />
+                <BaseButton color="primary" :loading="examStore.isLoading" class=" w-full " @click="submit">
+                    <Icon name="ph:upload-simple-duotone" class="size-5 me-3" />
                     {{ $t('save-change') }}
                 </BaseButton>
             </div>
