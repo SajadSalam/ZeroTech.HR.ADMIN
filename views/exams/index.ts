@@ -1,5 +1,3 @@
-import type { TableHeader } from '~/components/app-table/types'
-import type { Exam } from './types'
 
 export const tableHeaders = (t: (key: string) => string) => {
   return [
@@ -8,11 +6,7 @@ export const tableHeaders = (t: (key: string) => string) => {
       label: t('title'),
       icon: 'lucide:file-text',
     },
-    {
-      key: 'availableDays',
-      label: t('available-days'),
-      icon: 'lucide:file-text',
-    },
+    
     {
       key: 'examType',
       label: t('exam-type'),
