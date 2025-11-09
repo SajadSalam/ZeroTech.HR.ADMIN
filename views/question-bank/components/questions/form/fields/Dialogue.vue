@@ -173,8 +173,8 @@ const handleFocusOut = (e: FocusEvent, subQuestion: Question) => {
 <template>
   <div class="w-full "> 
     <div class="mb-4 flex items-center justify-between">
-      <h1 class="text-lg font-semibold">
-        <!-- {{ $t('sub-questions') }} -->
+      <h1 class="text-sm w-[75%]">
+        ⚠️ <b>{{ $t('note') }}:</b>  {{ $t('sub-questions-note') }}
       </h1>
       <BaseButton
         v-if="!isEvaluation"
