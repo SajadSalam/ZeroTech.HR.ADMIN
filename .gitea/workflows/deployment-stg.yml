@@ -3,20 +3,20 @@ name: Docker Build and Push
 on:
   push:
     tags:
-      - 'ums-national-ems-admin-stg-v*'
+      - 'ums-ems-vue-admin-stg-v*'
 
 jobs:
   ######## Staging Environment ########
   Build-Stg:
     runs-on: ubuntu-latest
-    if: startsWith(gitea.ref, 'refs/tags/ums-national-ems-admin-stg-v')
+    if: startsWith(gitea.ref, 'refs/tags/ums-ems-vue-admin-stg-v')
     steps:
       - name: Building
         uses: https://${{ secrets.DEVOPS_TOKEN }}:@gitea.ta3leem.dev/devops/cicd-template/templates/node_js_build@main
         with:
-          app_name: 'ums-national-ems-admin'
+          app_name: 'ums-ems-vue-admin'
           docker_registry_url: ${{ vars.CONTAINER_REGISTRY_URL }}
-          docker_registry_path: mohesr/ums-national-ems-admin
+          docker_registry_path: mohesr/ums-ems-vue-admin
           docker_image_tag: stg
           docker_registry_user: ${{ secrets.CONTAINER_REGISTRY_USER }}
           docker_registry_password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
@@ -25,7 +25,7 @@ jobs:
   Deploy-stg:
     needs: Build-Stg
     runs-on: ubuntu-latest
-    if: startsWith(gitea.ref, 'refs/tags/ums-national-ems-admin-stg-v')
+    if: startsWith(gitea.ref, 'refs/tags/ums-ems-vue-admin-stg-v')
     container:
       image: 'gitea.ta3leem.dev/devops/infra-base-images/kubectl:${{ vars.KUBECTL_VERSION }}'
       credentials:
@@ -35,5 +35,5 @@ jobs:
       - name: Deploying
         uses: https://${{ secrets.DEVOPS_TOKEN }}:@gitea.ta3leem.dev/devops/cicd-template/templates/kubernetes_deploy@main
         with:
-          app_name: 'ums-national-ems-admin'
+          app_name: 'ums-ems-vue-admin'
           kubeconfig: ${{ secrets.STG_KUBECONFIG }}
