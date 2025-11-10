@@ -2,8 +2,8 @@ import axios from 'axios'
 import { useToast } from '~/composables/toaster'
 
 // export const baseURL = 'http://192.168.50.163:5002/'
-// export const baseURL = 'https://ums-national-ems-api-stg.mohesr.net/'
-export const baseURL = import.meta.env.VITE_BASE_URL
+export const baseURL = 'https://ums-national-ems-api-stg.mohesr.net/'
+// export const baseURL = import.meta.env.VITE_BASE_URL
 
 const axiosIns = axios.create({
     baseURL: `${baseURL}api`,

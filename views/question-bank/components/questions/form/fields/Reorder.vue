@@ -30,13 +30,6 @@ const removeItem = (index: number) => {
 
 <template>
   <div>
-
-    <div class="mb-4 flex items-center justify-between">
-      <h1 class="text-sm">
-        ⚠️ <b>{{ $t('note') }}:</b> {{ $t('reorder-note') }}
-      </h1>
-    </div>
-
     <draggable v-model="modelValue.orderItems" item-key="order" class="my-5" :options="dragOptions">
       <template #item="{ index }">
         <div class="my-3 flex w-full items-center gap-5">

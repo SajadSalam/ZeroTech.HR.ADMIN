@@ -38,13 +38,6 @@ const changeCorrect = (item: any) => {
 
 <template>
   <div>
-
-    <div class="mb-4 flex items-center justify-between">
-      <h1 class="text-sm">
-        ⚠️ <b>{{ $t('note') }}:</b> {{ $t('multitems-note') }}
-      </h1>
-    </div>
-
     <div
       v-for="(item, index) in modelValue?.options"
       :key="`option-${index}`"

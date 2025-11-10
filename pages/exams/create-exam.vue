@@ -50,8 +50,12 @@ const openExamDetails = (exam: Record<string, any>) => {
 </script>
 
 <template>
-  <div class="my-12 mx-4">
+  <div>
+    <AppCrudCustom
+      :hideCreate="true"
+    >
       <CreateExamPage />
+    </AppCrudCustom>
   </div>
   
 </template>

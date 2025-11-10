@@ -145,7 +145,7 @@ const calculateDuration = () => {
     }
 }
 watchDeep(body, calculateDuration)
-
+const router = useRouter()
 const submit = async () => {
     const isValid = await body.value.$validate()
 

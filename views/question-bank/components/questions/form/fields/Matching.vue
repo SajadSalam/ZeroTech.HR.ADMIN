@@ -29,13 +29,6 @@ const alphabetIndex = (index: number) => {
 
 <template>
   <div class=" border-blue-500">
-
-    <div class="mb-4 flex items-center justify-between">
-      <h1 class="text-sm">
-        ⚠️ <b>{{ $t('note') }}:</b> {{ $t('matching-note') }}
-      </h1>
-    </div>
-
     <div
       v-for="(item, index) in modelValue?.matchingPairs"
       :key="`matching${index}`"

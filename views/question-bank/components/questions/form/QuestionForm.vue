@@ -184,21 +184,17 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
         :label="$t('answer')"
         :disabled="isEvaluation"
       />
-      <div v-if="element.type === QuestionType.Blank" class="flex flex-col">
-        <h1 class="text-sm mb-4">
-        ⚠️ <b>{{ $t('note') }}:</b>  {{ $t('fill-the-blank-note') }}
-        </h1>
-          <BaseInput
-            v-if="element.type === QuestionType.Blank"
-            v-model="element.correctText"
-            :label="$t('answer')"
-            :disabled="isEvaluation"
-          />
-      </div>
+      <BaseInput
+        v-if="element.type === QuestionType.Blank"
+        v-model="element.correctText"
+        :label="$t('answer')"
+        :disabled="isEvaluation"
+      />
       <div v-if="element.type === QuestionType.TrueOrFalse" class="mt-5 flex flex-col gap-5">
-        <h1 class="text-sm ">
-          ⚠️ <b>{{ $t('note') }}:</b>  {{ $t('select-the-correct-answer') }}
-        </h1>
+        <p >
+          <span class="font-bold"> {{$t('note')}} : </span>
+          {{ $t('select-the-correct-answer') }}
+        </p>
         <div class="flex items-center gap-5 mt-5">
 
           <BaseRadio
