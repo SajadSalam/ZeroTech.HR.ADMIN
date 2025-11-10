@@ -5,18 +5,7 @@ const defaultNavigation = [
     to: '/',
     privilege: 'ums:ems:statistics:superadmin',
   },
-//   {
-//     name: 'financial-dashboard',
-//     icon: { name: 'ph-chart-pie-duotone', class: 'w-5 h-5' },
-//     to: '/financial-dashboard',
-//     privilege: 'ums:ems:statistics:superadmin',
-//   },
-//   {
-//     name: 'blacklist',
-//     icon: { name: 'ph-user-minus-duotone', class: 'w-5 h-5' },
-//     to: '/blacklist',
-//     privilege: 'ums:ems:external-student-blacklist:view-any',
-//   },
+
   {
     name: 'questions-management',
     icon: { name: 'ph-folders-duotone', class: 'w-5 h-5' },
@@ -66,12 +55,6 @@ const defaultNavigation = [
       },
     ],
   },
-//    {
-//         name: 'examination-centers-management',
-//         icon: { name: 'ph-building-duotone', class: 'w-5 h-5' },
-//         to: '/examination-centers',
-//         privilege: 'ums:ems:examcenter:view-any',
-//       },
   {
     name: 'exams-management',
     icon: { name: 'ph-list-checks-duotone', class: 'w-5 h-5' },

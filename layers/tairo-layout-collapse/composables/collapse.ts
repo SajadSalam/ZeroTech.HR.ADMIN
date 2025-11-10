@@ -73,13 +73,7 @@ export function useCollapse() {
 
     // Check if we need dynamic navigation
     let navigationItems = ((app.tairo as any)?.collapse?.navigation?.items as any[]) || []
-    
-    // Check if we're in exam center detail view and use dynamic navigation
-    if (route.path.startsWith('/examination-centers/') && route.params.id) {
-      const { getExamCenterNavigation } = useDynamicNavigation()
-      const examCenterId = route.params.id as string
-      navigationItems = getExamCenterNavigation(examCenterId)
-    }
+
 
     if (navigationItems.length === 0) {
       return []
