@@ -7,7 +7,7 @@ import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vu
 import { createValidator } from '~/services/validationWithI18n'
 import { Validator } from '~/services/validator'
 import { useExamStore } from '../store/index'
-import { AvailableDays, ExamType, availableDaysOptions, examTypesOptions, proficiencyExamGroupOptions, type ExamCreate } from '../types/index'
+import { ExamType, examTypesOptions, proficiencyExamGroupOptions, type ExamCreate } from '../types/index'
 import ExamCardCreationResult from './ExamCardCreationResult.vue'
 
 
@@ -36,22 +36,12 @@ const formData = reactive<ExamCreate>({
     examTemplateId: null,
     startDate: null,
     startTime: null,
-    endDate: null,
     endTime: null,
     examType: null,
-    // required only when exam type is not final
-    examCenters: [],
     enterTimeAllowed: null,
-    // required only when exam type is final
     examGroups: [],
     instructions: '',
-    // required only when exam type is EvaluationProficiency
-    price: 30000,
-    // required only when exam type is EvaluationProficiency
-    retryPrice: 20000,
-    // required only when exam type is EvaluationProficiency
-    proficiencyExamGroupId: null,
-    availableDays: [],
+
 })
 
 const validator = new Validator<ExamCreate>(
@@ -66,9 +56,6 @@ const validator = new Validator<ExamCreate>(
         },
         startDate: {
             required: createValidator(t, 'start-date', 'required'),
-        },
-        endDate: {
-            required: createValidator(t, 'end-date', 'required'),
         },
         startTime: {
             required: createValidator(t, 'start-time', 'required'),
@@ -87,37 +74,11 @@ const validator = new Validator<ExamCreate>(
             required: createValidator(t, 'enterance-time-allowed', 'required'),
             minValue: createValidator(t, 'enterance-time-allowed', 'minValue', 1),
         },
-        examCenters: {
-            required: createValidator(t, 'exam-centers', 'required'),
-        },
         examGroups: {
             requiredIfFinal: helpers.withMessage(
                 () => t('validation.required', { field: t('groups') }),
                 requiredIf(computed(() => formData.examType === ExamType.Final))
             ),
-        },
-        price: {
-            requiredIfProficiency: helpers.withMessage(
-                () => t('validation.required', { field: t('price') }),
-                requiredIf(computed(() => formData.examType === ExamType.EvaluationProficiency))
-            ),
-            minValue: createValidator(t, 'price', 'minValue', 0),
-        },
-        retryPrice: {
-            requiredIfProficiency: helpers.withMessage(
-                () => t('validation.required', { field: t('retry-price') }),
-                requiredIf(computed(() => formData.examType === ExamType.EvaluationProficiency))
-            ),
-            minValue: createValidator(t, 'retry-price', 'minValue', 0),
-        },
-        proficiencyExamGroupId: {
-            requiredIfProficiency: helpers.withMessage(
-                () => t('validation.required', { field: t('proficiency-exam-group') }),
-                requiredIf(computed(() => formData.examType === ExamType.EvaluationProficiency))
-            ),
-        },
-        availableDays: {
-            required: createValidator(t, 'available-days', 'required'),
         },
     }
 )
@@ -149,37 +110,6 @@ const router = useRouter()
 const submit = async () => {
     const isValid = await body.value.$validate()
 
-    // Check for date validation
-    if (body.value.startDate.$model && body.value.endDate.$model) {
-        const startDate = body.value.startDate.$model
-            ? new Date(body.value.startDate.$model as string)
-            : null
-
-        const endDate = body.value.endDate.$model ? new Date(body.value.endDate.$model as string) : null
-
-        if (startDate && endDate && endDate < startDate) {
-            useToast({
-                message: t('end-date-before-start-date'),
-                isError: true,
-            })
-            return
-        }
-    }
-
-    // Check for time validation when dates are equal
-    if (body.value.startDate.$model === body.value.endDate.$model) {
-        const now = new Date().toISOString().split('T')[0]
-        const startTime = new Date(`${now}T${body.value.startTime.$model}`)
-        const endTime = new Date(`${now}T${body.value.endTime.$model}`)
-
-        if (endTime <= startTime) {
-            useToast({
-                message: t('end-time-before-start-time'),
-                isError: true,
-            })
-            return
-        }
-    }
 
     if (!isValid) {
         return
@@ -192,17 +122,7 @@ const submit = async () => {
         isCreateDialogOpen.value = false
     } catch (error) { }
 }
-// Automatically set endDate = startDate + 1 day
-watch(() => formData.startDate, (newStartDate) => {
-  if (!newStartDate) {
-    formData.endDate = null
-    return
-  }
 
-  const start = new Date(newStartDate)
-  start.setDate(start.getDate() + 1) // add 1 day
-  formData.endDate = start.toISOString().split('T')[0] // keep as YYYY-MM-DD
-})
 
 const updateInstructions = (content: string) => {
     // Remove HTML tags and trim whitespace to check if content is empty
@@ -219,33 +139,22 @@ const updateExamType = (type: ExamType) => {
 
 onMounted(() => {
     body.value.examType.$model = examTypesOptions(t)[0].value
-
-    body.value.availableDays.$model = availableDaysOptions(t)
-        .filter(day => day.value !== AvailableDays.Friday)
-        .map(day => day.value)
 })
 
 
 const selectedGroupObjects = ref([])
-const selectedExamCentersObjects = ref([])
-const selectedAvailableDaysObjects = ref([])
 
-function onSelectedGroups(items) {
-  selectedGroupObjects.value = items
+function onSelectedGroups(items: any) {
+    selectedGroupObjects.value = items
 }
 
-function onSeelectExamCenters(items) {
-    selectedExamCentersObjects.value = items
-}
 
-function onSelectedAvailableDays(items) {
-    selectedAvailableDaysObjects.value = items
-}
+
 
 </script>
 
 <template>
-    <div class="w-full h-screen grid grid-cols-1 lg:grid-cols-3 gap-6  " >
+    <div class="w-full h-screen grid grid-cols-1 lg:grid-cols-3 gap-6  ">
         <div class="relative mb-6 col-span-2">
             <!-- Tabs -->
             <div class="flex gap-2 absolute -top-10 right-4">
@@ -265,7 +174,7 @@ function onSelectedAvailableDays(items) {
                 <div name="slide-up-down">
                     <div>
                         <h1 class="font-bold text-2xl">
-                         {{ $t('create-exams') }} 
+                            {{ $t('create-exams') }}
                         </h1>
                         <p class="text-[#9F9E9E]">
                             {{ $t('create-exams-with-filters') }}
@@ -274,44 +183,28 @@ function onSelectedAvailableDays(items) {
                     <div class="flex flex-col gap-5 rounded-3xl p-3" v-if="body.examType.$model">
                         <AppFieldAppInputField v-model="body.title.$model" :errors="body.title.$errors"
                             :label="$t('title')" :placeholder="$t('enter-title')" />
-                        <div class="grid gap-5 md:grid-cols-2">
+                        <div class="grid gap-5 md:grid-cols-1">
                             <AppAutoCompleteField v-model="body.examTemplateId.$model" fetch-on-search
                                 search-key="search" :errors="body.examTemplateId.$errors" :label="$t('blueprint')"
-                                :placeholder="$t('blueprint')" get-url="/examtemplate" item-label="name" item-value="id" />
+                                :placeholder="$t('blueprint')" get-url="/examtemplate" item-label="name"
+                                item-value="id" />
                             <!-- <AppAutoCompleteField v-model="body.examType.$model" :items="examTypesOptions($t)"
                                 item-label="label" item-value="value" :errors="body.examType.$errors"
                                 :label="$t('exam-type')" :placeholder="$t('exam-type')" /> -->
 
-                            <AppAutoCompleteField v-model="body.examCenters.$model" :errors="body.examCenters.$errors"
-                                :label="$t('exam-centers')" :placeholder="$t('exam-centers')"
-                                item-subtitle="college.fullNameAr" get-url="/exam-center" search-key="search"
-                                fetch-on-search multiple item-label="name"
-                                :class="body.examType.$model != ExamType.Final ? 'col-span-2' : ''" item-value="id"
-                                select-all @update:object-value="onSeelectExamCenters" />
+
 
                         </div>
-                        <!-- EvaluationProficiency specific fields -->
-                        <div v-if="body.examType.$model === ExamType.EvaluationProficiency"
-                            class="grid gap-5 md:grid-cols-3">
-                            <AppFieldAppInputField v-model="body.price.$model" :errors="body.price.$errors"
-                                :label="$t('price')" :placeholder="$t('price')" type="number" min="0" />
-                            <AppFieldAppInputField v-model="body.retryPrice.$model" :errors="body.retryPrice.$errors"
-                                :label="$t('retry-price')" :placeholder="$t('retry-price')" type="number" min="0" />
-                            <AppAutoCompleteField v-model="body.proficiencyExamGroupId.$model"
-                                :errors="body.proficiencyExamGroupId.$errors" :items="proficiencyExamGroupOptions($t)"
-                                item-label="label" item-value="value" :placeholder="$t('proficiency-exam-group')"
-                                :label="$t('proficiency-exam-group')" />
-                        </div>
+                    
                         <div class="grid gap-5 md:grid-cols-2">
-                            
+
                             <AppAutoCompleteField v-if="body.examType.$model == ExamType.Final"
                                 v-model="body.examGroups.$model" fetch-on-search search-key="search"
                                 :errors="body.examGroups.$errors" :label="$t('groups')" :placeholder="$t('groups')"
                                 get-url="/groups" multiple item-label="name" item-value="id"
-                                @update:objectValue="onSelectedGroups" 
-                            />
+                                @update:objectValue="onSelectedGroups" />
                             <AppFieldAppInputField v-model="body.startDate.$model" :errors="body.startDate.$errors"
-                                    :label="$t('start-date')" :placeholder="$t('enter-start-date')" type="date" />
+                                :label="$t('start-date')" :placeholder="$t('enter-start-date')" type="date" />
                         </div>
                         <!-- <div class="grid gap-5 md:grid-cols-2">
                             <AppFieldAppInputField v-model="body.endDate.$model" :errors="body.endDate.$errors"
@@ -325,12 +218,6 @@ function onSelectedAvailableDays(items) {
                                 :label="$t('end-time')" :placeholder="$t('enter-end-time')" type="time" />
 
                         </div>
-                        <!-- <div class="grid gap-5 md:grid-cols-2">
-                            <AppAutoCompleteField class="col-span-4" v-model="body.availableDays.$model"
-                                :errors="body.availableDays.$errors" :label="$t('available-days')"
-                                :placeholder="$t('available-days')" :items="availableDaysOptions($t)" item-label="label"
-                                item-value="value" multiple @update:object-value="onSelectedAvailableDays" />
-                        </div> -->
                         <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
                             <AppFieldAppInputField v-model="body.duration.$model" :errors="body.duration.$errors"
                                 :label="$t('duration-in-minutes')" :placeholder="$t('enter-duration')" disabled />
@@ -367,19 +254,12 @@ function onSelectedAvailableDays(items) {
 
         </div>
         <div class="flex flex-col gap-4">
-            <ExamCardCreationResult 
+            <ExamCardCreationResult
                 :title="examTypesOptions($t).find((type) => type.value === body.examType.$model)?.label"
-                :description="body.title.$model ?? ''"
-                :groups="selectedGroupObjects"
-                :exam-centers="selectedExamCentersObjects"
-                :start-time="body.startTime.$model ?? '09:00'"
-                :end-time="body.endTime.$model ?? '09:00'" 
-                :start-date="body.startDate.$model ?? new Date('2026-01-01')" 
-                :end-date="body.endDate.$model ?? new Date('2026-01-01')"
-                :available-days="selectedAvailableDaysObjects"
-                :blueprint-id="body.examTemplateId.$model"
-                :duration="body.duration.$model"
-                />
+                :description="body.title.$model as string ?? ''" :groups="selectedGroupObjects"
+                :start-time="body.startTime.$model as string ?? '09:00'"
+                :end-time="body.endTime.$model as string ?? '09:00'" :start-date="body.startDate.$model as Date ?? new Date('2026-01-01')"
+                :blueprint-id="body.examTemplateId.$model as number" :duration="body.duration.$model as number" />
 
         </div>
 
@@ -392,6 +272,7 @@ function onSelectedAvailableDays(items) {
     box-shadow: none !important;
     padding: 0 !important;
     position: relative;
+
     label {
         border: none !important;
         margin-bottom: 8px;
@@ -400,8 +281,8 @@ function onSelectedAvailableDays(items) {
 
 .quill-editor {
     border: 1px solid #d1d5db !important;
-    border-bottom-left-radius:  6px !important;
-    border-bottom-right-radius:  6px !important;
+    border-bottom-left-radius: 6px !important;
+    border-bottom-right-radius: 6px !important;
     transition: all 0.2s ease-in-out;
     width: 100%;
     height: 40vh;

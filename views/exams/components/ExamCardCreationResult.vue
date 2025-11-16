@@ -6,12 +6,10 @@ interface Props {
   title?: string
   description?: string
   groups?: null | string[]
-  examCenters?: null | string[]
   startTime?: string
   endTime?: string
   startDate?: string | Date
   endDate?: string | Date
-  availableDays?: null | string[]
   blueprintId?: null | number
   duration?: number
 }
@@ -20,18 +18,15 @@ const props = withDefaults(defineProps<Props>(), {
   title: '---',
   description: 'No description added yet.',
   groups: null,
-  examCenters: null,
   startTime: '--:--',
   endTime: '--:--',
   startDate: '',
   endDate: '',
-  availableDays:  null,
   blueprintId:null
 })
 
 const isDialogGroupOpen = ref(false)
 const isDialogBlueprint = ref(false)
-const isDialogDaysOpen = ref(false)
 
 
 const formatDate = (date: string | Date) => {
@@ -92,7 +87,7 @@ const formatDate = (date: string | Date) => {
         </div>
   
         <!-- Exam Centers -->
-        <div v-if="examCenters" class="flex items-start gap-3 rounded-xl border border-[#E2E8F0] border-solid p-4">
+        <div class="flex items-start gap-3 rounded-xl border border-[#E2E8F0] border-solid p-4">
             <div class="flex-1">
                 <div class="w-10 h-10 bg-[#F3F3F3] rounded-full flex items-center justify-center mb-3">
                     <Icon name="majesticons:list-box" class="text-[#9F9E9E] w-5 h-5" />

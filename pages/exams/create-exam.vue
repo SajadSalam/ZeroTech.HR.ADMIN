@@ -1,11 +1,8 @@
 <script lang="ts" setup>
-import AppCrudActions from '~/components/app-crud/components/AppCrudActions.vue'
-import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import { useAuthStore } from '~/views/auth/store/auth'
 import CreateExamPage from '~/views/exams/components/CreateExamPage.vue'
-import { tableHeaders } from '~/views/exams/index'
 import { useExamStore } from '~/views/exams/store/index'
-import { ExamType, availableDaysOptions, examTypesOptions, proficiencyExamGroupOptions, type ExamFilters } from '~/views/exams/types/index'
+import {type ExamFilters } from '~/views/exams/types/index'
 
 definePageMeta({
   title: 'create-exams',

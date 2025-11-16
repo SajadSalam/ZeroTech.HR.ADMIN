@@ -11,26 +11,11 @@ export interface Exam {
   examType: ExamType | null
   examTemplateId: string | null
   startDate: string | null
-  endDate: string | null
   startTime: string | null
   endTime: string | null
   duration: number | null
   enterTimeAllowed: number | null
-  examCenters: string[] | null
   instructions: string | null
-  // EvaluationProficiency specific fields
-  price: number | null
-  retryPrice: number | null
-  proficiencyExamGroupId: ProficiencyExamGroup | null
-}
-export enum AvailableDays {
-  Sunday = 0,
-  Monday = 1,
-  Tuesday = 2,
-  Wednesday = 3,
-  Thursday = 4,
-  Friday = 5,
-  Saturday = 6,
 }
 export type ExamDto = Exam &
   BaseDto & {
@@ -41,7 +26,6 @@ export type ExamDto = Exam &
     pass?: number
     fail?: number
     templateName?: string
-    availableDays?: AvailableDays[]
   }
 export type ExamDetailed = ExamDto & {
   questions: QuestionDto[]
@@ -49,7 +33,6 @@ export type ExamDetailed = ExamDto & {
 
 export type ExamCreate = Exam & {
   examGroups: string[] | null
-  availableDays: AvailableDays[]
 }
 export type ExamFilters = {
   search: string | null
@@ -81,18 +64,7 @@ export interface LinkedExam {
   gradeTermId: number
   students: Student[]
 }
-export const availableDaysOptions = (t: (key: string) => string) => {
 
-  return [
-    { label: t('sunday'), value: AvailableDays.Sunday },
-    { label: t('monday'), value: AvailableDays.Monday },
-    { label: t('tuesday'), value: AvailableDays.Tuesday },
-    { label: t('wednesday'), value: AvailableDays.Wednesday },
-    { label: t('thursday'), value: AvailableDays.Thursday },
-    { label: t('friday'), value: AvailableDays.Friday },
-    { label: t('saturday'), value: AvailableDays.Saturday },
-  ]
-}
 
 export const examTypesOptions = (t: (key: string) => string) => {
   return [
