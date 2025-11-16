@@ -84,8 +84,9 @@ const getNoDataMessage = computed(() => {
           fetch-on-search
           search-key="name"
           :placeholder="$t('groups')"
-          get-url="/groups"
-          item-label="name"
+          get-url="/groups/lookup"
+          without-data
+          item-label="title"
           item-value="id"
         />
         <BaseCheckbox v-model="filters.hasCurve" :label="$t('has_curve')" />

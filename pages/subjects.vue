@@ -59,13 +59,6 @@ const { hasPrivilege } = useAuthStore()
     >
       <template #filters>
         <BaseInput v-model="filters.name" :placeholder="$t('search')" />
-        <AppAutoCompleteField
-          v-model="filters.subjectId"
-          :placeholder="$t('subject')"
-          get-url="/subjects"
-          item-label="name"
-          item-value="id"
-        />
       </template>
       <AppTable
         title="Subjects"

@@ -71,7 +71,7 @@ const updateQuestionBank = async () => {
                 <AppInputField v-model="body.title.$model" :errors="body.title.$errors" :label="$t('title')"
                     class="col-span-2" />
                 <AppAutoCompleteField v-model="body.categories.$model" fetch-on-search search-key="name"
-                    :label="$t('select-categories')" get-url="/category" multiple item-label="name" item-value="id"
+                    :label="$t('select-categories')" get-url="/category/lookup" without-data multiple item-label="title" item-value="id"
                     class="col-span-2" />
             </div>
 

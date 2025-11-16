@@ -64,10 +64,11 @@ const { hasPrivilege } = useAuthStore()
         <BaseInput v-model="filters.name" :placeholder="$t('search')" />
         <AppAutoCompleteField
          fetchOnSearch
-          searchKey="search"
+          searchKey="name"
           :placeholder="$t('subject')"
-          get-url="/subjects"
-          item-label="name"
+          get-url="/subjects/lookup"
+          without-data
+          item-label="title"
           item-value="id"
           v-model="filters.subjectId"
         />

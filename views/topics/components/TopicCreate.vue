@@ -68,8 +68,9 @@ watch(
           :errors="body.subjectId.$errors"
           size="md"
           :label="$t('subject')"
-          get-url="/subjects"
-          item-label="name"
+          get-url="/subjects/lookup"
+          without-data
+          item-label="title"
           item-value="id"
         />
       </div>

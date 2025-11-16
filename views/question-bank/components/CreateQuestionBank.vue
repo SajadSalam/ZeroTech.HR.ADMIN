@@ -140,9 +140,10 @@ watch(
           fetch-on-search
           search-key="name"
           :label="$t('select-categories')"
-          get-url="/category"
+          get-url="/category/lookup"
+          without-data
           multiple
-          item-label="name"
+          item-label="title"
           item-value="id"
           class="col-span-2"
         />

@@ -90,9 +90,9 @@ const { hasPrivilege } = useAuthStore()
             <template #filters>
                 <BaseInput v-model="filters.search" :placeholder="$t('search')" />
                 <AppAutoCompleteField v-model="filters.subjectId" fetch-on-search search-key="name"
-                    :placeholder="$t('subject')" get-url="/subjects" item-label="name" item-value="id" />
+                    :placeholder="$t('subject')" get-url="/subjects/lookup" without-data item-label="title" item-value="id" />
                 <AppAutoCompleteField v-model="filters.topics" fetch-on-search search-key="name"
-                    :placeholder="$t('topics')" get-url="/topics" item-label="name" item-value="id" multiple />
+                    :placeholder="$t('topics')" get-url="/topics/lookup" without-data item-label="title" item-value="id" multiple />
             </template>
             <AppTable :is-loading="isLoading" v-if="viewType === ViewType.Table" :title="$t('questions-bank')" :headers="tableHeader($t)"
                 :items="questionBanks">

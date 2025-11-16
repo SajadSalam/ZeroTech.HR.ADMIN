@@ -188,13 +188,14 @@ const updateExamType = (type: ExamType) => {
           v-if="body.examType.$model == ExamType.Final"
           v-model="body.examGroups.$model"
           fetch-on-search
-          search-key="search"
+          search-key="name"
           :errors="body.examGroups.$errors"
           :label="$t('groups')"
           :placeholder="$t('groups')"
-          get-url="/groups"
+          get-url="/groups/lookup"
+          without-data
           multiple
-          item-label="name"
+          item-label="title"
           item-value="id"
         />
       </div>

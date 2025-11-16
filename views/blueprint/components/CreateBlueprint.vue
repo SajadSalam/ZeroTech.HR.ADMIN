@@ -74,8 +74,9 @@ const questionBanks = ref([])
       </div>
       <AppAutoCompleteField
         fetch-on-search
-        search-key="search"
-        get-url="/question-bank"
+        search-key="name"
+        get-url="/question-bank/lookup"
+        without-data
         item-label="title"
         item-value="id"
         multiple

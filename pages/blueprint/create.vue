@@ -95,20 +95,20 @@ const removeTopic = (questionBankIndex: number, topicIndex: number) => {
 const fetchRealQuestionCount = async (questionBankIndex: number, topicIndex: number) => {
     const topic = questionBanksList.value[questionBankIndex].topics[topicIndex]
     const questionBankId = questionBanksList.value[questionBankIndex].questionBankId
-    
+
     // Create unique key for this topic's count
     const key = `${questionBankId}-${topicIndex}`
-    
+
     // Build params object, only including defined values
     const params: any = {
         questionBankId
     }
-    
+
     if (topic.topicId) params.topicId = topic.topicId
     if (topic.questionType !== null && topic.questionType !== undefined) params.type = topic.questionType
     if (topic.knowledgeLevelId) params.knowledgeLevelId = topic.knowledgeLevelId
     if (topic.difficulty !== null && topic.difficulty !== undefined) params.difficulty = topic.difficulty
-    
+
     try {
         const response = await axiosIns.get('/question-bank/question-count', { params })
         realQuestionCounts.value[key] = response.data.count || 0
@@ -161,7 +161,7 @@ watchDeep(
         for (const { id } of questionBanks.value) {
             if (!bodyQuestionBanks.some((qb: BlueprintQuestionBank) => qb.questionBankId === id)) {
                 bodyQuestionBanks.push({ questionBankId: id, topics: [] })
-                
+
                 // Fetch blueprint details for this question bank
                 const details = await blueprintStore.getQuestionBankBlueprintDetails(id)
                 if (details) {
@@ -197,7 +197,7 @@ const getTopicsByQuestionBankId = (questionBankId: string) => {
 const getQuestionTypesByTopicId = (questionBankId: string, topicId: string) => {
     const details = questionBankDetails.value[questionBankId]
     if (!details || !topicId) return []
-    
+
     return details.questionTypes
         .filter(qt => qt.topicId === topicId)
         .map(qt => ({
@@ -210,7 +210,7 @@ const getQuestionTypesByTopicId = (questionBankId: string, topicId: string) => {
 const getKnowledgeLevelsByQuestionType = (questionBankId: string, topicId: string, questionType: number | null) => {
     const details = questionBankDetails.value[questionBankId]
     if (!details || !topicId || questionType === null) return []
-    
+
     return details.knowledgeLevels
         .filter(kl => kl.questionType === questionType)
         .map(kl => ({
@@ -223,7 +223,7 @@ const getKnowledgeLevelsByQuestionType = (questionBankId: string, topicId: strin
 const getDifficultiesByKnowledgeLevel = (questionBankId: string, knowledgeLevelId: string) => {
     const details = questionBankDetails.value[questionBankId]
     if (!details || !knowledgeLevelId) return []
-    
+
     return details.difficulties
         .filter(d => d.knowledgeLevelId === knowledgeLevelId)
         .map(d => ({
@@ -237,40 +237,40 @@ const getDifficultiesByKnowledgeLevel = (questionBankId: string, knowledgeLevelI
 const getCurrentQuestionCount = (questionBankIndex: number, topicIndex: number): number => {
     const questionBankId = questionBanksList.value[questionBankIndex]?.questionBankId
     if (!questionBankId) return 0
-    
+
     const key = `${questionBankId}-${topicIndex}`
-    
+
     // Return real count from API if available
     if (realQuestionCounts.value[key] !== undefined) {
         return realQuestionCounts.value[key]
     }
-    
+
     // Fallback to static count from details
     const topic = questionBanksList.value[questionBankIndex]?.topics[topicIndex]
     if (!topic) return 0
-    
+
     const details = questionBankDetails.value[questionBankId]
     if (!details) return 0
-    
+
     if (!topic.topicId) {
         return details.subject.questionCount
     }
-    
+
     if (topic.questionType === null) {
         const topicData = details.topics.find(t => t.id === topic.topicId)
         return topicData?.questionCount || 0
     }
-    
+
     if (!topic.knowledgeLevelId) {
         const questionTypeData = details.questionTypes.find(qt => qt.topicId === topic.topicId && qt.questionType === topic.questionType)
         return questionTypeData?.questionCount || 0
     }
-    
+
     if (topic.difficulty === null) {
         const knowledgeLevel = details.knowledgeLevels.find(kl => kl.id === topic.knowledgeLevelId && kl.questionType === topic.questionType)
         return knowledgeLevel?.questionCount || 0
     }
-    
+
     const difficultyData = details.difficulties.find(d => d.knowledgeLevelId === topic.knowledgeLevelId && d.difficulty === topic.difficulty)
     return difficultyData?.questionCount || 0
 }
@@ -294,7 +294,7 @@ const validateQuestionCounts = (): boolean => {
         for (let topicIndex = 0; topicIndex < questionBank.topics.length; topicIndex++) {
             const topic = questionBank.topics[topicIndex]
             const availableCount = getCurrentQuestionCount(questionBankIndex, topicIndex)
-            
+
             if (topic.numberOfQuestions > availableCount) {
                 useToast({
                     message: t('number-of-questions-exceeds-available-count', {
@@ -307,18 +307,18 @@ const validateQuestionCounts = (): boolean => {
             }
         }
     }
-    
+
     return true
 }
 
 const submit = async () => {
     const isValid = await body.value.$validate()
     if (!isValid) return
-    
-    
+
+
     // Validate question counts
     if (!validateQuestionCounts()) return
-    
+
     const totalGrade = calculateTotalGrade()
     const maximumGrade = Number(body.value.maximumGrade.$model)
     if (totalGrade !== maximumGrade) {
@@ -334,7 +334,7 @@ const submit = async () => {
         isLoading.value = true
         await blueprintStore.create(validator.extractBody())
         router.push('/blueprint')
-    } catch (error) { 
+    } catch (error) {
         console.error(error)
     } finally {
         isLoading.value = false
@@ -353,16 +353,16 @@ const submit = async () => {
             <AppInputField v-model="body.maximumGrade.$model" :errors="body.maximumGrade.$errors"
                 :placeholder="$t('maximum-grade')" :label="$t('maximum-grade')" />
         </div>
-        <AppAutoCompleteField fetch-on-search search-key="search" get-url="/question-bank" item-label="title"
+        <AppAutoCompleteField fetch-on-search search-key="name" get-url="/question-bank/lookup" without-data item-label="title"
             item-value="id" multiple :label="$t('question-banks')" :placeholder="$t('question-banks')"
             :errors="body.questionBanks.$errors" @update:object-value="questionBanks = $event" />
         <p class="text-muted-500">
             {{ $t('choice-at-least-one-question-bank-to-add-settings-for-the-blueprint') }}
         </p>
-        
-       
-        <BaseCard v-for="(questionBank, questionBankIndex) in questionBanksList"
-            :key="questionBank.questionBankId" class="pa-3 my-2">
+
+
+        <BaseCard v-for="(questionBank, questionBankIndex) in questionBanksList" :key="questionBank.questionBankId"
+            class="pa-3 my-2">
             <BaseHeading>
                 {{ $t('bluebrint-settings-for-question-bank') }} (
                 {{ quesitonBankById(questionBank.questionBankId).title }} )
@@ -377,27 +377,31 @@ const submit = async () => {
                     <p class="text-sm text-gray-600">{{ $t('total-questions-in-question-bank') }}</p>
                 </div>
                 <div v-else class="space-y-2">
-                    <div v-for="(topic, topicIndex) in questionBanksList[questionBankIndex].topics" 
-                         :key="topicIndex" 
-                         class="bg-white rounded-md p-3 border border-blue-100">
+                    <div v-for="(topic, topicIndex) in questionBanksList[questionBankIndex].topics" :key="topicIndex"
+                        class="bg-white rounded-md p-3 border border-blue-100">
                         <div class="flex items-center justify-between">
                             <div class="flex-1">
                                 <p class="text-sm font-medium text-gray-700">
                                     {{ $t('topic') }} {{ topicIndex + 1 }}:
                                     <span v-if="topic.topicId" class="text-blue-600">
-                                        {{ getTopicsByQuestionBankId(questionBank.questionBankId).find(t => t.id === topic.topicId)?.name || $t('unknown-topic') }}
+                                        {{getTopicsByQuestionBankId(questionBank.questionBankId).find(t => t.id ===
+                                            topic.topicId)?.name || $t('unknown-topic')}}
                                     </span>
                                     <span v-else class="text-gray-400 italic">{{ $t('no-topic-selected') }}</span>
                                 </p>
                                 <div class="mt-1 text-xs text-gray-500 space-x-2">
                                     <p v-if="topic.questionType !== null">
-                                        {{ $t('type') }}: {{ questionTypeOptions(t).find(qt => qt.value === topic.questionType)?.label }}
+                                        {{ $t('type') }}: {{questionTypeOptions(t).find(qt => qt.value ===
+                                            topic.questionType)?.label}}
                                     </p>
                                     <p v-if="topic.knowledgeLevelId">
-                                        {{ $t('knowledgelevel') }}: {{ getKnowledgeLevelsByQuestionType(questionBank.questionBankId, topic.topicId, topic.questionType).find(kl => kl.id === topic.knowledgeLevelId)?.name }}
+                                        {{ $t('knowledgelevel') }}: {{
+                                            getKnowledgeLevelsByQuestionType(questionBank.questionBankId, topic.topicId,
+                                                topic.questionType).find(kl => kl.id === topic.knowledgeLevelId)?.name}}
                                     </p>
                                     <p v-if="topic.difficulty !== null">
-                                        {{ $t('difficulty') }}: {{ difficultyOptions(t).find(d => d.value === topic.difficulty)?.label }}
+                                        {{ $t('difficulty') }}: {{difficultyOptions(t).find(d => d.value ===
+                                            topic.difficulty)?.label}}
                                     </p>
                                 </div>
                             </div>
@@ -418,8 +422,8 @@ const submit = async () => {
                                 </p>
                             </div>
                         </div>
-                        <div v-if="topic.topicId && getCurrentQuestionCount(questionBankIndex, topicIndex) < topic.numberOfQuestions" 
-                             class="mt-2 p-2 bg-red-50 border border-red-200 rounded text-red-700 text-xs">
+                        <div v-if="topic.topicId && getCurrentQuestionCount(questionBankIndex, topicIndex) < topic.numberOfQuestions"
+                            class="mt-2 p-2 bg-red-50 border border-red-200 rounded text-red-700 text-xs">
                             <Icon name="ph:warning" class="inline mr-1" />
                             {{ $t('insufficient-questions-warning') }}
                         </div>
@@ -432,54 +436,47 @@ const submit = async () => {
                 <template #data-topicId="{ index }">
                     <AppAutoCompleteField v-model="questionBanksList[questionBankIndex].topics[index].topicId"
                         :items="getTopicsByQuestionBankId(questionBank.questionBankId)" item-label="name"
-                        item-value="id" :placeholder="$t('topics')" 
+                        item-value="id" :placeholder="$t('topics')"
                         @update:model-value="onTopicChange(questionBankIndex, index)" />
                 </template>
                 <template #data-questionType="{ index }">
-                    <AppAutoCompleteField
-                        v-model="questionBanksList[questionBankIndex].topics[index].questionType" 
+                    <AppAutoCompleteField v-model="questionBanksList[questionBankIndex].topics[index].questionType"
                         :items="getQuestionTypesByTopicId(questionBank.questionBankId, questionBanksList[questionBankIndex].topics[index].topicId)"
                         item-label="label" item-value="value" :placeholder="$t('select-a-question-type')"
                         :disabled="!questionBanksList[questionBankIndex].topics[index].topicId"
                         @update:model-value="onQuestionTypeChange(questionBankIndex, index)" />
                 </template>
                 <template #data-knowledgeLevelId="{ index }">
-                    <AppAutoCompleteField
-                        v-model="questionBanksList[questionBankIndex].topics[index].knowledgeLevelId"
+                    <AppAutoCompleteField v-model="questionBanksList[questionBankIndex].topics[index].knowledgeLevelId"
                         :items="getKnowledgeLevelsByQuestionType(
-                            questionBank.questionBankId, 
+                            questionBank.questionBankId,
                             questionBanksList[questionBankIndex].topics[index].topicId,
                             questionBanksList[questionBankIndex].topics[index].questionType
-                        )"
-                        item-label="name" item-value="id" :placeholder="$t('select-a-knowledge')"
+                        )" item-label="name" item-value="id" :placeholder="$t('select-a-knowledge')"
                         :disabled="!questionBanksList[questionBankIndex].topics[index].questionType"
                         @update:model-value="onKnowledgeLevelChange(questionBankIndex, index)" />
                 </template>
                 <template #data-difficulty="{ index }">
                     <div class="flex items-center gap-2">
-                        <AppAutoCompleteField
-                            v-model="questionBanksList[questionBankIndex].topics[index].difficulty"
+                        <AppAutoCompleteField v-model="questionBanksList[questionBankIndex].topics[index].difficulty"
                             :items="getDifficultiesByKnowledgeLevel(
                                 questionBank.questionBankId,
                                 questionBanksList[questionBankIndex].topics[index].knowledgeLevelId
-                            )"
-                            item-label="label" item-value="value" :placeholder="$t('select-a-difficulty')"
+                            )" item-label="label" item-value="value" :placeholder="$t('select-a-difficulty')"
                             :disabled="!questionBanksList[questionBankIndex].topics[index].knowledgeLevelId"
                             @update:model-value="onDifficultyChange(questionBankIndex, index)" />
-                       
+
                     </div>
                 </template>
                 <template #data-numberOfQuestions="{ index }">
                     <div class="space-y-1">
-                        <AppInputField
-                            v-model="questionBanksList[questionBankIndex].topics[index].numberOfQuestions"
-                            type="number" required :placeholder="$t('number-of-questions')" 
-                            :class="{
-                                'border-red-300 focus:border-red-500': questionBanksList[questionBankIndex].topics[index].topicId && 
+                        <AppInputField v-model="questionBanksList[questionBankIndex].topics[index].numberOfQuestions"
+                            type="number" required :placeholder="$t('number-of-questions')" :class="{
+                                'border-red-300 focus:border-red-500': questionBanksList[questionBankIndex].topics[index].topicId &&
                                     getCurrentQuestionCount(questionBankIndex, index) < questionBanksList[questionBankIndex].topics[index].numberOfQuestions
                             }" />
-                        <div v-if="questionBanksList[questionBankIndex].topics[index].topicId" 
-                             class="flex items-center justify-between text-xs">
+                        <div v-if="questionBanksList[questionBankIndex].topics[index].topicId"
+                            class="flex items-center justify-between text-xs">
                             <span :class="{
                                 'text-green-600': getCurrentQuestionCount(questionBankIndex, index) >= questionBanksList[questionBankIndex].topics[index].numberOfQuestions,
                                 'text-red-600': getCurrentQuestionCount(questionBankIndex, index) < questionBanksList[questionBankIndex].topics[index].numberOfQuestions,
@@ -487,8 +484,9 @@ const submit = async () => {
                             }">
                                 {{ $t('available') }}: {{ getCurrentQuestionCount(questionBankIndex, index) }}
                             </span>
-                            <span v-if="getCurrentQuestionCount(questionBankIndex, index) < questionBanksList[questionBankIndex].topics[index].numberOfQuestions"
-                                  class="text-red-600 font-medium">
+                            <span
+                                v-if="getCurrentQuestionCount(questionBankIndex, index) < questionBanksList[questionBankIndex].topics[index].numberOfQuestions"
+                                class="text-red-600 font-medium">
                                 {{ $t('exceeds-limit') }}
                             </span>
                         </div>
@@ -496,9 +494,10 @@ const submit = async () => {
                 </template>
                 <template #data-grade="{ index }">
                     <div class="flex items-center gap-2">
-                        <AppInputField v-model="questionBanksList[questionBankIndex].topics[index].grade"
-                        type="number" required :placeholder="$t('grade')" />
-                        <BaseButton @click="removeTopic(questionBankIndex, index)" color="danger" size="sm" variant="pastel">
+                        <AppInputField v-model="questionBanksList[questionBankIndex].topics[index].grade" type="number"
+                            required :placeholder="$t('grade')" />
+                        <BaseButton @click="removeTopic(questionBankIndex, index)" color="danger" size="sm"
+                            variant="pastel">
                             <Icon name="ph:trash"></Icon>
                             حذف
                         </BaseButton>
@@ -512,8 +511,9 @@ const submit = async () => {
                 </BaseButton>
             </div>
         </BaseCard>
-         <!-- Reactive Summary -->
-        <div v-if="questionBanksList.length > 0" class="my-4 p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg border border-green-200">
+        <!-- Reactive Summary -->
+        <div v-if="questionBanksList.length > 0"
+            class="my-4 p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg border border-green-200">
             <h3 class="text-lg font-semibold text-green-700 mb-3">{{ $t('blueprint-summary') }}</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="text-center">
@@ -522,7 +522,7 @@ const submit = async () => {
                 </div>
                 <div class="text-center">
                     <p class="text-2xl font-bold text-purple-600">
-                        {{ questionBanksList.reduce((sum, qb) => sum + qb.topics.length, 0) }}
+                        {{questionBanksList.reduce((sum, qb) => sum + qb.topics.length, 0)}}
                     </p>
                     <p class="text-sm text-gray-600">{{ $t('total-topic-configurations') }}</p>
                 </div>
@@ -537,8 +537,8 @@ const submit = async () => {
                     <p class="text-sm text-gray-600">{{ $t('total-calculated-grade') }}</p>
                 </div>
             </div>
-            <div v-if="calculateTotalGrade() !== Number(body.maximumGrade.$model) && Number(body.maximumGrade.$model) > 0" 
-                 class="mt-3 p-2 bg-yellow-50 border border-yellow-200 rounded text-yellow-700 text-sm">
+            <div v-if="calculateTotalGrade() !== Number(body.maximumGrade.$model) && Number(body.maximumGrade.$model) > 0"
+                class="mt-3 p-2 bg-yellow-50 border border-yellow-200 rounded text-yellow-700 text-sm">
                 <Icon name="ph:warning" class="inline mr-1" />
                 {{ $t('grade-mismatch-warning') }}
             </div>

@@ -199,9 +199,9 @@ function onSelectedGroups(items: any) {
                         <div class="grid gap-5 md:grid-cols-2">
 
                             <AppAutoCompleteField v-if="body.examType.$model == ExamType.Final"
-                                v-model="body.examGroups.$model" fetch-on-search search-key="search"
+                                v-model="body.examGroups.$model" fetch-on-search search-key="name"
                                 :errors="body.examGroups.$errors" :label="$t('groups')" :placeholder="$t('groups')"
-                                get-url="/groups" multiple item-label="name" item-value="id"
+                                get-url="/groups/lookup" without-data multiple item-label="title" item-value="id"
                                 @update:objectValue="onSelectedGroups" />
                             <AppFieldAppInputField v-model="body.startDate.$model" :errors="body.startDate.$errors"
                                 :label="$t('start-date')" :placeholder="$t('enter-start-date')" type="date" />

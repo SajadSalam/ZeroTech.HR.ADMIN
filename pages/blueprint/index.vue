@@ -52,9 +52,10 @@ const { hasPrivilege } = useAuthStore()
         <AppAutoCompleteField
           v-model="filters.questionBankId"
           fetch-on-search
-          search-key="search"
+          search-key="name"
           :placeholder="$t('questions-bank')"
-          get-url="/question-bank"
+          get-url="/question-bank/lookup"
+          without-data
           item-label="title"
           item-value="id"
         />
@@ -63,8 +64,9 @@ const { hasPrivilege } = useAuthStore()
           fetch-on-search
           search-key="name"
           :placeholder="$t('subject')"
-          get-url="/subjects"
-          item-label="name"
+          get-url="/subjects/lookup"
+          without-data
+          item-label="title"
           item-value="id"
         />
       </template>
@@ -76,8 +78,9 @@ const { hasPrivilege } = useAuthStore()
             search-key="name"
             :label="$t('topics')"
             :placeholder="$t('topics')"
-            get-url="/topics"
-            item-label="name"
+            get-url="/topics/lookup"
+            without-data
+            item-label="title"
             item-value="id"
           />
           <BaseInput

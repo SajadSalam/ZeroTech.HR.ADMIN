@@ -20,6 +20,7 @@ interface Props {
   oldData?: T[]
   placeholder?: string
   selectAll?: boolean
+  withoutData?: boolean
 }
 const emits = defineEmits(['update:objectValue', 'update:modelValue', 'create:item'])
 const createNewItem = () => {
@@ -144,7 +145,11 @@ async function fetchData() {
       if (search.value) params = { ...params, [searchKey.value]: search.value }
     }
     const res = await axiosInstance.get(props.getUrl, { params })
-    items.value = res.data.data
+    if (props.withoutData) {
+      items.value = res.data
+    } else {
+      items.value = res.data.data
+    }
   }
 }
 
