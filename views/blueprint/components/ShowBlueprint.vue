@@ -2,12 +2,11 @@
 import { useI18n } from 'vue-i18n'
 import { tableDetailHeaders } from '~/views/blueprint/index'
 import { useBlueprintStore } from '~/views/blueprint/store'
-import type { Blueprint, BlueprintDto } from '~/views/blueprint/types'
+import type { BlueprintDto } from '~/views/blueprint/types'
 import { difficultyOptions } from '~/views/question-bank'
 import {
     questionTypeOptions,
     type QuestionBankDto,
-    type QuestionBankTopicDto,
 } from '~/views/question-bank/types/index'
 import type { TopicDto } from '~/views/topics/types'
 const { t } = useI18n()
@@ -31,6 +30,10 @@ const questionBanks = computed(() => {
   return blueprint.value?.questionBanks
 })
 
+const questionsCount = computed(() => {
+  return blueprint.value?.questionBanks.reduce((acc, qb) => acc + qb.topics.reduce((acc, topic) => acc + topic.numberOfQuestions, 0), 0)
+})
+
 onMounted(async () => {
   blueprint.value = (await blueStore.getById(props.blueprintId.toString())) as BlueprintDto
 })
@@ -38,7 +41,7 @@ onMounted(async () => {
 <template>
   <div>
     <!-- Header Section -->
-    <div class="mb-5 rounded-lg bg-white p-6 shadow">
+    <div class="mb-5 rounded-lg bg-white p-6 border">
       <div class="flex items-center justify-between">
         <h1 class="text-2xl font-bold text-gray-800">
           {{ blueprint?.name || 'Blueprint Title' }}
@@ -50,15 +53,15 @@ onMounted(async () => {
           </div>
         </div>
         <div class="flex flex-col items-center">
-          <span class="text-sm text-gray-500"> {{ $t('question-banks') }}</span>
+          <span class="text-sm text-gray-500"> {{ $t('questions') }}</span>
           <div class="rounded-full bg-green-100 px-4 py-1 text-lg font-bold text-green-600">
-            {{ blueprint?.questionBanks.length }}
+            {{ questionsCount }}
           </div>
         </div>
       </div>
     </div>
 
-    <div class="mb-5 rounded-lg bg-white p-6 shadow">
+    <div class="mb-5 rounded-lg bg-white p-6 border">
       <h2 class="text-lg font-bold">
         {{ $t('question-banks') }}
       </h2>
@@ -78,7 +81,7 @@ onMounted(async () => {
       </div>
     </div>
 
-    <div class="mb-5 rounded-lg bg-white p-6 shadow">
+    <div class="mb-5 rounded-lg bg-white p-6 border">
       <h2 class="text-lg font-bold">
         {{ $t('settings') }}
       </h2>
@@ -151,7 +154,7 @@ onMounted(async () => {
       </div>
     </div>
 
-    <div class="mb-5 rounded-lg bg-white p-6 shadow">
+    <div class="mb-5 rounded-lg bg-white p-6 border">
       <h2 class="text-lg font-bold">
         {{ $t('question-banks') }}
       </h2>
