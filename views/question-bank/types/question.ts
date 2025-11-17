@@ -13,8 +13,6 @@ export interface Question {
   options: Option[]
   correctBoolean: boolean
   correctText: string
-  knowledgeLevelId: string
-  knowledgeLevelSimplifiedIntId?: number
   difficulty: Difficulty
   isContentShown?: boolean
   isSubQuestionContent?: boolean
@@ -50,15 +48,6 @@ export interface Option {
   isCorrect: boolean
 }
 
-export enum KnowledgeLevel {
-  Remember = 1,
-  Understand = 2,
-  Apply = 3,
-  Analyze = 4,
-  Evaluate = 5,
-  Create = 6,
-}
-
 export enum Difficulty {
   Easy = 1,
   Medium = 2,
@@ -87,7 +76,6 @@ export type QuestionFilters = BaseFilters & {
   type: QuestionType | null
   title: string | null
   topicId: string | null
-  knowledgeLevelId: string | null
   difficulty: Difficulty | null
   questionBankId: string | null
 }

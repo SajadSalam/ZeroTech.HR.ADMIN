@@ -15,7 +15,6 @@ import {
     QuestionType,
     type Question,
 } from '~/views/question-bank/types/question'
-import { useKnowledgelevelStore } from '../../../views/knowledgelevel/store'
 const { t } = useI18n()
 const toaster = useAppToaster()
 
@@ -93,7 +92,6 @@ const addQuestion = () => {
     correctBoolean: false,
     correctText: '',
     difficulty: null,
-    knowledgeLevelId: '',
     isContentShown: true,
     options: [],
     image: null,
@@ -215,9 +213,7 @@ const handlePageChange = (newPage: number) => {
   pageNumber.value = newPage
   fetchQuestions()
 }
-const knowledgeLevelStore = useKnowledgelevelStore()
 onMounted(async () => {
-  await knowledgeLevelStore.getKnowledgelevels({pageNumber: 1, pageSize: 500})
   fetchQuestionBank()
 })
 const saveChanges = async () => {
@@ -285,7 +281,7 @@ const removeTopic = (topic: QuestionBankTopicDto) => {
 }
 const validateQuestions = (): boolean => {
   const missingFields = questions.value.filter((question: Question) => {
-    return !question.type || !question.difficulty || !question.knowledgeLevelId
+    return !question.type || !question.difficulty
   })
   if (missingFields.length > 0) {
     toaster.show('danger', t('please-fill-in-the-required-fields'))

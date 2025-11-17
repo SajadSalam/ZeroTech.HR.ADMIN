@@ -4,7 +4,7 @@ import ShowBlueprint from '~/views/blueprint/components/ShowBlueprint.vue'
 import { tableDetailHeaders } from '~/views/blueprint/index'
 import { useBlueprintStore } from '~/views/blueprint/store'
 import type { Blueprint, BlueprintDto } from '~/views/blueprint/types'
-import { difficultyOptions, knowledgeLevelOptions } from '~/views/question-bank'
+import { difficultyOptions } from '~/views/question-bank'
 import {
     questionTypeOptions,
     type QuestionBankDto,

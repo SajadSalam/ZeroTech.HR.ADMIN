@@ -10,7 +10,6 @@ import { Difficulty, QuestionType, type Question } from '~/views/question-bank/t
 import Matching from './Matching.vue'
 import MultiItems from './MultiItems.vue'
 import Reorder from './Reorder.vue'
-import { useKnowledgelevelStore } from '~/views/knowledgelevel/store'
 
 const { t } = useI18n()
 
@@ -55,8 +54,6 @@ const addSubQuestion = () => {
     ],
     correctBoolean: false,
     correctText: '',
-    knowledgeLevelId: '',
-    knowledgeLevelSimplifiedIntId: 0,
     difficulty: Difficulty.Easy,
     topicId: modelValue.value.topicId,
     parentQuestionId: modelValue.value.id,
@@ -146,10 +143,6 @@ const watchSubQuestionType = (subQuestion: Question, newType: QuestionType) => {
     subQuestion.orderItems = []
   }
 }
-
-const knowledgeLevelStore = useKnowledgelevelStore()
-const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
-
 
 const handleFocusIn = (e: FocusEvent, subQuestion: Question) => {
   // mark active 
@@ -275,7 +268,7 @@ const handleFocusOut = (e: FocusEvent, subQuestion: Question) => {
        </div>
 
        <!-- Sub-question type and difficulty selectors -->
-       <div class="mb-4 grid gap-3 md:grid-cols-3">
+       <div class="mb-4 grid gap-3 md:grid-cols-2">
          <AppAutoCompleteField
            v-model="modelValue.subQuestions![index].type"
            :items="questionTypeOptions($t).filter(opt => opt.value !== QuestionType.Dialogue)"
@@ -293,14 +286,6 @@ const handleFocusOut = (e: FocusEvent, subQuestion: Question) => {
            item-value="value"
            :disabled="isEvaluation"
          />
-            <AppAutoCompleteField
-              v-model="modelValue.subQuestions![index].knowledgeLevelId"
-              :placeholder="$t('select-a-knowledge')"
-              :disabled="isEvaluation"
-              :items="knowledgeLevels"
-              item-label="name"
-              item-value="id"
-            />
        </div>
 
        

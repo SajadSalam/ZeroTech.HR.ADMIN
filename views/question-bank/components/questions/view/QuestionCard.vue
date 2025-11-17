@@ -6,7 +6,7 @@ import {
 } from '~/views/question-bank/types/index'
 import { type Question, QuestionType } from '~/views/question-bank/types/question'
 import QuestionForm from './QuestionForm.vue'
-import { difficultyOptions, knowledgeLevelOptions } from '~/views/question-bank'
+import { difficultyOptions } from '~/views/question-bank'
 import { useQuestionBankStore } from '~/views/question-bank/store'
 import { useI18n } from 'vue-i18n'
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'

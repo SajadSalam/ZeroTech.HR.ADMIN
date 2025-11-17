@@ -50,7 +50,6 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
 
   const questionFilters = ref<QuestionFilters>({
     difficulty: null,
-    knowledgeLevelId: null,
     pageNumber: 1,
     pageSize: 50,
     title: null,

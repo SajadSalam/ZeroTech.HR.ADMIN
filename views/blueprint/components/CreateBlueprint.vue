@@ -7,7 +7,7 @@ import { tableCreateHeaders } from '..'
 import { DegreeDisplayType, type Blueprint } from '../types'
 import { QuestionType } from '~/views/question-bank/types/question'
 import { questionTypeOptions } from '~/views/question-bank/types/index'
-import { difficultyOptions, knowledgeLevelOptions } from '~/views/question-bank'
+import { difficultyOptions } from '~/views/question-bank'
 
 const questionBankStore = useBlueprintStore()
 const subjects = [
@@ -127,14 +127,6 @@ const questionBanks = ref([])
                 <Icon name="tabler-circle-x" class="size-8" />
               </BaseButtonIcon>
             </div>
-          </template>
-          <template #data-knowledge="{ index }">
-            <AppAutoCompleteField
-              v-model="body.subjects[index].knowledge"
-              :items="knowledgeLevelOptions($t)"
-              item-label="label"
-              item-value="value"
-            />
           </template>
           <template #data-numberOfQuestions="{ index }">
             <BaseInput v-model="body.subjects[index].numberOfQuestions" type="number" />

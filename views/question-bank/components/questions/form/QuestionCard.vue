@@ -7,7 +7,6 @@ import type { QuestionGrades } from '~/views/evaluations/types'
 import { difficultyOptions } from '~/views/question-bank'
 import { questionTypeOptions } from '~/views/question-bank/types/index'
 import { AuditStatus, QuestionType, type Question } from '~/views/question-bank/types/question'
-import { useKnowledgelevelStore } from '../../../../knowledgelevel/store'
 import QuestionForm from './QuestionForm.vue'
 const props = defineProps<{
   index: number
@@ -19,9 +18,6 @@ const props = defineProps<{
 const emit = defineEmits(['removeQuestion', 'duplicate'])
 const element = defineModel<Question>()
 const { t } = useI18n()
-
-const knowledgeLevelStore = useKnowledgelevelStore()
-const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
 
 </script>
 

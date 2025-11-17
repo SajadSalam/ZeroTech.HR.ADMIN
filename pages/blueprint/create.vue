@@ -72,7 +72,6 @@ const addTopic = (index: number) => {
         topicId: '',
         questionType: null,
         difficulty: null,
-        knowledgeLevelId: '',
         numberOfQuestions: 1,
         grade: 1,
     })
@@ -106,7 +105,6 @@ const fetchRealQuestionCount = async (questionBankIndex: number, topicIndex: num
 
     if (topic.topicId) params.topicId = topic.topicId
     if (topic.questionType !== null && topic.questionType !== undefined) params.type = topic.questionType
-    if (topic.knowledgeLevelId) params.knowledgeLevelId = topic.knowledgeLevelId
     if (topic.difficulty !== null && topic.difficulty !== undefined) params.difficulty = topic.difficulty
 
     try {
@@ -123,22 +121,12 @@ const onTopicChange = (questionBankIndex: number, topicIndex: number) => {
     const topic = questionBanksList.value[questionBankIndex].topics[topicIndex]
     // Reset dependent fields without setting default values
     topic.questionType = null
-    topic.knowledgeLevelId = ''
     topic.difficulty = null
     // Fetch updated count
     fetchRealQuestionCount(questionBankIndex, topicIndex)
 }
 
 const onQuestionTypeChange = (questionBankIndex: number, topicIndex: number) => {
-    const topic = questionBanksList.value[questionBankIndex].topics[topicIndex]
-    // Reset dependent fields without setting default values
-    topic.knowledgeLevelId = ''
-    topic.difficulty = null
-    // Fetch updated count
-    fetchRealQuestionCount(questionBankIndex, topicIndex)
-}
-
-const onKnowledgeLevelChange = (questionBankIndex: number, topicIndex: number) => {
     const topic = questionBanksList.value[questionBankIndex].topics[topicIndex]
     // Reset dependent fields without setting default values
     topic.difficulty = null
@@ -207,25 +195,11 @@ const getQuestionTypesByTopicId = (questionBankId: string, topicId: string) => {
         }))
 }
 
-const getKnowledgeLevelsByQuestionType = (questionBankId: string, topicId: string, questionType: number | null) => {
+const getDifficultiesByQuestionType = (questionBankId: string, questionType: number | null) => {
     const details = questionBankDetails.value[questionBankId]
-    if (!details || !topicId || questionType === null) return []
-
-    return details.knowledgeLevels
-        .filter(kl => kl.questionType === questionType)
-        .map(kl => ({
-            id: kl.id,
-            name: kl.name,
-            questionCount: kl.questionCount
-        }))
-}
-
-const getDifficultiesByKnowledgeLevel = (questionBankId: string, knowledgeLevelId: string) => {
-    const details = questionBankDetails.value[questionBankId]
-    if (!details || !knowledgeLevelId) return []
+    if (!details || questionType === null) return []
 
     return details.difficulties
-        .filter(d => d.knowledgeLevelId === knowledgeLevelId)
         .map(d => ({
             value: d.difficulty,
             label: difficultyOptions(t).find(option => option.value === d.difficulty)?.label || '',
@@ -261,17 +235,12 @@ const getCurrentQuestionCount = (questionBankIndex: number, topicIndex: number):
         return topicData?.questionCount || 0
     }
 
-    if (!topic.knowledgeLevelId) {
+    if (topic.difficulty === null) {
         const questionTypeData = details.questionTypes.find(qt => qt.topicId === topic.topicId && qt.questionType === topic.questionType)
         return questionTypeData?.questionCount || 0
     }
 
-    if (topic.difficulty === null) {
-        const knowledgeLevel = details.knowledgeLevels.find(kl => kl.id === topic.knowledgeLevelId && kl.questionType === topic.questionType)
-        return knowledgeLevel?.questionCount || 0
-    }
-
-    const difficultyData = details.difficulties.find(d => d.knowledgeLevelId === topic.knowledgeLevelId && d.difficulty === topic.difficulty)
+    const difficultyData = details.difficulties.find(d => d.difficulty === topic.difficulty)
     return difficultyData?.questionCount || 0
 }
 
@@ -394,11 +363,6 @@ const submit = async () => {
                                         {{ $t('type') }}: {{questionTypeOptions(t).find(qt => qt.value ===
                                             topic.questionType)?.label}}
                                     </p>
-                                    <p v-if="topic.knowledgeLevelId">
-                                        {{ $t('knowledgelevel') }}: {{
-                                            getKnowledgeLevelsByQuestionType(questionBank.questionBankId, topic.topicId,
-                                                topic.questionType).find(kl => kl.id === topic.knowledgeLevelId)?.name}}
-                                    </p>
                                     <p v-if="topic.difficulty !== null">
                                         {{ $t('difficulty') }}: {{difficultyOptions(t).find(d => d.value ===
                                             topic.difficulty)?.label}}
@@ -446,24 +410,14 @@ const submit = async () => {
                         :disabled="!questionBanksList[questionBankIndex].topics[index].topicId"
                         @update:model-value="onQuestionTypeChange(questionBankIndex, index)" />
                 </template>
-                <template #data-knowledgeLevelId="{ index }">
-                    <AppAutoCompleteField v-model="questionBanksList[questionBankIndex].topics[index].knowledgeLevelId"
-                        :items="getKnowledgeLevelsByQuestionType(
-                            questionBank.questionBankId,
-                            questionBanksList[questionBankIndex].topics[index].topicId,
-                            questionBanksList[questionBankIndex].topics[index].questionType
-                        )" item-label="name" item-value="id" :placeholder="$t('select-a-knowledge')"
-                        :disabled="!questionBanksList[questionBankIndex].topics[index].questionType"
-                        @update:model-value="onKnowledgeLevelChange(questionBankIndex, index)" />
-                </template>
                 <template #data-difficulty="{ index }">
                     <div class="flex items-center gap-2">
                         <AppAutoCompleteField v-model="questionBanksList[questionBankIndex].topics[index].difficulty"
-                            :items="getDifficultiesByKnowledgeLevel(
+                            :items="getDifficultiesByQuestionType(
                                 questionBank.questionBankId,
-                                questionBanksList[questionBankIndex].topics[index].knowledgeLevelId
+                                questionBanksList[questionBankIndex].topics[index].questionType
                             )" item-label="label" item-value="value" :placeholder="$t('select-a-difficulty')"
-                            :disabled="!questionBanksList[questionBankIndex].topics[index].knowledgeLevelId"
+                            :disabled="!questionBanksList[questionBankIndex].topics[index].questionType"
                             @update:model-value="onDifficultyChange(questionBankIndex, index)" />
 
                     </div>

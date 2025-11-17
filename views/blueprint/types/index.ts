@@ -1,7 +1,7 @@
 import type { BaseFilters } from '~/utils/types/ApiResponses'
 import type { BaseDto } from '~/utils/types/base-dto'
 import type { QuestionBankDto } from '~/views/question-bank/types'
-import type { Difficulty, KnowledgeLevel, QuestionType } from '~/views/question-bank/types/question'
+import type { Difficulty, QuestionType } from '~/views/question-bank/types/question'
 
 export interface Blueprint {
   name: string
@@ -25,7 +25,6 @@ export interface BlueprintTopic {
   questionType: QuestionType | null
   numberOfQuestions: number
   grade: number
-  knowledgeLevelId: string
   difficulty: Difficulty | null
 }
 export type BlueprintFilter = {
@@ -60,14 +59,7 @@ export interface QuestionBankBlueprintDetails {
     questionType: number
     questionCount: number
   }[]
-  knowledgeLevels: {
-    id: string
-    name: string
-    questionType: number
-    questionCount: number
-  }[]
   difficulties: {
-    knowledgeLevelId: string
     difficulty: number
     questionCount: number
   }[]

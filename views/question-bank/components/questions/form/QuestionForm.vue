@@ -11,7 +11,6 @@ import AppFileUploaderButton from '~/components/app-field/AppFileUploaderButton.
 import AppFileField from '~/components/app-field/AppFileField.vue'
 import { difficultyOptions } from '~/views/question-bank'
 import { questionTypeOptions } from '~/views/question-bank/types'
-import { useKnowledgelevelStore } from '~/views/knowledgelevel/store'
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 
 const element = defineModel<Question>({
@@ -61,9 +60,6 @@ watch(
   }
 )
 
-const knowledgeLevelStore = useKnowledgelevelStore()
-const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
-
 </script>
 
 <template>
@@ -105,7 +101,7 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
       </div>
 
 
-      <div class="w-full  p-2 gap-4 grid grid-cols-3">
+      <div class="w-full  p-2 gap-4 grid grid-cols-2">
         <AppAutoCompleteField
           v-model="element.type"
           :items="questionTypeOptions($t)"
@@ -124,15 +120,6 @@ const knowledgeLevels = computed(() => knowledgeLevelStore.knowledgelevels)
           :key="`${element.id}-difficulty`"
           :disabled="isEvaluation"
           item-value="value"
-        />
-        <AppAutoCompleteField
-          v-model="element.knowledgeLevelId"
-          :placeholder="$t('select-a-knowledge')"
-          :key="element.id"
-          :disabled="isEvaluation"
-          :items="knowledgeLevels"
-          item-label="name"
-          item-value="id"
         />
         <!-- <BaseTag
           variant="pastel"

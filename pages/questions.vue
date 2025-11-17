@@ -100,16 +100,6 @@ const { hasPrivilege } = useAuthStore()
           item-label="label"
           item-value="value"
         />
-        <AppAutoCompleteField
-          v-model="filters.knowledgeLevelId"
-          :placeholder="$t('select-a-knowledge')"
-          get-url="/knowledgelevel/lookup"
-          fetch-on-search
-          search-key="name"
-          without-data
-          item-label="title"
-          item-value="id"
-        />
       </template>
       <AppTable title="Questions" :headers="questionsTableHeaders($t)" :items="questions">
         <template #data-index="data">
@@ -167,11 +157,6 @@ const { hasPrivilege } = useAuthStore()
         <template #data-difficulty="{ item }">
           <span class="text-primary-500">{{
             difficultyOptions($t).find((v) => v.value == item.difficulty)!.label
-          }}</span>
-        </template>
-        <template #data-knowledgeLevelId="{ item }">
-          <span class="text-primary-500">{{
-            item.knowledgeLevel?.name || '-'
           }}</span>
         </template>
         <template #data-auditStatus="{ item }">

@@ -7,7 +7,6 @@ import type { EvaluationDetialedDto } from '~/views/evaluations/types'
 import QuestionCard from '~/views/question-bank/components/questions/view/QuestionCard.vue'
 import {
   Difficulty,
-  KnowledgeLevel,
   type Question,
   QuestionType,
 } from '~/views/question-bank/types/question'

@@ -2,7 +2,6 @@ import type { TableHeader } from '@/components/app-table/types'
 import {
     AuditStatus,
     Difficulty,
-    KnowledgeLevel,
     QuestionType,
     type Question,
 } from '~/views/question-bank/types/question'
@@ -67,7 +66,6 @@ export const questionsTableHeaders = (t: (key: string) => string) => {
     { label: t('type'), key: 'type',icon: 'lucide:file-text' },
     { label: t('title'), key: 'title',icon: 'lucide:file-text' },
     { label: t('difficulty'), key: 'difficulty',icon: 'lucide:align-center-vertical' },
-    { label: t('knowledge'), key: 'knowledgeLevelId',icon: 'lucide:book' },
     { label: t('creator'), key: 'creatorFullName',icon: 'lucide:user' },
     { label: t('auditor'), key: 'auditorFullName',icon: 'lucide:user' },
     { label: t('audit-date'), key: 'auditDate',icon: 'lucide:calendar' },
@@ -94,34 +92,6 @@ export const difficultyOptions = (t: (key: string) => string) => {
     },
   ]
 }
-export const knowledgeLevelOptions = (t: (key: string) => string) => {
-  return [
-    {
-      label: t('remember'),
-      value: KnowledgeLevel.Remember,
-    },
-    {
-      label: t('understand'),
-      value: KnowledgeLevel.Understand,
-    },
-    {
-      label: t('apply'),
-      value: KnowledgeLevel.Apply,
-    },
-    {
-      label: t('analyze'),
-      value: KnowledgeLevel.Analyze,
-    },
-    {
-      label: t('evaluate'),
-      value: KnowledgeLevel.Evaluate,
-    },
-    {
-      label: t('create'),
-      value: KnowledgeLevel.Create,
-    },
-  ]
-}
 export const questionsFakeData: Question[] = [
   // Multiple Choice Question
   {
@@ -139,7 +109,6 @@ export const questionsFakeData: Question[] = [
     ],
     correctBoolean: false,
     correctText: 'Paris',
-    knowledgeLevelId: '1',
     difficulty: Difficulty.Easy,
     createdBy: 'Admin',
     creationDate: '2025-02-25',
@@ -162,7 +131,6 @@ export const questionsFakeData: Question[] = [
     options: [],
     correctBoolean: false,
     correctText: 'H2O',
-    knowledgeLevelId: '1',
     difficulty: Difficulty.Easy,
     createdBy: 'Admin',
     creationDate: '2025-02-25',
@@ -185,7 +153,6 @@ export const questionsFakeData: Question[] = [
     ],
     correctBoolean: false,
     correctText: 'East',
-    knowledgeLevelId: '1',
     difficulty: Difficulty.Easy,
     createdBy: 'Admin',
     creationDate: '2025-02-25',
@@ -205,7 +172,6 @@ export const questionsFakeData: Question[] = [
     options: [],
     correctBoolean: false,
     correctText: '',
-    knowledgeLevelId: '5',
     difficulty: Difficulty.Hard,
     createdBy: 'Admin',
     creationDate: '2025-02-25',
@@ -225,7 +191,6 @@ export const questionsFakeData: Question[] = [
     options: [],
     correctBoolean: false,
     correctText: 'False',
-    knowledgeLevelId: '1',
     difficulty: Difficulty.Easy,
     createdBy: 'Admin',
     creationDate: '2025-02-25',
@@ -249,7 +214,6 @@ export const questionsFakeData: Question[] = [
     ],
     correctBoolean: false,
     correctText: 'Mars',
-    knowledgeLevelId: '1',
     difficulty: Difficulty.Easy,
     createdBy: 'Admin',
     creationDate: '2025-02-25',
@@ -269,7 +233,6 @@ export const questionsFakeData: Question[] = [
     options: [],
     correctBoolean: false,
     correctText: '',
-    knowledgeLevelId: '2',
     difficulty: Difficulty.Medium,
     matchingPairs: [
       { left: 'France', right: 'Paris' },
@@ -294,7 +257,6 @@ export const questionsFakeData: Question[] = [
     options: [],
     correctBoolean: false,
     correctText: '',
-    knowledgeLevelId: '3',
     difficulty: Difficulty.Medium,
     orderItems: [
       { title: 'Mercury', order: 1 },
@@ -323,8 +285,6 @@ export const questionsFakeData: Question[] = [
     options: [],
     correctBoolean: false,
     correctText: '',
-    knowledgeLevelId: '4',
-    knowledgeLevelSimplifiedIntId: 4,
     difficulty: Difficulty.Hard,
     createdBy: 'Admin',
     creationDate: '2025-02-25',
@@ -349,8 +309,6 @@ export const questionsFakeData: Question[] = [
         ],
         correctBoolean: false,
         correctText: '',
-        knowledgeLevelId: '1',
-        knowledgeLevelSimplifiedIntId: 1,
         difficulty: Difficulty.Easy,
         topicId: '1',
         parentQuestionId: '9',
@@ -366,8 +324,6 @@ export const questionsFakeData: Question[] = [
         options: [],
         correctBoolean: false,
         correctText: 'Velocity is the rate of change of displacement, while acceleration is the rate of change of velocity.',
-        knowledgeLevelId: '2',
-        knowledgeLevelSimplifiedIntId: 2,
         difficulty: Difficulty.Medium,
         topicId: '1',
         parentQuestionId: '9',
@@ -383,8 +339,6 @@ export const questionsFakeData: Question[] = [
         options: [],
         correctBoolean: false,
         correctText: '',
-        knowledgeLevelId: '3',
-        knowledgeLevelSimplifiedIntId: 3,
         difficulty: Difficulty.Medium,
         topicId: '1',
         parentQuestionId: '9',

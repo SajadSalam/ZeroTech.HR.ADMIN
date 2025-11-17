@@ -3,7 +3,7 @@ import { useI18n } from 'vue-i18n'
 import { tableDetailHeaders } from '~/views/blueprint/index'
 import { useBlueprintStore } from '~/views/blueprint/store'
 import type { Blueprint, BlueprintDto } from '~/views/blueprint/types'
-import { difficultyOptions, knowledgeLevelOptions } from '~/views/question-bank'
+import { difficultyOptions } from '~/views/question-bank'
 import {
     questionTypeOptions,
     type QuestionBankDto,
@@ -193,13 +193,6 @@ onMounted(async () => {
                     type.value ===
                     blueprint?.questionBanks[questionBankIndex].topics[index].difficulty
                 )?.label
-              }}
-            </span>
-          </template>
-          <template #data-knowledgeLevelId="{ index }">
-            <span>
-              {{
-                blueprint?.questionBanks[questionBankIndex].topics[index].knowledgeLevel?.name || '-'
               }}
             </span>
           </template>

@@ -143,9 +143,6 @@ const getImageUrl = (image: any) => {
         <BaseTag size="sm" color="warning" variant="pastel">
           {{ $t('difficulty') }}: {{ $t(['easy', 'medium', 'hard'][subQuestion.difficulty - 1]) }}
         </BaseTag>
-        <BaseTag v-if="subQuestion.knowledgeLevelId" size="sm" color="success" variant="pastel">
-          {{ $t('knowledge-level') }}: {{ subQuestion.knowledgeLevelId }}
-        </BaseTag>
       </div>
     </div>
 

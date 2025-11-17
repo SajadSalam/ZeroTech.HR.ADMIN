@@ -42,12 +42,6 @@ const defaultNavigation = [
         privilege: 'ums:ems:category:view-any',
       },
       {
-        name: 'knowledgelevel',
-        icon: { name: 'ph-folder-simple-duotone', class: 'w-5 h-5' },
-        to: '/knowledgelevel',
-        privilege: 'ums:ems:knowledgelevel:view-any',
-      },
-      {
         name: 'groups',
         icon: { name: 'ph-list-checks-duotone', class: 'w-5 h-5' },
         to: '/groups',
