@@ -1,42 +1,42 @@
 
 export const tableHeaders = (t: (key: string) => string) => {
-  return [
-    {
-      key: 'title',
-      label: t('title'),
-      icon: 'lucide:file-text',
-    },
-    
-    {
-      key: 'examType',
-      label: t('exam-type'),
-      icon: 'lucide:align-horizontal-distribute-center',
-    },
-    {
-      key: 'templateName',
-      label: t('blueprint'),
-      icon: 'lucide:file-search',
-    },
-    {
-      key: 'startDate',
-      label: t('start-date'),
-      icon: 'lucide:calendar',
-    },
-    {
-      key: 'endDate',
-      label: t('end-date'),
-      icon: 'lucide:calendar',
-    },
+    return [
+        {
+            key: 'title',
+            label: t('title'),
+            icon: 'lucide:file-text',
+        },
 
-    {
-      key: 'time',
-      label: t('time') + ' (24hrs)',
-      icon: 'lucide:clock',
-    },
-    {
-      key: 'actions',
-      label: t('actions'),
-      icon: 'lucide:more-vertical',
-    },
-  ]
+
+        {
+            key: 'examDate',
+            label: t('exam-date'),
+            icon: 'lucide:calendar',
+        },
+        {
+            key: 'time',
+            label: t('time') + ' (24hrs)',
+            icon: 'lucide:clock',
+        },
+        {
+            key: 'templateName',
+            label: t('blueprint'),
+            icon: 'lucide:file-search',
+        },
+        {
+            key: 'questionCount',
+            label: t('question-count'),
+            icon: 'lucide:align-horizontal-distribute-center',
+        },
+        {
+            key: 'successGrade',
+            label: t('success-grade'),
+            icon: 'lucide:align-horizontal-distribute-center',
+        },
+        {
+            key: 'actions',
+            label: t('actions'),
+            icon: 'lucide:more-vertical',
+        },
+    ]
 }

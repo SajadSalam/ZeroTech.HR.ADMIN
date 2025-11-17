@@ -1,10 +1,9 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { requiredValidator } from '~/services/validation'
 import { Validator } from '~/services/validator'
 import { useExamStore } from '../store/index'
-import type { ExamEdit } from '../types'
+import type { Exam, ExamEdit } from '../types'
 
 const { t } = useI18n()
 const examStore = useExamStore()
@@ -14,31 +13,29 @@ const props = defineProps<{
   examId: string | number
 }>()
 const emit = defineEmits(['update:modelValue'])
-
+const modelValue = computed({
+  get() {
+    return props.modelValue
+  },
+  set(value: boolean) {
+    emit('update:modelValue', value)
+  }
+})
 const examObject = ref<ExamEdit | null>(null)
 
-const createValidator = (exam: Partial<ExamEdit>) =>
+const createValidator = (exam: Partial<Exam>) =>
   new Validator<ExamEdit>(
     {
-      title: exam.title ?? "",
-      examType: exam.examType ?? null,
-      examTemplateId: exam.examTemplateId ?? null,
-      startDate: exam.startDate ?? "",
-      endDate: exam.endDate ?? "",
+      examDate: exam.startDate ?? "",
       startTime: exam.startTime ?? "",
       endTime: exam.endTime ?? "",
-      duration: exam.duration ?? null,
       enterTimeAllowed: exam.enterTimeAllowed ?? 0,
-      examCenterId: exam.examCenterId ?? null,
-      instructions: exam.instructions ?? "",
     },
-
     {
-      startDate: { required: requiredValidator(t('required')) },
-      startTime: { required: requiredValidator(t('required')) },
-      endDate: { required: requiredValidator(t('required')) },
-      endTime: { required: requiredValidator(t('required')) },
-      enterTimeAllowed: { required: requiredValidator(t('required')) },
+      examDate: {  },
+      startTime: {  },
+      endTime: { },
+      enterTimeAllowed: {  },
     }
   )
 
@@ -86,16 +83,15 @@ const update = async () => {
 
   const isValid = await body.value.$validate();
   if (!isValid) return;
-  console.log(validator.value.formData)
   await examStore.updateExam(props.examId.toString(), validator.value.formData);
   validator.value.resetBody();
-  examStore.isUpdateDialogOpen = false;
+  modelValue.value = false;
 };
 
 const cancelExam = async () => {
 
-  await examStore.cancelExam(props.examId.toString())
-  emit('update:modelValue', false)
+  await examStore.deleteExam(props.examId.toString())
+  modelValue.value = false;
 }
 </script>
 
@@ -105,23 +101,15 @@ const cancelExam = async () => {
     :title="$t('exam_details')"
     size="3xl"
     overflow-y="visible"
-    @update:model-value="emit('update:modelValue', $event)"
+    @update:model-value="modelValue = $event"
   >
     <div class="flex flex-col gap-5 rounded-3xl p-3">
       <div class="grid gap-5 md:grid-cols-2">
         <AppFieldAppInputField
-          v-model="body.startDate.$model"
-          :errors="body.startDate.$errors"
+          v-model="body.examDate.$model"
+          :errors="body.examDate.$errors"
           :label="$t('start-date')"
           :placeholder="$t('enter-start-date')"
-          type="date"
-          
-        />
-        <AppFieldAppInputField
-          v-model="body.endDate.$model"
-          :errors="body.endDate.$errors"
-          :label="$t('end-date')"
-          :placeholder="$t('enter-end-date')"
           type="date"
           
         />

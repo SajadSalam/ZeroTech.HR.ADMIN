@@ -119,10 +119,9 @@ export type ExamDetail = ExamDto & {
   examCenters: ExaminationCenterDto[]
 }
 
-export type ExamEdit = Exam & {
-  startDate: string | null
-  endDate: string | null
-  startTime: string | null
-  endTime: string | null
-  enterTimeAllowed: number | null
+export type ExamEdit = {
+  examDate?: string | null
+  startTime?: string | null
+  endTime?: string | null
+  enterTimeAllowed?: number | null
 }
