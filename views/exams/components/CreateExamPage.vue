@@ -7,7 +7,7 @@ import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vu
 import { createValidator } from '~/services/validationWithI18n'
 import { Validator } from '~/services/validator'
 import { useExamStore } from '../store/index'
-import { ExamType, examTypesOptions, proficiencyExamGroupOptions, type ExamCreate } from '../types/index'
+import { ExamType, examTypesOptions, type ExamCreate } from '../types/index'
 import ExamCardCreationResult from './ExamCardCreationResult.vue'
 
 
@@ -73,6 +73,10 @@ const validator = new Validator<ExamCreate>(
         enterTimeAllowed: {
             required: createValidator(t, 'enterance-time-allowed', 'required'),
             minValue: createValidator(t, 'enterance-time-allowed', 'minValue', 1),
+            lessThanDuration: helpers.withMessage(
+                () => t('validation.maxValue', { field:"وقت التأخير", max: formData.duration ?? 0 }),
+                (value: number) => !value || !formData.duration || value < formData.duration
+            ),
         },
         examGroups: {
             requiredIfFinal: helpers.withMessage(
