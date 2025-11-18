@@ -1,58 +1,19 @@
-import axiosIns from "~/services/app-client/axios";
 import type { Counts } from "../types/counts";
-import type { GovernorateBookingChartData } from "../types/governorateBookingChart";
-import type { ProficiencyExamGroupChartData } from "../types/proficiencyExamGroupChartData";
 
 interface IHomeService {
   getCounts: () => Promise<Counts>
-  getProficiencyExamGroupChartData: (year: number) => Promise<ProficiencyExamGroupChartData>
 }
 
 export class HomeService implements IHomeService {
   async getCounts(): Promise<Counts> {
     // Returning fake data instead of API call
     return {
-      totalActiveExamCenters: 45,
-      totalHalls: 120,
-      totalActiveExternalStudents: 3500,
-      totalHallSeatsCapacity: 5000,
-      totalPaidAmounts: 204000000,
       totalUpcomingExams: 15,
-      todayTicketsToSeatsRatio: 75.5,
       currentActiveExams: 8,
       totalGroups: 25,
       totalExaminedStudents: 2850,
       totalAbsentStudents: 650,
-      examCentersAcceptanceStatus: {
-        acceptedCenters: 40,
-        totalCentersForExams: 45,
-        acceptanceRatio: 88.9,
-        rejectionRatio: 11.1
-      },
-      monthlyBookingStatistics: {
-        totalSeatsBooked: 3750,
-        totalCapacity: 5000,
-        totalEmptySeats: 1250,
-        bookingRatio: 75,
-        emptySeatsRatio: 25
-      },
-      proficiencyExamGroupChartData: {
-        year: 2025,
-        englishExams: [],
-        arabicExams: [],
-        computerExams: []
-      },
-      governorateBookingChartData: {
-        month: 1,
-        year: 2025,
-        monthName: 'January',
-        governorates: []
-      },
-      superadminCurrentExamsTable: {
-        currentExams: [],
-        totalCurrentExams: 8,
-        totalActiveStudents: 240
-      },
+
       registeredStudentsStatistics: {
         totalRegisteredStudents: 3500,
         totalStudentsBookedExams: 3200,
@@ -112,14 +73,5 @@ export class HomeService implements IHomeService {
       ]
     }
   }
-  
-  async getProficiencyExamGroupChartData(year: number): Promise<ProficiencyExamGroupChartData> {
-    const response = await axiosIns.get<ProficiencyExamGroupChartData>('/statistics/superadmin/proficiency-exam-group-chart-data?year=' + year)
-    return response.data
-  }
 
-  async getGovernorateBookingChartData(year: number, month: number): Promise<GovernorateBookingChartData> {
-    const response = await axiosIns.get<GovernorateBookingChartData>('/statistics/superadmin/governorate-booking-chart-data?year=' + year + '&month=' + month)
-    return response.data
-  }
 }

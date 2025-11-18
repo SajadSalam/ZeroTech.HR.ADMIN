@@ -1,48 +1,18 @@
 
 export interface Counts {
-  totalActiveExamCenters:        number;
-    totalHalls:                    number;
-    totalActiveExternalStudents:   number;
-    totalHallSeatsCapacity:        number;
-    totalPaidAmounts:              number;
     totalUpcomingExams:            number;
-    todayTicketsToSeatsRatio:      number;
     currentActiveExams:            number;
     totalGroups:                   number;
     totalExaminedStudents:         number;
     totalAbsentStudents:           number;
-    examCentersAcceptanceStatus:   ExamCentersAcceptanceStatus;
-    monthlyBookingStatistics:      MonthlyBookingStatistics;
-    proficiencyExamGroupChartData: ProficiencyExamGroupChartData;
-    governorateBookingChartData:   GovernorateBookingChartData;
-    superadminCurrentExamsTable:   SuperadminCurrentExamsTable;
-    registeredStudentsStatistics:  RegisteredStudentsStatistics;
-    passFailChartData:             PassFailChartData;
-    groupStudentCounts:            GroupStudentCount[];
-    collegeStudentCounts:          CollegeStudentCount[];
+    collegeStudentCounts:  CollegeStudentCount[];
+    passFailChartData: PassFailChartData;
+    groupStudentCounts: GroupStudentCount[];
+    registeredStudentsStatistics: RegisteredStudentsStatistics;
 }
 
-export interface ExamCentersAcceptanceStatus {
-    acceptedCenters:      number;
-    totalCentersForExams: number;
-    acceptanceRatio:      number;
-    rejectionRatio:       number;
-}
 
-export interface GovernorateBookingChartData {
-    month:        number;
-    year:         number;
-    monthName:    string;
-    governorates: any[];
-}
 
-export interface MonthlyBookingStatistics {
-    totalSeatsBooked: number;
-    totalCapacity:    number;
-    totalEmptySeats:  number;
-    bookingRatio:     number;
-    emptySeatsRatio:  number;
-}
 
 export interface ProficiencyExamGroupChartData {
     year:          number;
