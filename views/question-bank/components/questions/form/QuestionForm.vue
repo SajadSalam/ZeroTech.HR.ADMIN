@@ -149,7 +149,7 @@ watch(
       </div>
 
       <AppFileField
-        v-model:file="element.image"
+        v-model="element.image"
       />
 
       
