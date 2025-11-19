@@ -779,5 +779,6 @@
   "select-all": "Select All",
   "available": "available",
   "creation-start-date-before-creation-end-date": "Start date must be before end date",
-  "create-exams-with-filters": "Create new exam by entering the fields"
+  "create-exams-with-filters": "Create new exam by entering the fields",
+  "delete-selected-questions": "Delete selected question"
 }

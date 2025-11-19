@@ -110,7 +110,6 @@ const openExamDetails = (exam: Record<string, any>) => {
                 <BaseButton 
                 variant="pastel"
                 color="warning"
-                v-if="data.item.examType === ExamType.Final"
                 :to="`/exams/${data.item.id}/students`"
                 class="border-warning-500 font-bold"
             >

@@ -37,12 +37,15 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   
   if (!isFallbackRoute) {
     const hasAccess = await hasRouteAccess(to.path)
+    console.log(hasAccess)
+    console.log(to.path)
     
     if (!hasAccess) {
       const firstAccessiblePage = await findFirstAccessiblePage()
-      
+      console.log(firstAccessiblePage)
       // Prevent infinite redirect by ensuring we don't redirect to the same page
       if (firstAccessiblePage !== to.path) {
+        console.log(firstAccessiblePage)
         return navigateTo(firstAccessiblePage)
       }
     }

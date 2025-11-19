@@ -3,7 +3,7 @@ import { useAuthStore } from '~/views/auth/store/auth'
 
 const authStore = useAuthStore()
 const fullName = computed(() => authStore.userData.name || 'Sajad Salam')
-const role = computed(() => authStore.userData.roles.find(c=> c.slug.includes('ems'))?.name || 'SuperAdmin')
+const role = computed(() => authStore.userData.roles.map(c=> c.name).join(', ') || 'SuperAdmin')
 </script>
 <template>
     <div>

@@ -7,7 +7,7 @@ export interface Question {
   title: string
   alternateTitle?: string
   isAlternateTitleShown?: boolean
-  image: File | null
+  image: string |string[] | null
   order: number
   type: QuestionType
   options: Option[]
