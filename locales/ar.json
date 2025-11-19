@@ -589,7 +589,7 @@
   "exam-instructions": "تعليمات الامتحان",
   "fill-creation-period-dates-optional": "تواريخ إنشاء فترة إنشاء الاسئلة (اختياري)",
   "creation-period": "فترة الانشاء ",
-  "failed": "راسب",
+  "failed": "فاشل",
   "organizational-structure": "جامعة",
   "import-questions": "استيراد الأسئلة",
   "please-select-question-type-first": "يرجى اختيار نوع السؤال أولاً",
@@ -615,8 +615,6 @@
   "all-questions-failed-to-import": "فشل استيراد جميع الأسئلة. يرجى التحقق من الأخطاء أدناه",
   "import-summary": "ملخص الاستيراد",
   "total-rows": "إجمالي الصفوف",
-  "successful": "ناجح",
-  "failed": "فاشل",
   "import-errors": "أخطاء الاستيراد",
   "try-again": "حاول مرة أخرى",
   "close": "إغلاق",
@@ -754,8 +752,6 @@
   "supervisor-otp-code": "رمز المشرف",
   "supervisor-otp-instructions": "شارك هذا الرمز مع المشرف للمصادقة",
   "generate-new-otp": "إنشاء رمز جديد",
-  "try-again": "حاول مرة أخرى",
-  "close": "إغلاق",
   "mark-as-cheating": "تأشير كـ حالة غش",
   "blacklist-student": "إدراج في القائمة السوداء",
   "student-details": "تفاصيل الطالب",
@@ -808,5 +804,6 @@
   "select-all": "تحديد الكل",
   "available": "متاح",
   "creation-start-date-before-creation-end-date": "يجب أن يكون تاريخ البدء قبل تاريخ الانتهاء",
-  "see-more":"عرض المزيد"
+  "see-more": "عرض المزيد",
+  "delete-selected-questions": "حذف الاسئلة المحددة"
 }

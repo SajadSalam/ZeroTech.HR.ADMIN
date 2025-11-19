@@ -42,6 +42,7 @@ interface IQuestionBankService {
   removeTopic(questionBankId: string, topicId: string): Promise<boolean>
   importQuestions(questionBankId: string, file: File, questionTypeOption: ImportQuestionTypeOption): Promise<ImportQuestionResponse>
   downloadTemplate(questionTypeOption: ImportQuestionTypeOption): Promise<void>
+  deleteQuestions(questionIds: string[]): Promise<void>
 }
 
 export interface ImportQuestionError {
@@ -328,5 +329,13 @@ export class QuestionBankService implements IQuestionBankService {
     } catch (error) {
       throw error
     }
+  }
+
+  async deleteQuestions(questionIds: string[]): Promise<void> {
+    await axios.delete(`/question/multi`, {
+      data: {
+        questionIds
+      }
+    })
   }
 }

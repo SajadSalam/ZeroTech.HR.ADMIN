@@ -9,7 +9,7 @@ const authStore = useAuthStore()
 const fullName = computed(() => authStore.userData.name || 'Sajad Salam')
 const role = computed(
     () =>
-        authStore.userData.roles.find((c) => c.slug.includes('ems'))?.name ||
+        authStore.userData.roles.map((c) => c.name).join(', ') ||
         'SuperAdmin'
 )
 </script>

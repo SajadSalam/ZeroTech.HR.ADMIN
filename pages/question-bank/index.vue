@@ -147,8 +147,8 @@ const { hasPrivilege } = useAuthStore()
             </div>
         </AppCrud>
     </div>
-    <CreateQuestionBank />
-    <EditQuestionBank />
-    <AssignDialog />
+    <CreateQuestionBank v-if="hasPrivilege('ums:ems:question-bank:create')" />
+    <EditQuestionBank v-if="hasPrivilege('ums:ems:question-bank:update')" />
+    <AssignDialog  v-if="hasPrivilege('ums:ems:question-bank:assign-creators') && hasPrivilege('ums:ems:question-bank:assign-auditors')" />
 </template>
 <style></style>

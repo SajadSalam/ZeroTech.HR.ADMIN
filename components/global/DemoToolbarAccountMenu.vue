@@ -6,7 +6,7 @@ const authStore = useAuthStore()
 const fullName = computed(() => authStore.userData.name || 'Sajad Salam')
 const role = computed(
     () =>
-        authStore.userData.roles.find((c) => c.slug.includes('ems'))?.name ||
+        authStore.userData.roles.map(c=> c.name).join(', ') ||
         'SuperAdmin'
 )
 const orgStructure = computed(() => authStore.userData.organizationalStructure?.fullNameAr || '-')
@@ -37,7 +37,7 @@ console.log('orgStructure', orgStructure.value)
                         class="h-20 w-45 flex items-center justify-between p-4 relative text-black left-1 rounded-full"
                     >
                         <span class="grow text-start">
-                            <p class="font-bold text-13px">
+                            <p class="font-bold text-[13px]">
                                 {{ fullName }}
                             </p>
                             <p class="text-muted-500 text-xs">
