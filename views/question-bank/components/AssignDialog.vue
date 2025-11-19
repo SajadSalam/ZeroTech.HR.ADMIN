@@ -141,7 +141,7 @@ const handleCourseChange = (selectedCourses: any[]) => {
           class="flex-1"
           @update:model-value="debouncedSearch"
         />
-        <AppAutoCompleteField
+        <!-- <AppAutoCompleteField
           v-model="filters.value.position"
           fetch-on-search
           search-key="name"
@@ -150,7 +150,7 @@ const handleCourseChange = (selectedCourses: any[]) => {
           item-label="arabicName"
           item-value="id"
           class="w-64"
-        />
+        /> -->
         <AppAutoCompleteField
           v-model="filters.value.courses"
           fetch-on-search
