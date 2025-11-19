@@ -151,7 +151,7 @@ const cancelExam = async () => {
       </BaseButton>
       <BaseButton color="primary" :loading="examStore.isLoading" class="gap-5" @click="update">
         <Icon name="ph:upload-simple-duotone" class="size-5" />
-        {{ $t('reschedule') }}
+        {{ $t('save-changes') }}
       </BaseButton>
     </template>
   </AppDialog>

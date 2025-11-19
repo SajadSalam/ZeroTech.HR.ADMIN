@@ -155,7 +155,7 @@ watch(
         <AppFieldAppInputField
           v-model="body.creationStartDate.$model"
           :errors="body.creationStartDate.$errors"
-          :label="$t('start-date')"
+          :label="$t('start-date-creation-qustion-bank')"
           :placeholder="$t('enter-start-date')"
           type="date"
         />
