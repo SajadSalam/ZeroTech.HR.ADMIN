@@ -125,7 +125,7 @@ const handleCourseChange = (selectedCourses: any[]) => {
       $t('assigns') +
       (questionBankStore.assignType === AssignType.Auditor
         ? ' ' + $t('auditors')
-        : ' ' + $t('creators'))
+        : ' ' + $t('creators')) + ' (' + selectedEmployees.length + ')'
     "
     size="3xl"
     overflow-y="visible"
