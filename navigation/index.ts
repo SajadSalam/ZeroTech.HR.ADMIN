@@ -74,7 +74,7 @@ const defaultNavigation = [
     //     to: '/evaluations',
     //     // privilege: 'ums:ems:exam:get-exam-grade',
     //     // role:'ums@exam:corrector'
-    //   },
+//   },
     ],
   },
 

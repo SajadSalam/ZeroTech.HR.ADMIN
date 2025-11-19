@@ -19,6 +19,7 @@ import ViewQuestion from '~/views/question-bank/components/ViewQuestion.vue'
 import {
     questionTypeOptions,
 } from '~/views/question-bank/types/index'
+import { QuestionBankService } from '~/views/question-bank/service'
 
 definePageMeta({
     title: 'questions-page',
@@ -79,8 +80,14 @@ const toggleSelectAllQuestions = () => {
         selectedQuestions.value = questions.value
     }
 }
-const deleteSelectedQuestions = () => {
-    console.log(selectedQuestions.value)
+
+var questionBankService = new QuestionBankService()
+const deleteSelectedQuestions = async () => {
+    appTableStore.setLoading(true)
+    await questionBankService.deleteQuestions(selectedQuestions.value.map((q) => q.id!) as string[])
+    selectedQuestions.value = []
+    getQuestions()
+    appTableStore.setLoading(false)
 }
 </script>
 

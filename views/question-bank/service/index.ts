@@ -332,10 +332,8 @@ export class QuestionBankService implements IQuestionBankService {
   }
 
   async deleteQuestions(questionIds: string[]): Promise<void> {
-    await axios.delete(`/question/multi`, {
-      data: {
-        questionIds
-      }
+    await axios.delete(`/question/bulk-delete`, {
+      data: questionIds
     })
   }
 }
