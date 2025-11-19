@@ -80,7 +80,7 @@ const updateQuestionBank = async () => {
             </h1>
             <div class="my-1 grid gap-3 md:grid-cols-2">
                 <AppFieldAppInputField v-model="body.creationStartDate.$model" :errors="body.creationStartDate.$errors"
-                    :label="$t('start-date')" :placeholder="$t('enter-start-date')" type="date" />
+                    :label="$t('start-date-creation-qustion-bank')" :placeholder="$t('enter-start-date')" type="date" />
                 <AppFieldAppInputField v-model="body.creationEndDate.$model" :errors="body.creationEndDate.$errors"
                     :label="$t('end-date')" :placeholder="$t('enter-end-date')" type="date" />
             </div>
