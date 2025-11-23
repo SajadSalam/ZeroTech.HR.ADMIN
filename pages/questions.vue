@@ -98,7 +98,7 @@ const deleteSelectedQuestions = async () => {
             <template #filters>
                 <BaseInput v-model="filters.title" :placeholder="$t('search')" />
                 <AppAutoCompleteField v-model="filters.questionBankId" fetch-on-search search-key="name"
-                    :placeholder="$t('questions-bank')" get-url="/question-bank/lookup" without-data item-label="title"
+                    :placeholder="$t('questions-bank')" get-url="/question-bank"  item-label="title"
                     item-value="id" />
                 <AppAutoCompleteField v-model="filters.type" :items="questionTypeOptions($t)"
                     :placeholder="$t('select-a-question-type')" item-label="label" item-value="value" />

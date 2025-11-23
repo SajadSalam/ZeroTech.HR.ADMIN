@@ -54,8 +54,7 @@ const { hasPrivilege } = useAuthStore()
           fetch-on-search
           search-key="name"
           :placeholder="$t('questions-bank')"
-          get-url="/question-bank/lookup"
-          without-data
+          get-url="/question-bank"
           item-label="title"
           item-value="id"
         />

@@ -322,7 +322,7 @@ const submit = async () => {
             <AppInputField v-model="body.maximumGrade.$model" :errors="body.maximumGrade.$errors"
                 :placeholder="$t('maximum-grade')" :label="$t('maximum-grade')" />
         </div>
-        <AppAutoCompleteField fetch-on-search search-key="name" get-url="/question-bank/lookup" without-data item-label="title"
+        <AppAutoCompleteField fetch-on-search search-key="name" get-url="/question-bank" item-label="title"
             item-value="id" multiple :label="$t('question-banks')" :placeholder="$t('question-banks')"
             :errors="body.questionBanks.$errors" @update:object-value="questionBanks = $event" />
         <p class="text-muted-500">
