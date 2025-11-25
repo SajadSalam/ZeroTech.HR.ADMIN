@@ -150,7 +150,9 @@ watch(
 
       <AppFileField
         v-model="element.image"
-      />
+        :multiple="true"
+        accept="image/*"
+      /> 
 
       
 
