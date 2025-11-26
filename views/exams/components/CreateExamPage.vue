@@ -68,7 +68,7 @@ const validator = new Validator<ExamCreate>(
         },
         duration: {
             required: createValidator(t, 'duration', 'required'),
-            minValue: createValidator(t, 'duration', 'minValue', 1),
+            minValue: createValidator(t, 'duration', 'minValue', 30),
         },
         enterTimeAllowed: {
             required: createValidator(t, 'enterance-time-allowed', 'required'),
