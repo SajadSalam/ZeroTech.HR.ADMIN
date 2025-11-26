@@ -105,9 +105,8 @@ const deleteSelectedQuestions = async () => {
                 <AppAutoCompleteField v-model="filters.difficulty" :items="difficultyOptions($t)"
                     :placeholder="$t('select-a-difficulty')" item-label="label" item-value="value" />
             </template>
-            <BaseButton 
-            v-if="selectedQuestions.length > 0 && hasPrivilege('ums:ems:question:delete')"
-            color="primary" variant="pastel" @click="deleteSelectedQuestions"> 
+            <BaseButton v-if="selectedQuestions.length > 0 && hasPrivilege('ums:ems:question:delete')" color="primary"
+                variant="pastel" @click="deleteSelectedQuestions">
                 <Icon class="me-2" name="ph-trash" />
                 {{ $t('delete-selected-questions') }}
             </BaseButton>
@@ -142,10 +141,13 @@ const deleteSelectedQuestions = async () => {
 
                         <BaseButton v-if="
                             item.auditStatus != AuditStatus.Rejected && hasPrivilege('ums:ems:question:reject')
-                        " :data-nui-tooltip="$t('Rejected')" color="danger" variant="pastel" size="sm" @click="openReject(item)">
+                        " :data-nui-tooltip="$t('Rejected')" color="danger" variant="pastel" size="sm"
+                            @click="openReject(item)">
                             <Icon name="ph-x" />
                             {{ $t('Reject') }}
                         </BaseButton>
+                        <AuditLogBtn :entity-id="item.id" />
+
                     </div>
                 </template>
                 <template #data-usedTimes="">
@@ -177,7 +179,7 @@ const deleteSelectedQuestions = async () => {
             </AppTable>
         </AppCrud>
     </div>
-  
+
     <ViewQuestion />
     <RejectDialog @update="getQuestions()" />
 </template>
