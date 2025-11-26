@@ -806,5 +806,6 @@
   "available": "متاح",
   "creation-start-date-before-creation-end-date": "يجب أن يكون تاريخ البدء قبل تاريخ الانتهاء",
   "see-more": "عرض المزيد",
-  "delete-selected-questions": "حذف الاسئلة المحددة"
+  "delete-selected-questions": "حذف الاسئلة المحددة",
+  "audit-log": "سجل العمليات"
 }
