@@ -21,7 +21,11 @@ export const useAuditLogStore = defineStore('auditLog', () => {
     try {
       loading.value = true
       const res = await auditLogService.get(filters)
-      auditLogs.value = res.data
+      auditLogs.value = res.data.map(log => ({
+        ...log,
+        changes: log.action === 2 ? getChanges(log.oldValues, log.newValues) : {noChanges: true}
+      }))
+      console.log(auditLogs.value)
     } catch (error) {
       throw error
     } finally {

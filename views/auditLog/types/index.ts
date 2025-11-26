@@ -10,6 +10,7 @@ export interface AuditLog {
   ipAddress: string;
   userAgent: string;
   timestamp: string;         // ISO date string
+  changes: Record<string, { oldValue: any; newValue: any }>;
 }
 
 export interface AuditLogFilters {
