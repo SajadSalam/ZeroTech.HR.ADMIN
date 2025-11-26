@@ -52,70 +52,39 @@ const openExamDetails = (exam: Record<string, any>) => {
 
 <template>
   <div>
-    <AppCrud
-      pagination
-      v-model:current-page="filters.pageNumber"
-      :total-pages="examStore.totalPages"
-      create-link="/exams/create-exam"  
-      :add-button-text="$t('create-exams')"
-      :hide-create="!hasPrivilege('ums:ems:exam:create')"
-    >
+    <AppCrud pagination v-model:current-page="filters.pageNumber" :total-pages="examStore.totalPages"
+      create-link="/exams/create-exam" :add-button-text="$t('create-exams')"
+      :hide-create="!hasPrivilege('ums:ems:exam:create')">
       <template #filters>
         <BaseInput :placeholder="$t('search')" v-model="filters.search" />
-        <AppAutoCompleteField
-          fetchOnSearch
-          searchKey="search"
-          :placeholder="$t('blueprint')"
-          get-url="/examtemplate"
-          item-label="name"
-          item-value="id"
-          v-model="filters.examTemplateId"
-        />
-    
+        <AppAutoCompleteField fetchOnSearch searchKey="search" :placeholder="$t('blueprint')" get-url="/examtemplate"
+          item-label="name" item-value="id" v-model="filters.examTemplateId" />
+
       </template>
       <AppTable title="Exams" :headers="tableHeaders($t)" :items="exams">
         <template #data-actions="data">
           <div class="flex items-center justify-center gap-2">
-            <AppCrudActions
-              :item="data.item"
-              :delete-service="examStore.deleteExam"
-              :edit-button-action="
+            <AppCrudActions :item="data.item" :delete-service="examStore.deleteExam" :edit-button-action="
                 () => {
                  isUpdateDialogOpen = true;
                   examId = data.item.id;
                 }
-              "r
-              :hide-delete="true"
-              :hide-update="!hasPrivilege('ums:ems:exam:update')"
-            />
-            <BaseButtonIcon
-              :data-nui-tooltip="$t('view')"
-              rounded="full"
-              size="sm"
-              color="primary"
-              variant="outline"
-              @click="openExamDetails(data.item)"
-            >
+              " r :hide-delete="true" :hide-update="!hasPrivilege('ums:ems:exam:update')" />
+            <BaseButtonIcon :data-nui-tooltip="$t('view')" rounded="full" size="sm" color="primary" variant="outline"
+              @click="openExamDetails(data.item)">
               <Icon name="ph:eye" size="18" />
             </BaseButtonIcon>
-            <BaseButton 
-                variant="pastel"
-                color="success"
-                :to="`/exams/${data.item.id}/view`"
-                class="border-green-500 font-bold"
-            >
-             <Icon name="ph:question" class="me-2" size="18"></Icon>
-                  {{ $t("questions") }}
-                </BaseButton>
-                <BaseButton 
-                variant="pastel"
-                color="warning"
-                :to="`/exams/${data.item.id}/students`"
-                class="border-warning-500 font-bold"
-            >
-             <Icon name="ph:question" class="me-2" size="18"></Icon>
-                  {{ $t("students") }}
-                </BaseButton>
+            <BaseButton variant="pastel" color="success" :to="`/exams/${data.item.id}/view`"
+              class="border-green-500 font-bold">
+              <Icon name="ph:question" class="me-2" size="18"></Icon>
+              {{ $t("questions") }}
+            </BaseButton>
+            <BaseButton variant="pastel" color="warning" :to="`/exams/${data.item.id}/students`"
+              class="border-warning-500 font-bold">
+              <Icon name="ph:question" class="me-2" size="18"></Icon>
+              {{ $t("students") }}
+            </BaseButton>
+            <AuditLogBtn :entity-id="data.item.id" />
           </div>
         </template>
         <template #data-templateName="{ item }">
@@ -125,7 +94,7 @@ const openExamDetails = (exam: Record<string, any>) => {
           {{ examTypesOptions($t).find((type) => type.value === item.examType)?.label }}
         </template>
         <template #data-time="{ item }">
-          {{ item.startTime }} - {{ item.endTime }} 
+          {{ item.startTime }} - {{ item.endTime }}
         </template>
         <template #data-attendance>
           {{ Math.floor(Math.random() * 100) }}
@@ -143,7 +112,8 @@ const openExamDetails = (exam: Record<string, any>) => {
           {{ item.endDate ? item.endDate.split("T")[0] : '' }}
         </template>
         <template #data-availableDays="{ item }">
-            {{ item.availableDays?.map((day) => availableDaysOptions($t).find((option) => option.value === day)?.label).join(', ') }}
+          {{ item.availableDays?.map((day) => availableDaysOptions($t).find((option) => option.value ===
+          day)?.label).join(', ') }}
         </template>
       </AppTable>
     </AppCrud>
