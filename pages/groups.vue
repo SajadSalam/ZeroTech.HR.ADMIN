@@ -121,6 +121,7 @@ watch(
       >
         <!-- Actions column -->
         <template #data-actions="{ item }">
+          <div class="flex items-center justify-center">
           <AppCrudActions
             :hide-update="false"
             :edit-button-action="() => openEdit(item)"
@@ -128,6 +129,9 @@ watch(
             :hide-delete="!canDeleteGroup"
             :delete-service="groupStore.deleteGroup"
           />
+          
+          <AuditLogBtn :entity-id="item.id" />
+          </div>
         </template>
 
         <!-- Organizational structures column -->
@@ -162,7 +166,11 @@ watch(
           :key="group.id"
           :group="group"
           @update:open-edit="openEdit"
-        />
+        >
+          <template #actions>
+            <AuditLogBtn :entity-id="group.id" />
+          </template>
+        </CardView>
       </div>
     </AppCrud>
 
