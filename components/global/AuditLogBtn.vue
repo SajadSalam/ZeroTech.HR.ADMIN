@@ -4,11 +4,7 @@ const props = defineProps<{
     entityType?: string
     entityId?: string
 }>()
-const isAuditLogDialogOpen = inject<Ref<boolean>>('isAuditLogDialogOpen')
 const auditLogStore = useAuditLogStore()
-if (!isAuditLogDialogOpen) {
-    throw new Error('isAuditLogDialogOpen must be provided by a parent component')
-}
 
 const toggleAuditLogDialogVisibility = () => {
     if (props.entityType) {
@@ -17,7 +13,7 @@ const toggleAuditLogDialogVisibility = () => {
     if (props.entityId) {
         auditLogStore.filters.entityId = props.entityId
     }
-    isAuditLogDialogOpen.value = !isAuditLogDialogOpen.value
+    auditLogStore.toggleAuditLogDialogVisibility()
 }
 </script>
 <template>

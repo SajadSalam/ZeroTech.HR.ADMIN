@@ -12,11 +12,7 @@ const auditLogStore = useAuditLogStore()
 const filters = computed(() => auditLogStore.filters)
 const auditLogs = computed(() => auditLogStore.auditLogs)
 const isLoading = computed(() => auditLogStore.loading)
-
-const isAuditLogDialogOpen = inject<Ref<boolean>>('isAuditLogDialogOpen')
-if (!isAuditLogDialogOpen) {
-    throw new Error('isAuditLogDialogOpen must be provided by a parent component')
-}
+const isAuditLogDialogOpen = computed(() => auditLogStore.isAuditLogDialogOpen)
 const iconBg = (action: number) => {
   switch (action) {
     case 1:
@@ -49,8 +45,8 @@ const isChangesVisible = ref<Record<string, boolean>>({})
 </script>
 <template>
   <AppDialog
-    v-model="isAuditLogDialogOpen"
-    :title="$t('سجل التعديلات')"
+    v-model="auditLogStore.isAuditLogDialogOpen"
+    :title="$t('audit-log')"
     size="xl"
     overflow-y="visible"
   >
@@ -59,12 +55,12 @@ const isChangesVisible = ref<Record<string, boolean>>({})
         <div class="grid grid-cols-2 gap-4">
           <AppInputField
             v-model="filters.startDate"
-            :label="$t('من تاريخ')"
+            :label="$t('min_date')"
             type="date"
           />
           <AppInputField
             v-model="filters.endDate"
-            :label="$t('الى تاريخ')"
+            :label="$t('max_date')"
             type="date"
           />
         </div>
@@ -106,18 +102,18 @@ const isChangesVisible = ref<Record<string, boolean>>({})
           @click="isChangesVisible[log.id] = !isChangesVisible[log.id]"
           class="mt-1 text-sm text-gray-500 leading-relaxed cursor-pointer hover:underline"
         >
-          انقر لمشاهدة التعديلات
+          {{ $t('click-to-view-changes') }}
         </p>
         <div v-if="isChangesVisible[log.id]" class="mt-2 p-3 bg-gray-50 rounded-lg border border-gray-200">
           <div v-for="(change, key) in getChanges(log.oldValues, log.newValues)" :key="key" class="mb-3 last:mb-0">
             <div class="font-semibold text-sm text-gray-700 mb-1">{{ key }}:</div>
             <div class="flex flex-col gap-1 text-xs">
               <div class="flex items-start gap-2">
-                <span class="font-medium text-red-600 min-w-[60px]">القديم:</span>
+                <span class="font-medium text-red-600 min-w-[60px]">{{ $t('old-value') }}:</span>
                 <span class="text-gray-600 break-words">{{ typeof change.oldValue === 'object' ? JSON.stringify(change.oldValue, null, 2) : change.oldValue ?? 'null' }}</span>
               </div>
               <div class="flex items-start gap-2">
-                <span class="font-medium text-green-600 min-w-[60px]">الجديد:</span>
+                <span class="font-medium text-green-600 min-w-[60px]">{{ $t('new-value') }}:</span>
                 <span class="text-gray-600 break-words">{{ typeof change.newValue === 'object' ? JSON.stringify(change.newValue, null, 2) : change.newValue ?? 'null' }}</span>
               </div>
             </div>
@@ -136,7 +132,7 @@ const isChangesVisible = ref<Record<string, boolean>>({})
   </div>
   <div v-else class="bg-white rounded-2xl p-6 max-h-[560px] overflow-y-auto">
     <div class="text-center text-gray-500">
-      لم يتم العثور على سجلات تعديلات
+      {{ $t('no-audit-logs-found') }}
     </div>
   </div>
         </div>

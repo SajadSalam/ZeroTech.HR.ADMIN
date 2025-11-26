@@ -5,6 +5,10 @@ const auditLogService = new AuditLogService()
 export const useAuditLogStore = defineStore('auditLog', () => {
   const auditLogs = ref<AuditLog[]>([])
   const loading = ref(false)
+  const isAuditLogDialogOpen = ref<boolean>(false)
+  const toggleAuditLogDialogVisibility = () => {
+    isAuditLogDialogOpen.value = !isAuditLogDialogOpen.value
+  }
   const filters = ref<AuditLogFilters>({
     entityType: null,
     entityId: null,
@@ -29,5 +33,7 @@ export const useAuditLogStore = defineStore('auditLog', () => {
     loading,
     getAuditLogs,
     filters,
+    isAuditLogDialogOpen,
+    toggleAuditLogDialogVisibility,
   }
 })
