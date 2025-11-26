@@ -6,17 +6,17 @@ const props = defineProps<{
 }>()
 const isAuditLogDialogOpen = inject<Ref<boolean>>('isAuditLogDialogOpen')
 const auditLogStore = useAuditLogStore()
-if (props.entityType) {
-    auditLogStore.filters.entityType = props.entityType
-}
-if (props.entityId) {
-    auditLogStore.filters.entityId = props.entityId
-}
 if (!isAuditLogDialogOpen) {
     throw new Error('isAuditLogDialogOpen must be provided by a parent component')
 }
 
 const toggleAuditLogDialogVisibility = () => {
+    if (props.entityType) {
+        auditLogStore.filters.entityType = props.entityType
+    }
+    if (props.entityId) {
+        auditLogStore.filters.entityId = props.entityId
+    }
     isAuditLogDialogOpen.value = !isAuditLogDialogOpen.value
 }
 </script>

@@ -2,7 +2,7 @@
 import { useI18n } from 'vue-i18n'
 import AppInputField from '../app-field/AppInputField.vue'
 import { useAuditLogStore } from '~/views/auditLog/store'
-import type { AuditLog } from '~/views/auditLog/types'
+import type { AuditLog, AuditLogFilters } from '~/views/auditLog/types'
 import { auditLogActions, getAuditLogActionIcon } from '~/views/auditLog'
 import { formatDate } from '~/services/formatters'
 import { getChanges } from '~/utils'
@@ -28,12 +28,18 @@ const iconBg = (action: number) => {
       return "bg-blue-500";
   }
 };
-watch(() => isAuditLogDialogOpen.value, (newVal: boolean) => {
-    console.log(newVal)
-}, { immediate: true })
-watch(filters, () => {
-  auditLogStore.getAuditLogs(filters.value)
-}, { deep: true })
+// Watch only the properties we care about, excluding entityType and entityId
+watch(
+  () => ({
+    action: filters.value.action,
+    startDate: filters.value.startDate,
+    endDate: filters.value.endDate
+  }),
+  () => {
+    auditLogStore.getAuditLogs(filters.value)
+  },
+  { deep: true }
+)
 watch(isAuditLogDialogOpen, () => {
   if (isAuditLogDialogOpen.value) {
     auditLogStore.getAuditLogs(filters.value)
