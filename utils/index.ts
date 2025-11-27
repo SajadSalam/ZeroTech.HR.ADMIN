@@ -27,20 +27,9 @@ export const getChanges = (
   if (typeof oldObj === "string" && typeof newObj === "string" && oldObj === newObj) {
     return {}
   }
-
-  // Parse safely
-  const safeParse = (value: string | object | null): Record<string, any> => {
-    if (!value) return {}
-    if (typeof value === "object") return value as Record<string, any>
-    try {
-      return JSON.parse(value)
-    } catch {
-      return {}
-    }
-  }
-
-  const oldParsed = safeParse(oldObj)
-  const newParsed = safeParse(newObj)
+  
+  const oldParsed = JSON.parse(oldObj as string)
+  const newParsed = JSON.parse(newObj as string)
 
   // Collect changes
   const keys = new Set([...Object.keys(oldParsed), ...Object.keys(newParsed)])
