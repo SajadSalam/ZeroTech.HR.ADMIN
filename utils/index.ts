@@ -18,47 +18,39 @@ export const isNullOrEmpty = (str: string | null) => {
  * @param newObj - The new JSON object (can be a JSON string or object)
  * @returns An object with changed keys, each containing oldValue and newValue
  */
-export const getChanges = (oldObj: string | object | null, newObj: string | object | null): Record<string, { oldValue: any; newValue: any }> => {
-  // Parse JSON strings if needed
-  let oldParsed: Record<string, any> = {}
-  let newParsed: Record<string, any> = {}
+export const getChanges = (
+  oldObj: string | object | null,
+  newObj: string | object | null
+): Record<string, { oldValue: any; newValue: any }> => {
 
-  try {
-    if (typeof oldObj === 'string') {
-      oldParsed = oldObj ? JSON.parse(oldObj) : {}
-    } else if (oldObj && typeof oldObj === 'object') {
-      oldParsed = oldObj as Record<string, any>
-    }
-  } catch (e) {
-    console.error('Error parsing oldValues:', e)
-    oldParsed = {}
+  // Fast check: if both are strings and exactly equal → no changes
+  if (typeof oldObj === "string" && typeof newObj === "string" && oldObj === newObj) {
+    return {}
   }
 
-  try {
-    if (typeof newObj === 'string') {
-      newParsed = newObj ? JSON.parse(newObj) : {}
-    } else if (newObj && typeof newObj === 'object') {
-      newParsed = newObj as Record<string, any>
+  // Parse safely
+  const safeParse = (value: string | object | null): Record<string, any> => {
+    if (!value) return {}
+    if (typeof value === "object") return value as Record<string, any>
+    try {
+      return JSON.parse(value)
+    } catch {
+      return {}
     }
-  } catch (e) {
-    console.error('Error parsing newValues:', e)
-    newParsed = {}
   }
 
-  // Get all unique keys from both objects
-  const allKeys = new Set([...Object.keys(oldParsed), ...Object.keys(newParsed)])
+  const oldParsed = safeParse(oldObj)
+  const newParsed = safeParse(newObj)
+
+  // Collect changes
+  const keys = new Set([...Object.keys(oldParsed), ...Object.keys(newParsed)])
   const changes: Record<string, { oldValue: any; newValue: any }> = {}
 
-  // Compare each key
-  for (const key of allKeys) {
-    const oldValue = oldParsed[key]
-    const newValue = newParsed[key]
-
-    // Check if values are different (using deep comparison for objects/arrays)
-    if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
+  for (const key of keys) {
+    if (JSON.stringify(oldParsed[key]) !== JSON.stringify(newParsed[key])) {
       changes[key] = {
-        oldValue: oldValue,
-        newValue: newValue
+        oldValue: oldParsed[key],
+        newValue: newParsed[key]
       }
     }
   }

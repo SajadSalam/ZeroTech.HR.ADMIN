@@ -3,7 +3,7 @@ import { useI18n } from 'vue-i18n'
 import AppInputField from '../app-field/AppInputField.vue'
 import { useAuditLogStore } from '~/views/auditLog/store'
 import type { AuditLog, AuditLogFilters } from '~/views/auditLog/types'
-import { auditLogActions, getAuditLogActionIcon } from '~/views/auditLog'
+import { auditLogActions } from '~/views/auditLog'
 import { formatDate } from '~/services/formatters'
 import { getChanges } from '~/utils'
 
@@ -61,7 +61,7 @@ const isChangesVisible = ref<Record<string, boolean>>({})
                   <div
                     class="w-8 h-8 rounded-full flex items-center justify-center shadow-sm text-white text-sm font-semibold"
                     :class="iconBg(log.action)">
-                    <Icon :name="getAuditLogActionIcon(log.action) ?? ''" />
+                    <Icon :name="auditLogActions.find(action => action.value === log.action)?.icon ?? ''" />
                   </div>
 
                   <!-- Vertical line (except last item) -->
@@ -75,10 +75,7 @@ const isChangesVisible = ref<Record<string, boolean>>({})
                       {{ log.username || '[Name]' }}
                     </span>
                     <span class="font-semibold capitalize mr-1">
-                      {{ auditLogActions[log.action as keyof typeof auditLogActions]?.name ?? '' }}
-                    </span>
-                    <span class="ml-1">
-                      {{ }}
+                      {{ auditLogActions.find(action => action.value === log.action)?.name ?? '' }}
                     </span>
                   </div>
 

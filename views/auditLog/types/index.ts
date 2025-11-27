@@ -10,13 +10,13 @@ export interface AuditLog {
   ipAddress: string;
   userAgent: string;
   timestamp: string;         // ISO date string
-  changes: Record<string, { oldValue: any; newValue: any }>;
+  changes: Record<string, { oldValue: any; newValue: any; }> | { noChanges: boolean };
 }
 
 export interface AuditLogFilters {
-  entityType: string | null;
-  entityId: string | null;
-  action: number | null;
-  startDate: string | null;
-  endDate: string | null;
+  entityType?: string | null;
+  entityId?: string | null;
+  action?: number | null;
+  startDate?: string | null;
+  endDate?: string | null;
 }

@@ -1,25 +1,20 @@
-export const auditLogActions = {
-  1: {
+export const auditLogActions = [
+  {
     name: 'انشاء',
     color: 'green',
+    icon: 'material-symbols:edit',
+    value: 1,
   },
-  2: {
+  {
     name: 'تحديث',
     color: 'blue',
+    icon: 'pepicons-pop:repeat',
+    value: 2,
   },
-  3: {
+  {
     name: 'حذف',
     color: 'red',
+    icon: 'ph-x',
+    value: 3,
   },
-}
-
-export const getAuditLogActionIcon = (action: number) => {
-  switch (action) {
-    case 1:
-        return 'material-symbols:edit'
-    case 2:
-        return 'pepicons-pop:repeat'
-    case 3:
-        return 'ph-x'
-  }
-}
+]
