@@ -127,7 +127,7 @@ schedule,جدولة
 create-blueprints,إنشاء نماذج الاسئلة
 wirting-title,ادخل العنوان
 wirting-grade,درجة الكتابة
-success-grade,الدرجة الكلية
+success-grade,الدرجة القصوى
 add-subject,إضافة مادة
 display-result,عرض النتيجة
 move-between-questions,التنقل بين الأسئلة
@@ -350,7 +350,7 @@ create-group,انشاء مجموعة
 grade-per-question,الدرجة / السؤال
 add-settings,أضف المزيد من الإعدادات
 bluebrint-settings-for-question-bank,اعدادات المخطط لبنك الاسئلة 
-maximum-grade,اعلى درجة للامتحان
+maximum-grade,الدرجة الكلية
 choice-at-least-one-question-bank-to-add-settings-for-the-blueprint,اختيار بنك أسئلة واحد على الأقل لإضافة إعدادات للمخطط
 real-time-exam-monitoring,مراقبة الامتحانات الحقيقة
 real-time-exam-monitoring-description,يظهر هذا التقرير مراقبة الامتحانات المباشر

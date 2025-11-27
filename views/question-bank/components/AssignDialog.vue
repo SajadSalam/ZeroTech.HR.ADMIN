@@ -251,7 +251,7 @@ const handleCourseChange = (selectedCourses: any[]) => {
         @click="saveAssign"
       >
         <Icon name="ph:upload-simple-duotone" class="size-5" />
-        {{ $t('assigns') }}
+        {{ $t('save') }}
       </BaseButton>
     </div>
   </AppDialog>
