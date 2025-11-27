@@ -24,7 +24,7 @@ export class FileService {
     const formData = new FormData()
     for (let i = 0; i < files.length; i++) formData.append('files', files[i])
 
-    const res = await axiosIns.post('/file/multi', formData)
+    const res = await axiosIns.post('/file/multi-with-url', formData)
     return res.data
   }
   async fetchSignedUrl(imageKey: string): Promise<string> {
