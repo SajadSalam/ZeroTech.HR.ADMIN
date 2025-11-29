@@ -24,7 +24,7 @@ jobs:
           cicd_tag: ${{ gitea.ref_name }}
   Deploy-stg:
     needs: Build-Stg
-    runs-on: ubuntu-latest
+    runs-on: ums-stg-aau
     if: startsWith(gitea.ref, 'refs/tags/ums-ems-vue-admin-stg-v')
     container:
       image: 'gitea.ta3leem.dev/devops/infra-base-images/kubectl:${{ vars.KUBECTL_VERSION }}'
@@ -36,4 +36,4 @@ jobs:
         uses: https://${{ secrets.DEVOPS_TOKEN }}:@gitea.ta3leem.dev/devops/cicd-template/templates/kubernetes_deploy@main
         with:
           app_name: 'ums-ems-vue-admin'
-          kubeconfig: ${{ secrets.STG_KUBECONFIG }}
+          kubeconfig: ${{ secrets.AAU_STG_KUBECONFIG }}
