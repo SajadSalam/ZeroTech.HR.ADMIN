@@ -259,7 +259,8 @@ const saveChanges = async () => {
       return shouldInclude ? { ...q, order: index + 1 } : null
     })
     .filter((q): q is Question => q !== null)
-  questionBankStore.saveQuestions(route.params.id as string, questionsToSave, toBeDeletedIds.value)
+  await questionBankStore.saveQuestions(route.params.id as string, questionsToSave, toBeDeletedIds.value)
+  fetchQuestionBank()
 }
 
 const updateQuestion = (updatedQuestion: Question) => {
@@ -371,6 +372,7 @@ const currentTopicName = computed(() => {
           color="primary"
           variant="pastel"
           @click="questionBankStore.isAddTopicOpen = true"
+          v-if="hasPrivilege('ums:ems:question:bulk-create')"
         >
           <Icon name="ph:plus-circle-fill" class="me-1 size-8" />
           {{ $t('add') }}

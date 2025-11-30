@@ -4,11 +4,15 @@ import { useQuestionBankStore } from '~/views/question-bank/store/index'
 import { useSubjectStore } from '~/views/subjects/store'
 import { useTopicStore } from '~/views/topics/store'
 import type { QuestionBankTopicUpdate } from '../types'
+import { useAuthStore } from '~/views/auth/store/auth'
 
 const questionBankStore = useQuestionBankStore()
 const subjectStore = useSubjectStore()
 const topicsStore = useTopicStore()
-subjectStore.getSubjects()
+const { hasPrivilege } = useAuthStore()
+if (hasPrivilege('ums:ems:question:bulk-create')){
+  subjectStore.getSubjects()
+}
 const subjectId = computed(() => props.subjectId)
 const emit = defineEmits(['update'])
 const route = useRoute()
@@ -26,7 +30,9 @@ const addTopic = () => {
 }
 watch(subjectId, (value: string) => {
   if (value) {
-    topicsStore.getTopics({ subjectId: value, pageNumber: 1, pageSize: 500 })
+    if (hasPrivilege('ums:ems:question:bulk-create')){
+      topicsStore.getTopics({ subjectId: value, pageNumber: 1, pageSize: 500 })
+    }
   }
 })
 const topics = computed(() => topicsStore.topics)
