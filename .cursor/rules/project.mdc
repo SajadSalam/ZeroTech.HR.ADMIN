@@ -9,7 +9,7 @@ const isLoading = computed(() => entityStore.isLoading)
 const entities = computed(() => entityStore.entities || [])
 const filters = computed<EntityFilters>({
   get() {
-    return entityStore.filters
+  return entityStore.filters
   },
   set(value) {
     entityStore.filters = value

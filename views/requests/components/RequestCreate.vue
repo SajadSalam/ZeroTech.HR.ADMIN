@@ -54,9 +54,7 @@ const employeeBalance = computed(() => requestStore.employeeBalance)
 // Load data on component mount
 onMounted(async () => {
   await requestTypesStore.getRequestTypes()
-  if (authStore.userData?.roles.some(role => role.name === 'Admin')) {
-    await employeesStore.getEmployees()
-  }
+  // No need to pre-load employees since AppAutoCompleteField will fetch them on search
 })
 
 // Watch for request type changes to update balance-related fields
@@ -128,23 +126,31 @@ const isAdmin = computed(() => authStore.userData?.roles.some(role => role.name 
     overflow-y="visible"
   >
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Employee Selection (Admin only) -->
-      <div v-if="isAdmin" class="md:col-span-2">
+      <!-- Employee Selection -->
+      <div class="md:col-span-2">
         <AppAutoCompleteField
           v-model="body.employeeId.$model"
           label="الموظف"
-          placeholder="اختر الموظف"
-          :items="employees"
-          item-title="firstName"
+          placeholder="البحث عن موظف..."
+          get-url="/employee"
+          :fetch-on-search="true"
+          search-key="search"
+          item-label="fullName"
           item-value="id"
+          item-subtitle="employeeNumber"
           :error="body.employeeId.$error"
           :error-message="body.employeeId.$errors[0]?.$message"
           required
         >
           <template #item="{ item }">
-            <div>
-              <div class="font-medium">{{ item.firstName }} {{ item.lastName }}</div>
-              <div class="text-sm text-gray-500">{{ item.email }}</div>
+            <div class="flex items-center justify-between w-full">
+              <div>
+                <div class="font-medium">{{ item.fullName }}</div>
+                <div class="text-sm text-gray-500">{{ item.employeeNumber }} - {{ item.department?.name }}</div>
+              </div>
+              <div class="text-xs text-gray-400">
+                {{ item.position }}
+              </div>
             </div>
           </template>
         </AppAutoCompleteField>
