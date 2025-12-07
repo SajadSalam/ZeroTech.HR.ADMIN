@@ -98,8 +98,7 @@ const deleteSelectedQuestions = async () => {
             <template #filters>
                 <BaseInput v-model="filters.title" :placeholder="$t('search')" />
                 <AppAutoCompleteField v-model="filters.questionBankId" fetch-on-search search-key="name"
-                    :placeholder="$t('questions-bank')" get-url="/question-bank/lookup" without-data item-label="title"
-                    item-value="id" />
+                    :placeholder="$t('questions-bank')" get-url="/question-bank" item-label="title" item-value="id" />
                 <AppAutoCompleteField v-model="filters.type" :items="questionTypeOptions($t)"
                     :placeholder="$t('select-a-question-type')" item-label="label" item-value="value" />
                 <AppAutoCompleteField v-model="filters.difficulty" :items="difficultyOptions($t)"
@@ -134,7 +133,8 @@ const deleteSelectedQuestions = async () => {
                         <BaseButton v-if="
                             item.auditStatus != AuditStatus.Approved && hasPrivilege('ums:ems:question:approve')
                         " :data-nui-tooltip="$t('Approved')" color="success" variant="pastel" size="sm"
-                            @click="questionBankStore.approveQuestion(item.id)">
+                            @click="questionBankStore.approveQuestion(item.id)" :loading="questionBankStore.isLoading"
+                            :disabled="questionBankStore.isLoading">
                             <Icon name="ph-check" />
                             {{ $t('Approve') }}
                         </BaseButton>
@@ -142,7 +142,8 @@ const deleteSelectedQuestions = async () => {
                         <BaseButton v-if="
                             item.auditStatus != AuditStatus.Rejected && hasPrivilege('ums:ems:question:reject')
                         " :data-nui-tooltip="$t('Rejected')" color="danger" variant="pastel" size="sm"
-                            @click="openReject(item)">
+                            @click="openReject(item)" :loading="questionBankStore.isLoading"
+                            :disabled="questionBankStore.isLoading">
                             <Icon name="ph-x" />
                             {{ $t('Reject') }}
                         </BaseButton>

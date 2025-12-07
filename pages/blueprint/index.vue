@@ -44,11 +44,25 @@ const { hasPrivilege } = useAuthStore()
       :add-button-text="$t('create-blueprint')" :hide-create="!hasPrivilege('ums:ems:examtemplate:create')">
       <template #filters>
         <BaseInput v-model="filters.search" :placeholder="$t('search')" />
-        <AppAutoCompleteField v-model="filters.questionBankId" fetch-on-search search-key="name"
-          :placeholder="$t('questions-bank')" get-url="/question-bank/lookup" without-data item-label="title"
-          item-value="id" />
-        <AppAutoCompleteField v-model="filters.subjectId" fetch-on-search search-key="name" :placeholder="$t('subject')"
-          get-url="/subjects/lookup" without-data item-label="title" item-value="id" />
+        <AppAutoCompleteField
+          v-model="filters.questionBankId"
+          fetch-on-search
+          search-key="name"
+          :placeholder="$t('questions-bank')"
+          get-url="/question-bank"
+          item-label="title"
+          item-value="id"
+        />
+        <AppAutoCompleteField
+          v-model="filters.subjectId"
+          fetch-on-search
+          search-key="name"
+          :placeholder="$t('subject')"
+          get-url="/subjects/lookup"
+          without-data
+          item-label="title"
+          item-value="id"
+        />
       </template>
       <template #additional-filters>
         <div class="flex gap-4">
