@@ -39,14 +39,17 @@ const openEdit = (questionBank: QuestionBankDto) => {
         <span class="text-lg font-semibold">{{ questionBank.title }}</span>
         
       </div>
-      <AppCrudActions
+      <div class="flex items-center ">
+        <AppCrudActions
         v-if="canManage"
         :item="questionBank"
         :delete-service="questionBankStore.deleteQuestionBank"
         :edit-button-action="() => openEdit(questionBank)"
         :hide-delete="!canDelete"
         :hide-update="!canUpdate"
-      />
+        />
+        <slot name="actions" />
+      </div>
     </div>
 
     <!-- Question Bank Details -->

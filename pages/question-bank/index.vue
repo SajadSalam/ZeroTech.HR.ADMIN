@@ -90,12 +90,14 @@ const { hasPrivilege } = useAuthStore()
             <template #filters>
                 <BaseInput v-model="filters.search" :placeholder="$t('search')" />
                 <AppAutoCompleteField v-model="filters.subjectId" fetch-on-search search-key="name"
-                    :placeholder="$t('subject')" get-url="/subjects/lookup" without-data item-label="title" item-value="id" />
+                    :placeholder="$t('subject')" get-url="/subjects/lookup" without-data item-label="title"
+                    item-value="id" />
                 <AppAutoCompleteField v-model="filters.topics" fetch-on-search search-key="name"
-                    :placeholder="$t('topics')" get-url="/topics/lookup" without-data item-label="title" item-value="id" multiple />
+                    :placeholder="$t('topics')" get-url="/topics/lookup" without-data item-label="title" item-value="id"
+                    multiple />
             </template>
-            <AppTable :is-loading="isLoading" v-if="viewType === ViewType.Table" :title="$t('questions-bank')" :headers="tableHeader($t)"
-                :items="questionBanks">
+            <AppTable :is-loading="isLoading" v-if="viewType === ViewType.Table" :title="$t('questions-bank')"
+                :headers="tableHeader($t)" :items="questionBanks">
                 <template #data-id="data">
                     <span>{{ data.index + 1 }}</span>
                 </template>
@@ -118,6 +120,8 @@ const { hasPrivilege } = useAuthStore()
             }
                 " :hide-delete="!hasPrivilege('ums:ems:question-bank:delete')"
                             :hide-update="!hasPrivilege('ums:ems:question-bank:update')" />
+                        <AuditLogBtn :entity-id="item.id" />
+
                     </div>
                 </template>
                 <template #data-auditor="{ item }">
@@ -143,12 +147,18 @@ const { hasPrivilege } = useAuthStore()
             </AppTable>
             <div v-else class="grid gap-2 md:grid-cols-3">
                 <CardView v-for="questionBank in questionBanks" :key="questionBank.id" :question-bank="questionBank"
-                    @update:open-edit="openEdit" @update:open-assign-auditor="openAssignAuditor" @update:open-assign-creator="openAssignCreator" />
+                    @update:open-edit="openEdit" @update:open-assign-auditor="openAssignAuditor"
+                    @update:open-assign-creator="openAssignCreator" >
+                    <template #actions>
+                        <AuditLogBtn :entity-id="questionBank.id" />
+                    </template>
+                </CardView>
             </div>
         </AppCrud>
     </div>
     <CreateQuestionBank v-if="hasPrivilege('ums:ems:question-bank:create')" />
     <EditQuestionBank v-if="hasPrivilege('ums:ems:question-bank:update')" />
-    <AssignDialog  v-if="hasPrivilege('ums:ems:question-bank:assign-creators') && hasPrivilege('ums:ems:question-bank:assign-auditors')" />
+    <AssignDialog
+        v-if="hasPrivilege('ums:ems:question-bank:assign-creators') && hasPrivilege('ums:ems:question-bank:assign-auditors')" />
 </template>
 <style></style>

@@ -147,6 +147,8 @@ const deleteSelectedQuestions = async () => {
                             <Icon name="ph-x" />
                             {{ $t('Reject') }}
                         </BaseButton>
+                        <AuditLogBtn :entity-id="item.id" />
+
                     </div>
                 </template>
                 <template #data-usedTimes="">

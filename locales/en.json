@@ -780,5 +780,10 @@
   "available": "available",
   "creation-start-date-before-creation-end-date": "Start date must be before end date",
   "create-exams-with-filters": "Create new exam by entering the fields",
-  "delete-selected-questions": "Delete selected question"
+  "delete-selected-questions": "Delete selected question",
+  "audit-log": "Audit Log",
+  "click-to-view-changes": "Click to view changes",
+  "old-value": "Old Value",
+  "new-value": "New Value",
+  "no-audit-logs-found": "No audit logs found"
 }

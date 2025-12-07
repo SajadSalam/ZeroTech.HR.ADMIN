@@ -48,17 +48,19 @@ const openEdit = async (group: GroupDto) => {
         </BaseIconBox>
         <!--  <span class="text-lg font-semibold">{{ group.name }}</span> -->
       </div>
-
-      <AppCrudActions
+      <div class="flex items-center">
+        <AppCrudActions
         v-if="canManage"
         :item="group"
         :delete-service="groupStore.deleteGroup"
         :edit-button-action="() => openEdit(group)"
         :hide-delete="!canDelete"
         :hide-update="false"
-      />
+        />
+        <slot name="actions" />
+      </div>
     </div>
-
+      
     <!-- Organizational structure tags -->
     <div class="mt-2 flex flex-col items-center justify-center text-center">
       <h1 class="my-5 text-3xl font-semibold">
