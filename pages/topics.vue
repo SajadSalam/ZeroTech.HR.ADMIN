@@ -61,10 +61,10 @@ const { hasPrivilege } = useAuthStore()
     >
       <!-- Search filter -->
       <template #filters>
-        <BaseInput v-model="filters.name" :placeholder="$t('search')" />
+        <BaseInput v-model="filters.Search" :placeholder="$t('search')" />
         <AppAutoCompleteField
          fetchOnSearch
-          searchKey="name"
+          searchKey="search"
           :placeholder="$t('subject')"
           get-url="/subjects/lookup"
           without-data

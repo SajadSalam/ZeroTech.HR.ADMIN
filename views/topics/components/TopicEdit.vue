@@ -14,11 +14,12 @@ const { t } = useI18n()
 const selectedTopic = computed(() => topicStore.selectedTopic)
 const validator = new Validator<TopicCreateDto>(
   {
-    name: selectedTopic.value?.name as string,
+    titleAr: selectedTopic.value?.titleAr as string,
+    titleEn: selectedTopic.value?.titleEn as string,
     subjectId: selectedTopic.value?.subjectId as string,
   },
   {
-    name: {
+    titleAr: {
       required: createValidator(t, 'topic-name', 'required'),
     },
     subjectId: {
@@ -48,7 +49,8 @@ watch(
       validator.resetBody()
     } else {
       validator.fillBody({
-        name: selectedTopic.value?.name as string,
+        titleAr: selectedTopic.value?.titleAr as string,
+        titleEn: selectedTopic.value?.titleEn as string,
         subjectId: selectedTopic.value?.subjectId as string,
       })
     }
@@ -65,10 +67,16 @@ watch(
     <div class="rounded-3xl p-3">
       <div class="flex flex-col gap-4">
         <AppInputField
-          v-model="body.name.$model"
-          :errors="body.name.$errors"
+          v-model="body.titleAr.$model"
+          :errors="body.titleAr.$errors"
           size="md"
           :label="$t('topic-name')"
+        />
+        <AppInputField
+          v-model="body.titleEn.$model"
+          :errors="body.titleEn.$errors"
+          size="md"
+          :label="$t('topic-name-en')"
         />
         <AppAutoCompleteField
           v-model="body.subjectId.$model"

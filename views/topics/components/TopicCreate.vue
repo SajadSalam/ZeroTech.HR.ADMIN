@@ -13,11 +13,12 @@ const { t } = useI18n()
 
 const validator = new Validator<TopicCreateDto>(
   {
-    name: '',
+    titleAr: '',
+    titleEn: '',
     subjectId: '',
   },
   {
-    name: {
+    titleAr: {
       required: createValidator(t, 'topic-name', 'required'),
     },
   }
@@ -56,10 +57,16 @@ watch(
     <div class="rounded-3xl p-3">
       <div class="flex flex-col gap-4">
         <AppInputField
-          v-model="body.name.$model"
-          :errors="body.name.$errors"
+          v-model="body.titleAr.$model"
+          :errors="body.titleAr.$errors"
           size="md"
           :label="$t('topic-name')"
+        />
+        <AppInputField
+          v-model="body.titleEn.$model"
+          :errors="body.titleEn.$errors"
+          size="md"
+          :label="$t('topic-name-en')"
         />
         <AppAutoCompleteField
           v-model="body.subjectId.$model"
