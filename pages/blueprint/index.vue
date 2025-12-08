@@ -73,12 +73,8 @@ const { hasPrivilege } = useAuthStore()
         </div>
       </template>
       <AppTable :is-loading="isLoading" :title="$t('blueprints')" :headers="tableHeaders($t)" :items="blueprints">
-        <template #data-questionBanks="{ item }">
-          {{ item.questionBanks.map((questionBank) => questionBank.questionBank.title).join(', ') }}
-        </template>
-        <template #data-studyYear="{ item }">
-          {{ new Date().getFullYear() - 1 }} -
-          {{ new Date().getFullYear() }}
+        <template #data-questionBankNames="{ item }">
+          {{ item.questionBankNames.join(', ') }}
         </template>
         <template #data-actions="data">
           <div class="flex items-center justify-center gap-2">

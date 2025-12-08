@@ -10,7 +10,7 @@ export const tableHeaders = (t: (key: string) => string) => {
       icon: 'lucide:file-text',
     },
     {
-      key: 'questionBanks',
+      key: 'questionBankNames',
       label: t('question-banks'),
       icon: 'lucide:file',
     },

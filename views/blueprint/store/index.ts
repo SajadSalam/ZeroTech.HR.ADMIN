@@ -8,9 +8,9 @@ export const useBlueprintStore = defineStore('blueprint', () => {
   const totalPages = ref(0)
   const isLoading = ref(false)
   const filters = ref<BlueprintFilter>({
-    pageSize: 50,
-    pageNumber: 1,
-    search: null,
+    Page: 1,
+    PageSize: 50,
+    Search: '',
     questionBankId: null,
     minGrade: null,
     maxGrade: null,
@@ -22,7 +22,7 @@ export const useBlueprintStore = defineStore('blueprint', () => {
       isLoading.value = true
 
       const response = await blueprintService.get(filters.value)
-      blueprints.value = response.data
+      blueprints.value = response.items
       totalPages.value = response.pagesCount
     } catch (error) {
     } finally {

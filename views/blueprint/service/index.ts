@@ -12,22 +12,22 @@ interface IBlueprintService {
 
 export class BlueprintService implements IBlueprintService {
   async get(filters: BaseFilters): Promise<PaginatedResponse<BlueprintDto>> {
-    const response = await axiosIns.get<PaginatedResponse<BlueprintDto>>('/examtemplate', {
+    const response = await axiosIns.get<PaginatedResponse<BlueprintDto>>('/exam-templates', {
       params: filters,
     })
     return response.data
   }
 
   async create(blueprint: Blueprint): Promise<BlueprintDto> {
-    const response = await axiosIns.post<BlueprintDto>('/examtemplate', blueprint)
+    const response = await axiosIns.post<BlueprintDto>('/exam-templates', blueprint)
     return response.data
   }
 
   async delete(id: string): Promise<void> {
-    await axiosIns.delete(`/examtemplate/${id}`)
+    await axiosIns.delete(`/exam-templates/${id}`)
   }
   async getById(id: string): Promise<BlueprintDto> {
-    const response = await axiosIns.get<BlueprintDto>(`/examtemplate/${id}`)
+    const response = await axiosIns.get<BlueprintDto>(`/exam-templates/${id}`)
     return response.data
   }
 
