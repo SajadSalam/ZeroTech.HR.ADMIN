@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-import { useAuthStore } from '~/views/auth/store/auth'
 import ReplaceQuestion from '~/views/exams/components/ReplaceQuestion.vue'
 import { useExamStore } from '~/views/exams/store'
 import type { ExamDetailed } from '~/views/exams/types'
 import QuestionCard from '~/views/question-bank/components/questions/view/QuestionCard.vue'
-import type { Question, QuestionDto } from '~/views/question-bank/types/question'
+import type { QuestionDto } from '~/views/questions/types'
 
 definePageMeta({
     title: 'exam-view',
