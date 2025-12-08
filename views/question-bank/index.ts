@@ -1,8 +1,6 @@
-import type { TableHeader } from '@/components/app-table/types'
+import type { TableHeader } from '~/components/app-table/types'
 import {
-    AuditStatus,
     Difficulty,
-    QuestionType,
 } from '~/views/questions/types'
 
 export const tableHeader = (t: (key: string) => string) => {
