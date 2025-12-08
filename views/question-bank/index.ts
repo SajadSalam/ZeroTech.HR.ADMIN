@@ -33,11 +33,6 @@ export const tableHeader = (t: (key: string) => string) => {
       icon: 'lucide:activity',
     },
     {
-      key: 'categories',
-      label: t('categories'),
-      icon: 'lucide:tag',
-    },
-    {
       key: 'creationPeriod',
       label: t('creation-period'),
       icon: 'lucide:calendar',

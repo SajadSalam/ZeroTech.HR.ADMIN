@@ -4,7 +4,6 @@ import type {
     AssignDto,
     AssignForm,
     AssignType,
-    QuestionBank,
     QuestionBankCreateDto,
     QuestionBankDetailedDto,
     QuestionBankDto,
@@ -178,7 +177,7 @@ export class QuestionBankService implements IQuestionBankService {
    * @returns A promise that resolves to the detailed question bank data.
    */
   async getDetailed(id: string): Promise<QuestionBankDetailedDto> {
-    const response = await axios.get<QuestionBankDetailedDto>('/question-bank/' + id + '/details')
+    const response = await axios.get<QuestionBankDetailedDto>('/question-banks/' + id)
     return response.data
   }
 
@@ -188,7 +187,7 @@ export class QuestionBankService implements IQuestionBankService {
    * @returns A promise that resolves to a paginated response of question banks.
    */
   async get(filters: QuestionBankFilters): Promise<PaginatedResponse<QuestionBankDto>> {
-    const response = await axios.get<PaginatedResponse<QuestionBankDto>>('/question-bank', {
+    const response = await axios.get<PaginatedResponse<QuestionBankDto>>('/question-banks', {
       params: filters,
     })
     return response.data
@@ -200,7 +199,7 @@ export class QuestionBankService implements IQuestionBankService {
    * @returns A promise that resolves to the created question bank data.
    */
   async create(data: QuestionBankCreateDto): Promise<QuestionBankDto> {
-    const response = await axios.post<QuestionBankDto>('/question-bank', data)
+    const response = await axios.post<QuestionBankDto>('/question-banks', data)
     return response.data
   }
 
@@ -210,8 +209,8 @@ export class QuestionBankService implements IQuestionBankService {
    * @param data - The updated data for the question bank.
    * @returns A promise that resolves to the updated question bank data.
    */
-  async update(id: string, data: QuestionBank): Promise<QuestionBankDto> {
-    const response = await axios.put<QuestionBankDto>('/question-bank/' + id, data)
+  async update(id: string, data: QuestionBankCreateDto): Promise<QuestionBankDto> {
+    const response = await axios.put<QuestionBankDto>('/question-banks/' + id, data)
     return response.data
   }
 
@@ -221,15 +220,15 @@ export class QuestionBankService implements IQuestionBankService {
    * @returns A promise that resolves when the question bank is deleted.
    */
   async delete(id: string): Promise<void> {
-    await axios.delete(`/question-bank/${id}`)
+    await axios.delete(`/question-banks/${id}`)
   }
 
   async addTopic(questionBankId: string, topic: QuestionBankTopicUpdate): Promise<boolean> {
-    return (await axios.post<boolean>(`/question-bank/${questionBankId}/add-topic`, topic)).data
+    return (await axios.post<boolean>(`/question-banks/${questionBankId}/add-topic`, topic)).data
   }
 
   async removeTopic(questionBankId: string, topicId: string): Promise<boolean> {
-    return (await axios.delete<boolean>(`/question-bank/${questionBankId}/remove-topic/${topicId}`))
+    return (await axios.delete<boolean>(`/question-banks/${questionBankId}/remove-topic/${topicId}`))
       .data
   }
   async importQuestions(

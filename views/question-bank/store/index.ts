@@ -10,7 +10,6 @@ import {
     AssignType,
     type AssignDto,
     type AssignForm,
-    type QuestionBank,
     type QuestionBankCreateDto,
     type QuestionBankDetailedDto,
     type QuestionBankDto,
@@ -62,8 +61,8 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
     try {
       isLoading.value = true
       const response = await questionBankService.get(questionBankFilters)
-      questionBanks.value = response.data
-      totalPages.value = response.pagesCount
+      questionBanks.value = response.items
+      totalPages.value = response.pageCount
     } catch (error) {
     } finally {
       isLoading.value = false
@@ -73,8 +72,8 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
     try {
       isLoading.value = true
       const response = await questionBankService.getQuestions(questionsFilters)
-      questions.value = response.data
-      totalPages.value = response.pagesCount
+      questions.value = response.items
+      totalPages.value = response.pageCount
     } catch (error) {
     } finally {
       isLoading.value = false
@@ -93,7 +92,7 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
     }
   }
 
-  const updateQuestionBank = async (data: QuestionBank) => {
+  const updateQuestionBank = async (data: QuestionBankCreateDto) => {
     try {
       isLoading.value = true
       await questionBankService.update(selectedQuestionBankId.value!, data)

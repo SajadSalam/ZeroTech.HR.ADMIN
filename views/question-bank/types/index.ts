@@ -1,6 +1,5 @@
 import type { BaseFilters } from '~/utils/types/ApiResponses'
 import type { BaseDto } from '~/utils/types/base-dto'
-import type { CategoryDto } from '~/views/categories/types'
 import type { Employee } from '~/views/employee/types'
 import type { SubjectDto } from '~/views/subjects/types'
 import type { TopicDto } from '~/views/topics/types'
@@ -8,8 +7,10 @@ import { QuestionType, type Question } from './question'
 
 export interface QuestionBank {
   title: string
-  creationStartDate: string
-  creationEndDate: string
+  subjectId: string
+  startEditingDatetimeUtc: string | null
+  endEditingDatetimeUtc: string | null
+  topicIds?: string[]
 }
 
 export type QuestionBankDto = QuestionBank &
@@ -18,9 +19,8 @@ export type QuestionBankDto = QuestionBank &
     questionBankTopics: QuestionBankTopicDto[]
     questionTypes: QuestionType[]
     totalQuestionCount: number
-    creationStartDate: string | null
-    creationEndDate: string | null
-    categories?: CategoryDto[]
+    startEditingDatetimeUtc: string | null
+    endEditingDatetimeUtc: string | null
   }
 
 export type QuestionBankTopicDto = {
@@ -30,9 +30,6 @@ export type QuestionBankTopicDto = {
 
 export type QuestionBankCreateDto = QuestionBank & {
   topicIds: string[]
-  creationStartDate: string | null
-  creationEndDate: string | null
-  categories?: string[]
 }
 export type QuestionBankTopicUpdate = {
   topicId: string

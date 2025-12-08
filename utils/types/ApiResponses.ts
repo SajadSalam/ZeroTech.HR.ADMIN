@@ -2,7 +2,7 @@ import type { AxiosError } from 'axios'
 
 export interface PaginatedResponse<T> {
   items: T[]
-  pagesCount: number
+  pageCount: number
   currentPage: number
   type: string
   pageSize: number
