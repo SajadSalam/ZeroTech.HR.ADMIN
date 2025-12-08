@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { employeePayrollDetailsTableHeaders } from '../index'
 import { usePayrollStore } from '../store'
 
 const payrollStore = usePayrollStore()
@@ -21,35 +20,7 @@ const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString('en-US')
 }
 
-const detailsData = computed(() => {
-  if (!selectedPayroll.value) return []
-  
-  const payroll = selectedPayroll.value
-  return [
-    { key: 'payrollBatchTitle', value: payroll.payrollBatchTitle },
-    { key: 'baseSalary', value: formatCurrency(payroll.baseSalary) },
-    { key: 'scheduledWorkingDays', value: `${payroll.scheduledWorkingDays} يوم` },
-    { key: 'actualWorkingDays', value: `${payroll.actualWorkingDays} يوم` },
-    { key: 'absentDays', value: `${payroll.absentDays} يوم` },
-    { key: 'lateDays', value: `${payroll.lateDays} يوم` },
-    { key: 'regularHours', value: `${payroll.regularHours} ساعة` },
-    { key: 'overtimeHours', value: `${payroll.overtimeHours} ساعة` },
-    { key: 'overtimePay', value: formatCurrency(payroll.overtimePay) },
-    { key: 'totalLateMinutes', value: `${payroll.totalLateMinutes} دقيقة` },
-    { key: 'lateDeductions', value: formatCurrency(payroll.lateDeductions) },
-    { key: 'absenceDeductions', value: formatCurrency(payroll.absenceDeductions) },
-    { key: 'totalDeductions', value: formatCurrency(payroll.totalDeductions) },
-    { key: 'grossPay', value: formatCurrency(payroll.grossPay) },
-    { key: 'netPay', value: formatCurrency(payroll.netPay) },
-    { key: 'dailyRate', value: formatCurrency(payroll.dailyRate) },
-    { key: 'hourlyRate', value: formatCurrency(payroll.hourlyRate) },
-    { key: 'deductionPercentage', value: formatPercentage(payroll.deductionPercentage) },
-    { key: 'attendanceRate', value: formatPercentage(payroll.attendanceRate) },
-     { key: 'statusDisplay', value: payroll.statusDisplay },
-  ]
-})
 
-const headers = employeePayrollDetailsTableHeaders()
 
 const isDialogOpen = computed({
   get: () => !!selectedPayroll.value,
