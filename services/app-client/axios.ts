@@ -6,7 +6,7 @@ import { useToast } from '~/composables/toaster'
 export const baseURL = import.meta.env.VITE_BASE_URL
 
 const axiosIns = axios.create({
-    baseURL: `${baseURL}api`,
+    baseURL: `${baseURL}v1`,
 })
 
 // ℹ️ Add request interceptor to send the authorization header on each subsequent request after login

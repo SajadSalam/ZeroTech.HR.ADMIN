@@ -16,7 +16,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   if (!auth.isLogged) return
 
   // Ensure user privileges are loaded
-  if (auth.userPrivileges.length === 0) {
+  if (!auth.userPrivileges) {
     try {
       await auth.fetchUserPrivileges()
     } catch (error) {

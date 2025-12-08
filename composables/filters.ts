@@ -54,7 +54,7 @@ export const useFilters = (filterModel?: FilterField[]) => {
 
   watch(pageNumber, async () => {
     await router.push({
-      query: { ...useRoute().query, pageNumber: pageNumber.value },
+      query: { ...useRoute().query, page: pageNumber.value },
     })
     getData()
   })

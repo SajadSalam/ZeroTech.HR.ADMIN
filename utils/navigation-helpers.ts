@@ -22,7 +22,7 @@ export const findFirstAccessiblePage = async (): Promise<string> => {
   const authStore = useAuthStore()
   
   // Ensure user privileges are loaded
-  if (authStore.userPrivileges.length === 0) {
+  if (!authStore.userPrivileges) {
     await authStore.fetchUserPrivileges()
   }
   
@@ -56,7 +56,7 @@ export const hasRouteAccess = async (route: string): Promise<boolean> => {
   const authStore = useAuthStore()
   
   // Ensure user privileges are loaded
-  if (authStore.userPrivileges.length === 0) {
+  if (!authStore.userPrivileges) {
     await authStore.fetchUserPrivileges()
   }
   

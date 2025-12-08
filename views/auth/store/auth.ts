@@ -4,7 +4,7 @@ import type { AuthResponse, LoginBody, UserPrivilege } from '../types'
 const authService = new AuthService()
 export const useAuthStore = defineStore('auth-store', () => {
   const isLoading = ref(false)
-  const userPrivileges = ref<UserPrivilege[]>([])
+  const userPrivileges = ref<UserPrivilege>()
 
   const token = computed({
     get: () => localStorage.getItem('token') || '',
@@ -30,7 +30,7 @@ export const useAuthStore = defineStore('auth-store', () => {
       isLoading.value = true
       let response
       response = await authService.login(body)
-      token.value = response.token
+      token.value = response.token.accessToken
       userData.value = response
     } catch (error) {
       throw error
@@ -42,12 +42,14 @@ export const useAuthStore = defineStore('auth-store', () => {
   const fetchUserPrivileges = async () => {
     try {
       userPrivileges.value = await authService.userPrivileges()
+      console.log(userPrivileges.value);
+      
     } catch (error) {
       throw error
     }
   }
   const hasPrivilege = (privilege: string) => {
-    return userPrivileges.value.some((p) => p.role.permissions?.includes(privilege))
+    return userPrivileges.value?.roles.some((r) => r.permissions?.some((p) => p.slug === privilege))
   }
 
   const logout = () => {

@@ -9,13 +9,13 @@ interface IAuthService {
 
 export class AuthService implements IAuthService {
   async login(body: LoginBody): Promise<AuthResponse> {
-    const response = await axios.post<AuthResponse>('/iam/login', body)
+    const response = await axios.post<AuthResponse>('/auth/login', body)
 
     return response.data
   }
 
-  async userPrivileges(): Promise<UserPrivilege[]> {
-    const response = await axios.get<UserPrivilege[]>('/iam/users/my-privileges')
+  async userPrivileges(): Promise<UserPrivilege> {
+    const response = await axios.get<UserPrivilege>('/ums/privileges')
 
     return response.data
   }

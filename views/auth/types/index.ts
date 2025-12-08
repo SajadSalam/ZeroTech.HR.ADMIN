@@ -41,35 +41,47 @@ export interface RegisterBody {
   role: string
 }
 
-export interface AuthResponse {
-  id: number
-  email: string
-  name: string
-  username: null
-  usernameType: null
-  ownerType: string
-  ownerId: number
-  deletedAt: null
-  createdAt: Date
-  token: string
-  roles: Role[]
-  systems: number[]
-  organizationalStructure: Organization
-  examCenter: ExamCenter
-  hall: Hall
+export interface Token {
+  accessToken: string;
+  expiryMinutes: number;
+  refreshToken: string;
+  refreshTokenExpiryDays: number;
+}
+export interface Permission {
+  id: number;
+  name: string;
+  slug: string;
+  group: string;
+}
+export interface Role {
+  id: number;
+  name: string;
+  slug: string;
+  permissions?: Permission[];
+  description?: string;
 }
 
-export interface Role {
-  id: number
-  name: string
-  slug: string
-  permissions?: string[]
+export interface OrganizationalStructure {
+  id: number;
+  arabicName: string;
+  englishName: string;
+  parentId: number;
+  uniteTypeId: number;
+  fullNameAr: string;
+  fullNameEn: string;
 }
+
+export interface AuthResponse {
+  id: number;
+  email: string;
+  name: string;
+  username: string;
+  ownerId: number;
+  token: Token;
+  roles: Role[];
+  organizationalStructure: OrganizationalStructure;
+}
+
 export interface UserPrivilege {
-  id: number
-  userId: number
-  osId: number
-  roleId: number
-  isActive: boolean
-  role: Role
+  roles: Role[];
 }

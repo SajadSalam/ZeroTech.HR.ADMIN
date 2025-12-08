@@ -148,7 +148,7 @@ async function fetchData() {
     if (props.withoutData) {
       items.value = res.data
     } else {
-      items.value = res.data.data
+      items.value = res.data.items
     }
   }
 }
