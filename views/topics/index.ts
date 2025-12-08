@@ -11,6 +11,11 @@ export const tableHeader = (t: (key: string) => string) => {
       icon: 'lucide:file-text',
     },
     {
+      key: 'subject.titleEn',
+      label: t('subject'),
+      icon: 'lucide:book',
+    },
+    {
       key: 'actions',
       label: t('actions'),
       icon: 'lucide:more-vertical',
