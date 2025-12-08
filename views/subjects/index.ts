@@ -2,7 +2,7 @@
 export const tableHeader = (t: (key: string) => string) => {
   return [
     {
-      key: 'name',
+      key: 'titleAr',
       label: t('subject-name'),
       icon: 'lucide:book',
     },
@@ -13,7 +13,7 @@ export const tableHeader = (t: (key: string) => string) => {
       icon: 'lucide:code',
     },
     {
-      key: 'englishName',
+      key: 'titleEn',
       label: t('subject_english_name'),
       icon: 'lucide:book',
     },

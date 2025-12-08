@@ -14,12 +14,12 @@ const { t } = useI18n()
 const selectedSubject = computed(() => subjectStore.selectedSubject)
 const validator = new Validator<Subject>(
   {
-    name: selectedSubject.value?.name as string,
+    titleAr: selectedSubject.value?.titleAr as string,
     code: selectedSubject.value?.code as string,
-    englishName: selectedSubject.value?.englishName as string,
+    titleEn: selectedSubject.value?.titleEn as string,
   },
   {
-    name: {
+    titleAr: {
       required: createValidator(t, 'subject-name', 'required'),
     },
   }
@@ -46,9 +46,9 @@ watch(
       validator.resetBody()
     } else {
       validator.fillBody({
-        name: selectedSubject.value?.name as string,
+        titleAr: selectedSubject.value?.titleAr as string,
         code: selectedSubject.value?.code as string,
-        englishName: selectedSubject.value?.englishName as string,
+        titleEn: selectedSubject.value?.titleEn as string,
       })
     }
   }
@@ -64,8 +64,8 @@ watch(
     <div class="rounded-3xl p-3">
       <div class="flex flex-col gap-4">
         <AppInputField
-          v-model="body.name.$model"
-          :errors="body.name.$errors"
+          v-model="body.titleAr.$model"
+          :errors="body.titleAr.$errors"
           size="md"
           :label="$t('subject-name')"
         />
@@ -76,8 +76,8 @@ watch(
           :label="$t('subject_code')"
         />
         <AppInputField
-          v-model="body.englishName.$model"
-          :errors="body.englishName.$errors"
+          v-model="body.titleEn.$model"
+          :errors="body.titleEn.$errors"
           size="md"
           :label="$t('subject_english_name')"
         />
