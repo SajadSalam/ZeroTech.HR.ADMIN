@@ -6,9 +6,12 @@ export const useSubjectStore = defineStore('subject', () => {
   const subjects = ref<SubjectDto[]>([])
   const isLoading = ref(false)
   const filters = ref<SubjectFilters>({
-    pageSize: 50,
-    pageNumber: 1,
-    name: null,
+    Page: 1,
+    PageSize: 50,
+    Search: '',
+    titleAr: null,
+    code: null,
+    titleEn: null,
   })
   const isCreateDialogOpen = ref(false)
   const isEditDialogOpen = ref(false)
@@ -20,7 +23,9 @@ export const useSubjectStore = defineStore('subject', () => {
     try {
       isLoading.value = true
       const response = await subjectService.get(filters.value)
-      subjects.value = response.data
+      console.log(response);
+      
+      subjects.value = response.items
       totalPages.value = response.pagesCount
     } catch (error) {
     } finally {
