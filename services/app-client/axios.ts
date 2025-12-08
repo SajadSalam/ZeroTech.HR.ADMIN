@@ -20,16 +20,18 @@ axiosIns.interceptors.request.use((config) => {
     if (typeof window === 'undefined') {
         return config
     }
-    
+
     const token = localStorage.getItem('token')
     const locale = localStorage.getItem('locale')
     //
 
-    if (!token)
-        useRouter().push("/login")
-
+    if (!token) useRouter().push('/login')
+    // add SortDirection = desc to every get request
+    if (config.method === 'get') {
+        config.params = config.params || {}
+        config.params.IsSortDescending = false
+    }
     config.headers = config.headers || {}
-
     config.headers['Accept-Language'] = locale
     config.headers.Authorization = token ? `Bearer ${token}` : ''
 
