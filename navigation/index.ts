@@ -66,9 +66,14 @@ export default [
     icon: { name: 'ph-money-duotone', class: 'w-5 h-5' },
     children: [
         {
-            name: 'الرواتب',
+            name: 'دفعات الرواتب',
             icon: { name: 'ph-money-duotone', class: 'w-5 h-5' },
-            to: '/salaries',
+            to: '/payroll-batches',
+        },
+        {
+            name: 'رواتب الموظفين',
+            icon: { name: 'ph-user-circle-duotone', class: 'w-5 h-5' },
+            to: '/employee-payrolls',
         },
         {
             name: 'المخصصات',

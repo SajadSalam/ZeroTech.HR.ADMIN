@@ -8,7 +8,7 @@ const employee = computed(() => vacationStore.employeeVacation)
 
 const formatDate = (dateString: string) => {
     if (!dateString) return '-'
-    return new Date(dateString).toLocaleDateString('ar-SA')
+    return new Date(dateString).toLocaleDateString('en-US')
 }
 
 const closeDialog = () => {

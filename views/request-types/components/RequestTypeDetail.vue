@@ -283,11 +283,11 @@ watch(() => props.requestTypeId, () => {
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
         <div>
           <span class="text-gray-600 dark:text-gray-400">تاريخ الإنشاء:</span>
-          <div class="font-medium">{{ new Date(requestType.createdAt).toLocaleDateString('ar-SA') }}</div>
+          <div class="font-medium">{{ new Date(requestType.createdAt).toLocaleDateString('en-US') }}</div>
         </div>
         <div>
           <span class="text-gray-600 dark:text-gray-400">آخر تحديث:</span>
-          <div class="font-medium">{{ new Date(requestType.updatedAt).toLocaleDateString('ar-SA') }}</div>
+          <div class="font-medium">{{ new Date(requestType.updatedAt).toLocaleDateString('en-US') }}</div>
         </div>
         <div>
           <span class="text-gray-600 dark:text-gray-400">الحالة:</span>

@@ -427,7 +427,7 @@ watch(() => route.params.id, () => {
                     <div class="flex items-center gap-2 text-success-700 dark:text-success-300">
                       <Icon name="ph:check-circle-duotone" class="size-4" />
                       <span class="text-sm font-medium">تم الإنجاز في:</span>
-                      <span class="text-sm">{{ new Date().toLocaleDateString('ar-SA') }}</span>
+                      <span class="text-sm">{{ new Date().toLocaleDateString('en-US') }}</span>
                     </div>
                   </div>
                 </div>

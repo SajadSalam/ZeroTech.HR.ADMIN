@@ -24,7 +24,7 @@ export const tableHeader = (): TableHeader[] => [
     sortable: true,
     render: (item: any) => {
       if (!item.startDate) return ''
-      return new Date(item.startDate).toLocaleDateString('ar-SA')
+      return new Date(item.startDate).toLocaleDateString('en-US')
     },
   },
   {
@@ -33,7 +33,7 @@ export const tableHeader = (): TableHeader[] => [
     sortable: true,
     render: (item: any) => {
       if (!item.endDate) return ''
-      return new Date(item.endDate).toLocaleDateString('ar-SA')
+      return new Date(item.endDate).toLocaleDateString('en-US')
     },
   },
   {
@@ -64,7 +64,7 @@ export const tableHeader = (): TableHeader[] => [
     sortable: true,
     render: (item: any) => {
       if (!item.submittedAt) return ''
-      return new Date(item.submittedAt).toLocaleDateString('ar-SA')
+      return new Date(item.submittedAt).toLocaleDateString('en-US')
     },
   },
   {
