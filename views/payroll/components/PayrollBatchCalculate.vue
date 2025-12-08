@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import AppInputField from '~/components/app-field/AppInputField.vue'
-import AppMultiSelect from '~/components/app-field/AppMultiSelect.vue'
 import { Validator } from '~/services/validator'
 import { usePayrollStore } from '../store'
 import type { PayrollCalculationDto } from '../types'
@@ -73,8 +72,8 @@ watch(
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <AppInputField
-            v-model="body.overtimeMultiplier.$model"
-            :errors="body.overtimeMultiplier.$errors"
+            v-model="body.overtimeMultiplier!.$model"
+            :errors="body.overtimeMultiplier!.$errors"
             size="md"
             label="معامل الساعات الإضافية"
             type="number"
@@ -84,8 +83,8 @@ watch(
             placeholder="1.5"
           />
           <AppInputField
-            v-model="body.lateDeductionFactor.$model"
-            :errors="body.lateDeductionFactor.$errors"
+            v-model="body.lateDeductionFactor!.$model"
+            :errors="body.lateDeductionFactor!.$errors"
             size="md"
             label="معامل خصم التأخير"
             type="number"
@@ -98,7 +97,7 @@ watch(
 
         <div class="flex items-center gap-3">
           <BaseCheckbox
-            v-model="body.recalculateExisting.$model"
+            v-model="body.recalculateExisting!.$model"
             color="primary"
           />
           <label class="text-sm font-medium text-gray-700">
