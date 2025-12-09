@@ -3,11 +3,13 @@ import AppCrudActions from '~/components/app-crud/components/AppCrudActions.vue'
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import { formatDate } from '~/services/formatters'
 import { useAuthStore } from '~/views/auth/store/auth'
+import AssignDialog from '~/views/question-bank/components/AssignDialog.vue'
 import CardView from '~/views/question-bank/components/CardView.vue'
 import CreateQuestionBank from '~/views/question-bank/components/CreateQuestionBank.vue'
 import EditQuestionBank from '~/views/question-bank/components/EditQuestionBank.vue'
 import { tableHeader } from '~/views/question-bank/index'
 import { useQuestionBankStore } from '~/views/question-bank/store/index'
+import { AssignType } from '~/views/question-bank/types/assign'
 import {
     type QuestionBankDto,
     type QuestionBankFilters,
@@ -58,6 +60,16 @@ const toggleViewType = () => {
     viewType.value = viewType.value === ViewType.Table ? ViewType.Card : ViewType.Table
 }
 const { hasPrivilege } = useAuthStore()
+const openAssignCreator = (item: QuestionBankDto) => {
+    questionBankStore.isAssignDialogOpen = true
+    questionBankStore.assignType = AssignType.Creator
+    questionBankStore.selectedQuestionBank = item
+}
+const openAssignAuditor = (item: QuestionBankDto) => {
+    questionBankStore.isAssignDialogOpen = true
+    questionBankStore.assignType = AssignType.Auditor
+    questionBankStore.selectedQuestionBank = item
+}
 </script>
 
 <template>
@@ -84,6 +96,20 @@ const { hasPrivilege } = useAuthStore()
                 :headers="tableHeader($t)" :items="questionBanks">
                 <template #data-id="data">
                     <span>{{ data.index + 1 }}</span>
+                </template>
+                <template #data-creator="{ item }">
+                    <BaseButton  color="primary"
+                        variant="outline" @click="openAssignCreator(item)">
+                        <Icon name="ph-eye" class="me-1" />
+                        {{ $t('creators') }}
+                    </BaseButton>
+                </template>
+                 <template #data-auditor="{ item }">
+                    <BaseButton color="primary"
+                        variant="outline" @click="openAssignAuditor(item)">
+                        <Icon name="ph-eye" class="me-1" />
+                        {{ $t('auditors') }}
+                    </BaseButton>
                 </template>
                 <template #data-actions="{ item }">
                     <div class="flex items-center justify-center gap-2">
@@ -124,7 +150,6 @@ const { hasPrivilege } = useAuthStore()
     </div>
     <CreateQuestionBank v-if="hasPrivilege('ums:ems:question-bank:create')" />
     <EditQuestionBank v-if="hasPrivilege('ums:ems:question-bank:update')" />
-    <AssignDialog
-        v-if="hasPrivilege('ums:ems:question-bank:assign-creators') && hasPrivilege('ums:ems:question-bank:assign-auditors')" />
+    <AssignDialog  />
 </template>
 <style></style>

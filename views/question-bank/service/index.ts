@@ -1,10 +1,12 @@
 import axios from '~/services/app-client/axios'
 import type { PaginatedResponse } from '~/utils/types/ApiResponses'
+import type { Employee } from '~/views/employee/types'
 import type {
     QuestionBankCreateDto,
     QuestionBankDto,
     QuestionBankFilters,
 } from '../types'
+import type { AssignForm, AssignType } from '../types/assign'
 
 interface IQuestionBankService {
   get: (filters: QuestionBankFilters) => Promise<PaginatedResponse<QuestionBankDto>>
@@ -57,4 +59,14 @@ export class QuestionBankService implements IQuestionBankService {
       data: questionIds
     })
   }
+
+  async assignEmployees(questionBankId: string, data: AssignForm): Promise<void> {
+    await axios.post(`/question-banks/${questionBankId}/employees`, data)
+  }
+
+  async getAssignedEmployees(questionBankId: string, type: AssignType): Promise<Employee[]> {
+    const response = await axios.get<Employee[]>(`/question-banks/${questionBankId}/employees?type=${type}`)
+    return response.data
+  }
+
 }

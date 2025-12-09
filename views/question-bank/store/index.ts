@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia'
+import type { Employee } from '~/views/employee/types'
 import type { } from '~/views/questions/types'
 import { QuestionBankService } from '../service'
 import {
     type QuestionBankCreateDto,
-    type QuestionBankDetailedDto,
     type QuestionBankDto,
     type QuestionBankFilters,
 } from '../types'
+import { AssignType, type AssignForm } from '../types/assign'
 
 const questionBankService = new QuestionBankService()
 
@@ -20,10 +21,13 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
     subjectId: null,
     topics: [],
   })
+
+  const isAssignDialogOpen = ref(false)
   const isCreateDialogOpen = ref(false)
   const isEditDialogOpen = ref(false)
   const selectedQuestionBankId = ref<string | null>(null)
-  const selectedQuestionBank = ref<QuestionBankDetailedDto | QuestionBankDto | null>(null)
+  const selectedQuestionBank = ref<QuestionBankDto | null>(null)
+  const assignType = ref<AssignType>(AssignType.Creator)
   const totalPages = ref(0)
 
   const getQuestionBanks = async (questionBankFilters: QuestionBankFilters) => {
@@ -72,18 +76,33 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
       isLoading.value = false
     }
   }
-  const getQuestionBank = async (id: string) => {
+
+  const assignEmployees = async (questionBankId: string, data: AssignForm) => {
     try {
       isLoading.value = true
-      const response = await questionBankService.getDetailed(id)
-      selectedQuestionBank.value = response
+      await questionBankService.assignEmployees(questionBankId, data)
+      isAssignDialogOpen.value = false
     } catch (error) {
+      throw error
     } finally {
       isLoading.value = false
     }
   }
 
-
+  const getAssignedEmployees = async (questionBankId: string, type: AssignType) => {
+    try {
+      isLoading.value = true
+      const response = await questionBankService.getAssignedEmployees(questionBankId, type)
+      return response.map((emp: Employee) => ({
+        ...emp,
+        empFullName: emp.name,
+      }))
+    } catch (error) {
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
 
 
   return {
@@ -92,13 +111,16 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
     filters,
     isCreateDialogOpen,
     isEditDialogOpen,
+    isAssignDialogOpen,
     selectedQuestionBankId,
     selectedQuestionBank,
     totalPages,
     getQuestionBanks,
-    getQuestionBank,
     createQuestionBank,
     updateQuestionBank,
     deleteQuestionBank,
+    assignType,
+    assignEmployees,
+    getAssignedEmployees,
   }
 })
