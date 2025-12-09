@@ -2,8 +2,6 @@
 import AppCrudActions from '~/components/app-crud/components/AppCrudActions.vue'
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import { useAuthStore } from '~/views/auth/store/auth'
-import CreateBlueprint from '~/views/blueprint/components/CreateBlueprint.vue'
-// import CreateQuestionBank from '~/views/question-bank/components/CreateQuestionBank.vue';
 import { tableHeaders } from '~/views/blueprint/index'
 import { useBlueprintStore } from '~/views/blueprint/store/index'
 import type { BlueprintFilter } from '~/views/blueprint/types'
@@ -115,6 +113,5 @@ const { hasPrivilege } = useAuthStore()
       </AppTable>
     </AppCrud>
   </div>
-  <!-- <CreateBlueprint /> -->
 </template>
 <style></style>
