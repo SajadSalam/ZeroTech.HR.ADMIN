@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import AppInputField from '~/components/app-field/AppInputField.vue'
-import { useOrganizationStore } from './store/index'
-import type { OrganizationFilters, Organization } from './types/index'
+import AppInputField from '~/components/app-field/AppInputField.vue';
+import { useOrganizationStore } from './store/index';
+import type { Organization, OrganizationFilters } from './types/index';
 
 const props = defineProps<{ multiple: boolean }>()
 const organizationStore = useOrganizationStore()
@@ -72,7 +72,7 @@ watchDebounced(
       />
       <Icon name="ph-folder-fill" class="me-2 size-7 text-yellow-500" />
 
-      {{ isNullOrEmpty(filters.search) ? child.arabicName : child.fullNameAr }}
+      {{ isNullOrEmpty(filters.search ?? '') ? child.arabicName : child.fullNameAr }}
     </template>
   </BaseTreeSelect>
 </template>

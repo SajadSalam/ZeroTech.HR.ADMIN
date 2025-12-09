@@ -18,7 +18,7 @@ export const useEmployeeStore = defineStore('employee', () => {
   const getEmployees = async (filters: EmployeeFilters) => {
     try {
       const res = await employeeService.get(filters)
-      employees.value = res.data.map((emp: Employee) => ({
+      employees.value = res.items.map((emp: Employee) => ({
         ...emp,
         empFullName: `${emp.empArFirstName} ${emp.empArSecondName} ${emp.empArThirdName} ${emp.empArFourthName}`,
       }))

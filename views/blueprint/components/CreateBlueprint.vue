@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import AppInputField from '~/components/app-field/AppInputField.vue'
 
-import { useBlueprintStore } from '../store/index'
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
-import { tableCreateHeaders } from '..'
-import { DegreeDisplayType, type Blueprint } from '../types'
-import { QuestionType } from '~/views/question-bank/types/question'
-import { questionTypeOptions } from '~/views/question-bank/types/index'
 import { difficultyOptions } from '~/views/question-bank'
+import { questionTypeOptions } from '~/views/question-bank/types/index'
+import { QuestionType } from '~/views/questions/types'
+import { tableCreateHeaders } from '..'
+import { useBlueprintStore } from '../store/index'
+import { DegreeDisplayType, type Blueprint } from '../types'
 
 const questionBankStore = useBlueprintStore()
 const subjects = [

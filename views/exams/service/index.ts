@@ -1,6 +1,6 @@
 import axiosIns from '~/services/app-client/axios'
 import type { BaseFilters, PaginatedResponse } from '~/utils/types/ApiResponses'
-import type { QuestionDto } from '~/views/question-bank/types/question'
+import type { QuestionDto } from '~/views/questions/types'
 import type { StudentFilters } from '~/views/students/types'
 import type { ExamCreate, ExamDetailed, ExamDto, ExamEdit, LinkedExam } from '../types'
 

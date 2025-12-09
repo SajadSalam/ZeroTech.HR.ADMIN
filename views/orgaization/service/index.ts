@@ -1,9 +1,8 @@
-import type { WithoutPagination } from '~/utils/types/ApiResponses'
-import type { Organization, OrganizationFilters } from '../types'
 import axiosIns from '~/services/app-client/axios'
+import type { Organization, OrganizationFilters } from '../types'
 
 interface IOrganizationService {
-  getTree: (filters: OrganizationFilters) => Promise<WithoutPagination<Organization>>
+  getTree: (filters: OrganizationFilters) => Promise<Organization[]>
 }
 
 /**
@@ -18,8 +17,11 @@ export class OrganizationService implements IOrganizationService {
    * @param {OrganizationFilters} filters - The filters to apply when retrieving subjects.
    * @returns {Promise<WithoutPagination<OrganizationFilters>>} A promise that resolves to a paginated response containing the subjects.
    */
-  async getTree(filters: OrganizationFilters): Promise<WithoutPagination<Organization>> {
-    const response = await axiosIns.get<WithoutPagination<Organization>>(
+  async getTree(filters: OrganizationFilters): Promise<Organization[]> {
+    if(filters.parentId == null || filters.parentId == 'null' || isNullOrEmpty(filters.parentId as string)) {
+      delete filters.parentId
+    }
+    const response = await axiosIns.get<Organization[]>(
       '/ums/organizational-structure/tree',
       { params: filters }
     )

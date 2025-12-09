@@ -8,7 +8,7 @@ export const generateGuid = () => {
     return v.toString(16)
   })
 }
-export const isNullOrEmpty = (str: string | null) => {
+export const isNullOrEmpty = (str: string | null | undefined) => {
   return str == null || str == '' || str == undefined
 }
 

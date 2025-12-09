@@ -1,5 +1,5 @@
 import type { TableHeader } from '~/components/app-table/types'
-import { QuestionType } from '../question-bank/types/question'
+import { QuestionType } from '../questions/types'
 import { DegreeDisplayType, type Blueprint } from './types'
 
 export const tableHeaders = (t: (key: string) => string) => {

@@ -55,7 +55,7 @@ const openEdit = (questionBank: QuestionBankDto) => {
     <!-- Question Bank Details -->
     <div class="flex flex-col items-center justify-center text-center">
       <h1 class="my-10 text-3xl font-semibold">
-        {{ questionBank.subject.name }}
+        {{ questionBank.subject.titleAr }}
         
       </h1>
       

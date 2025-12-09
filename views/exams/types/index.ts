@@ -3,7 +3,7 @@ import type { BaseDto } from '~/utils/types/base-dto'
 import type { BlueprintDto } from '~/views/blueprint/types'
 import type { ExaminationCenterDto } from '~/views/examination-centers/types'
 import ExamEdit from '~/views/exams/components/ExamEdit.vue'
-import type { QuestionDto } from '~/views/question-bank/types/question'
+import type { QuestionDto } from '~/views/questions/types'
 import type { Student } from '~/views/students/types'
 
 export interface Exam {
