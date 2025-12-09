@@ -54,16 +54,14 @@ export enum Difficulty {
   Hard = 3,
 }
 
-export enum QuestionType {
-  MultipleChoice = 1,
-  Blank = 2,
-  DropDown = 3,
-  Article = 4,
-  TrueOrFalse = 5,
-  Radio = 6,
-  Matching = 7,
-  Reorder = 8,
-  Dialogue = 9,
+export enum QuestionType  {
+  SingleChoice = 1,
+  MultipleChoice = 2,
+  TrueFalse = 3,
+  Ordering = 4,
+  Matching = 5,
+  ShortAnswer = 6,
+  FillInBlank = 7,
 }
 
 export enum AuditStatus {

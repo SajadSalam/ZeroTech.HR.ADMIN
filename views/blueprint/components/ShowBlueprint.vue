@@ -2,23 +2,23 @@
 import { useI18n } from 'vue-i18n'
 import { tableDetailHeaders } from '~/views/blueprint/index'
 import { useBlueprintStore } from '~/views/blueprint/store'
-import type { BlueprintDto } from '~/views/blueprint/types'
 import { difficultyOptions } from '~/views/question-bank'
 import {
     questionTypeOptions,
     type QuestionBankDto,
 } from '~/views/question-bank/types/index'
 import type { TopicDto } from '~/views/topics/types'
+import type { BlueprintDetailes, BlueprintQuestionBank, BlueprintTopic } from '../types'
 const { t } = useI18n()
 
 interface Props {
-  blueprintId: number
+  blueprintId: string | string[]
 }
 
 // Get props in <script setup>
 const props = defineProps<Props>()
 
-const blueprint = ref<BlueprintDto | null>(null)
+const blueprint = ref<BlueprintDetailes | null>(null)
 
 const blueStore = useBlueprintStore()
 
@@ -27,15 +27,20 @@ const topics = ref<TopicDto[]>([])
 const questionBank = ref<QuestionBankDto | null>(null)
 
 const questionBanks = computed(() => {
-  return blueprint.value?.questionBanks
+  return blueprint.value?.questionBankNames
 })
 
 const questionsCount = computed(() => {
-  return blueprint.value?.questionBanks.reduce((acc, qb) => acc + qb.topics.reduce((acc, topic) => acc + topic.numberOfQuestions, 0), 0)
+  if (!blueprint.value?.questionBanks) return 0
+  return blueprint.value.questionBanks.reduce((acc: number, qb: BlueprintQuestionBank) => acc + qb.topics.reduce((acc: number, topic: BlueprintTopic) => acc + topic.numberOfQuestions, 0), 0)
 })
 
 onMounted(async () => {
-  blueprint.value = (await blueStore.getById(props.blueprintId.toString())) as BlueprintDto
+  const id = Array.isArray(props.blueprintId) ? props.blueprintId[0] : props.blueprintId
+  const result = await blueStore.getById(id)
+  if (result) {
+    blueprint.value = result
+  }
 })
 </script>
 <template>
@@ -44,12 +49,12 @@ onMounted(async () => {
     <div class="mb-5 rounded-lg bg-white p-6 border">
       <div class="flex items-center justify-between">
         <h1 class="text-2xl font-bold text-gray-800">
-          {{ blueprint?.name || 'Blueprint Title' }}
+          {{ blueprint?.title || 'Blueprint Title' }}
         </h1>
         <div class="flex flex-col items-center">
-          <span class="text-sm text-gray-500"> {{ $t('success-grade') }}</span>
+          <span class="text-sm text-gray-500"> {{ $t('maximum-grade') }}</span>
           <div class="rounded-full bg-green-100 px-4 py-1 text-lg font-bold text-green-600">
-            {{ blueprint?.successGrade || 0 }}
+            {{ blueprint?.fullGrade || 0 }}
           </div>
         </div>
         <div class="flex flex-col items-center">
@@ -67,7 +72,7 @@ onMounted(async () => {
       </h2>
 
       <div class="my-3 grid gap-5 md:grid-cols-6">
-        <div v-for="qb in blueprint?.questionBanks" :key="qb.id">
+        <div v-for="qb in blueprint?.questionBanks" :key="qb.questionBankId">
           <BaseTag
             color="primary"
             variant="pastel"
@@ -75,7 +80,7 @@ onMounted(async () => {
             class="pa-3 flex cursor-pointer items-center gap-2 text-lg"
           >
             <div class="h-2 w-2 rounded-full bg-primary-500" />
-            {{ qb.questionBank.title }}
+            {{ qb.questionBankTitle }}
           </BaseTag>
         </div>
       </div>
@@ -161,29 +166,29 @@ onMounted(async () => {
 
       <BaseCard
         v-for="(qb, questionBankIndex) in blueprint?.questionBanks"
-        :key="qb.id"
+        :key="qb.questionBankId"
         class="pa-3 my-2"
       >
         <BaseHeading>
-          {{ qb.questionBank.title }}
+          {{ qb.questionBankTitle }}
         </BaseHeading>
 
         <AppTable
           hide-no-data
           :headers="tableDetailHeaders($t)"
-          :items="blueprint?.questionBanks[questionBankIndex].topics"
+          :items="blueprint?.questionBanks[questionBankIndex]?.topics || []"
           class="mt-3"
         >
           <template #data-topicId="{ index }">
-            {{ blueprint?.questionBanks[questionBankIndex].topics[index].topicN }}
+            {{ blueprint?.questionBanks[questionBankIndex].topics[index].topicTitleEn }}
           </template>
           <template #data-questionType="{ index }">
             <span>
               {{
                 questionTypeOptions($t).find(
                   (type) =>
-                    type.value ===
-                    blueprint?.questionBanks[questionBankIndex].topics[index].questionType
+                    type.name ==
+                    blueprint?.questionBanks[questionBankIndex].topics[index].questionType.toString()
                 )?.label
               }}
             </span>
@@ -193,8 +198,8 @@ onMounted(async () => {
               {{
                 difficultyOptions($t).find(
                   (type) =>
-                    type.value ===
-                    blueprint?.questionBanks[questionBankIndex].topics[index].difficulty
+                    type.name ==
+                    blueprint?.questionBanks[questionBankIndex].topics[index].difficulty.toString()
                 )?.label
               }}
             </span>

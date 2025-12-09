@@ -1,6 +1,5 @@
 import type { BaseFilters } from '~/utils/types/ApiResponses'
 import type { BaseDto } from '~/utils/types/base-dto'
-import type { QuestionBankDto } from '~/views/question-bank/types'
 import type { Difficulty, QuestionType } from '~/views/question-bank/types/question'
 
 export interface Blueprint {
@@ -17,55 +16,13 @@ export interface Blueprint {
   topicNames: string[];
 }
 export type BlueprintDto = Blueprint & BaseDto
-export interface BlueprintQuestionBank {
-  questionBankId: string
-  topics: BlueprintTopic[]
-}
 
-export interface BlueprintTopic {
-  topicId: string
-  questionType: QuestionType | null
-  numberOfQuestions: number
-  grade: number
-  difficulty: Difficulty | null
-}
 export type BlueprintFilter = {
-  search?: string | null
   questionBankId: string | null
-  minGrade: string | null
-  maxGrade: string | null
-  subjectId: string | null
   topicId: string | null
+  SuccessGrade: string | null
+  FullGrade: string | null
 } & BaseFilters
-
-export enum DegreeDisplayType {
-  Percentage = 'Percentage',
-  Points = 'Points',
-  Letters = 'Letters',
-}
-
-export interface QuestionBankBlueprintDetails {
-  title: string
-  subject: {
-    id: string
-    name: string
-    questionCount: number
-  }
-  topics: {
-    id: string
-    name: string
-    questionCount: number
-  }[]
-  questionTypes: {
-    topicId: string
-    questionType: number
-    questionCount: number
-  }[]
-  difficulties: {
-    difficulty: number
-    questionCount: number
-  }[]
-}
 
 export interface BlueprintCreate {
   title: string;
@@ -87,4 +44,65 @@ export interface BlueprintItem {
   difficulty: Difficulty;
   numberOfQuestions: number;
   gradePerQuestion: number;
+}
+export interface BlueprintTopic {
+  topicId: string;
+  topicTitleEn: string;
+  topicTitleAr: string;
+  questionType: QuestionType;
+  numberOfQuestions: number;
+  grade: number;
+  difficulty: Difficulty;
+  order: number;
+}
+export interface BlueprintQuestionBankItem {
+  id: string;
+  examTemplateId: string;
+  questionBankId: string;
+  questionBankTitle: string;
+  topicId: string;
+  topicTitleEn: string;
+  topicTitleAr: string;
+  questionType: QuestionType;
+  difficulty: Difficulty;
+  numberOfQuestions: number;
+  gradePerQuestion: number;
+  itemTotalGrade: number;
+  order: number;
+}
+
+export interface BlueprintQuestionBank {
+  questionBankId: string;
+  questionBankTitle: string;
+  topics: BlueprintTopic[];
+}
+export interface BlueprintDetailes extends BlueprintDto {
+  questionBanks: BlueprintQuestionBank[];
+  items: BlueprintQuestionBankItem[];
+}
+
+export interface CountDetails {
+  id: string;
+  title: string;
+  totalCount: number;
+  topics: TopicDetails[];
+}
+
+export interface TopicDetails {
+  id: string;
+  titleEn: string;
+  titleAr: string;
+  types: QuestionTypeStats[];
+}
+
+export interface QuestionTypeStats {
+  name: string;
+  value: number;
+  difficulty: DifficultyStats[];
+}
+
+export interface DifficultyStats {
+  name: string;
+  value: number;
+  count: number;
 }

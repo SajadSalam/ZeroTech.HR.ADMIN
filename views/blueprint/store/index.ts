@@ -1,6 +1,6 @@
 import type { BaseFilters } from '~/utils/types/ApiResponses'
 import { BlueprintService } from '../service'
-import type { Blueprint, BlueprintDto, BlueprintFilter, QuestionBankBlueprintDetails } from '../types'
+import type { Blueprint, BlueprintCreate, BlueprintDto, BlueprintFilter, QuestionBankBlueprintDetails } from '../types'
 const blueprintService = new BlueprintService()
 export const useBlueprintStore = defineStore('blueprint', () => {
   const blueprints = ref<BlueprintDto[]>([])
@@ -12,9 +12,8 @@ export const useBlueprintStore = defineStore('blueprint', () => {
     PageSize: 50,
     Search: '',
     questionBankId: null,
-    minGrade: null,
-    maxGrade: null,
-    subjectId: null,
+    SuccessGrade: null,
+    FullGrade: null,
     topicId: null,
   })
   const getBlueprints = async () => {
@@ -29,7 +28,7 @@ export const useBlueprintStore = defineStore('blueprint', () => {
       isLoading.value = false
     }
   }
-  const create = async (blueprint: Blueprint) => {
+  const create = async (blueprint: BlueprintCreate) => {
     try {
       isLoading.value = true
       await blueprintService.create(blueprint)
@@ -59,17 +58,16 @@ export const useBlueprintStore = defineStore('blueprint', () => {
       isLoading.value = false
     }
   }
-
-  const getQuestionBankBlueprintDetails = async (questionBankId: string): Promise<QuestionBankBlueprintDetails | null> => {
+  const getCountByQuestionBankId = async (questionBankId: string) => {
     try {
       isLoading.value = true
-      return await blueprintService.getQuestionBankBlueprintDetails(questionBankId)
+      return await blueprintService.getCountByQuestionBankId(questionBankId)
     } catch (error) {
-      return null
     } finally {
       isLoading.value = false
     }
   }
+
   return {
     blueprints,
     isCreateDialogOpen,
@@ -80,6 +78,6 @@ export const useBlueprintStore = defineStore('blueprint', () => {
     create,
     getById,
     deleteBlueprint,
-    getQuestionBankBlueprintDetails,
+    getCountByQuestionBankId,
   }
 })

@@ -1,26 +1,29 @@
 import type { TableHeader } from '~/components/app-table/types'
-import { QuestionType } from '../question-bank/types/question'
-import { DegreeDisplayType, type Blueprint } from './types'
 
 export const tableHeaders = (t: (key: string) => string) => {
   return [
     {
-      key: 'name',
-      label: t('name'),
+      key: 'title',
+      label: t('title'),
       icon: 'lucide:file-text',
     },
     {
       key: 'questionBankNames',
       label: t('question-banks'),
-      icon: 'lucide:file',
+      icon: 'lucide:library',
     },
     {
-      key: 'studyYear',
-      label: t('study-year'),
-      icon: 'lucide:calendar',
+      key: 'topicNames',
+      label: t('topics'),
+      icon: 'lucide:tags',
     },
     {
       key: 'randomizeAnswer',
+      label: t('randomize-answers'),
+      icon: 'lucide:shuffle',
+    },
+    {
+      key: 'randomizeChoices',
       label: t('randomize-choices'),
       icon: 'lucide:shuffle',
     },
@@ -28,11 +31,6 @@ export const tableHeaders = (t: (key: string) => string) => {
       key: 'displayResult',
       label: t('display-result'),
       icon: 'lucide:check-circle',
-    },
-    {
-      key: 'randomizeChoices',
-      label: t('randomize-answers'),
-      icon: 'lucide:shuffle',
     },
     {
       key: 'moveBetweenQuestion',
@@ -45,9 +43,14 @@ export const tableHeaders = (t: (key: string) => string) => {
       icon: 'lucide:check',
     },
     {
-      key: 'halfSuccessGrade',
-      label: t('half-success-grade'),
-      icon: 'lucide:list-checks',
+      key: 'fullGrade',
+      label: t('full-grade'),
+      icon: 'lucide:scale',
+    },
+    {
+      key: 'totalQuestionsGrade',
+      label: t('total-questions-grade'),
+      icon: 'lucide:list',
     },
     {
       key: 'actions',
@@ -86,7 +89,7 @@ export const tableCreateHeaders = (t: (key: string) => string) => {
 export const tableDetailHeaders = (t: (key: string) => string) => {
   return [
     {
-      key: 'topicName',
+      key: 'topicId',
       label: t('topics'),
     },
     {
@@ -94,16 +97,16 @@ export const tableDetailHeaders = (t: (key: string) => string) => {
       label: t('question-type'),
     },
     {
+      key: 'difficulty',
+      label: t('difficulty'),
+    },  
+    {
       key: 'numberOfQuestions',
       label: t('number-of-questions'),
     },
     {
       key: 'grade',
       label: t('grade-per-question'),
-    },
-    {
-      key: 'difficulty',
-      label: t('difficulty'),
     },
   ]
 }

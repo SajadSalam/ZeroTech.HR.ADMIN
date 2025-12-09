@@ -74,43 +74,43 @@ export interface QuestionCustomAnswerProps {
 export const questionTypeOptions = (t: (key: string) => string) => {
   return [
     {
+      name: 'SingleChoice',
+      label: t('single-choice'),
+      value: QuestionType.SingleChoice,
+    },
+    {
+      name: 'MultipleChoice',
       label: t('multiple-choice'),
       value: QuestionType.MultipleChoice,
     },
     {
-      label: t('fill-the-blank'),
-      value: QuestionType.Blank,
-    },
-    {
-      label: t('dropdown'),
-      value: QuestionType.DropDown,
-    },
-    // {
-    //   label: t('article'),
-    //   value: QuestionType.Article,
-    // },
-    {
+      name: 'TrueFalse',
       label: t('true-or-false'),
-      value: QuestionType.TrueOrFalse,
+      value: QuestionType.TrueFalse,
     },
     {
-      label: t('radio'),
-      value: QuestionType.Radio,
+      name: 'Ordering',
+      label: t('ordering'),
+      value: QuestionType.Ordering,
     },
     {
+      name: 'Matching',
       label: t('matching'),
-      value: QuestionType.Matching
+      value: QuestionType.Matching,
     },
     {
-      label: t('reorder'),
-      value: QuestionType.Reorder
+      name: 'ShortAnswer',
+      label: t('short-answer'),
+      value: QuestionType.ShortAnswer,
     },
     {
-      label: t('dialogue'),
-      value: QuestionType.Dialogue
+      name: 'FillInBlank',
+      label: t('fill-the-blank'),
+      value: QuestionType.FillInBlank,
     },
   ]
 }
+
 
 export const questionTypeMap: { [key: string]: QuestionType } = {
   'multiple-choice': QuestionType.MultipleChoice,

@@ -48,33 +48,26 @@ const { hasPrivilege } = useAuthStore()
           v-model="filters.questionBankId"
           fetch-on-search
           search-key="name"
-          :placeholder="$t('questions-bank')"
-          get-url="/question-bank"
+          :placeholder="$t('question-banks')"
+          get-url="/question-banks"
           item-label="title"
           item-value="id"
         />
-        <AppAutoCompleteField
-          v-model="filters.subjectId"
-          fetch-on-search
-          search-key="name"
-          :placeholder="$t('subject')"
-          get-url="/subjects/lookup"
-          without-data
-          item-label="title"
-          item-value="id"
-        />
+        <AppAutoCompleteField v-model="filters.topicId" fetch-on-search search-key="name" :label="$t('topics')"
+          :placeholder="$t('topics')" get-url="/topics/lookup" without-data item-label="title" item-value="id" />
       </template>
       <template #additional-filters>
         <div class="flex gap-4">
-          <AppAutoCompleteField v-model="filters.topicId" fetch-on-search search-key="name" :label="$t('topics')"
-            :placeholder="$t('topics')" get-url="/topics/lookup" without-data item-label="title" item-value="id" />
-          <BaseInput v-model="filters.minGrade" :label="$t('min_grade')" :placeholder="$t('min_grade')" />
-          <BaseInput v-model="filters.maxGrade" :label="$t('max_grade')" :placeholder="$t('max_grade')" />
+          <BaseInput v-model="filters.SuccessGrade" :label="$t('half-success-grade')" :placeholder="$t('half-success-grade')" />
+          <BaseInput v-model="filters.FullGrade" :label="$t('maximum-grade')" :placeholder="$t('maximum-grade')" />
         </div>
       </template>
       <AppTable :is-loading="isLoading" :title="$t('blueprints')" :headers="tableHeaders($t)" :items="blueprints">
         <template #data-questionBankNames="{ item }">
           {{ item.questionBankNames.join(', ') }}
+        </template>
+        <template #data-topicNames="{ item }">
+          {{ item.topicNames.join(', ') }}
         </template>
         <template #data-actions="data">
           <div class="flex items-center justify-center gap-2">
@@ -85,7 +78,6 @@ const { hasPrivilege } = useAuthStore()
               <Icon name="ph:eye" size="18" />
             </BaseButtonIcon>
             <AuditLogBtn :entity-id="data.item.id" />
-
           </div>
         </template>
         <template #data-displayResult="{ item }">
@@ -123,6 +115,6 @@ const { hasPrivilege } = useAuthStore()
       </AppTable>
     </AppCrud>
   </div>
-  <CreateBlueprint />
+  <!-- <CreateBlueprint /> -->
 </template>
 <style></style>
