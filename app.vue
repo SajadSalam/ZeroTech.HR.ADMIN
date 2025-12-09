@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { useI18n } from 'vue-i18n'
+import { useAuthStore } from './views/auth/store/auth'
 
 interface TairoConfig {
     title?: string
@@ -35,6 +36,11 @@ useHead({
 const colorMode = useColorMode()
 colorMode.value = 'light'
 colorMode.preference = 'light'
+
+onMounted(() => {
+    const auth = useAuthStore()
+    auth.fetchUserPrivileges()
+})
 
 
 </script>

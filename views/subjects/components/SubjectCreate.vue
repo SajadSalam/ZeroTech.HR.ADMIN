@@ -13,12 +13,12 @@ const { t } = useI18n()
 
 const validator = new Validator<Subject>(
   {
-    name: '',
+    titleAr: '',
     code: '',
-    englishName: '',
+    titleEn: '',
   },
   {
-    name: {
+    titleAr: {
       required: createValidator(t, 'subject-name', 'required'),
     },
   }
@@ -57,8 +57,8 @@ watch(
     <div class="rounded-3xl p-3">
       <div class="flex flex-col gap-4">
         <AppInputField
-          v-model="body.name.$model"
-          :errors="body.name.$errors"
+          v-model="body.titleAr.$model"
+          :errors="body.titleAr.$errors"
           size="md"
           :label="$t('subject-name')"
         />
@@ -69,8 +69,8 @@ watch(
           :label="$t('subject_code')"
         />
         <AppInputField
-          v-model="body.englishName.$model"
-          :errors="body.englishName.$errors"
+          v-model="body.titleEn.$model"
+          :errors="body.titleEn.$errors"
           size="md"
           :label="$t('subject_english_name')"
         />

@@ -22,19 +22,10 @@ export default defineNuxtConfig({
     devtools: { enabled: true },
     pages: true,
     
-    // Suppress middleware override warnings and disable route rules
-    experimental: {
-        payloadExtraction: false,
-        scanPageMeta: false,
-        writeEarlyHints: false,
-    },
     
     // Configure Nitro for static generation
     nitro: {
         preset: 'static',
-        experimental: {
-            warnOnMiddlewareConflict: false
-        },
         prerender: {
             crawlLinks: false,
             failOnError: false

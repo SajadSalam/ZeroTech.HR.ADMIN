@@ -12,15 +12,15 @@ export const useOrganizationStore = defineStore('organization', () => {
   })
   const getOrganizations = async (filters: OrganizationFilters) => {
     try {
-      if (isNullOrEmpty(filters.search) && filters.parentId == null) {
-        filters.parentId = 'null'
+      if (isNullOrEmpty(filters.search ?? '') && filters.parentId == null) {
+        filters.parentId = null
         filters.search = null
       }
-      if (!isNullOrEmpty(filters.search)) {
+      if (!isNullOrEmpty(filters.search ?? '')) {
         filters.parentId = null
       }
       const res = await organizationService.getTree(filters)
-      const allOrganizations: Organization[] = res.data
+      const allOrganizations: Organization[] = res
       const ret = allOrganizations
         // .filter((org) => org.parentId == (filters.parentId == 'null' ? null : filters.parentId))
         .map((org) => ({

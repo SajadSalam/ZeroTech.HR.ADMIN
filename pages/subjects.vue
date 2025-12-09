@@ -51,7 +51,7 @@ const { hasPrivilege } = useAuthStore()
   <div>
     <AppCrud :add-button-text="$t('add-new-subject')" :add-btn-action="() => (subjectStore.isCreateDialogOpen = true)"
       :pagination="true" :total-pages="subjectStore.totalPages" :title="$t('subjects')"
-      :hide-create="!hasPrivilege('ums:ems:subjects:create')" @update:current-page="filters.pageNumber = $event">
+      :hide-create="!hasPrivilege('ums:ems:subjects:create')" @update:current-page="filters.Page = $event">
       <template #filters>
         <BaseInput v-model="filters.name" :placeholder="$t('search')" />
       </template>

@@ -1,6 +1,7 @@
 import type { BaseFilters } from '~/utils/types/ApiResponses'
 import type { BaseDto } from '~/utils/types/base-dto'
-import type { Difficulty, QuestionType } from '~/views/question-bank/types/question'
+import type { QuestionBankDto } from '~/views/question-bank/types'
+import type { Difficulty, QuestionType } from '~/views/questions/types'
 
 export interface Blueprint {
   title: string;

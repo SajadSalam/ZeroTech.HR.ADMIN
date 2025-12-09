@@ -1,7 +1,7 @@
 import type { BaseFilters } from '~/utils/types/ApiResponses'
 import type { BaseDto } from '~/utils/types/base-dto'
 import type { ExamDto } from '~/views/exams/types'
-import type { QuestionDto } from '~/views/question-bank/types/question'
+import type { QuestionDto } from '~/views/questions/types'
 import type { Student } from '~/views/students/types'
 
 export type EvaluationDto = {
