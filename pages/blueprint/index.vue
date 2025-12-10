@@ -38,7 +38,7 @@ const { hasPrivilege } = useAuthStore()
 <template>
   <div>
     <AppCrud v-model:current-page="blueprintStore.filters.pageNumber" pagination
-      :total-pages="blueprintStore.totalPages" :add-btn-action="() => router.push('/blueprint/create')"
+      :total-pages="blueprintStore.totalPages" :add-btn-action="() => router.push('/blueprint/form/create')"
       :add-button-text="$t('create-blueprint')" :hide-create="!hasPrivilege('ums:ems:examtemplate:create')">
       <template #filters>
         <BaseInput v-model="filters.search" :placeholder="$t('search')" />
@@ -51,13 +51,13 @@ const { hasPrivilege } = useAuthStore()
           item-label="title"
           item-value="id"
         />
-        <AppAutoCompleteField v-model="filters.topicId" fetch-on-search search-key="name" :label="$t('topics')"
+        <AppAutoCompleteField v-model="filters.topicId" fetch-on-search search-key="name"
           :placeholder="$t('topics')" get-url="/topics/lookup" without-data item-label="title" item-value="id" />
       </template>
       <template #additional-filters>
         <div class="flex gap-4">
-          <BaseInput v-model="filters.SuccessGrade" :label="$t('half-success-grade')" :placeholder="$t('half-success-grade')" />
-          <BaseInput v-model="filters.FullGrade" :label="$t('maximum-grade')" :placeholder="$t('maximum-grade')" />
+          <BaseInput v-model="filters.successGrade" :label="$t('half-success-grade')" :placeholder="$t('half-success-grade')" />
+          <BaseInput v-model="filters.fullGrade" :label="$t('maximum-grade')" :placeholder="$t('maximum-grade')" />
         </div>
       </template>
       <AppTable :is-loading="isLoading" :title="$t('blueprints')" :headers="tableHeaders($t)" :items="blueprints">
@@ -69,7 +69,7 @@ const { hasPrivilege } = useAuthStore()
         </template>
         <template #data-actions="data">
           <div class="flex items-center justify-center gap-2">
-            <AppCrudActions hide-update :hide-delete="!hasPrivilege('ums:ems:examtemplate:delete')"
+            <AppCrudActions :hide-delete="!hasPrivilege('ums:ems:examtemplate:delete')" :edit-button-action="() => router.push(`/blueprint/form/${data.item.id}`)"
               :delete-service="blueprintStore.deleteBlueprint" :item="data.item" />
             <BaseButtonIcon :data-nui-tooltip="$t('view')" rounded="full" size="sm" color="primary" variant="outline"
               :to="`/blueprint/${data.item.id}/view`">

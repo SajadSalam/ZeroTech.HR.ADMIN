@@ -1,7 +1,6 @@
 import axiosIns from '~/services/app-client/axios'
-import type { Blueprint, BlueprintDetailes, BlueprintCreate, BlueprintDto, QuestionBankBlueprintDetails, CountDetails } from '../types'
-import type { BaseFilters, PaginatedResponse, WithoutPagination } from '~/utils/types/ApiResponses'
-import type { BaseDto } from '~/utils/types/base-dto'
+import type { BlueprintDetailes, BlueprintCreate, BlueprintDto, CountDetails } from '../types'
+import type { BaseFilters, PaginatedResponse } from '~/utils/types/ApiResponses'
 
 interface IBlueprintService {
   get: (filters: BaseFilters) => Promise<PaginatedResponse<BlueprintDto>>
@@ -9,7 +8,6 @@ interface IBlueprintService {
   update: (id: string, blueprint: BlueprintCreate) => Promise<BlueprintDto>
   delete: (id: string) => Promise<void>
   getById: (id: string) => Promise<BlueprintDetailes>
-  getCountByQuestionBankId: (questionBankId: string) => Promise<CountDetails>
 }
 
 export class BlueprintService implements IBlueprintService {
@@ -37,8 +35,5 @@ export class BlueprintService implements IBlueprintService {
     const response = await axiosIns.get<BlueprintDetailes>(`/exam-templates/${id}`)
     return response.data
   }
-  async getCountByQuestionBankId(questionBankId: string): Promise<CountDetails> {
-    const response = await axiosIns.get<CountDetails>(`/question-banks/${questionBankId}/count-details`)
-    return response.data
-  }
+  
 }

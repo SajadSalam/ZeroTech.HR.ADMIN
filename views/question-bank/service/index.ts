@@ -7,12 +7,14 @@ import type {
     QuestionBankFilters,
 } from '../types'
 import type { AssignForm, AssignType } from '../types/assign'
+import type { CountDetails } from '~/views/blueprint/types'
 
 interface IQuestionBankService {
   get: (filters: QuestionBankFilters) => Promise<PaginatedResponse<QuestionBankDto>>
   create: (data: QuestionBankCreateDto) => Promise<QuestionBankDto>
   update: (id: string, data: QuestionBankCreateDto) => Promise<QuestionBankDto>
   delete: (id: string) => Promise<void>
+  getCountByQuestionBankId: (questionBankId: string) => Promise<CountDetails>
 }
 
 export class QuestionBankService implements IQuestionBankService {
@@ -66,6 +68,10 @@ export class QuestionBankService implements IQuestionBankService {
 
   async getAssignedEmployees(questionBankId: string, type: AssignType): Promise<Employee[]> {
     const response = await axios.get<Employee[]>(`/question-banks/${questionBankId}/employees?type=${type}`)
+    return response.data
+  }
+  async getCountByQuestionBankId(questionBankId: string): Promise<CountDetails> {
+    const response = await axios.get<CountDetails>(`/question-banks/${questionBankId}/count-details`)
     return response.data
   }
 

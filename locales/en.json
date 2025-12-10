@@ -786,5 +786,14 @@
   "click-to-view-changes": "Click to view changes",
   "old-value": "Old Value",
   "new-value": "New Value",
-  "no-audit-logs-found": "No audit logs found"
+  "no-audit-logs-found": "No audit logs found",
+  "add-proper-number": "Add proper number",
+  "no-negative-numbers-allowed": "No negative numbers allowed",
+  "success-grade-must-be-less-than-full-grade": "Success grade must be less than full grade",
+  "full-grade-must-be-less-than-or-equal-to-total-questions-grade": "Full grade must be less than or equal to total questions grade",
+  "single-choice": "Single Choice",
+  "true-false": "True or False",
+  "ordering": "Ordering",
+  "short-answer": "Short Answer",
+  "fill-in-blank": "Fill In Blank"
 }

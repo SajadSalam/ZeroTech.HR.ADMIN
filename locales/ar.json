@@ -812,5 +812,14 @@
   "click-to-view-changes": "انقر لمشاهدة التعديلات",
   "old-value": "القديم",
   "new-value": "الجديد",
-  "no-audit-logs-found": "لم يتم العثور على سجلات تعديلات"
+  "no-audit-logs-found": "لم يتم العثور على سجلات تعديلات",
+  "add-proper-number": "أدخل رقم صالح",
+  "no-negative-numbers-allowed": "لا يسمح بالأرقام السالبة",
+  "success-grade-must-be-less-than-full-grade": "يجب أن يكون درجة النجاح أقل من الدرجة القصوى",
+  "full-grade-must-be-less-than-or-equal-to-total-questions-grade": "يجب أن يكون الدرجة القصوى أقل من أو تساوي درجة الاسئلة الكلية",
+  "single-choice": "اختيار واحد من متعدد",
+  "true-false": "صح أو خطأ",
+  "ordering": "ترتيب",
+  "short-answer": "اجابة مختصرة",
+  "fill-in-blank": "تعبئة الفراغ",
 }

@@ -1,6 +1,5 @@
 import type { BaseFilters } from '~/utils/types/ApiResponses'
 import type { BaseDto } from '~/utils/types/base-dto'
-import type { QuestionBankDto } from '~/views/question-bank/types'
 import type { Difficulty, QuestionType } from '~/views/questions/types'
 
 export interface Blueprint {
@@ -21,8 +20,8 @@ export type BlueprintDto = Blueprint & BaseDto
 export type BlueprintFilter = {
   questionBankId: string | null
   topicId: string | null
-  SuccessGrade: string | null
-  FullGrade: string | null
+  successGrade: string | null
+  fullGrade: string | null
 } & BaseFilters
 
 export interface BlueprintCreate {
@@ -106,4 +105,13 @@ export interface DifficultyStats {
   name: string;
   value: number;
   count: number;
+}
+
+export type SelectedTopic = {
+    topicId: string
+    questionType: number | null
+    difficulty: number | null
+    numberOfQuestions: number
+    grade: number
+    difficultyCount?: number // Store the count when difficulty is selected
 }

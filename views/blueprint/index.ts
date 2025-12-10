@@ -44,12 +44,12 @@ export const tableHeaders = (t: (key: string) => string) => {
     },
     {
       key: 'fullGrade',
-      label: t('full-grade'),
+      label: t('maximum-grade'),
       icon: 'lucide:scale',
     },
     {
       key: 'totalQuestionsGrade',
-      label: t('total-questions-grade'),
+      label: t('success-grade'),
       icon: 'lucide:list',
     },
     {

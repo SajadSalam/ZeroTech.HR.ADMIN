@@ -1,6 +1,7 @@
 import type { TableHeader } from '~/components/app-table/types'
 import {
     Difficulty,
+    QuestionType,
 } from '~/views/questions/types'
 
 export const tableHeader = (t: (key: string) => string) => {
@@ -84,6 +85,46 @@ export const difficultyOptions = (t: (key: string) => string) => {
       label: t('hard'),
       value: Difficulty.Hard,
       name: "Hard"
+    },
+  ]
+}
+
+export const questionTypeOptions = (t: (key: string) => string) => {
+  return [
+    {
+      label: t('single-choice'),
+      value: QuestionType.SingleChoice,
+      name: "SingleChoice",
+    },
+    {
+      label: t('multiple-choice'),
+      value: QuestionType.MultipleChoice,
+      name: "MultipleChoice",
+    },
+    {
+      label: t('true-false'),
+      value: QuestionType.TrueFalse,
+      name: "True/False",
+    },
+    {
+      label: t('ordering'),
+      value: QuestionType.Ordering,
+      name: "Ordering",
+    },
+    {
+      label: t('matching'),
+      value: QuestionType.Matching,
+      name: "Matching",
+    },
+    {
+      label: t('short-answer'),
+      value: QuestionType.ShortAnswer,
+      name: "ShortAnswer",
+    },
+    {
+      label: t('fill-in-blank'),
+      value: QuestionType.FillInBlank,
+      name: "FillInBlank",
     },
   ]
 }
