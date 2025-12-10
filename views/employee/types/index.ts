@@ -8,6 +8,7 @@ export interface Employee {
   collegeId: number
   position: null
   empFullName: string
+  name: string
 }
 
 export interface EmployeeFilters {
