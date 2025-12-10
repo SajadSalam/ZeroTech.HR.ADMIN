@@ -5,29 +5,22 @@ import { useBlueprintForm, type QuestionBank } from '~/views/blueprint/composabl
 const {
     body,
     questionBanks,
-    calculateTotalGrade: calculateTotalGradeFromComposable,
+    calculateTotalGrade,
 } = useBlueprintForm()
-
-const totalQuestionBanks = computed(() => {
-    return questionBanks.value.length
-})
 
 const totalTopicRows = computed(() => {
     return questionBanks.value.reduce((sum: number, qb: QuestionBank) => sum + qb.selectedTopics.length, 0)
 })
 
-const calculateTotalGrade = () => {
-    return calculateTotalGradeFromComposable()
-}
 </script>
 
 <template>
-    <div v-if="totalQuestionBanks > 0"
+    <div v-if="questionBanks.length > 0"
         class="my-4 p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg border border-green-200">
         <h3 class="text-lg font-semibold text-green-700 mb-3">{{ $t('blueprint-summary') }}</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="text-center">
-                <p class="text-2xl font-bold text-blue-600">{{ totalQuestionBanks }}</p>
+                <p class="text-2xl font-bold text-blue-600">{{ questionBanks.length }}</p>
                 <p class="text-sm text-gray-600">{{ $t('question-banks-selected') }}</p>
             </div>
             <div class="text-center">

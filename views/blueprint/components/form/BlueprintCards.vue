@@ -12,6 +12,7 @@ const { t } = useI18n()
 const {
     questionBanks,
     countDetails,
+    isQuestionCountValid,
 } = useBlueprintForm()
 
 const addTopic = (index: number) => {
@@ -183,18 +184,12 @@ const getCurrentQuestionCount = (qbIndex: number, topicIndex: number) => {
 }
 
 // Check if numberOfQuestions exceeds available count
-const exceedsLimit = (qbIndex: number, topicIndex: number) => {
-    const topic = questionBanks.value[qbIndex].selectedTopics[topicIndex]
-    const availableCount = getCurrentQuestionCount(qbIndex, topicIndex)
-    return availableCount > 0 && topic.numberOfQuestions > availableCount
-}
+
 
 const validationMessage = (val: number) => { 
     return !val || val % 1 !== 0 ? t('add-proper-number') : (val < 0 ? t('no-negative-numbers-allowed') : '')
 }
 
-// Expose exceedsLimit for submit validation
-defineExpose({ exceedsLimit })
 </script>
 
 <template>
@@ -253,17 +248,17 @@ defineExpose({ exceedsLimit })
                     <AppInputField v-model="qb.selectedTopics[index].numberOfQuestions" type="number" required
                         :placeholder="$t('number-of-questions')" :disabled="!qb.selectedTopics[index].difficulty"
                         :class="{
-                            'border-red-300 focus:border-red-500': exceedsLimit(qbIndex, index)
+                            'border-red-300 focus:border-red-500': isQuestionCountValid(qbIndex, index)
                         }" />
                     <div v-if="qb.selectedTopics[index].difficulty && qb.selectedTopics[index].difficultyCount !== undefined"
                         class="flex items-center justify-between text-xs">
                         <span :class="{
-                            'text-green-600': !exceedsLimit(qbIndex, index),
-                            'text-red-600': exceedsLimit(qbIndex, index) || validationMessage(qb.selectedTopics[index].numberOfQuestions)
+                            'text-green-600': !isQuestionCountValid(qbIndex, index),
+                            'text-red-600': isQuestionCountValid(qbIndex, index) || validationMessage(qb.selectedTopics[index].numberOfQuestions)
                         }">
                             {{ $t('available') }}: {{ getCurrentQuestionCount(qbIndex, index) }}
                         </span>
-                        <span v-if="exceedsLimit(qbIndex, index)" class="text-red-600 font-medium">
+                        <span v-if="isQuestionCountValid(qbIndex, index)" class="text-red-600 font-medium">
                             {{ $t('exceeds-limit') }}
                         </span>
                         <span class="text-red-600 font-medium">

@@ -5,34 +5,25 @@ const {
     body,
 } = useBlueprintForm()
 
-type SettingKey = 'displayResult' | 'moveBetweenQuestion' | 'randomizeAnswer' | 'randomizeChoices'
 
-const settings: Array<{ key: SettingKey; translationKey: string }> = [
+const settings: { key: string; name: string }[] = [
     {
         key: 'displayResult',
-        translationKey: 'display-result',
+        name: 'display-result',
     },
     {
         key: 'moveBetweenQuestion',
-        translationKey: 'move-between-questions',
+        name: 'move-between-questions',
     },
     {
         key: 'randomizeAnswer',
-        translationKey: 'randomize-answers',
+        name: 'randomize-answers',
     },
     {
         key: 'randomizeChoices',
-        translationKey: 'randomize-choices',
+        name: 'randomize-choices',
     },
 ]
-
-const getValue = (key: SettingKey) => {
-    return body.value[key].$model
-}
-
-const toggleValue = (key: SettingKey) => {
-    body.value[key].$model = !body.value[key].$model
-}
 </script>
 
 <template>
@@ -46,20 +37,20 @@ const toggleValue = (key: SettingKey) => {
         <BaseTag
             v-for="setting in settings"
             :key="setting.key"
-            :color="getValue(setting.key) ? 'primary' : 'muted'"
+            :color="body[setting.key].$model ? 'primary' : 'muted'"
             variant="pastel"
             size="md"
             class="pa-3 flex cursor-pointer items-center gap-2 text-lg"
-            @click="toggleValue(setting.key)"
+            @click="body[setting.key].$model = !body[setting.key].$model"
         >
             <div
                 class="h-2 w-2 rounded-full"
                 :class="{
-                    'bg-primary-500': getValue(setting.key),
-                    'bg-muted-300': !getValue(setting.key),
+                    'bg-primary-500': body[setting.key].$model,
+                    'bg-muted-300': !body[setting.key].$model,
                 }"
             />
-            {{ $t(setting.translationKey) }}
+            {{ $t(setting.name) }}
         </BaseTag>
     </div>
 </template>

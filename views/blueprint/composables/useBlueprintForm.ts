@@ -59,6 +59,13 @@ function createBlueprintForm() {
     )
 
     const body = validator.validation
+
+    const isQuestionCountValid = (qbIndex: number, topicIndex: number) => {
+        const topic = questionBanks.value[qbIndex].selectedTopics[topicIndex]
+        const availableCount = topic.difficultyCount as number
+        return availableCount > 0 && topic.numberOfQuestions > availableCount
+    }
+
     const addQuestionBank = async (qb: QuestionBankDto) => {
         const response = await questionBankStore.getCountByQuestionBankId(qb.id)
         if (response) {
@@ -103,11 +110,11 @@ function createBlueprintForm() {
         }
     }
 
-    const validateQuestionCounts = (exceedsLimitFn: (qbIndex: number, topicIndex: number) => boolean) => {
+    const validateQuestionCounts = () => {
         for (let qbIndex = 0; qbIndex < questionBanks.value.length; qbIndex++) {
             const qb = questionBanks.value[qbIndex]
             for (let topicIndex = 0; topicIndex < qb.selectedTopics.length; topicIndex++) {
-                if (exceedsLimitFn(qbIndex, topicIndex)) {
+                if (isQuestionCountValid(qbIndex, topicIndex)) {
                     toaster.show('danger', t('number-of-questions-exceeds-available-count'))
                     return false
                 }
@@ -151,12 +158,11 @@ function createBlueprintForm() {
 
     const submit = async (
         blueprintId?: string,
-        exceedsLimitFn?: (qbIndex: number, topicIndex: number) => boolean
     ) => {
         const isValid = await body.value.$validate()
         if (!isValid) return
         
-        if (exceedsLimitFn && !validateQuestionCounts(exceedsLimitFn)) return
+        if (!validateQuestionCounts()) return
         if(Number(body.value.fullGrade.$model) <= Number(body.value.successGrade.$model)) {
             toaster.show('danger', t('success-grade-must-be-less-than-full-grade'))
             return
@@ -320,13 +326,14 @@ function createBlueprintForm() {
         calculateTotalGrade,
         submit,
         validator,
+        isQuestionCountValid,
         populateFormFromBlueprint,
     }
 }
 
-// Export singleton getter - all components will share the same instance
 export const useBlueprintForm = () => {
     if (!formInstance) {
+        console.log("here");
         formInstance = createBlueprintForm()
     }
     return formInstance
