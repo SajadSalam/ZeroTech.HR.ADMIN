@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DotLoading from '~/components/DotLoading.vue'
 import { useEmployeeVacationStore } from '../store'
 
 const vacationStore = useEmployeeVacationStore()
@@ -18,15 +19,10 @@ const closeDialog = () => {
 </script>
 
 <template>
-    <AppDialog
-        v-model="vacationStore.isDialogOpen"
-        title="رصيد الإجازات"
-        size="xl"
-        overflow-y="visible"
-        @close="closeDialog"
-    >
+    <AppDialog v-model="vacationStore.isDialogOpen" title="رصيد الإجازات" size="xl" overflow-y="visible"
+        @close="closeDialog">
         <div v-if="isLoading" class="flex justify-center items-center py-10">
-            <AppLoading />
+            <DotLoading />
         </div>
 
         <div v-else-if="employee" class="space-y-6">
@@ -39,41 +35,37 @@ const closeDialog = () => {
                     <div>
                         <span class="text-sm text-gray-600">الاسم الكامل:</span>
                         <p class="font-medium text-gray-900">
-                            {{ employee.fullName }}
+                            {{ employee?.fullName }}
                         </p>
                     </div>
                     <div>
                         <span class="text-sm text-gray-600">رقم الموظف:</span>
                         <p class="font-medium text-gray-900">
-                            {{ employee.employeeNumber }}
+                            {{ employee?.employeeNumber }}
                         </p>
                     </div>
                     <div>
-                        <span class="text-sm text-gray-600"
-                            >البريد الإلكتروني:</span
-                        >
+                        <span class="text-sm text-gray-600">البريد الإلكتروني:</span>
                         <p class="font-medium text-gray-900">
-                            {{ employee.email }}
+                            {{ employee?.email }}
                         </p>
                     </div>
                     <div>
                         <span class="text-sm text-gray-600">الهاتف:</span>
                         <p class="font-medium text-gray-900">
-                            {{ employee.phone }}
+                            {{ employee?.phone }}
                         </p>
                     </div>
                     <div>
-                        <span class="text-sm text-gray-600"
-                            >المسمى الوظيفي:</span
-                        >
+                        <span class="text-sm text-gray-600">المسمى الوظيفي:</span>
                         <p class="font-medium text-gray-900">
-                            {{ employee.jobTitle }}
+                            {{ employee?.jobTitle }}
                         </p>
                     </div>
                     <div>
                         <span class="text-sm text-gray-600">القسم:</span>
                         <p class="font-medium text-gray-900">
-                            {{ employee.department?.name || '-' }}
+                            {{ employee?.department?.name || '-' }}
                         </p>
                     </div>
                 </div>
@@ -86,41 +78,39 @@ const closeDialog = () => {
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <span class="text-sm text-gray-600"
-                            >تاريخ التعيين:</span
-                        >
+                        <span class="text-sm text-gray-600">تاريخ التعيين:</span>
                         <p class="font-medium text-gray-900">
-                            {{ formatDate(employee.hireDate) }}
+                            {{ formatDate(employee?.hireDate) }}
                         </p>
                     </div>
                     <div>
                         <span class="text-sm text-gray-600">نوع العقد:</span>
                         <p class="font-medium text-gray-900">
-                            {{ employee.contractTypeDisplay }}
+                            {{ employee?.contractTypeDisplay }}
                         </p>
                     </div>
                     <div>
                         <span class="text-sm text-gray-600">سنوات الخدمة:</span>
                         <p class="font-medium text-gray-900">
-                            {{ employee.yearsOfService }} سنة
+                            {{ employee?.yearsOfService }} سنة
                         </p>
                     </div>
                     <div>
                         <span class="text-sm text-gray-600">أشهر الخدمة:</span>
                         <p class="font-medium text-gray-900">
-                            {{ employee.monthsOfService }} شهر
+                            {{ employee?.monthsOfService }} شهر
                         </p>
                     </div>
                     <div>
                         <span class="text-sm text-gray-600">أيام الخدمة:</span>
                         <p class="font-medium text-gray-900">
-                            {{ employee.daysOfService }} يوم
+                            {{ employee?.daysOfService }} يوم
                         </p>
                     </div>
                     <div>
                         <span class="text-sm text-gray-600">الفرع:</span>
                         <p class="font-medium text-gray-900">
-                            {{ employee.branch?.name || '-' }}
+                            {{ employee?.branch?.name || '-' }}
                         </p>
                     </div>
                 </div>
@@ -133,49 +123,39 @@ const closeDialog = () => {
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="col-span-full">
-                        <span class="text-sm text-gray-600"
-                            >الرصيد الحالي:</span
-                        >
+                        <span class="text-sm text-gray-600">الرصيد الحالي:</span>
                         <p class="text-3xl font-bold text-green-600">
-                            {{ employee.vacationBalance.toFixed(2) }} يوم
+                            {{ employee?.vacationBalance?.toFixed(2) }} يوم
                         </p>
                     </div>
                     <div>
-                        <span class="text-sm text-gray-600"
-                            >معدل الاستحقاق الشهري:</span
-                        >
+                        <span class="text-sm text-gray-600">الرصيد المستخدم:</span>
                         <p class="font-medium text-gray-900">
                             {{
-                                employee.vacationAccrualRatePerMonth.toFixed(2)
+                                employee?.usedVacationBalance?.toFixed(2)
                             }}
-                            يوم/شهر
+                            يوم
                         </p>
                     </div>
                     <div>
-                        <span class="text-sm text-gray-600"
-                            >معدل الاستحقاق اليومي:</span
-                        >
+                        <span class="text-sm text-gray-600">الرصيد المتاح:</span>
                         <p class="font-medium text-gray-900">
-                            {{ employee.vacationAccrualRatePerDay.toFixed(2) }}
-                            يوم/يوم
+                            {{ employee?.availableVacationBalance?.toFixed(2) }}
+                            يوم
                         </p>
                     </div>
                     <div class="col-span-full">
-                        <span class="text-sm text-gray-600"
-                            >الرصيد محسوب حتى تاريخ:</span
-                        >
+                        <span class="text-sm text-gray-600">الرصيد المعلق:</span>
                         <p class="font-medium text-gray-900">
-                            {{ formatDate(employee.vacationBalanceAsOfDate) }}
+                            {{ employee?.pendingVacationBalance?.toFixed(2) }}
+                            يوم
                         </p>
                     </div>
                 </div>
             </div>
 
             <!-- جدول العمل -->
-            <div
-                v-if="employee.workSchedule"
-                class="bg-purple-50 rounded-lg p-4"
-            >
+            <div v-if="employee?.workSchedule" class="bg-purple-50 rounded-lg p-4">
                 <h3 class="text-lg font-semibold text-gray-900 mb-3">
                     جدول العمل
                 </h3>
@@ -183,27 +163,25 @@ const closeDialog = () => {
                     <div>
                         <span class="text-sm text-gray-600">اسم الجدول:</span>
                         <p class="font-medium text-gray-900">
-                            {{ employee.workSchedule.name }}
+                            {{ employee?.workSchedule?.name }}
                         </p>
                     </div>
-                    <div v-if="employee.workSchedule.description">
+                    <div v-if="employee?.workSchedule?.description">
                         <span class="text-sm text-gray-600">الوصف:</span>
                         <p class="font-medium text-gray-900">
-                            {{ employee.workSchedule.description }}
+                            {{ employee?.workSchedule?.description }}
                         </p>
                     </div>
                     <div>
                         <span class="text-sm text-gray-600">الحالة:</span>
-                        <span
-                            :class="[
-                                'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ml-2',
-                                employee.workSchedule.isActive
-                                    ? 'bg-green-100 text-green-800'
-                                    : 'bg-red-100 text-red-800',
-                            ]"
-                        >
+                        <span :class="[
+                            'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ml-2',
+                            employee?.workSchedule?.isActive
+                                ? 'bg-green-100 text-green-800'
+                                : 'bg-red-100 text-red-800',
+                        ]">
                             {{
-                                employee.workSchedule.isActive
+                                employee?.workSchedule?.isActive
                                     ? 'نشط'
                                     : 'غير نشط'
                             }}
@@ -221,33 +199,31 @@ const closeDialog = () => {
                     <div>
                         <span class="text-sm text-gray-600">الجنس:</span>
                         <p class="font-medium text-gray-900">
-                            {{ employee.genderDisplay }}
+                            {{ employee?.genderDisplay }}
                         </p>
                     </div>
                     <div>
                         <span class="text-sm text-gray-600">العمر:</span>
                         <p class="font-medium text-gray-900">
-                            {{ employee.age }} سنة
+                            {{ employee?.age }} سنة
                         </p>
                     </div>
                     <div>
-                        <span class="text-sm text-gray-600"
-                            >تاريخ الميلاد:</span
-                        >
+                        <span class="text-sm text-gray-600">تاريخ الميلاد:</span>
                         <p class="font-medium text-gray-900">
-                            {{ formatDate(employee.birthDate) }}
+                            {{ formatDate(employee?.birthDate) }}
                         </p>
                     </div>
                     <div>
                         <span class="text-sm text-gray-600">رقم الهوية:</span>
                         <p class="font-medium text-gray-900">
-                            {{ employee.identityNumber }}
+                            {{ employee?.identityNumber }}
                         </p>
                     </div>
-                    <div v-if="employee.attachmentCount > 0">
+                    <div v-if="employee?.attachmentCount > 0">
                         <span class="text-sm text-gray-600">عدد المرفقات:</span>
                         <p class="font-medium text-gray-900">
-                            {{ employee.attachmentCount }} ملف
+                            {{ employee?.attachmentCount }} ملف
                         </p>
                     </div>
                 </div>
@@ -262,4 +238,3 @@ const closeDialog = () => {
         </template>
     </AppDialog>
 </template>
-

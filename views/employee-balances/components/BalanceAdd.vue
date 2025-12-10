@@ -16,7 +16,7 @@ const validator = new Validator<AddBalanceDto>(
     },
     {
         amount: {
-            required: requiredValidator('المبلغ'),
+            required: requiredValidator('الرصيد'),
         },
         reason: {
             required: requiredValidator('السبب'),
@@ -73,7 +73,7 @@ watch(
 
             <AppInputField
                 v-model.number="body.amount.$model"
-                label="المبلغ"
+                label="الرصيد"
                 type="number"
                 step="0.01"
                 min="0.01"

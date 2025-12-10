@@ -21,31 +21,6 @@ const appTableStore = useAppTableStore()
 const employeeId = computed(() => route.params.id as string)
 const isLoading = computed(() => balanceStore.isLoading)
 const balances = computed(() => balanceStore.balanceSummary?.balances || [])
-// create fake data for balances
-const fakeBalances = [
-    {
-        balanceType: 'رصيد الاجازات',
-        allocatedBalance: 30000,
-        currentBalance: 20000,
-        pendingBalance: 0,
-        availableBalance: 20000,
-        periodStartDate: '2025-01-01',
-        periodEndDate: '2025-12-31',
-        notes: 'رصيد الاجازات',
-        isActive: true,
-    },
-    {
-        balanceType: 'رصيد المرض',
-        allocatedBalance: 10000,
-        currentBalance: 10000,
-        pendingBalance: 0,
-        availableBalance: 10000,
-        periodStartDate: '2025-01-01',
-        periodEndDate: '2025-12-31',
-        notes: 'رصيد المرض',
-        isActive: true,
-    },
-]
 const employeeName = computed(
     () => balanceStore.balanceSummary?.employeeName || ''
 )
@@ -121,7 +96,7 @@ onUnmounted(() => {
             <AppTable
                 title="جدول الأرصدة"
                 :headers="tableHeader()"
-                :items="fakeBalances"
+                :items="balances"
                 :is-loading="isLoading"
             >
                 <template #data-balanceType="{ item }">

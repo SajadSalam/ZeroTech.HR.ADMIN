@@ -133,7 +133,7 @@ watch(() => workScheduleStore.isEditDialogOpen, (val: boolean) => {
       breakDurationMinutes: shift.breakDurationMinutes,
     }))
 
-    validator.setBody({
+    validator.fillBody({
       id: schedule.id,
       name: schedule.name,
       description: schedule.description || '',

@@ -10,14 +10,14 @@ export const useEmployeeVacationStore = defineStore('employeeVacation', () => {
 
     // Methods
     const getEmployeeVacationBalance = async (employeeId: number | string) => {
+        isLoading.value = true
+        isDialogOpen.value = true
         try {
-            isLoading.value = true
             const response =
                 await employeeVacationService.getEmployeeVacationBalance(
                     employeeId
                 )
             employeeVacation.value = response
-            isDialogOpen.value = true
         } catch (error) {
             console.error('Error fetching employee vacation balance:', error)
             throw error
