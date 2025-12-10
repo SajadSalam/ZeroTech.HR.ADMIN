@@ -3,9 +3,9 @@ import type { Employee } from '~/views/employee/types'
 import type { } from '~/views/questions/types'
 import { QuestionBankService } from '../service'
 import {
-    type QuestionBankCreateDto,
-    type QuestionBankDto,
-    type QuestionBankFilters,
+  type QuestionBankCreateDto,
+  type QuestionBankDto,
+  type QuestionBankFilters,
 } from '../types'
 import { AssignType, type AssignForm } from '../types/assign'
 
@@ -29,7 +29,7 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
   const selectedQuestionBank = ref<QuestionBankDto | null>(null)
   const assignType = ref<AssignType>(AssignType.Creator)
   const totalPages = ref(0)
-
+  const isAddTopicOpen = ref(false)
   const getQuestionBanks = async (questionBankFilters: QuestionBankFilters) => {
     try {
       isLoading.value = true
@@ -104,6 +104,38 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
     }
   }
 
+  const getById = async (id: string) => {
+    try {
+      isLoading.value = true
+      const response = await questionBankService.getById(id)
+      return response
+    } catch (error) {
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
+  const removeTopic = async (questionBankId: string, topicId: string) => {
+    try {
+      isLoading.value = true
+      await questionBankService.removeTopic(questionBankId, topicId)
+    } catch (error) {
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const addTopic = async (questionBankId: string, topicId: string) => {
+    try {
+      isLoading.value = true
+      await questionBankService.addTopic(questionBankId, topicId)
+    } catch (error) {
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
 
   return {
     questionBanks,
@@ -122,5 +154,9 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
     assignType,
     assignEmployees,
     getAssignedEmployees,
+    getById,
+    removeTopic,
+    addTopic,
+    isAddTopicOpen,
   }
 })
