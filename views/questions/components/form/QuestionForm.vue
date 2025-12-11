@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import AppInputField from '~/components/app-field/AppInputField.vue'
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
+import AppInputField from '~/components/app-field/AppInputField.vue'
 import AppTextAreaField from '~/components/app-field/AppTextAreaField.vue'
 import { useTopicStore } from '~/views/topics/store'
-import { useQuestionForm } from './useQuestionForm'
-import ChoicesForm from './ChoicesForm.vue'
-import OrderingForm from './OrderingForm.vue'
-import MatchingForm from './MatchingForm.vue'
-import TextAnswerForm from './TextAnswerForm.vue'
 import type { QuestionDto } from '../../types'
 import type { QuestionRequest } from '../../types/request'
+import ChoicesForm from './ChoicesForm.vue'
+import MatchingForm from './MatchingForm.vue'
+import OrderingForm from './OrderingForm.vue'
+import TextAnswerForm from './TextAnswerForm.vue'
+import { useQuestionForm } from './useQuestionForm'
 
 interface Props {
   questionBankId?: string
@@ -34,6 +34,7 @@ const {
   requiresOrdering,
   requiresMatching,
   requiresTextAnswer,
+  isEnglishTitleEnabled,
   addChoice,
   removeChoice,
   addOrderingItem,
@@ -50,6 +51,13 @@ const {
   fillForm,
   QuestionType,
 } = useQuestionForm(props.questionBankId, props.topicId)
+
+// Watch English title toggle - clear value when disabled
+watch(isEnglishTitleEnabled, (enabled) => {
+  if (!enabled) {
+    body.value.titleEn.$model = ''
+  }
+})
 
 // Topic store for topic selection
 const topicStore = useTopicStore()
@@ -146,9 +154,6 @@ const getQuestionTypeIcon = (type: number | null): string => {
         <h2 class="text-2xl font-bold text-muted-800 dark:text-white">
           {{ isEditMode ? $t('edit-question') : $t('create-question') }}
         </h2>
-        <p class="mt-1 text-sm text-muted-500">
-          {{ $t('question-form-description') }}
-        </p>
       </div>
       <div
         v-if="body.questionType.$model"
@@ -201,7 +206,7 @@ const getQuestionTypeIcon = (type: number | null): string => {
           v-model="body.topicId.$model"
           :label="$t('topic')"
           :items="topicStore.topics"
-          :errors="body.topicId.$errors"
+          :errors="body.topicId.$errors as any"
           item-label="titleAr"
           item-subtitle="titleEn"
           item-value="id"
@@ -284,24 +289,54 @@ const getQuestionTypeIcon = (type: number | null): string => {
       </div>
 
       <div class="grid gap-4 md:grid-cols-2">
-        <!-- Title English -->
-        <AppInputField
-          v-model="body.titleEn.$model"
-          :label="$t('title-en')"
-          :errors="body.titleEn.$errors"
-          :placeholder="$t('enter-title')"
-          :disabled="isLoading"
-        />
-
         <!-- Title Arabic -->
         <AppInputField
           v-model="body.titleAr.$model"
           :label="$t('title-ar')"
-          :errors="body.titleAr.$errors"
+          :errors="body.titleAr.$errors as any"
           :placeholder="$t('enter-title')"
           :disabled="isLoading"
           class-name="text-right"
         />
+
+        <!-- English Title Toggle & Input -->
+        <div class="space-y-3">
+          <!-- Toggle Switch -->
+          <div class="flex items-center justify-between">
+            <label class="text-sm font-medium text-muted-700 dark:text-muted-200">
+              {{ $t('title-en') }} ({{ $t('optional') }})
+            </label>
+            <label class="relative inline-flex cursor-pointer items-center">
+              <input
+                v-model="isEnglishTitleEnabled"
+                type="checkbox"
+                class="peer sr-only"
+                :disabled="isLoading"
+              />
+              <div
+                class="peer h-6 w-11 rounded-full bg-muted-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-muted-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary-500 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 dark:border-muted-600 dark:bg-muted-700 dark:peer-focus:ring-primary-800 rtl:peer-checked:after:-translate-x-full"
+              />
+            </label>
+          </div>
+
+          <!-- English Title Input (only shown when enabled) -->
+          <Transition
+            enter-active-class="transition-all duration-200 ease-out"
+            enter-from-class="opacity-0 -translate-y-2"
+            enter-to-class="opacity-100 translate-y-0"
+            leave-active-class="transition-all duration-150 ease-in"
+            leave-from-class="opacity-100 translate-y-0"
+            leave-to-class="opacity-0 -translate-y-2"
+          >
+            <AppInputField
+              v-if="isEnglishTitleEnabled"
+              v-model="body.titleEn.$model"
+              :errors="body.titleEn.$errors as any"
+              :placeholder="$t('enter-title')"
+              :disabled="isLoading"
+            />
+          </Transition>
+        </div>
 
         <!-- Explanation -->
         <AppTextAreaField

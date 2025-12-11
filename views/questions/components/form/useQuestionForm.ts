@@ -55,6 +55,9 @@ export const useQuestionForm = (
   // Flag to track if we're currently filling the form (prevents watcher from clearing data)
   const isFillingForm = ref(false)
 
+  // Flag to track if English title is enabled
+  const isEnglishTitleEnabled = ref(false)
+
   // Initial form state
   const getInitialState = (): QuestionFormState => ({
     questionBankId: questionBankId || '',
@@ -80,7 +83,6 @@ export const useQuestionForm = (
         required: createValidator(t, 'topic', 'required'),
       },
       titleEn: {
-        required: createValidator(t, 'title-en', 'required'),
         maxLength: createValidator(t, 'title-en', 'maxLength', 500),
       },
       titleAr: {
@@ -360,13 +362,19 @@ export const useQuestionForm = (
   const validate = async (): Promise<{ isValid: boolean; errors: string[] }> => {
     const isBodyValid = await body.value.$validate()
     const typeErrors = validateTypeSpecificFields()
+    const errors: string[] = [
+      ...body.value.$errors.map((e) => e.$message as string),
+      ...typeErrors,
+    ]
+
+    // Add English title validation if enabled
+    if (isEnglishTitleEnabled.value && !body.value.titleEn.$model.trim()) {
+      errors.push(t('validation.required', { field: t('title-en') }))
+    }
 
     return {
-      isValid: isBodyValid && typeErrors.length === 0,
-      errors: [
-        ...body.value.$errors.map((e) => e.$message as string),
-        ...typeErrors,
-      ],
+      isValid: isBodyValid && typeErrors.length === 0 && errors.length === body.value.$errors.length + typeErrors.length,
+      errors,
     }
   }
 
@@ -424,14 +432,19 @@ export const useQuestionForm = (
   }
 
   // Fill form with existing data
-  const fillForm = (data: QuestionRequest) => {
+  const fillForm = (data: QuestionRequest | any) => {
     // Set flag to prevent watcher from clearing data
     isFillingForm.value = true
     
     body.value.questionBankId.$model = data.questionBankId
     body.value.topicId.$model = data.topicId
-    body.value.titleEn.$model = data.titleEn
+    body.value.titleEn.$model = data.titleEn || ''
     body.value.titleAr.$model = data.titleAr
+    
+    // Enable English title if it has a value
+    if (data.titleEn && data.titleEn.trim()) {
+      isEnglishTitleEnabled.value = true
+    }
     
     // Handle questionType - can be string or number from API
     if (typeof data.questionType === 'string') {
@@ -553,6 +566,7 @@ export const useQuestionForm = (
     requiresOrdering,
     requiresMatching,
     requiresTextAnswer,
+    isEnglishTitleEnabled,
     addChoice,
     removeChoice,
     setCorrectChoice,
