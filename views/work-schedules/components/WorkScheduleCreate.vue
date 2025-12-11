@@ -259,7 +259,7 @@ watch(() => workScheduleStore.isCreateDialogOpen, (val: boolean) => {
             :model-value="shift"
             :index="index"
             :show-remove-button="body.shifts.$model.length > 1"
-            @update:model-value="updateShift(index, $event)"
+            @update:model-value="(updatedShift) => updateShift(index, updatedShift)"
             @remove="removeShift(index)"
           />
         </div>

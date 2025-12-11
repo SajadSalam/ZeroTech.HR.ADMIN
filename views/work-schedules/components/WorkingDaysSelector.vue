@@ -8,6 +8,7 @@ interface Props {
   errors?: ErrorObject[]
   disabled?: boolean
   required?: boolean
+  shiftIndex?: number
 }
 
 const props = defineProps<Props>()
@@ -137,20 +138,20 @@ const clearAll = () => {
     <!-- Days Grid -->
     <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2">
       <div
-        v-for="option in workingDaysOptions"
-        :key="option.value"
+        v-for="(option, index) in workingDaysOptions"
+        :key="`${shiftIndex}-${option.value}`"
         class="relative"
       >
         <input
-          :id="`day-${option.value}`"
+          :id="`day-${shiftIndex}-${option.value}`"
           type="checkbox"
           :checked="isDaySelected(option.value)"
           :disabled="disabled"
           class="peer sr-only"
-          @change="toggleDay(option.value)"
+          @change="toggleDay(option.value, index)"
         >
         <label
-          :for="`day-${option.value}`"
+          :for="`day-${shiftIndex}-${option.value}`"
           class="flex cursor-pointer items-center justify-center rounded-lg border-2 border-muted-300 bg-white p-3 text-sm font-medium text-muted-700 transition-all hover:border-primary-500 hover:bg-primary-500 hover:text-primary-500 hover:bg-op-10 peer-checked:border-primary-500 peer-checked:bg-primary-100 peer-checked:text-primary-700 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 dark:border-muted-600 dark:bg-muted-800 dark:text-muted-300 dark:hover:border-primary-400 dark:hover:bg-primary-900/20 dark:peer-checked:border-primary-400 dark:peer-checked:bg-primary-900/30 dark:peer-checked:text-primary-300"
           :class="{
             'bg-primary-500 text-primary-500 !font-bold !bg-opacity-20': isDaySelected(option.value),

@@ -62,6 +62,11 @@ export default [
     to: '/roles',
    },
    {
+    name: 'الحضور والانصراف',
+    icon: { name: 'ph-clock-duotone', class: 'w-5 h-5' },
+    to: '/attendance',
+   },
+   {
     name: 'ادارة الرواتب',
     icon: { name: 'ph-money-duotone', class: 'w-5 h-5' },
     children: [

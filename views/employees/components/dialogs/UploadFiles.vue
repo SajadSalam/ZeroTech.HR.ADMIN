@@ -13,7 +13,7 @@ const isLoading = ref(false)
 
 const body = ref({
     file: [] as (string | File)[],
-    attachmentType: "image/png",
+    attachmentType: "",
     description: '',
 })
 
@@ -54,7 +54,7 @@ const uploadFiles = async () => {
         // Reset form and close dialog
         body.value = {
             file: [],
-            attachmentType: "image/png",
+            attachmentType: "",
             description: '',
         }
         employeeStore.isCreateDialogOpen = false
@@ -72,7 +72,7 @@ watch(
     if (val) {
       body.value = {
         file: [],
-        attachmentType: "image/png",
+        attachmentType: "",
         description: '',
       }
     }
@@ -90,6 +90,7 @@ watch(
   >
     <div class="rounded-3xl p-3">
       <div class="flex flex-col gap-4">
+        <AppInputField v-model="body.attachmentType" label="نوع الوثيقة" placeholder="نوع الوثيقة" />
             <AppInputField
                 v-model="body.description"
                 label="وصف الوثيقة"

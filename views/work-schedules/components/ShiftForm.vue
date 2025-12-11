@@ -166,6 +166,7 @@ const removeShift = () => {
         :errors="getFieldErrors('workingDays')"
         :disabled="disabled"
         required
+        :shiftIndex="index"
         @update:model-value="updateField('workingDays', $event)"
       />
     </div>

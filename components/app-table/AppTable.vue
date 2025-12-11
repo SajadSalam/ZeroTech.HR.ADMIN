@@ -13,8 +13,16 @@ interface Props {
     hideNoData?: boolean,
     rowKey?: string,
     highlightedRows?: string[] | number[],
+    hasSelect?: boolean
 }
 const props = defineProps<Props>()
+const emits = defineEmits<{
+    (e: 'row-clicked', item: T): void,
+    (e: 'update:selectedItemsID', value: string[]): void
+}>()
+const selectedItems = defineModel<T[]>([])
+const selectedItemsID = ref<string[]>([])
+const itemsID = computed(() => props.items.map((item) => item.id))
 
 // Local reactive state instead of global store
 const localHeaders = ref<TableHeader[]>([])
@@ -48,6 +56,55 @@ watch(() => props.headers, (newHeaders) => {
     initializeHeaders(newHeaders)
 }, { immediate: true })
 
+watch(
+    selectedItemsID,
+    (newValue) => {
+        emits('update:selectedItemsId', newValue)
+    },
+    { immediate: true }
+)
+
+const allitemsSelectedIndicator = computed(() =>
+    props.items?.length
+        ? props.items.every((o) => selectedItemsID.value.includes(o.id))
+        : false
+)
+
+const itemSelected = (item: T) => selectedItemsID.value?.includes(item.id)
+
+function itemToggle(item: T) {
+    const isSelected = itemSelected(item)
+
+    selectedItemsID.value = isSelected
+        ? selectedItemsID.value?.filter((id) => id !== item.id)
+        : [...selectedItemsID.value, item.id]
+
+    selectedItems.value = isSelected
+        ? selectedItems.value.filter((o) => o.id !== item.id)
+        : [...selectedItems.value, item]
+}
+
+function toggleAllItems() {
+    const shouldDeselect = allitemsSelectedIndicator.value
+    if (shouldDeselect) {
+        const currentIds = new Set(itemsID.value)
+
+        selectedItemsID.value = selectedItemsID.value.filter(
+            (id) => !currentIds.has(id)
+        )
+
+        selectedItems.value = selectedItems.value.filter(
+            (item) => !currentIds.has(item.id)
+        )
+    } else {
+        const newItems = props.items.filter(
+            (o) => !selectedItemsID.value.includes(o.id)
+        )
+        const newItemsIds = newItems.map((o) => o.id)
+        selectedItemsID.value = [...selectedItemsID.value, ...newItemsIds]
+        selectedItems.value = [...selectedItems.value, ...newItems]
+    }
+}
 // Computed properties
 const isLoading = computed(() => localIsLoading.value || props.isLoading)
 const headers = computed(() => {
@@ -108,9 +165,6 @@ const toggleLoading = () => {
     localIsLoading.value = !localIsLoading.value
 }
 
-const emits = defineEmits<{
-    (e: 'row-clicked', item: T): void
-}>()
 const slots = useSlots()
 const hasSlot = (name: string) => !!slots[name]
 const headerSlots = computed(() => {
@@ -171,7 +225,8 @@ defineExpose({
     <div class="w-full h-full">
         <div class="overflow-x-auto">
             <table v-if="!isLoading" class="min-w-full">
-                <TableHeadersGenerator class="w-full" :headers="headers">
+                <TableHeadersGenerator class="w-full" :headers="headers" :has-select="hasSelect ?? false"
+                    v-model="allitemsSelectedIndicator" @check="() => toggleAllItems()">
                     <template v-for="headerSlot in headerSlots" #[headerSlot]>
                         <slot :name="slotName(headerSlot)" />
                     </template>
@@ -182,17 +237,22 @@ defineExpose({
                     </TairoTableCell>
                 </TairoTableRow>
 
-                <tr
-v-for="(item, index) in data" :id="`row-${item[rowKey as keyof T]}`"
+                <tr v-for="(item, index) in data" :id="`row-${item[rowKey as keyof T]}`"
                     :key="`row-${item[rowKey as keyof T]}`"
                     :class="{ 'row-higthlight': isRowHighlighted(item[rowKey as keyof T]) }"
                     @click="() => emits('row-clicked', item)">
+                    <td v-if="hasSelect ?? false" spaced>
+                        <span class="text-sm">
+                            <BaseCheckbox @click.stop class="!size-4 mx-2" :checked="itemSelected(item)"
+                                @change="itemToggle(item)" />
+                        </span>
+                    </td>
                     <td v-for="header in headers" :key="`table-header-${header.key}`" spaced>
                         <span v-if="!hasSlot(`data-${header.key}`)">
                             {{
-                                get(item, header.key)
-                                    ? get(item, header.key)
-                                    : '-'
+                            get(item, header.key)
+                            ? get(item, header.key)
+                            : '-'
                             }}
                         </span>
                         <slot v-else :name="slotName(`data-${header.key}`)" :item="item" :index="index" />
