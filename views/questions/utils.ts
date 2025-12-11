@@ -38,7 +38,7 @@ export const getQuestionTypeLabel = (type: QuestionType, t: (key: string) => str
 }
 
 // Get question type icon
-export const getQuestionTypeIcon = (type: QuestionType, t: (key: string) => string): string => {
+export const getQuestionTypeIcon = (type: QuestionType): string => {
     if(typeof type === 'string') {
         type = mapQuestionTypeStringToEnum(type)
     }
@@ -53,7 +53,26 @@ export const getQuestionTypeIcon = (type: QuestionType, t: (key: string) => stri
   }
   return icons[type] || 'ph:question'
 }
-
+export const mapQuestionTypeEnumToString = (questionType: QuestionType): string => {
+  switch (questionType) {
+    case QuestionType.SingleChoice:
+      return 'SingleChoice'
+    case QuestionType.MultipleChoice:
+      return 'MultipleChoice'
+    case QuestionType.TrueFalse:
+      return 'TrueFalse'
+    case QuestionType.Ordering:
+      return 'Ordering'
+    case QuestionType.Matching:
+      return 'Matching'
+    case QuestionType.ShortAnswer:
+      return 'ShortAnswer'
+    case QuestionType.FillInBlank:
+      return 'FillInBlank'
+    default:
+      return 'SingleChoice'
+  }
+}
 export const mapDifficultyStringToEnum = (difficulty: string): Difficulty => {
   switch (difficulty) {
     case 'Easy':
@@ -64,6 +83,17 @@ export const mapDifficultyStringToEnum = (difficulty: string): Difficulty => {
       return Difficulty.Hard
     default:
       return Difficulty.Easy
+  }
+}
+
+export const mapDifficultyEnumToString = (difficulty: Difficulty): string => {
+  switch (difficulty) {
+    case Difficulty.Easy:
+      return 'Easy'
+    case Difficulty.Medium:
+      return 'Medium'
+    case Difficulty.Hard:
+      return 'Hard'
   }
 }
 // Get difficulty label and color

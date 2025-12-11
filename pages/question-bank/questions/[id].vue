@@ -79,9 +79,16 @@ const showCreateForm = () => {
 }
 
 // Switch to edit mode
-const showEditForm = (question: QuestionDto) => {
-  editingQuestion.value = question
-  viewMode.value = 'edit'
+const showEditForm = async (question: QuestionDto) => {
+  try {
+    // Fetch full question details by ID
+    const fullQuestion = await questionStore.getQuestionById(question.id)
+    editingQuestion.value = fullQuestion
+    viewMode.value = 'edit'
+  } catch (error) {
+    // Error is already handled by the store
+    console.error('Failed to fetch question details:', error)
+  }
 }
 
 // Go back to list

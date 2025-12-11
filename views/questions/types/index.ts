@@ -25,7 +25,7 @@ export enum AuditStatus {
 
 // QuestionChoice interfaces
 export interface QuestionChoice {
-    questionId: string
+    id?: string
     text: string
     isCorrect: boolean
 }
@@ -34,7 +34,7 @@ export type QuestionChoiceDto = BaseDto & QuestionChoice
 
 // QuestionTextAnswerPattern interfaces
 export interface QuestionTextAnswerPattern {
-    questionId: string
+    id?: string
     pattern: string
 }
 
@@ -42,7 +42,7 @@ export type QuestionTextAnswerPatternDto = BaseDto & QuestionTextAnswerPattern
 
 // QuestionOrderingItem interfaces
 export interface QuestionOrderingItem {
-    questionId: string
+    id?: string
     text: string
     correctOrderIndex: number
 }
@@ -51,7 +51,7 @@ export type QuestionOrderingItemDto = BaseDto & QuestionOrderingItem
 
 // MatchingRightItem interfaces
 export interface MatchingRightItem {
-    questionId: string
+    id?: string
     text: string
 }
 
@@ -59,7 +59,7 @@ export type MatchingRightItemDto = BaseDto & MatchingRightItem
 
 // MatchingLeftItem interfaces
 export interface MatchingLeftItem {
-    questionId: string
+    id?: string
     text: string
     correctRightItemId: string
     order: number

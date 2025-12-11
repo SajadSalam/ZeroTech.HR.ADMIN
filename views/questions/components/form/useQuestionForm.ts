@@ -1,7 +1,7 @@
 import { useI18n } from 'vue-i18n'
 import { createValidator } from '~/services/validationWithI18n'
 import { Validator } from '~/services/validator'
-import { Difficulty, QuestionType } from '../../types'
+import { Difficulty, QuestionType, type QuestionChoice, type QuestionOrderingItem, type MatchingLeftItem, type MatchingRightItem, type QuestionTextAnswerPattern } from '../../types'
 import type {
     MatchingLeftItemRequest,
     MatchingRightItemRequest,
@@ -10,6 +10,7 @@ import type {
     QuestionRequest,
     QuestionTextAnswerPatternRequest,
 } from '../../types/request'
+import { mapDifficultyStringToEnum, mapQuestionTypeStringToEnum } from '../../utils'
 
 // Form state interface that matches the validator requirements
 export interface QuestionFormState {
@@ -45,6 +46,9 @@ export const useQuestionForm = (
   topicId?: string
 ) => {
   const { t } = useI18n()
+
+  // Flag to track if we're currently filling the form (prevents watcher from clearing data)
+  const isFillingForm = ref(false)
 
   // Initial form state
   const getInitialState = (): QuestionFormState => ({
@@ -416,30 +420,76 @@ export const useQuestionForm = (
 
   // Fill form with existing data
   const fillForm = (data: QuestionRequest) => {
+    // Set flag to prevent watcher from clearing data
+    isFillingForm.value = true
+    
     body.value.questionBankId.$model = data.questionBankId
     body.value.topicId.$model = data.topicId
     body.value.titleEn.$model = data.titleEn
     body.value.titleAr.$model = data.titleAr
-    body.value.questionType.$model = Number(data.questionType) as QuestionType
-    body.value.difficulty.$model = Number(data.difficulty) as Difficulty
+    
+    // Handle questionType - can be string or number from API
+    if (typeof data.questionType === 'string') {
+      body.value.questionType.$model = mapQuestionTypeStringToEnum(data.questionType)
+    } else {
+      body.value.questionType.$model = Number(data.questionType) as QuestionType
+    }
+    
+    // Handle difficulty - can be string or number from API
+    if (typeof data.difficulty === 'string') {
+      body.value.difficulty.$model = mapDifficultyStringToEnum(data.difficulty)
+    } else {
+      body.value.difficulty.$model = Number(data.difficulty) as Difficulty
+    }
+    
     body.value.isActive.$model = data.isActive
     body.value.explanation.$model = data.explanation || ''
 
+    // Map choices - remove id and questionId fields from DTOs
     if (data.choices) {
-      body.value.choices.$model = [...data.choices]
+      body.value.choices.$model = data.choices.map((choice: QuestionChoice) => ({
+        text: choice.text,
+        isCorrect: choice.isCorrect,
+      }))
     }
+
+    // Map ordering items - remove id and questionId fields from DTOs
     if (data.orderingItems) {
-      body.value.orderingItems.$model = [...data.orderingItems]
+      body.value.orderingItems.$model = data.orderingItems.map((item: QuestionOrderingItem) => ({
+        text: item.text,
+        correctOrderIndex: item.correctOrderIndex,
+      }))
     }
+
+    // Map matching left items - remove id and questionId fields from DTOs
     if (data.matchingLeftItems) {
-      body.value.matchingLeftItems.$model = [...data.matchingLeftItems]
+      body.value.matchingLeftItems.$model = data.matchingLeftItems.map((item: MatchingLeftItem) => ({
+        text: item.text,
+        correctRightItemId: item.correctRightItemId,
+        order: item.order,
+      }))
     }
+
+    // Map matching right items - keep id but remove questionId from DTOs
     if (data.matchingRightItems) {
-      body.value.matchingRightItems.$model = [...data.matchingRightItems]
+      body.value.matchingRightItems.$model = data.matchingRightItems.map((item: MatchingRightItem) => ({
+        id: item.id || '',
+        text: item.text,
+      }))
     }
+
+    // Map text answer patterns - remove id and questionId fields from DTOs
     if (data.textAnswerPatterns) {
-      body.value.textAnswerPatterns.$model = [...data.textAnswerPatterns]
+      body.value.textAnswerPatterns.$model = data.textAnswerPatterns.map((pattern: QuestionTextAnswerPattern) => ({
+        id: pattern.id || '',
+        pattern: pattern.pattern,
+      }))
     }
+
+    // Reset flag after filling is complete
+    nextTick(() => {
+      isFillingForm.value = false
+    })
   }
 
   // Watch question type changes to initialize default data
@@ -447,6 +497,9 @@ export const useQuestionForm = (
     () => body.value.questionType.$model,
     (newType, oldType) => {
       if (newType === oldType) return
+      
+      // Don't clear data when we're filling the form with existing data
+      if (isFillingForm.value) return
 
       // Clear all type-specific data when type changes
       body.value.choices.$model = []
