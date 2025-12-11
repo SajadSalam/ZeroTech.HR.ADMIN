@@ -8,12 +8,13 @@ import type { QuestionBankDto } from '~/views/question-bank/types'
 const {
     body,
     setQuestionBanks,
+    resetQuestionBanks,
     questionBanks,
 } = useBlueprintForm()
 
 const parseQuestionBanks = (qb: QuestionBankDto[]) => {
     if (qb.length === 0) {
-        setQuestionBanks(undefined)
+        resetQuestionBanks()
         return
     }
     const isAddition = qb.length > questionBanks.value.length
@@ -21,7 +22,9 @@ const parseQuestionBanks = (qb: QuestionBankDto[]) => {
         ? qb.find(item => !questionBanks.value.some((existing: QuestionBankDto) => existing.id === item.id))
         : questionBanks.value.find((item: QuestionBankDto) => !qb.some(newItem => newItem.id === item.id))
 
-    setQuestionBanks(changedItem, isAddition)
+    if (changedItem) {
+        setQuestionBanks(changedItem, isAddition)
+    }
 }
 </script>
 

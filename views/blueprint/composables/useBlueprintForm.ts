@@ -83,14 +83,13 @@ function createBlueprintForm() {
         questionBanks.value = questionBanks.value.filter((QB: QuestionBankDto) => QB.id !== qbId)
         countDetails.value = Object.fromEntries(Object.entries(countDetails.value).filter(([key]) => key !== qbId))
     }
+    const resetQuestionBanks = () => {
+        questionBanks.value = []
+        existingQuestionBanksIds.value = []
+        countDetails.value = {}
+    }
 
-    const setQuestionBanks = async (questionBank: QuestionBankDto | undefined, isAddition?: boolean) => {
-        if (!questionBank) {
-            questionBanks.value = []
-            existingQuestionBanksIds.value = []
-            countDetails.value = {}
-            return
-        }
+    const setQuestionBanks = async (questionBank: QuestionBankDto, isAddition?: boolean) => {
         isLoading.value = true
         try {
             if (isAddition) {
@@ -315,7 +314,7 @@ function createBlueprintForm() {
     }
 
     const reset = () => {
-        setQuestionBanks(undefined)
+        resetQuestionBanks()
         validator.resetBody()
         isLoading.value = false
         formInstance = null
@@ -332,6 +331,7 @@ function createBlueprintForm() {
         setQuestionBanks,
         buildBlueprintItems,
         calculateTotalGrade,
+        resetQuestionBanks,
         submit,
         validator,
         isQuestionCountValid,
