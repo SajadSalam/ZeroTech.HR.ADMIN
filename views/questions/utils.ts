@@ -1,29 +1,58 @@
-import { Difficulty, QuestionType } from "./types"
+import { Difficulty, QuestionType } from './types'
 
-export const mapQuestionTypeStringToEnum = (type: string): QuestionType => {
-  switch (type) {
-    case 'SingleChoice':
-      return QuestionType.SingleChoice
-    case 'MultipleChoice':
-      return QuestionType.MultipleChoice
-    case 'TrueFalse':
-      return QuestionType.TrueFalse
-    case 'Ordering':
-      return QuestionType.Ordering
-    case 'Matching':
-      return QuestionType.Matching
-    case 'ShortAnswer':
-      return QuestionType.ShortAnswer
-    case 'FillInBlank':
-      return QuestionType.FillInBlank
-    default:
-      return QuestionType.SingleChoice
+// ============================================
+// Question Type Converters
+// ============================================
+
+/**
+ * Converts string representation to QuestionType enum
+ * @param value - String like 'SingleChoice', 'MultipleChoice', etc.
+ * @returns QuestionType enum value
+ */
+export const questionTypeFromString = (value: string): QuestionType => {
+  const mapping: Record<string, QuestionType> = {
+    SingleChoice: QuestionType.SingleChoice,
+    MultipleChoice: QuestionType.MultipleChoice,
+    TrueFalse: QuestionType.TrueFalse,
+    Ordering: QuestionType.Ordering,
+    Matching: QuestionType.Matching,
+    ShortAnswer: QuestionType.ShortAnswer,
+    FillInBlank: QuestionType.FillInBlank,
   }
+  return mapping[value] ?? QuestionType.SingleChoice
 }
-// Get question type label
-export const getQuestionTypeLabel = (type: QuestionType, t: (key: string) => string): string => {
+
+/**
+ * Converts QuestionType enum to string representation
+ * @param value - QuestionType enum value
+ * @returns String like 'SingleChoice', 'MultipleChoice', etc.
+ */
+export const questionTypeToString = (value: QuestionType): string => {
+  const mapping: Record<QuestionType, string> = {
+    [QuestionType.SingleChoice]: 'SingleChoice',
+    [QuestionType.MultipleChoice]: 'MultipleChoice',
+    [QuestionType.TrueFalse]: 'TrueFalse',
+    [QuestionType.Ordering]: 'Ordering',
+    [QuestionType.Matching]: 'Matching',
+    [QuestionType.ShortAnswer]: 'ShortAnswer',
+    [QuestionType.FillInBlank]: 'FillInBlank',
+  }
+  return mapping[value] ?? 'SingleChoice'
+}
+
+/**
+ * Gets localized label for a question type
+ * @param type - QuestionType enum value
+ * @param t - i18n translation function
+ * @returns Localized label
+ */
+export const getQuestionTypeLabel = (
+  type: QuestionType | string,
+  t: (key: string) => string
+): string => {
+
     if(typeof type === 'string') {
-        type = mapQuestionTypeStringToEnum(type)
+    type = questionTypeFromString(type)
     }
   const labels: Record<QuestionType, string> = {
     [QuestionType.SingleChoice]: t('single-choice'),
@@ -32,16 +61,17 @@ export const getQuestionTypeLabel = (type: QuestionType, t: (key: string) => str
     [QuestionType.Ordering]: t('ordering'),
     [QuestionType.Matching]: t('matching'),
     [QuestionType.ShortAnswer]: t('short-answer'),
-    [QuestionType.FillInBlank]: t('fill-the-blank'),
+    [QuestionType.FillInBlank]: t('fill-in-blank'),
   }
-  return labels[type] || t('unknown')
+  return labels[type] ?? t('unknown')
 }
 
-// Get question type icon
+/**
+ * Gets icon name for a question type
+ * @param type - QuestionType enum value
+ * @returns Phosphor icon name
+ */
 export const getQuestionTypeIcon = (type: QuestionType): string => {
-    if(typeof type === 'string') {
-        type = mapQuestionTypeStringToEnum(type)
-    }
   const icons: Record<QuestionType, string> = {
     [QuestionType.SingleChoice]: 'ph:radio-button',
     [QuestionType.MultipleChoice]: 'ph:check-square',
@@ -51,60 +81,61 @@ export const getQuestionTypeIcon = (type: QuestionType): string => {
     [QuestionType.ShortAnswer]: 'ph:text-aa',
     [QuestionType.FillInBlank]: 'ph:text-indent',
   }
-  return icons[type] || 'ph:question'
-}
-export const mapQuestionTypeEnumToString = (questionType: QuestionType): string => {
-  switch (questionType) {
-    case QuestionType.SingleChoice:
-      return 'SingleChoice'
-    case QuestionType.MultipleChoice:
-      return 'MultipleChoice'
-    case QuestionType.TrueFalse:
-      return 'TrueFalse'
-    case QuestionType.Ordering:
-      return 'Ordering'
-    case QuestionType.Matching:
-      return 'Matching'
-    case QuestionType.ShortAnswer:
-      return 'ShortAnswer'
-    case QuestionType.FillInBlank:
-      return 'FillInBlank'
-    default:
-      return 'SingleChoice'
-  }
-}
-export const mapDifficultyStringToEnum = (difficulty: string): Difficulty => {
-  switch (difficulty) {
-    case 'Easy':
-      return Difficulty.Easy
-    case 'Medium':
-      return Difficulty.Medium
-    case 'Hard':
-      return Difficulty.Hard
-    default:
-      return Difficulty.Easy
-  }
+  return icons[type] ?? 'ph:question'
 }
 
-export const mapDifficultyEnumToString = (difficulty: Difficulty): string => {
-  switch (difficulty) {
-    case Difficulty.Easy:
-      return 'Easy'
-    case Difficulty.Medium:
-      return 'Medium'
-    case Difficulty.Hard:
-      return 'Hard'
+// ============================================
+// Difficulty Converters
+// ============================================
+
+/**
+ * Converts string representation to Difficulty enum
+ * @param value - String like 'Easy', 'Medium', 'Hard'
+ * @returns Difficulty enum value
+ */
+export const difficultyFromString = (value: string): Difficulty => {
+  const mapping: Record<string, Difficulty> = {
+    Easy: Difficulty.Easy,
+    Medium: Difficulty.Medium,
+    Hard: Difficulty.Hard,
   }
+  return mapping[value] ?? Difficulty.Easy
 }
-// Get difficulty label and color
-export const getDifficultyConfig = (difficulty: Difficulty, t: (key: string) => string) => {
-    if(typeof difficulty === 'string') {
-        difficulty = mapDifficultyStringToEnum(difficulty)
-    }
-  const configs = {
+
+/**
+ * Converts Difficulty enum to string representation
+ * @param value - Difficulty enum value
+ * @returns String like 'Easy', 'Medium', 'Hard'
+ */
+export const difficultyToString = (value: Difficulty): string => {
+  const mapping: Record<Difficulty, string> = {
+    [Difficulty.Easy]: 'Easy',
+    [Difficulty.Medium]: 'Medium',
+    [Difficulty.Hard]: 'Hard',
+  }
+  return mapping[value] ?? 'Easy'
+}
+
+/**
+ * Gets localized label and color for a difficulty level
+ * @param difficulty - Difficulty enum value
+ * @param t - i18n translation function
+ * @returns Object with label and color
+ */
+export const getDifficultyConfig = (
+  difficulty: Difficulty | string,
+  t: (key: string) => string
+): { label: string; color: 'success' | 'warning' | 'danger' | 'muted' } => {
+  if(typeof difficulty === 'string') {
+    difficulty = difficultyFromString(difficulty)
+  }
+  const configs: Record<
+    Difficulty,
+    { label: string; color: 'success' | 'warning' | 'danger' }
+  > = {
     [Difficulty.Easy]: { label: t('easy'), color: 'success' },
     [Difficulty.Medium]: { label: t('medium'), color: 'warning' },
     [Difficulty.Hard]: { label: t('hard'), color: 'danger' },
   }
-  return configs[difficulty] || { label: t('unknown'), color: 'muted' }
+  return configs[difficulty] ?? { label: t('unknown'), color: 'muted' }
 }

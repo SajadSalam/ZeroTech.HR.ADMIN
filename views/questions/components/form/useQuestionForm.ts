@@ -1,7 +1,7 @@
 import { useI18n } from 'vue-i18n'
 import { createValidator } from '~/services/validationWithI18n'
 import { Validator } from '~/services/validator'
-import { Difficulty, QuestionType, type QuestionChoice, type QuestionOrderingItem, type MatchingLeftItem, type MatchingRightItem, type QuestionTextAnswerPattern } from '../../types'
+import { Difficulty, QuestionType, type MatchingLeftItem, type MatchingRightItem, type QuestionChoice, type QuestionOrderingItem, type QuestionTextAnswerPattern } from '../../types'
 import type {
     MatchingLeftItemRequest,
     MatchingRightItemRequest,
@@ -10,7 +10,12 @@ import type {
     QuestionRequest,
     QuestionTextAnswerPatternRequest,
 } from '../../types/request'
-import { mapDifficultyStringToEnum, mapQuestionTypeStringToEnum } from '../../utils'
+import {
+    difficultyFromString,
+    difficultyToString,
+    questionTypeFromString,
+    questionTypeToString,
+} from '../../utils'
 
 // Form state interface that matches the validator requirements
 export interface QuestionFormState {
@@ -375,8 +380,8 @@ export const useQuestionForm = (
       topicId: formData.topicId,
       titleEn: formData.titleEn,
       titleAr: formData.titleAr,
-      questionType: String(type),
-      difficulty: String(formData.difficulty),
+      questionType: questionTypeToString(type!),
+      difficulty: difficultyToString(formData.difficulty!),
       isActive: formData.isActive,
       explanation: formData.explanation || undefined,
     }
@@ -430,14 +435,14 @@ export const useQuestionForm = (
     
     // Handle questionType - can be string or number from API
     if (typeof data.questionType === 'string') {
-      body.value.questionType.$model = mapQuestionTypeStringToEnum(data.questionType)
+      body.value.questionType.$model = questionTypeFromString(data.questionType)
     } else {
       body.value.questionType.$model = Number(data.questionType) as QuestionType
     }
     
     // Handle difficulty - can be string or number from API
     if (typeof data.difficulty === 'string') {
-      body.value.difficulty.$model = mapDifficultyStringToEnum(data.difficulty)
+      body.value.difficulty.$model = difficultyFromString(data.difficulty)
     } else {
       body.value.difficulty.$model = Number(data.difficulty) as Difficulty
     }

@@ -3,7 +3,7 @@ import type { QuestionFilters } from '../service'
 import { QuestionService } from '../service'
 import { type Difficulty, type QuestionDto, type QuestionType } from '../types'
 import type { QuestionRequest } from '../types/request'
-import { mapDifficultyEnumToString, mapQuestionTypeEnumToString } from '../utils'
+import { difficultyToString, questionTypeToString } from '../utils'
 
 const questionService = new QuestionService()
 
@@ -66,8 +66,8 @@ export const useQuestionStore = defineStore('question', () => {
   const updateQuestion = async (data: QuestionRequest) => {
     try {
       isLoading.value = true
-      data.difficulty = mapDifficultyEnumToString(parseInt(data.difficulty) as Difficulty)
-      data.questionType = mapQuestionTypeEnumToString(parseInt(data.questionType) as QuestionType)
+      data.difficulty = difficultyToString(parseInt(data.difficulty) as Difficulty)
+      data.questionType = questionTypeToString(parseInt(data.questionType) as QuestionType)
       await questionService.update(selectedQuestionId.value!, data as QuestionRequest)
       await getQuestions(filters.value as QuestionFilters)
     } catch (error) {
