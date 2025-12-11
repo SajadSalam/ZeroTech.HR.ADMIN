@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
 import { QuestionType, type QuestionDto } from '~/views/questions/types';
-import { getDifficultyConfig, getQuestionTypeIcon, getQuestionTypeLabel } from '~/views/questions/utils';
+import { getDifficultyConfig, getQuestionTypeIcon, getQuestionTypeLabel, questionTypeFromString } from '~/views/questions/utils';
 
 const props = defineProps<{
   question: QuestionDto
@@ -15,18 +15,41 @@ defineEmits<{
 const { t } = useI18n()
 
 const choicesMap = computed(() => {
-    let choices: string[] = []
-  if(question.value.questionType === QuestionType.SingleChoice || question.value.questionType === QuestionType.MultipleChoice) {
-    choices = question.value.choices.map((choice) => choice.text)
-  } else if(question.value.questionType === QuestionType.Ordering) {
-    choices.push(...question.value.orderingItems)
-  } else if(question.value.questionType === QuestionType.Matching) {
-    choices.push(...question.value.matchingLeftItems)
-  } else if(question.value.questionType === QuestionType.ShortAnswer) {
-    choices.push(...question.value.textAnswerPatterns)
-  }
+    let choices: {text: string, isCorrect: boolean}[] = []
+    console.log(question.value.questionType)
+
+    const questionType = questionTypeFromString(question.value.questionType as string)
+  if(questionType === QuestionType.SingleChoice || questionType === QuestionType.MultipleChoice) {
+    choices = question.value.choices?.map((choice, index) => {
+        return {text: choice.text, isCorrect: choice.isCorrect}
+    }) ?? []
+  } else if(questionType === QuestionType.Ordering) {
+    choices = question.value.orderingItems?.map((item) => 
+    {
+        return {text: item.text, isCorrect: false}
+    }) ?? []
+  } else if(questionType === QuestionType.Matching) {
+    choices = question.value.matchingRightItems?.map((item, index) => {
+        return {text: item.text + ' - ' + question.value.matchingLeftItems?.[index]?.text, isCorrect: false}
+    }) ?? []
+  } 
   return choices
 })
+const getQuestionAnswerIcon = (questionType: string | QuestionType, choice: {text: string, isCorrect: boolean}) => {
+  const questionTypeEnum = questionTypeFromString(questionType as string)
+  if(questionTypeEnum === QuestionType.SingleChoice || questionTypeEnum === QuestionType.MultipleChoice) {
+    return choice.isCorrect ? 'ph:check-circle' : 'ph:circle'
+  } else if(questionTypeEnum === QuestionType.Ordering) {
+    return 'ph:list-numbers'
+  } else if(questionTypeEnum === QuestionType.Matching) {
+    return 'ph:arrows-left-right'
+  } else if(questionType === QuestionType.ShortAnswer) {
+    return 'ph:text-aa'
+  } else if(questionTypeEnum === QuestionType.FillInBlank) {
+    return 'ph:text-aa'
+  }
+  return 'ph:circle'
+}
 </script>
 
 <template>
@@ -82,9 +105,15 @@ const choicesMap = computed(() => {
       <p class="mt-1 line-clamp-1 text-sm text-muted-500">
         {{ question.titleEn }}
       </p>
-
-      <div class="grid grid-cols-2 gap-2">
+      <p class="mt-2">
+        {{$t('choices')}}:
+      </p>
+      <div class="grid grid-cols-2 gap-2 my-2">
         
+        <div v-for="(value, index) in choicesMap" :key="index" class="flex items-center gap-2">
+            <Icon :name="getQuestionAnswerIcon(question.questionType, value)" class="size-4" />
+            {{ value.text }}
+        </div>
       </div>
     </div>
 
@@ -92,38 +121,11 @@ const choicesMap = computed(() => {
     <div class="mt-4 flex items-center gap-4 border-t border-muted-100 pt-4 dark:border-muted-700">
       <!-- Choices count for choice-based questions -->
       <div
-        v-if="question.choices?.length"
+        v-if="choicesMap.length"
         class="flex items-center gap-1 text-xs text-muted-400"
       >
         <Icon name="ph:list-bullets" class="size-4" />
-        {{ question.choices.length }} {{ $t('choices') }}
-      </div>
-
-      <!-- Ordering items count -->
-      <div
-        v-if="question.orderingItems?.length"
-        class="flex items-center gap-1 text-xs text-muted-400"
-      >
-        <Icon name="ph:list-numbers" class="size-4" />
-        {{ question.orderingItems.length }} {{ $t('choices') }}
-      </div>
-
-      <!-- Matching items count -->
-      <div
-        v-if="question.matchingLeftItems?.length"
-        class="flex items-center gap-1 text-xs text-muted-400"
-      >
-        <Icon name="ph:arrows-left-right" class="size-4" />
-        {{ question.matchingLeftItems.length }} {{ $t('choices') }}
-      </div>
-
-      <!-- Text patterns count -->
-      <div
-        v-if="question.textAnswerPatterns?.length"
-        class="flex items-center gap-1 text-xs text-muted-400"
-      >
-        <Icon name="ph:text-aa" class="size-4" />
-        {{ question.textAnswerPatterns.length }} {{ $t('choices') }}
+        {{ choicesMap.length }} {{ $t('choices') }}
       </div>
 
       <!-- Active status -->

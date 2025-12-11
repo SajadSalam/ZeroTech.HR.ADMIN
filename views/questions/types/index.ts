@@ -73,7 +73,7 @@ export interface Question {
     topicId: string
     titleEn: string
     titleAr: string
-    questionType: QuestionType
+    questionType: QuestionType | string
     difficulty: Difficulty
     isActive: boolean
     status: AuditStatus
