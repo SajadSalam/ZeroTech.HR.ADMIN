@@ -109,7 +109,7 @@ function createBlueprintForm() {
         for (let qbIndex = 0; qbIndex < questionBanks.value.length; qbIndex++) {
             const qb = questionBanks.value[qbIndex]
             for (let topicIndex = 0; topicIndex < qb.selectedTopics.length; topicIndex++) {
-                if (isQuestionCountValid(qbIndex, topicIndex)) {
+                if (!isQuestionCountValid(qbIndex, topicIndex)) {
                     toaster.show('danger', t('number-of-questions-exceeds-available-count'))
                     return false
                 }
