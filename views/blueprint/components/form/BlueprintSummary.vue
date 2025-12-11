@@ -8,6 +8,10 @@ const {
     calculateTotalGrade,
 } = useBlueprintForm()
 
+const totalGrade = computed(() => {
+    return calculateTotalGrade()
+})
+
 const totalTopicRows = computed(() => {
     return questionBanks.value.reduce((sum: number, qb: QuestionBank) => sum + qb.selectedTopics.length, 0)
 })
@@ -31,16 +35,16 @@ const totalTopicRows = computed(() => {
             </div>
             <div class="text-center">
                 <p class="text-2xl font-bold" :class="{
-                    'text-green-600': calculateTotalGrade() === Number(body.totalQuestionsGrade.$model) && Number(body.totalQuestionsGrade.$model) > 0,
-                    'text-red-600': calculateTotalGrade() !== Number(body.totalQuestionsGrade.$model) && Number(body.totalQuestionsGrade.$model) > 0,
+                    'text-green-600': totalGrade === Number(body.totalQuestionsGrade.$model) && Number(body.totalQuestionsGrade.$model) > 0,
+                    'text-red-600': totalGrade !== Number(body.totalQuestionsGrade.$model) && Number(body.totalQuestionsGrade.$model) > 0,
                     'text-gray-600': Number(body.totalQuestionsGrade.$model) === 0
                 }">
-                    {{ calculateTotalGrade() }} / {{ body.totalQuestionsGrade.$model || 0 }}
+                    {{ totalGrade }} / {{ body.totalQuestionsGrade.$model || 0 }}
                 </p>
                 <p class="text-sm text-gray-600">{{ $t('total-calculated-grade') }}</p>
             </div>
         </div>
-        <div v-if="calculateTotalGrade() !== Number(body.totalQuestionsGrade.$model) && Number(body.totalQuestionsGrade.$model) > 0"
+        <div v-if="totalGrade !== Number(body.totalQuestionsGrade.$model) && Number(body.totalQuestionsGrade.$model) > 0"
             class="mt-3 p-2 bg-yellow-50 border border-yellow-200 rounded text-yellow-700 text-sm">
             <Icon name="ph:warning" class="inline mr-1" />
             {{ $t('grade-mismatch-warning') }}

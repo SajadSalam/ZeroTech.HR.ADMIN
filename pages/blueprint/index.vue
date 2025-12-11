@@ -37,7 +37,7 @@ const { hasPrivilege } = useAuthStore()
 
 <template>
   <div>
-    <AppCrud v-model:current-page="blueprintStore.filters.pageNumber" pagination
+    <AppCrud v-model:current-page="blueprintStore.filters.page" pagination
       :total-pages="blueprintStore.totalPages" :add-btn-action="() => router.push('/blueprint/form/create')"
       :add-button-text="$t('create-blueprint')" :hide-create="!hasPrivilege('ums:ems:examtemplate:create')">
       <template #filters>
@@ -56,8 +56,8 @@ const { hasPrivilege } = useAuthStore()
       </template>
       <template #additional-filters>
         <div class="flex gap-4">
-          <BaseInput v-model="filters.successGrade" :label="$t('half-success-grade')" :placeholder="$t('half-success-grade')" />
-          <BaseInput v-model="filters.fullGrade" :label="$t('maximum-grade')" :placeholder="$t('maximum-grade')" />
+          <BaseInput v-model="filters.successGrade" :label="$t('success-grade')" :placeholder="$t('success-grade')" />
+          <BaseInput v-model="filters.fullGrade" :label="$t('total-questions-grade')" :placeholder="$t('total-questions-grade')" />
         </div>
       </template>
       <AppTable :is-loading="isLoading" :title="$t('blueprints')" :headers="tableHeaders($t)" :items="blueprints">

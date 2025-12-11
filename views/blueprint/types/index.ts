@@ -76,7 +76,7 @@ export interface BlueprintQuestionBank {
   questionBankTitle: string;
   topics: BlueprintTopic[];
 }
-export interface BlueprintDetailes extends BlueprintDto {
+export interface BlueprintDetails extends BlueprintDto {
   questionBanks: BlueprintQuestionBank[];
   items: BlueprintQuestionBankItem[];
 }

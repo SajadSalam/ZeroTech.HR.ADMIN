@@ -3,13 +3,13 @@ import { useI18n } from 'vue-i18n'
 import { tableDetailHeaders } from '~/views/blueprint/index'
 import { useBlueprintStore } from '~/views/blueprint/store'
 import { difficultyOptions, questionTypeOptions } from '~/views/question-bank'
-import type { BlueprintDetailes, BlueprintQuestionBank, BlueprintTopic } from '../types'
+import type { BlueprintDetails, BlueprintQuestionBank, BlueprintTopic } from '../types'
 const { t } = useI18n()
 const route = useRoute()
 const blueprintId = computed(() => route.params.id)
-const blueprint = ref<BlueprintDetailes | null>(null)
+const blueprint = ref<BlueprintDetails | null>(null)
 
-const blueStore = useBlueprintStore()
+const blueprintStore = useBlueprintStore()
 
 const questionsCount = computed(() => {
   if (!blueprint.value?.questionBanks) return 0
@@ -40,7 +40,7 @@ const settings = computed(() => {
 })
 
 onMounted(async () => {
-  const result = await blueStore.getById(blueprintId.value as string)
+  const result = await blueprintStore.getById(blueprintId.value as string)
   if (result) {
     blueprint.value = result
   }
@@ -55,7 +55,7 @@ onMounted(async () => {
           {{ blueprint?.title || 'Blueprint Title' }}
         </h1>
         <div class="flex flex-col items-center">
-          <span class="text-sm text-gray-500"> {{ $t('maximum-grade') }}</span>
+          <span class="text-sm text-gray-500"> {{ $t('full-grade') }}</span>
           <div class="rounded-full bg-green-100 px-4 py-1 text-lg font-bold text-green-600">
             {{ blueprint?.fullGrade || 0 }}
           </div>

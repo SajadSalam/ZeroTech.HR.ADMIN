@@ -3,11 +3,12 @@ import { Validator } from '~/services/validator'
 import { createValidator } from '~/services/validationWithI18n'
 import { useAppToaster } from '~/services/toaster/toaster'
 import { useBlueprintStore } from '~/views/blueprint/store'
-import type { BlueprintItem, CountDetails, SelectedTopic, BlueprintDetailes, BlueprintQuestionBank, BlueprintTopic, TopicDetails, QuestionTypeStats, DifficultyStats, BlueprintCreate } from '~/views/blueprint/types/index'
+import type { BlueprintItem, CountDetails, SelectedTopic, BlueprintDetails, BlueprintQuestionBank, BlueprintTopic, TopicDetails, QuestionTypeStats, DifficultyStats, BlueprintCreate } from '~/views/blueprint/types/index'
 import type { QuestionBankDto } from '~/views/question-bank/types'
 import { difficultyOptions, questionTypeOptions } from '~/views/question-bank'
 import { Difficulty, QuestionType } from '~/views/questions/types'
 import { useQuestionBankStore } from '~/views/question-bank/store'
+import type { SubjectDto } from '~/views/subjects/types'
 
 export type QuestionBank = QuestionBankDto & {
     selectedTopics: SelectedTopic[]
@@ -44,16 +45,16 @@ function createBlueprintForm() {
                 required: createValidator(t, 'title', 'required'),
             },
             successGrade: {
-                required: createValidator(t, 'half-success-grade', 'required'),
-                minValue: createValidator(t, 'half-success-grade', 'minValue', 1),
-            },
-            fullGrade: {
                 required: createValidator(t, 'success-grade', 'required'),
                 minValue: createValidator(t, 'success-grade', 'minValue', 1),
             },
+            fullGrade: {
+                required: createValidator(t, 'full-grade', 'required'),
+                minValue: createValidator(t, 'full-grade', 'minValue', 1),
+            },
             totalQuestionsGrade: {
-                required: createValidator(t, 'maximum-grade', 'required'),
-                minValue: createValidator(t, 'maximum-grade', 'minValue', 1),
+                required: createValidator(t, 'total-questions-grade', 'required'),
+                minValue: createValidator(t, 'total-questions-grade', 'minValue', 1),
             },
         }
     )
@@ -63,7 +64,7 @@ function createBlueprintForm() {
     const isQuestionCountValid = (qbIndex: number, topicIndex: number) => {
         const topic = questionBanks.value[qbIndex].selectedTopics[topicIndex]
         const availableCount = topic.difficultyCount as number
-        return availableCount > 0 && topic.numberOfQuestions > availableCount
+        return topic.numberOfQuestions <= availableCount
     }
 
     const addQuestionBank = async (qb: QuestionBankDto) => {
@@ -83,8 +84,8 @@ function createBlueprintForm() {
         countDetails.value = Object.fromEntries(Object.entries(countDetails.value).filter(([key]) => key !== qbId))
     }
 
-    const setQuestionBanks = async (questionBank: QuestionBankDto[]) => {
-        if (questionBank.length === 0) {
+    const setQuestionBanks = async (questionBank: QuestionBankDto | undefined, isAddition?: boolean) => {
+        if (!questionBank) {
             questionBanks.value = []
             existingQuestionBanksIds.value = []
             countDetails.value = {}
@@ -92,15 +93,10 @@ function createBlueprintForm() {
         }
         isLoading.value = true
         try {
-            const currentQuestionBankIds = questionBank.map(qb => qb.id)
-            const idsToRemove = existingQuestionBanksIds.value.filter(
-                id => !currentQuestionBankIds.includes(id)
-            )
-            idsToRemove.forEach(id => removeQuestionBank(id))
-            for (const qb of questionBank) {
-                if (!existingQuestionBanksIds.value.includes(qb.id)) {
-                    await addQuestionBank(qb)
-                }
+            if (isAddition) {
+                await addQuestionBank(questionBank)
+            } else {
+                removeQuestionBank(questionBank.id)
             }
         } catch (error) {
             console.error('Error setting question banks:', error)
@@ -266,7 +262,7 @@ function createBlueprintForm() {
     }
 
     // Populate form with blueprint details
-    const populateFormFromBlueprint = async (blueprint: BlueprintDetailes) => {
+    const populateFormFromBlueprint = async (blueprint: BlueprintDetails) => {
         // Populate form fields
         body.value.title.$model = blueprint.title
         body.value.successGrade.$model = blueprint.successGrade
@@ -290,7 +286,7 @@ function createBlueprintForm() {
                 endEditingDatetimeUtc: null,
                 createdAtUtc: '',
                 updatedAtUtc: '',
-                subject: {} as any,
+                subject: {} as SubjectDto,
                 topics: [],
                 questionTypes: [],
                 totalQuestionCount: 0,
@@ -298,7 +294,9 @@ function createBlueprintForm() {
         })
 
         // Set question banks (this will fetch count details for each)
-        await setQuestionBanks(questionBankDtos)
+        await Promise.all(questionBankDtos.map(async (qb: QuestionBankDto) => {
+            await setQuestionBanks(qb, true)
+        }))
 
         // After question banks are set and count details are loaded, populate selectedTopics
         // Wait a bit for count details to be loaded
@@ -316,6 +314,16 @@ function createBlueprintForm() {
         })
     }
 
+    const reset = () => {
+        setQuestionBanks(undefined)
+        validator.resetBody()
+        isLoading.value = false
+        formInstance = null
+    }
+    
+    onUnmounted(() => {
+        reset()
+    })
     return {
         questionBanks,
         countDetails,
@@ -328,12 +336,12 @@ function createBlueprintForm() {
         validator,
         isQuestionCountValid,
         populateFormFromBlueprint,
+        reset,
     }
 }
 
 export const useBlueprintForm = () => {
     if (!formInstance) {
-        console.log("here");
         formInstance = createBlueprintForm()
     }
     return formInstance

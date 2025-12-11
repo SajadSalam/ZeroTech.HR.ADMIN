@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useBlueprintForm } from '~/views/blueprint/composables/useBlueprintForm'
-import { tableCreateHeaders } from '~/views/blueprint'
+import { tableDetailHeaders } from '~/views/blueprint/index'
 import type { TopicDetails, QuestionTypeStats, DifficultyStats, SelectedTopic } from '~/views/blueprint/types'
 import AppTable from '~/components/app-table/AppTable.vue'
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
@@ -222,7 +222,7 @@ const validationMessage = (val: number) => {
                 </div>
             </div>
         </div>
-        <AppTable hide-no-data :headers="tableCreateHeaders($t)" :items="qb.selectedTopics" class="mt-3">
+        <AppTable hide-no-data :headers="tableDetailHeaders($t)" :items="qb.selectedTopics" class="mt-3">
             <template #data-topicId="{ index }">
                 <AppAutoCompleteField :model-value="qb.selectedTopics[index].topicId"
                     :items="countDetails[qb.id]?.topics || []" item-label="titleEn" item-value="id"
@@ -248,17 +248,17 @@ const validationMessage = (val: number) => {
                     <AppInputField v-model="qb.selectedTopics[index].numberOfQuestions" type="number" required
                         :placeholder="$t('number-of-questions')" :disabled="!qb.selectedTopics[index].difficulty"
                         :class="{
-                            'border-red-300 focus:border-red-500': isQuestionCountValid(qbIndex, index)
+                            'border-red-300 focus:border-red-500': !isQuestionCountValid(qbIndex, index)
                         }" />
                     <div v-if="qb.selectedTopics[index].difficulty && qb.selectedTopics[index].difficultyCount !== undefined"
                         class="flex items-center justify-between text-xs">
                         <span :class="{
-                            'text-green-600': !isQuestionCountValid(qbIndex, index),
-                            'text-red-600': isQuestionCountValid(qbIndex, index) || validationMessage(qb.selectedTopics[index].numberOfQuestions)
+                            'text-green-600': isQuestionCountValid(qbIndex, index),
+                            'text-red-600': !isQuestionCountValid(qbIndex, index) || validationMessage(qb.selectedTopics[index].numberOfQuestions)
                         }">
                             {{ $t('available') }}: {{ getCurrentQuestionCount(qbIndex, index) }}
                         </span>
-                        <span v-if="isQuestionCountValid(qbIndex, index)" class="text-red-600 font-medium">
+                        <span v-if="!isQuestionCountValid(qbIndex, index)" class="text-red-600 font-medium">
                             {{ $t('exceeds-limit') }}
                         </span>
                         <span class="text-red-600 font-medium">

@@ -44,12 +44,12 @@ export const tableHeaders = (t: (key: string) => string) => {
     },
     {
       key: 'fullGrade',
-      label: t('maximum-grade'),
+      label: t('full-grade'),
       icon: 'lucide:scale',
     },
     {
       key: 'totalQuestionsGrade',
-      label: t('success-grade'),
+      label: t('total-questions-grade'),
       icon: 'lucide:list',
     },
     {
@@ -57,32 +57,6 @@ export const tableHeaders = (t: (key: string) => string) => {
       label: t('actions'),
       icon: 'lucide:more-vertical',
     },
-  ]
-}
-
-export const tableCreateHeaders = (t: (key: string) => string) => {
-  return [
-    {
-      key: 'topicId',
-      label: t('topics'),
-    },
-    {
-      key: 'questionType',
-      label: t('question-type'),
-    },
-    {
-      key: 'difficulty',
-      label: t('difficulty'),
-    },  
-    {
-      key: 'numberOfQuestions',
-      label: t('number-of-questions'),
-    },
-    {
-      key: 'grade',
-      label: t('grade-per-question'),
-    },
-   
   ]
 }
 
