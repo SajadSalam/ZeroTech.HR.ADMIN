@@ -597,6 +597,9 @@
   "try-again": "Try Again",
   "close": "Close",
   "upload-file": "Upload File",
+  "file-size-exceeds-limit": "File size exceeds the maximum limit of {size} MB",
+  "invalid-file-format": "Invalid file format. Only Excel files (.xlsx, .xls) are allowed",
+  "no-permission-to-import": "You do not have permission to import questions",
   "selected-file": "Selected File",
   "categories": "Categories",
   "category": "Category",
@@ -879,5 +882,6 @@
   "accepted-answers-preview": "Accepted Answers Preview",
   "no-patterns-defined": "No patterns defined",
   "at-least-one-pattern-required": "At least one answer pattern is required",
-  "fix-invalid-patterns": "Please fix invalid regex patterns before saving"
+  "fix-invalid-patterns": "Please fix invalid regex patterns before saving",
+  "choices": "choices"
 }

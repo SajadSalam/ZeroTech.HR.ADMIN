@@ -1,18 +1,32 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
-import type { QuestionDto } from '~/views/questions/types';
+import { QuestionType, type QuestionDto } from '~/views/questions/types';
 import { getDifficultyConfig, getQuestionTypeIcon, getQuestionTypeLabel } from '~/views/questions/utils';
 
-defineProps<{
+const props = defineProps<{
   question: QuestionDto
 }>()
-
+const question = computed(() => props.question)
 defineEmits<{
   edit: [question: QuestionDto]
   delete: [questionId: string]
 }>()
 
 const { t } = useI18n()
+
+const choicesMap = computed(() => {
+    let choices: string[] = []
+  if(question.value.questionType === QuestionType.SingleChoice || question.value.questionType === QuestionType.MultipleChoice) {
+    choices = question.value.choices.map((choice) => choice.text)
+  } else if(question.value.questionType === QuestionType.Ordering) {
+    choices.push(...question.value.orderingItems)
+  } else if(question.value.questionType === QuestionType.Matching) {
+    choices.push(...question.value.matchingLeftItems)
+  } else if(question.value.questionType === QuestionType.ShortAnswer) {
+    choices.push(...question.value.textAnswerPatterns)
+  }
+  return choices
+})
 </script>
 
 <template>
@@ -68,6 +82,10 @@ const { t } = useI18n()
       <p class="mt-1 line-clamp-1 text-sm text-muted-500">
         {{ question.titleEn }}
       </p>
+
+      <div class="grid grid-cols-2 gap-2">
+        
+      </div>
     </div>
 
     <!-- Question Stats -->
@@ -87,7 +105,7 @@ const { t } = useI18n()
         class="flex items-center gap-1 text-xs text-muted-400"
       >
         <Icon name="ph:list-numbers" class="size-4" />
-        {{ question.orderingItems.length }} {{ $t('items') }}
+        {{ question.orderingItems.length }} {{ $t('choices') }}
       </div>
 
       <!-- Matching items count -->
@@ -96,7 +114,7 @@ const { t } = useI18n()
         class="flex items-center gap-1 text-xs text-muted-400"
       >
         <Icon name="ph:arrows-left-right" class="size-4" />
-        {{ question.matchingLeftItems.length }} {{ $t('pairs') }}
+        {{ question.matchingLeftItems.length }} {{ $t('choices') }}
       </div>
 
       <!-- Text patterns count -->
@@ -105,7 +123,7 @@ const { t } = useI18n()
         class="flex items-center gap-1 text-xs text-muted-400"
       >
         <Icon name="ph:text-aa" class="size-4" />
-        {{ question.textAnswerPatterns.length }} {{ $t('patterns') }}
+        {{ question.textAnswerPatterns.length }} {{ $t('choices') }}
       </div>
 
       <!-- Active status -->

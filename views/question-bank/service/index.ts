@@ -7,6 +7,7 @@ import type {
     QuestionBankFilters,
 } from '../types'
 import type { AssignForm, AssignType } from '../types/assign'
+import type { ImportQuestionResponse, ImportQuestionTypeOption } from '../types/import'
 
 interface IQuestionBankService {
   get: (filters: QuestionBankFilters) => Promise<PaginatedResponse<QuestionBankDto>>
@@ -16,6 +17,8 @@ interface IQuestionBankService {
   getById: (id: string) => Promise<QuestionBankDto>
   assignEmployees: (questionBankId: string, data: AssignForm) => Promise<void>
   getAssignedEmployees: (questionBankId: string, type: AssignType) => Promise<Employee[]>
+  downloadTemplate: (questionBankId: string, templateEndpoint: string) => Promise<Blob>
+  importQuestions: (questionBankId: string, file: File, option: ImportQuestionTypeOption) => Promise<ImportQuestionResponse>
 }
 
 export class QuestionBankService implements IQuestionBankService {
@@ -57,4 +60,62 @@ export class QuestionBankService implements IQuestionBankService {
     await axios.post(`/question-banks/${questionBankId}/topics`, { topicId })
   }
 
+  /**
+   * Download template for importing questions
+   * @param questionBankId - The question bank ID
+   * @param templateEndpoint - The template endpoint (e.g., 'download-choices-template')
+   */
+  async downloadTemplate(questionBankId: string, templateEndpoint: string): Promise<Blob> {
+    const response = await axios.get(`/questions/${questionBankId}/${templateEndpoint}`, {
+      responseType: 'blob',
+    })
+    return response.data
+  }
+
+  /**
+   * Import questions from Excel file
+   * @param questionBankId - The question bank ID
+   * @param file - The Excel file to import
+   * @param option - The import question type option
+   */
+  async importQuestions(
+    questionBankId: string,
+    file: File,
+    option: ImportQuestionTypeOption
+  ): Promise<ImportQuestionResponse> {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    // Build URL with query parameter for choice-based questions
+    let url = `/questions/${questionBankId}/${option.endpoint}`
+    if (option.endpoint === 'import-choices') {
+      url += `?questionType=${option.value}`
+    }
+
+    const response = await axios.post<ImportQuestionResponse>(url, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+
+    // Parse response to match expected format
+    const data = response.data
+    
+    // If API returns simple message format, transform it
+    if (data.message && !data.hasErrors) {
+      return {
+        message: data.message,
+        totalRows: 0,
+        successCount: 0,
+        errorCount: 0,
+        hasErrors: false,
+        errors: [],
+      }
+    }
+
+    return data
+  }
+
 }
+
+export type { ImportQuestionResponse, ImportQuestionTypeOption }

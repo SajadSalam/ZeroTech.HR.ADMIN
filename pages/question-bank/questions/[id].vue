@@ -9,7 +9,7 @@ import { useQuestionStore } from '~/views/questions/store'
 import type { QuestionDto } from '~/views/questions/types'
 import type { QuestionRequest } from '~/views/questions/types/request'
 import { useTopicStore } from '~/views/topics/store'
-
+import ImportQuestions from '~/views/questions/components/ImportQuestions.vue'
 definePageMeta({
   title: 'questions',
   description: 'questions-description',
@@ -148,8 +148,9 @@ const confirmDelete = async () => {
     // Error handling
   }
 }
-
-
+const importQuestions = () => {
+  questionBankStore.importDialogOpen = true
+}
 // Check if in form mode
 const isFormMode = computed(() => viewMode.value === 'create' || viewMode.value === 'edit')
 </script>
@@ -188,7 +189,9 @@ const isFormMode = computed(() => viewMode.value === 'create' || viewMode.value 
         </div>
 
         <div v-if="!isFormMode" class="flex items-center gap-2">
-          <BaseButton size="lg" color="primary" variant="pastel">
+          <BaseButton
+          @click="importQuestions"
+          size="lg" color="primary" variant="pastel">
             <Icon name="tabler-file-upload" class="me-2 size-5" />
             {{ $t('import-questions') }}
           </BaseButton>
@@ -308,10 +311,11 @@ const isFormMode = computed(() => viewMode.value === 'create' || viewMode.value 
     <TairoModal
       :open="isDeleteDialogOpen"
       size="sm"
+      class="pa-5"
       @close="isDeleteDialogOpen = false"
     >
       <template #header>
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 pa-4">
           <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-danger-500/10">
             <Icon name="ph:trash" class="size-5 text-danger-500" />
           </div>
@@ -322,7 +326,7 @@ const isFormMode = computed(() => viewMode.value === 'create' || viewMode.value 
       </template>
 
       <div class="p-6">
-        <p class="text-muted-600 dark:text-muted-300">
+        <p class="text-muted-600 text-start dark:text-muted-300">
           {{ $t('delete-confirmation') }}
         </p>
 
@@ -360,4 +364,10 @@ const isFormMode = computed(() => viewMode.value === 'create' || viewMode.value 
       <p class="mt-4 text-muted-500">{{ $t('loading') }}</p>
     </div>
   </div>
+
+  <ImportQuestions
+    :question-bank-id="questionBankId"
+    :topic-id="selectedTab ?? undefined"
+    @close="questionBankStore.importDialogOpen = false"
+  />
 </template>
