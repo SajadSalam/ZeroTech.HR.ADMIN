@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import type { QuestionFilters } from '../service'
 import { QuestionService } from '../service'
-import { type Difficulty, type QuestionDto, type QuestionType } from '../types'
+import { AuditStatus, type Difficulty, type Question, type QuestionDto, type QuestionType } from '../types'
 import type { QuestionRequest } from '../types/request'
-import { difficultyToString, questionTypeToString } from '../utils'
+import { auditStatusFromString, difficultyFromString, difficultyToString, questionTypeFromString, questionTypeToString } from '../utils'
 
 const questionService = new QuestionService()
 
@@ -23,14 +23,23 @@ export const useQuestionStore = defineStore('question', () => {
   const isCreateDialogOpen = ref(false)
   const isEditDialogOpen = ref(false)
   const selectedQuestionId = ref<string | null>(null)
-  const selectedQuestion = ref<QuestionDto | null>(null)
+  const selectedQuestion = ref<Question | null>(null)
+  const isRejectionDialogOpen = ref(false)
+  const isRequestUpdateDialogOpen = ref(false)
   const totalPages = ref(0)
 
   const getQuestions = async (questionFilters: QuestionFilters) => {
     try {
       isLoading.value = true
       const response = await questionService.get(questionFilters)
-      questions.value = response.items
+      questions.value = response.items.map((question: Question) => {
+        return {
+          ...question,
+          questionType: questionTypeFromString(question.questionType as string) as QuestionType,
+          difficulty: difficultyFromString(question.difficulty as string) as Difficulty,
+          status: auditStatusFromString(question.status as string) as AuditStatus,
+        }
+      }) as QuestionDto[]
       totalPages.value = response.pageCount
     } catch (error) {
     } finally {
@@ -88,12 +97,50 @@ export const useQuestionStore = defineStore('question', () => {
     }
   }
 
+  const approveQuestion = async (id: string) => {
+    try {
+      isLoading.value = true
+      await questionService.approve(id)
+      await getQuestions(filters.value)
+    } catch (error) {
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const cancelQuestion = async (id: string, reason: string) => {
+    try {
+      isLoading.value = true
+      await questionService.cancel(id, reason)
+      await getQuestions(filters.value)
+    } catch (error) {
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const requestUpdateQuestion = async (id: string, reason: string) => {
+    try {
+      isLoading.value = true
+      await questionService.requestUpdate(id, reason)
+      await getQuestions(filters.value)
+    } catch (error) {
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     questions,
     isLoading,
     filters,
     isCreateDialogOpen,
     isEditDialogOpen,
+    isRejectionDialogOpen,
+    isRequestUpdateDialogOpen,
     selectedQuestionId,
     selectedQuestion,
     totalPages,
@@ -102,6 +149,9 @@ export const useQuestionStore = defineStore('question', () => {
     createQuestion,
     updateQuestion,
     deleteQuestion,
+    approveQuestion,
+    cancelQuestion,
+    requestUpdateQuestion,
   }
 })
 

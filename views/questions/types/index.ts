@@ -19,8 +19,9 @@ export enum Difficulty {
 
 export enum AuditStatus {
     Pending = 1,
-    Approved = 2,
-    Rejected = 3,
+    RequestUpdate = 2,
+    Approve = 3    ,
+    Cancel = 4,
 }
 
 // QuestionChoice interfaces
@@ -69,14 +70,30 @@ export type MatchingLeftItemDto = BaseDto & MatchingLeftItem
 
 // Question interfaces
 export interface Question {
+    id?: string
     questionBankId: string
     topicId: string
+    topic?: {
+        id: string
+        titleEn: string
+        titleAr: string
+    }
     titleEn: string
     titleAr: string
     questionType: QuestionType | string
-    difficulty: Difficulty
+    difficulty: Difficulty | string
     isActive: boolean
-    status: AuditStatus
+    status: AuditStatus | string
+    auditStatus?: AuditStatus
+    creator?: {
+        id: number
+        name: string
+    }
+    auditor?: {
+        id: number
+        name: string
+    } | null
+    auditDate?: string | null
     explanation?: string | null
     attachments?: unknown[] // Attachment type would need to be defined elsewhere
     choices?: QuestionChoiceDto[]
@@ -84,6 +101,8 @@ export interface Question {
     matchingLeftItems?: MatchingLeftItemDto[]
     matchingRightItems?: MatchingRightItemDto[]
     textAnswerPatterns?: QuestionTextAnswerPatternDto[]
+    createdAtUtc?: string
+    updateAtUtc?: string
 }
 
 export type QuestionDto = BaseDto & Question

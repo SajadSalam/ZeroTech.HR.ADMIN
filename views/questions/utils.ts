@@ -1,4 +1,4 @@
-import { Difficulty, QuestionType } from './types'
+import { AuditStatus, Difficulty, QuestionType } from './types'
 
 // ============================================
 // Question Type Converters
@@ -138,4 +138,73 @@ export const getDifficultyConfig = (
     [Difficulty.Hard]: { label: t('hard'), color: 'danger' },
   }
   return configs[difficulty] ?? { label: t('unknown'), color: 'muted' }
+}
+export const difficultyOptions = (t: (key: string) => string) => {
+  return [
+    { label: t('easy'), value: Difficulty.Easy },
+    { label: t('medium'), value: Difficulty.Medium },
+    { label: t('hard'), value: Difficulty.Hard },
+  ]
+}
+
+
+export const questionTypeOptions = (t: (key: string) => string) => {
+  return [
+    { label: t('single-choice'), value: QuestionType.SingleChoice },
+    { label: t('multiple-choice'), value: QuestionType.MultipleChoice },
+    { label: t('true-or-false'), value: QuestionType.TrueFalse },
+    { label: t('ordering'), value: QuestionType.Ordering },
+    { label: t('matching'), value: QuestionType.Matching },
+    { label: t('short-answer'), value: QuestionType.ShortAnswer },
+    { label: t('fill-the-blank'), value: QuestionType.FillInBlank },
+  ]
+}
+
+
+// ============================================
+// Audit Status Converters
+// ============================================
+
+/**
+ * Converts string representation to AuditStatus enum
+ * @param value - String like 'Pending', 'RequestUpdate', 'Approve', 'Cancel'
+ * @returns AuditStatus enum value
+ */
+export const auditStatusFromString = (value: string): AuditStatus => {
+  const mapping: Record<string, AuditStatus> = {
+    'Pending': AuditStatus.Pending,
+    'RequestUpdate': AuditStatus.RequestUpdate,
+    'Approve': AuditStatus.Approve,
+    'Cancel': AuditStatus.Cancel,
+  }
+  return mapping[value] ?? AuditStatus.Pending
+}
+
+/**
+ * Converts AuditStatus enum to string representation
+ * @param value - AuditStatus enum value
+ * @returns String like 'Pending', 'RequestUpdate', 'Approve', 'Cancel'
+ */
+export const auditStatusToString = (value: AuditStatus): string => {
+  const mapping: Record<AuditStatus, string> = {
+    [AuditStatus.Pending]: 'Pending',
+    [AuditStatus.RequestUpdate]: 'RequestUpdate',
+    [AuditStatus.Approve]: 'Approve',
+    [AuditStatus.Cancel]: 'Cancel',
+  }
+  return mapping[value] ?? 'Pending'
+}
+
+/**
+ * Gets audit status options for dropdowns
+ * @param t - i18n translation function
+ * @returns Array of options with label and value
+ */
+export const auditStatusOptions = (t: (key: string) => string) => {
+  return [
+    { label: t('pending'), value: AuditStatus.Pending },
+    { label: t('request-update'), value: AuditStatus.RequestUpdate },
+    { label: t('approve'), value: AuditStatus.Approve },
+    { label: t('cancel'), value: AuditStatus.Cancel },
+  ]
 }

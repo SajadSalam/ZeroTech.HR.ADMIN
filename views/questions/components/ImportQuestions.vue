@@ -172,7 +172,6 @@ watch(uploadFile, () => {
                 :placeholder="$t('select-a-question-type')" 
                 item-label="label"
             />
-            {{ selectedQuestionType }}
             <!-- Download Template Button -->
             <div v-if="selectedQuestionType" class="flex justify-end">
                 <BaseButton variant="outline" color="muted" :loading="isDownloadingTemplate" @click="downloadTemplate">
