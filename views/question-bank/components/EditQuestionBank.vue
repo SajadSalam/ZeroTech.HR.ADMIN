@@ -6,23 +6,34 @@ import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vu
 import { createValidator } from '~/services/validationWithI18n'
 import { Validator } from '~/services/validator'
 import { useQuestionBankStore } from '../store/index'
-import type { QuestionBank } from '../types'
+import type { QuestionBankCreateDto } from '../types'
 import { useToast } from '~/composables/toaster'
+import { useSubjectStore } from '~/views/subjects/store'
+import { useTopicStore } from '~/views/topics/store'
 
 const questionBankStore = useQuestionBankStore()
+const subjectStore = useSubjectStore()
+const topicStore = useTopicStore()
 const { t } = useI18n()
 const questionBank = computed(() => questionBankStore.selectedQuestionBank)
 
-const validator = new Validator<QuestionBank>(
+const validator = new Validator<QuestionBankCreateDto>(
     {
         title: questionBank.value?.title || '',
-        creationEndDate: questionBank.value?.creationEndDate || null,
-        creationStartDate: questionBank.value?.creationStartDate || null,
-        categories: null,
+        subjectId: questionBank.value?.subject?.id || '',
+        topicIds: questionBank.value?.questionBankTopics?.map((x) => x.topicId) || [],
+        startEditingDatetimeUtc: questionBank.value?.startEditingDatetimeUtc || null,
+        endEditingDatetimeUtc: questionBank.value?.endEditingDatetimeUtc || null,
     },
     {
         title: {
             required: createValidator(t, 'title', 'required'),
+        },
+        subjectId: {
+            required: createValidator(t, 'select-subject', 'required'),
+        },
+        topicIds: {
+            required: createValidator(t, 'select-topics', 'required'),
         },
     }
 )
@@ -31,17 +42,40 @@ const body = validator.validation
 watchDeep(questionBank, (value) => {
     if (value) {
         body.value.title.$model = value.title
-        body.value.creationStartDate.$model = value.creationStartDate
-        body.value.creationEndDate.$model = value.creationEndDate
-        body.value.categories.$model = value.categories?.map((x) => x.id)
+        body.value.subjectId.$model = value.subject?.id || ''
+        body.value.topicIds.$model = value.questionBankTopics?.map((x) => x.topicId) || []
+        body.value.startEditingDatetimeUtc.$model = value.startEditingDatetimeUtc
+        body.value.endEditingDatetimeUtc.$model = value.endEditingDatetimeUtc
+        if (value.subject?.id) {
+            topicStore.getTopics({
+                subjectId: value.subject.id,
+                Page: 1,
+                PageSize: 500,
+                Search: '',
+                name: null,
+            })
+        }
     }
 })
 
+watch<string | null>(() => body.value.subjectId.$model as string | null, (value) => {
+    if (value) {
+        topicStore.getTopics({
+            subjectId: value,
+            Page: 1,
+            PageSize: 500,
+            Search: '',
+            name: null,
+        })
+    }
+})
+
+const topics = computed(() => topicStore.topics)
+
 const updateQuestionBank = async () => {
     const bodyData = validator.extractBody()
-    if(bodyData.creationStartDate && bodyData.creationEndDate) {
-        // check if creationStartDate is before creationEndDate
-        if(new Date(bodyData.creationStartDate) > new Date(bodyData.creationEndDate)) {
+    if(bodyData.startEditingDatetimeUtc && bodyData.endEditingDatetimeUtc) {
+        if(new Date(bodyData.startEditingDatetimeUtc) > new Date(bodyData.endEditingDatetimeUtc)) {
             useToast({
                 message: t('creation-start-date-before-creation-end-date'),
                 isError: true,
@@ -70,18 +104,40 @@ const updateQuestionBank = async () => {
             <div class="grid gap-3 md:grid-cols-1">
                 <AppInputField v-model="body.title.$model" :errors="body.title.$errors" :label="$t('title')"
                     class="col-span-2" />
-                <AppAutoCompleteField v-model="body.categories.$model" fetch-on-search search-key="name"
-                    :label="$t('select-categories')" get-url="/category/lookup" without-data multiple item-label="title" item-value="id"
-                    class="col-span-2" />
+                <AppAutoCompleteField
+                    v-model="body.subjectId.$model"
+                    fetch-on-search
+                    search-key="search"
+                    :label="$t('select-subject')"
+                    :items="subjectStore.subjects"
+                    :errors="body.subjectId.$errors"
+                    item-label="titleAr"
+                    item-subtitle="titleEn"
+                    item-value="id"
+                    class="col-span-2"
+                />
+                <AppAutoCompleteField
+                    v-model="body.topicIds.$model"
+                    fetch-on-search
+                    search-key="search"
+                    multiple
+                    :label="$t('select-topics')"
+                    :items="topics"
+                    :errors="body.topicIds.$errors"
+                    item-label="titleAr"
+                    item-subtitle="titleEn"
+                    item-value="id"
+                    class="col-span-2"
+                />
             </div>
 
             <h1 class="mt-5 text-lg font-semibold">
                 {{ $t('fill-creation-period-dates-optional') }}
             </h1>
             <div class="my-1 grid gap-3 md:grid-cols-2">
-                <AppFieldAppInputField v-model="body.creationStartDate.$model" :errors="body.creationStartDate.$errors"
+                <AppFieldAppInputField v-model="body.startEditingDatetimeUtc.$model" :errors="body.startEditingDatetimeUtc.$errors"
                     :label="$t('start-date-creation-qustion-bank')" :placeholder="$t('enter-start-date')" type="date" />
-                <AppFieldAppInputField v-model="body.creationEndDate.$model" :errors="body.creationEndDate.$errors"
+                <AppFieldAppInputField v-model="body.endEditingDatetimeUtc.$model" :errors="body.endEditingDatetimeUtc.$errors"
                     :label="$t('end-date')" :placeholder="$t('enter-end-date')" type="date" />
             </div>
             <BaseButton color="primary" :disabled="questionBankStore.isLoading" class="mt-5 w-full gap-1"

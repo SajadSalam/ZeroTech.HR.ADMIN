@@ -1,45 +1,61 @@
 <script lang="ts" setup>
 import {
     AuditStatus,
+    Difficulty,
+    QuestionType,
     type Question,
-    type QuestionFilters,
-} from '~/views/question-bank/types/question'
+} from '~/views/questions/types'
 
 import {
-    difficultyOptions,
     questionsTableHeaders,
 } from '~/views/question-bank/index'
 
-import { useQuestionBankStore } from '~/views/question-bank/store/index'
 
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import { useAuthStore } from '~/views/auth/store/auth'
-import RejectDialog from '~/views/question-bank/components/RejectDialog.vue'
-import ViewQuestion from '~/views/question-bank/components/ViewQuestion.vue'
+import CancelDialog from '~/views/questions/components/CancelDialog.vue'
+import RequestUpdateDialog from '~/views/questions/components/RequestUpdateDialog.vue'
+import ViewQuestionDialog from '~/views/questions/components/ViewQuestionDialog.vue'
+import type { QuestionFilters } from '~/views/questions/service'
+import { useQuestionStore } from '~/views/questions/store'
 import {
+    difficultyOptions,
+    getDifficultyConfig,
+    getQuestionTypeLabel,
     questionTypeOptions,
-} from '~/views/question-bank/types/index'
-import { QuestionBankService } from '~/views/question-bank/service'
+} from '~/views/questions/utils'
+
+
 
 definePageMeta({
     title: 'questions-page',
     description: 'to-create-groups-of-questions',
 })
 
-const questionBankStore = useQuestionBankStore()
+const questionsStore = useQuestionStore()
 const appTableStore = useAppTableStore()
-const questions = computed(() => questionBankStore.questions || [])
+const questions = computed(() => questionsStore.questions || [])
 const filters = computed<QuestionFilters>({
     get() {
-        return questionBankStore.questionFilters
+        return questionsStore.filters
     },
     set(value: QuestionFilters) {
-        questionBankStore.questionFilters = value
+        questionsStore.filters = value
+    },
+})
+
+// Computed property for search input to handle null values
+const searchInput = computed({
+    get() {
+        return filters.value.search || ''
+    },
+    set(value: string) {
+        filters.value.search = value || null
     },
 })
 const getQuestions = async () => {
     appTableStore.setLoading(true)
-    await questionBankStore.getQuestions(filters.value)
+    await questionsStore.getQuestions(filters.value)
     appTableStore.setLoading(false)
 }
 getQuestions()
@@ -50,17 +66,28 @@ watchDebounced(
     },
     { deep: true, debounce: 500 }
 )
-const openView = (item: Question) => {
-    questionBankStore.selectedQuestion = {
-        ...item,
-        isContentShown: true,
+const openView = async (item: Question) => {
+    questionsStore.selectedQuestionId = item.id!
+    try {
+        // Fetch full question details from API
+        const fullQuestion = await questionsStore.getQuestionById(item.id!)
+        questionsStore.selectedQuestion = fullQuestion
+        questionsStore.isEditDialogOpen = true
+    } catch (error) {
+        console.error('Failed to fetch question details:', error)
     }
-    questionBankStore.isViewDialogOpen = true
 }
 
-const openReject = (item: Question) => {
-    questionBankStore.selectedQuestion = item
-    questionBankStore.isRejectionDialogOpen = true
+const openCancel = (item: Question) => {
+    questionsStore.selectedQuestionId = item.id!
+    questionsStore.selectedQuestion = item
+    questionsStore.isRejectionDialogOpen = true
+}
+
+const openRequestUpdate = (item: Question) => {
+    questionsStore.selectedQuestionId = item.id!
+    questionsStore.selectedQuestion = item
+    questionsStore.isRequestUpdateDialogOpen = true
 }
 
 const { hasPrivilege } = useAuthStore()
@@ -81,40 +108,40 @@ const toggleSelectAllQuestions = () => {
     }
 }
 
-var questionBankService = new QuestionBankService()
-const deleteSelectedQuestions = async () => {
-    appTableStore.setLoading(true)
-    await questionBankService.deleteQuestions(selectedQuestions.value.map((q) => q.id!) as string[])
-    selectedQuestions.value = []
-    getQuestions()
-    appTableStore.setLoading(false)
-}
+// var questionsService = new QuestionService()
+// const deleteSelectedQuestions = async () => {
+//     appTableStore.setLoading(true)
+//     await questionBankService.deleteQuestions(selectedQuestions.value.map((q) => q.id!) as string[])
+//     selectedQuestions.value = []
+//     getQuestions()
+//     appTableStore.setLoading(false)
+// }
 </script>
 
 <template>
     <div>
-        <AppCrud v-model:current-page="filters.pageNumber" pagination :total-pages="questionBankStore.totalPages"
-            hide-create>
+        <AppCrud v-model:current-page="filters.page" pagination :total-pages="questionsStore.totalPages" hide-create>
             <template #filters>
-                <BaseInput v-model="filters.title" :placeholder="$t('search')" />
+                <BaseInput v-model="searchInput" :placeholder="$t('search')" />
                 <AppAutoCompleteField v-model="filters.questionBankId" fetch-on-search search-key="name"
-                    :placeholder="$t('questions-bank')" get-url="/question-bank" item-label="title" item-value="id" />
-                <AppAutoCompleteField v-model="filters.type" :items="questionTypeOptions($t)"
+                    :placeholder="$t('questions-bank')" get-url="/question-banks/lookup" without-data item-label="title"
+                    item-value="id" />
+                <AppAutoCompleteField v-model="filters.questionType" :items="questionTypeOptions($t)"
                     :placeholder="$t('select-a-question-type')" item-label="label" item-value="value" />
                 <AppAutoCompleteField v-model="filters.difficulty" :items="difficultyOptions($t)"
                     :placeholder="$t('select-a-difficulty')" item-label="label" item-value="value" />
             </template>
-            <BaseButton v-if="selectedQuestions.length > 0 && hasPrivilege('ums:ems:question:delete')" color="primary"
+            <!-- <BaseButton v-if="selectedQuestions.length > 0 && hasPrivilege('ums:ems:question:delete')" color="primary"
                 variant="pastel" @click="deleteSelectedQuestions">
                 <Icon class="me-2" name="ph-trash" />
                 {{ $t('delete-selected-questions') }}
-            </BaseButton>
+            </BaseButton> -->
             <AppTable title="Questions" :headers="questionsTableHeaders($t)" :items="questions">
-                <template #data-index="data">
+                <template #data-index="{ item, index }">
                     <div class="flex items-center gap-2">
-                        <BaseCheckbox :model-value="selectedQuestions.includes(data.item)"
-                            @update:model-value="selectQuestion(data.item)" />
-                        {{ (data.index + 1) + (filters.pageNumber - 1) * filters.pageSize }}
+                        <BaseCheckbox :model-value="selectedQuestions.includes(item)"
+                            @update:model-value="selectQuestion(item)" />
+                        {{ (index + 1) + ((filters.page ?? 1) - 1) * (filters.pageSize ?? 50) }}
                     </div>
                 </template>
                 <template #header-index>
@@ -125,28 +152,40 @@ const deleteSelectedQuestions = async () => {
                     </div>
                 </template>
                 <template #data-actions="{ item }">
-                    <div class="flex items-center justify-center gap-3">
-                        <BaseButtonIcon :data-nui-tooltip="$t('view')" variant="outline" rounded="full" color="primary"
-                            size="sm" @click="openView(item)">
-                            <Icon name="ph-eye" size="18" />
-                        </BaseButtonIcon>
+                    <div class="grid grid-cols-2 items-center justify-center gap-2">
                         <BaseButton v-if="
-                            item.auditStatus != AuditStatus.Approved && hasPrivilege('ums:ems:question:approve')
-                        " :data-nui-tooltip="$t('Approved')" color="success" variant="pastel" size="sm"
-                            @click="questionBankStore.approveQuestion(item.id)" :loading="questionBankStore.isLoading"
-                            :disabled="questionBankStore.isLoading">
+                            item.status === AuditStatus.Pending
+                        " :data-nui-tooltip="$t('approve')" color="success" variant="pastel" size="sm"
+                            @click="questionsStore.approveQuestion(item.id)" :loading="questionsStore.isLoading"
+                            :disabled="questionsStore.isLoading">
                             <Icon name="ph-check" />
-                            {{ $t('Approve') }}
                         </BaseButton>
 
                         <BaseButton v-if="
-                            item.auditStatus != AuditStatus.Rejected && hasPrivilege('ums:ems:question:reject')
-                        " :data-nui-tooltip="$t('Rejected')" color="danger" variant="pastel" size="sm"
-                            @click="openReject(item)" :loading="questionBankStore.isLoading"
-                            :disabled="questionBankStore.isLoading">
+                            item.status === AuditStatus.Pending
+                        " :data-nui-tooltip="$t('cancel')" color="danger" variant="pastel" size="sm"
+                            @click="openCancel(item)" :loading="questionsStore.isLoading"
+                            :disabled="questionsStore.isLoading">
                             <Icon name="ph-x" />
-                            {{ $t('Reject') }}
                         </BaseButton>
+
+                        <BaseButton class="col-span-2" v-if="
+                            item.status === AuditStatus.Pending
+                        " :data-nui-tooltip="$t('request-update')" color="warning" variant="pastel" size="sm"
+                            @click="openRequestUpdate(item)" :loading="questionsStore.isLoading"
+                            :disabled="questionsStore.isLoading">
+                            <Icon name="ph-arrow-clockwise" />
+                            {{ $t('request-update') }}
+                        </BaseButton>
+
+
+                        <BaseButtonIcon :data-nui-tooltip="$t('view')" variant="outline" rounded="full" color="primary"
+                            size="sm" @click="openView(item)">
+                            <Icon name="ph-eye" size="16" />
+                        </BaseButtonIcon>
+
+
+
                         <AuditLogBtn :entity-id="item.id" />
 
                     </div>
@@ -154,24 +193,40 @@ const deleteSelectedQuestions = async () => {
                 <template #data-usedTimes="">
                     {{ Math.floor(Math.random() * 100) }}
                 </template>
+                <template #data-title="{ item }">
+                    <span>{{ item.titleAr || item.titleEn }}</span>
+                </template>
                 <template #data-type="{ item }">
-                    <span class="text-primary-500">{{
-                        questionTypeOptions($t).find((v) => v.value == item.type)!.label
-                        }}</span>
+                    <span class="text-primary-500">
+
+                        {{ getQuestionTypeLabel(item.questionType as QuestionType, $t) }}
+                    </span>
                 </template>
                 <template #data-difficulty="{ item }">
                     <span class="text-primary-500">{{
-                        difficultyOptions($t).find((v) => v.value == item.difficulty)!.label
-                        }}</span>
+                        getDifficultyConfig(item.difficulty as Difficulty, $t).label
+                    }}</span>
+                </template>
+                <template #data-creatorFullName="{ item }">
+                    <span>{{ item.creator?.name || '-' }}</span>
+                </template>
+                <template #data-auditorFullName="{ item }">
+                    <span>{{ item.auditor?.name || '-' }}</span>
+                </template>
+                <template #data-questionBankName="{ item }">
+                    <span>{{ item.topic?.titleAr || item.topic?.titleEn || '-' }}</span>
                 </template>
                 <template #data-auditStatus="{ item }">
-                    <BaseTag variant="pastel" :color="item.auditStatus != AuditStatus.Pending
-                            ? item.auditStatus == AuditStatus.Rejected
-                                ? 'danger'
-                                : 'success'
-                            : 'warning'
-                        " so>
-                        {{ $t(AuditStatus[item.auditStatus ?? 1]) }}
+                    <BaseTag variant="pastel" :color="item.status === AuditStatus.Pending
+                            ? 'warning'
+                            : item.status === AuditStatus.Approve
+                                ? 'success'
+                                : item.status === AuditStatus.RequestUpdate
+                                    ? 'info'
+                                    : 'danger'
+                        ">
+                        {{ $t(typeof item.status === 'string' ? item.status : AuditStatus[item.status ??
+                        AuditStatus.Pending]) }}
                     </BaseTag>
                 </template>
                 <template #data-auditDate="{ item }">
@@ -181,7 +236,8 @@ const deleteSelectedQuestions = async () => {
         </AppCrud>
     </div>
 
-    <ViewQuestion />
-    <RejectDialog @update="getQuestions()" />
+    <ViewQuestionDialog />
+    <CancelDialog @update="getQuestions()" />
+    <RequestUpdateDialog @update="getQuestions()" />
 </template>
 <style></style>

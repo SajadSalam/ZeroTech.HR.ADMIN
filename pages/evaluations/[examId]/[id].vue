@@ -6,10 +6,10 @@ import { useEvaluationStore } from '~/views/evaluations/store'
 import type { EvaluationDetialedDto } from '~/views/evaluations/types'
 import QuestionCard from '~/views/question-bank/components/questions/view/QuestionCard.vue'
 import {
-  Difficulty,
-  type Question,
-  QuestionType,
-} from '~/views/question-bank/types/question'
+    Difficulty,
+    QuestionType,
+    type Question,
+} from '~/views/questions/types'
 definePageMeta({
   title: 'questions-editor',
   description: 'to-add-or-edit-questions',

@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import axiosIns from '~/services/app-client/axios'
-import { useQuestionBankStore } from '../store/index'
+import { debounce } from 'lodash-es'
+import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
+import AppInputField from '~/components/app-field/AppInputField.vue'
+import { useEmployeeStore } from '~/views/employee/store'
+import type { Employee, EmployeeFilters } from '~/views/employee/types'
+import OrganizationTree from '~/views/orgaization/OrganizationTree.vue'
 import { useOrganizationStore } from '~/views/orgaization/store'
 import type { Organization } from '~/views/orgaization/types'
-import OrganizationTree from '~/views/orgaization/OrganizationTree.vue'
-import { useEmployeeStore } from '~/views/employee/store'
-import type { Employee, EmployeeFilters, Course } from '~/views/employee/types'
-import { AssignType, type AssignDto, type AssignForm } from '../types'
-import AppInputField from '~/components/app-field/AppInputField.vue'
-import { debounce, get } from 'lodash-es'
-import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
+import { useQuestionBankStore } from '../store/index'
+import { AssignType } from '../types/assign'
 
 const questionBankStore = useQuestionBankStore()
 const organizationStore = useOrganizationStore()
@@ -17,7 +16,14 @@ const employeeStore = useEmployeeStore()
 const tree = ref<Organization[]>([])
 const isLoading = ref(false)
 const selectedEmployees = ref<Employee[]>([])
-const filters = employeeStore.filters as EmployeeFilters
+const filters = computed({
+    get() {
+        return employeeStore.filters
+    },
+    set(value: EmployeeFilters) {
+        employeeStore.filters = value 
+    }
+})
 
 const fetchEmployees = async (collegeId: number) => {
   filters.value.collegeId = collegeId
@@ -31,7 +37,6 @@ const employees = computed(() => {
   return employeeStore.employees
 })
 const selectedItem = ref<number>(0)
-
 onMounted(async () => {
   filters.value = {
     search: null,
@@ -61,38 +66,14 @@ const toggleEmployee = (employee: Employee) => {
 
 const saveAssign = async () => {
   questionBankStore.isLoading = true
-  const employeeIds: AssignForm[] = selectedEmployees.value.map<AssignForm>((emp: Employee) => {
-    return {
-      employeeId: emp.employeeId,
-    }
+  await questionBankStore.assignEmployees(questionBankStore.selectedQuestionBank?.id as string, {
+    type: questionBankStore.assignType,
+    employeeIds: selectedEmployees.value.map((emp: Employee) => emp.employeeId as number),
   })
-  if (questionBankStore.assignType === AssignType.Auditor) {
-    questionBankStore.assignAuditor(
-      questionBankStore.selectedQuestionBank?.id as string,
-      employeeIds
-    )
-  } else {
-    questionBankStore.assignCreator(
-      questionBankStore.selectedQuestionBank?.id as string,
-      employeeIds
-    )
-  }
-
   questionBankStore.isLoading = false
   questionBankStore.isAssignDialogOpen = false
 }
 
-watchDeep(
-  () => questionBankStore.assign,
-  () => {
-    selectedEmployees.value = questionBankStore.assign.map((emp: AssignDto) => {
-      return {
-        ...emp.employee,
-        empFullName: `${emp.employee.empArFirstName} ${emp.employee.empArSecondName} ${emp.employee.empArThirdName} ${emp.employee.empArFourthName}`,
-      }
-    })
-  }
-)
 watchDeep(
   () => filters.value,
   () => {
@@ -101,7 +82,7 @@ watchDeep(
 )
 watch(
   () => questionBankStore.isAssignDialogOpen,
-  () => {
+  async () => {
     filters.value = {
       search: null,
       position: null,
@@ -111,6 +92,8 @@ watch(
       pageNumber: 1,
     }
     employeeStore.employees = []
+
+    selectedEmployees.value = await questionBankStore.getAssignedEmployees(questionBankStore.selectedQuestionBank?.id as string, questionBankStore.assignType)
   }
 )
 const handleCourseChange = (selectedCourses: any[]) => {
@@ -135,34 +118,13 @@ const handleCourseChange = (selectedCourses: any[]) => {
     <div class="mb-4">
       <div class="mb-4 flex items-center gap-4">
         <AppInputField
-          v-model="filters.value.search"
+          v-model="filters.search"
           :placeholder="$t('search-employee')"
           icon="ph-search"
           class="flex-1"
           @update:model-value="debouncedSearch"
         />
-        <!-- <AppAutoCompleteField
-          v-model="filters.value.position"
-          fetch-on-search
-          search-key="name"
-          get-url="/ums/positions"
-          :placeholder="$t('select-a-position')"
-          item-label="arabicName"
-          item-value="id"
-          class="w-64"
-        /> -->
-        <AppAutoCompleteField
-          v-model="filters.value.courses"
-          fetch-on-search
-          search-key="courseName"
-          get-url="/ums/courses"
-          :placeholder="$t('select-subject')"
-          item-label="courseName"
-          item-value="id"
-          multiple
-          class="w-64"
-          @update:model-value="handleCourseChange"
-        />
+      
       </div>
     </div>
     <hr class="my-4" />

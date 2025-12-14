@@ -1,80 +1,43 @@
 import { defineStore } from 'pinia'
-import type { ImportQuestionTypeOption } from '~/views/question-bank/types'
-import type {
-    Question,
-    QuestionDto,
-    QuestionFilters,
-} from '~/views/question-bank/types/question'
+import type { Employee } from '~/views/employee/types'
+import type { } from '~/views/questions/types'
 import { QuestionBankService } from '../service'
 import {
-    AssignType,
-    type AssignDto,
-    type AssignForm,
-    type QuestionBank,
     type QuestionBankCreateDto,
-    type QuestionBankDetailedDto,
     type QuestionBankDto,
     type QuestionBankFilters,
-    type QuestionBankTopicDto,
-    type QuestionBankTopicUpdate,
 } from '../types'
+import { AssignType, type AssignForm } from '../types/assign'
+import type { ImportQuestionResponse, ImportQuestionTypeOption } from '../types/import'
 
 const questionBankService = new QuestionBankService()
 
 export const useQuestionBankStore = defineStore('questionBank', () => {
   const questionBanks = ref<QuestionBankDto[]>([])
-  const questions = ref<QuestionDto[]>([])
-  const selectedTopic = ref<QuestionBankTopicDto | null>(null)
   const isLoading = ref(false)
   const filters = ref<QuestionBankFilters>({
     pageSize: 50,
-    pageNumber: 1,
+    page: 1,
     search: null,
     subjectId: null,
     topics: [],
   })
+
+  const isAssignDialogOpen = ref(false)
   const isCreateDialogOpen = ref(false)
   const isEditDialogOpen = ref(false)
-  const isRejectionDialogOpen = ref(false)
   const selectedQuestionBankId = ref<string | null>(null)
-  const selectedQuestionBank = ref<QuestionBankDetailedDto | QuestionBankDto | null>(null)
-  const selectedQuestion = ref<Question | null>(null)
-  const isAssignDialogOpen = ref(false)
-  const isDeleteTopicOpen = ref(false)
-  const isAddTopicOpen = ref(false)
+  const selectedQuestionBank = ref<QuestionBankDto | null>(null)
   const assignType = ref<AssignType>(AssignType.Creator)
   const totalPages = ref(0)
-  const isViewDialogOpen = ref(false)
-  const assign = ref<AssignDto[]>([])
+  const isAddTopicOpen = ref(false)
   const importDialogOpen = ref(false)
-
-  const questionFilters = ref<QuestionFilters>({
-    difficulty: null,
-    pageNumber: 1,
-    pageSize: 50,
-    title: null,
-    topicId: null,
-    type: null,
-    questionBankId: null,
-  })
-
   const getQuestionBanks = async (questionBankFilters: QuestionBankFilters) => {
     try {
       isLoading.value = true
       const response = await questionBankService.get(questionBankFilters)
-      questionBanks.value = response.data
-      totalPages.value = response.pagesCount
-    } catch (error) {
-    } finally {
-      isLoading.value = false
-    }
-  }
-  const getQuestions = async (questionsFilters: QuestionFilters) => {
-    try {
-      isLoading.value = true
-      const response = await questionBankService.getQuestions(questionsFilters)
-      questions.value = response.data
-      totalPages.value = response.pagesCount
+      questionBanks.value = response.items
+      totalPages.value = response.pageCount
     } catch (error) {
     } finally {
       isLoading.value = false
@@ -93,7 +56,7 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
     }
   }
 
-  const updateQuestionBank = async (data: QuestionBank) => {
+  const updateQuestionBank = async (data: QuestionBankCreateDto) => {
     try {
       isLoading.value = true
       await questionBankService.update(selectedQuestionBankId.value!, data)
@@ -115,34 +78,12 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
       isLoading.value = false
     }
   }
-  const getQuestionBank = async (id: string) => {
-    try {
-      isLoading.value = true
-      const response = await questionBankService.getDetailed(id)
-      selectedQuestionBank.value = response
-    } catch (error) {
-    } finally {
-      isLoading.value = false
-    }
-  }
 
-  const getQuestionBankQuestions = async (
-    questionBankId: string,
-    pageNumber: number,
-    pageSize: number,
-    topicId?: string
-  ) => {
+  const assignEmployees = async (questionBankId: string, data: AssignForm) => {
     try {
       isLoading.value = true
-      const response = await questionBankService.getQuestionBankQuestions(
-        questionBankId,
-        pageNumber,
-        pageSize,
-        topicId
-      )
-      questions.value = response.data
-      totalPages.value = response.pagesCount
-      return response
+      await questionBankService.assignEmployees(questionBankId, data)
+      isAssignDialogOpen.value = false
     } catch (error) {
       throw error
     } finally {
@@ -150,77 +91,37 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
     }
   }
 
-  const saveQuestions = async (questionBankId: string, questions: Question[], toBeDeletedIds: string[] = []) => {
+  const getAssignedEmployees = async (questionBankId: string, type: AssignType) => {
     try {
       isLoading.value = true
-      await questionBankService.saveQuestions(
-        questionBankId,
-        questions,
-        toBeDeletedIds
-      )
+      const response = await questionBankService.getAssignedEmployees(questionBankId, type)
+      return response.map((emp: Employee) => ({
+        ...emp,
+        empFullName: emp.name,
+      }))
+    } catch (error) {
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
+  const getCountByQuestionBankId = async (questionBankId: string) => {
+    try {
+      isLoading.value = true
+      return await questionBankService.getCountByQuestionBankId(questionBankId)
     } catch (error) {
     } finally {
       isLoading.value = false
     }
   }
 
-  const approveQuestion = async (questionId: string) => {
+  const getById = async (id: string) => {
     try {
       isLoading.value = true
-      const res = await questionBankService.approveQuestion(questionId)
-      questions.value.find((x) => x.id === questionId)!.auditStatus = res.auditStatus
-    } catch (error) {
-    } finally {
-      isLoading.value = false
-    }
-  }
-  const rejectQuestion = async (questionId: string, body: { rejectReason?: string | null }) => {
-    try {
-      isLoading.value = true
-      const res = await questionBankService.rejectQuestion(questionId, body)
-      questions.value.find((x) => x.id === questionId)!.auditStatus = res.auditStatus
-    } catch (error) {
-    } finally {
-      isLoading.value = false
-    }
-  }
-  const assignAuditor = async (questionBankId: string, data: AssignForm[]) => {
-    try {
-      isLoading.value = true
-      await questionBankService.assignAuditor(questionBankId, data)
-    } catch (error) {
-    } finally {
-      isLoading.value = false
-    }
-  }
-
-  const assignCreator = async (questionBankId: string, data: AssignForm[]) => {
-    try {
-      isLoading.value = true
-      await questionBankService.assignCreator(questionBankId, data)
-    } catch (error) {
-    } finally {
-      isLoading.value = false
-    }
-  }
-
-  const getAssigns = async (questionBankId: string, type: AssignType) => {
-    try {
-      isLoading.value = true
-      const response = await questionBankService.getAssigns(questionBankId, type)
-      assign.value = response.data
-    } catch (error) {
-    } finally {
-      isLoading.value = false
-    }
-  }
-
-  const addTopic = async (questionBankId: string, topic: QuestionBankTopicUpdate) => {
-    try {
-      isLoading.value = true
-      const response = await questionBankService.addTopic(questionBankId, topic)
+      const response = await questionBankService.getById(id)
       return response
     } catch (error) {
+      throw error
     } finally {
       isLoading.value = false
     }
@@ -228,39 +129,78 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
   const removeTopic = async (questionBankId: string, topicId: string) => {
     try {
       isLoading.value = true
-      const response = await questionBankService.removeTopic(questionBankId, topicId)
-      return response
+      await questionBankService.removeTopic(questionBankId, topicId)
     } catch (error) {
+      throw error
     } finally {
       isLoading.value = false
     }
   }
 
+  const addTopic = async (questionBankId: string, topicId: string) => {
+    try {
+      isLoading.value = true
+      await questionBankService.addTopic(questionBankId, topicId)
+    } catch (error) {
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  /**
+   * Download template for importing questions
+   * @param option - The import question type option containing template endpoint
+   */
+  const downloadTemplate = async (questionBankId: string, option: ImportQuestionTypeOption) => {
+    try {
+      const blob = await questionBankService.downloadTemplate(
+        questionBankId,
+        option.templateEndpoint
+      )
+
+      // Create download link
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      
+      // Set filename based on question type
+      const filename = option.templateEndpoint.split('-').join('_') + '_template.xlsx'
+      link.setAttribute('download', filename)
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  /**
+   * Import questions from Excel file
+   * @param questionBankId - The question bank ID
+   * @param file - The Excel file to import
+   * @param option - The import question type option
+   */
   const importQuestions = async (
     questionBankId: string,
     file: File,
-    questionTypeOption: ImportQuestionTypeOption
-  ) => {
+    option: ImportQuestionTypeOption | null
+  ): Promise<ImportQuestionResponse> => {
     try {
-        console.log(questionBankId, file, questionTypeOption)
-      isLoading.value = true
-      const response = await questionBankService.importQuestions(questionBankId, file, questionTypeOption)
-      return response
-    } catch (error: any) {
-      throw error // Re-throw the error to handle it in the component
-    } finally {
-      isLoading.value = false
-    }
-  }
+      if (!option) {
+        throw new Error('Question type option is required')
+      }
 
-  const downloadTemplate = async (questionTypeOption: ImportQuestionTypeOption) => {
-    try {
-      isLoading.value = true
-      await questionBankService.downloadTemplate(questionTypeOption)
-    } catch (error: any) {
-      throw error // Re-throw the error to handle it in the component
-    } finally {
-      isLoading.value = false
+      const response = await questionBankService.importQuestions(
+        questionBankId,
+        file,
+        option
+      )
+
+      return response
+    } catch (error) {
+      throw error
     }
   }
 
@@ -268,39 +208,26 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
     questionBanks,
     isLoading,
     filters,
-    isViewDialogOpen,
     isCreateDialogOpen,
-    selectedQuestion,
     isEditDialogOpen,
+    isAssignDialogOpen,
     selectedQuestionBankId,
     selectedQuestionBank,
     totalPages,
-    isAssignDialogOpen,
-    isRejectionDialogOpen,
-    assignType,
-    assign,
-    questionFilters,
-    selectedTopic,
-    isDeleteTopicOpen,
-    isAddTopicOpen,
     getQuestionBanks,
-    getQuestionBank,
-    getQuestionBankQuestions,
     createQuestionBank,
-    saveQuestions,
     updateQuestionBank,
     deleteQuestionBank,
-    getQuestions,
-    questions,
-    approveQuestion,
-    rejectQuestion,
-    assignAuditor,
-    assignCreator,
-    getAssigns,
-    addTopic,
+    assignType,
+    assignEmployees,
+    getAssignedEmployees,
+    getCountByQuestionBankId,
+    getById,
     removeTopic,
+    addTopic,
+    isAddTopicOpen,
     importDialogOpen,
-    importQuestions,
     downloadTemplate,
+    importQuestions,
   }
 })

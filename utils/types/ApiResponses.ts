@@ -2,7 +2,7 @@ import type { AxiosError } from 'axios'
 
 export interface PaginatedResponse<T> {
   items: T[]
-  pagesCount: number
+  pageCount: number
   currentPage: number
   type: string
   pageSize: number
@@ -22,9 +22,9 @@ export interface SingleObjectResponse<T> {
   error?: null
 }
 export interface BaseFilters extends Record<string, any> {
-  page: number
-  pageSize: number
-  search: string
+  page?: number
+  pageSize?: number
+  search?: string | null
 }
 
 export type ApiError<T> = AxiosError<PaginatedResponse<T>>
