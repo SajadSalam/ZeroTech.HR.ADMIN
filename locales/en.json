@@ -818,7 +818,6 @@
   "click-to-view-changes": "Click to view changes",
   "old-value": "Old Value",
   "new-value": "New Value",
-  "no-audit-logs-found": "No audit logs found",
   "add-proper-number": "Add proper number",
   "no-negative-numbers-allowed": "No negative numbers allowed",
   "success-grade-must-be-less-than-full-grade": "Success grade must be less than full grade",
@@ -909,7 +908,7 @@
   "created-by": "Created By",
   "unknown": "Unknown",
   "created-at": "Created At",
-  "updated-at": "Updated At"
+  "updated-at": "Updated At",
   "no-audit-logs-found": "No audit logs found",
   "start-date-from": "Start Date From",
   "start-date-to": "Start Date To",
