@@ -1,38 +1,39 @@
 import axiosIns from '~/services/app-client/axios'
-import type { Blueprint, BlueprintDto, QuestionBankBlueprintDetails } from '../types'
-import type { BaseFilters, PaginatedResponse, WithoutPagination } from '~/utils/types/ApiResponses'
-import type { BaseDto } from '~/utils/types/base-dto'
+import type { BlueprintDetails, BlueprintCreate, BlueprintDto } from '../types'
+import type { BaseFilters, PaginatedResponse } from '~/utils/types/ApiResponses'
 
 interface IBlueprintService {
   get: (filters: BaseFilters) => Promise<PaginatedResponse<BlueprintDto>>
-  create: (blueprint: Blueprint) => Promise<BlueprintDto>
+  create: (blueprint: BlueprintCreate) => Promise<BlueprintDto>
+  update: (id: string, blueprint: BlueprintCreate) => Promise<BlueprintDto>
   delete: (id: string) => Promise<void>
-  getQuestionBankBlueprintDetails: (questionBankId: string) => Promise<QuestionBankBlueprintDetails>
+  getById: (id: string) => Promise<BlueprintDetails>
 }
 
 export class BlueprintService implements IBlueprintService {
   async get(filters: BaseFilters): Promise<PaginatedResponse<BlueprintDto>> {
-    const response = await axiosIns.get<PaginatedResponse<BlueprintDto>>('/examtemplate', {
+    const response = await axiosIns.get<PaginatedResponse<BlueprintDto>>('/exam-templates', {
       params: filters,
     })
     return response.data
   }
 
-  async create(blueprint: Blueprint): Promise<BlueprintDto> {
-    const response = await axiosIns.post<BlueprintDto>('/examtemplate', blueprint)
+  async create(blueprint: BlueprintCreate): Promise<BlueprintDto> {
+    const response = await axiosIns.post<BlueprintDto>('/exam-templates', blueprint)
+    return response.data
+  }
+
+  async update(id: string, blueprint: BlueprintCreate): Promise<BlueprintDto> {
+    const response = await axiosIns.put<BlueprintDto>(`/exam-templates/${id}`, blueprint)
     return response.data
   }
 
   async delete(id: string): Promise<void> {
-    await axiosIns.delete(`/examtemplate/${id}`)
+    await axiosIns.delete(`/exam-templates/${id}`)
   }
-  async getById(id: string): Promise<BlueprintDto> {
-    const response = await axiosIns.get<BlueprintDto>(`/examtemplate/${id}`)
+  async getById(id: string): Promise<BlueprintDetails> {
+    const response = await axiosIns.get<BlueprintDetails>(`/exam-templates/${id}`)
     return response.data
   }
-
-  async getQuestionBankBlueprintDetails(questionBankId: string): Promise<QuestionBankBlueprintDetails> {
-    const response = await axiosIns.get<QuestionBankBlueprintDetails>(`/question-bank/${questionBankId}/blueprint-details`)
-    return response.data
-  }
+  
 }

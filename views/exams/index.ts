@@ -30,7 +30,7 @@ export const tableHeaders = (t: (key: string) => string) => {
         },
         {
             key: 'successGrade',
-            label: t('success-grade'),
+            label: t('full-grade'),
             icon: 'lucide:align-horizontal-distribute-center',
         },
         {

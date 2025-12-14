@@ -105,6 +105,15 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
       isLoading.value = false
     }
   }
+  const getCountByQuestionBankId = async (questionBankId: string) => {
+    try {
+      isLoading.value = true
+      return await questionBankService.getCountByQuestionBankId(questionBankId)
+    } catch (error) {
+    } finally {
+      isLoading.value = false
+    }
+  }
 
   const getById = async (id: string) => {
     try {
@@ -212,6 +221,7 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
     assignType,
     assignEmployees,
     getAssignedEmployees,
+    getCountByQuestionBankId,
     getById,
     removeTopic,
     addTopic,
