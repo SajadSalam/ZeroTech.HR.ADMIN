@@ -1,20 +1,17 @@
-import type { BaseFilters } from '~/utils/types/ApiResponses'
 import { BlueprintService } from '../service'
-import type { Blueprint, BlueprintDto, BlueprintFilter, QuestionBankBlueprintDetails } from '../types'
+import type { BlueprintCreate, BlueprintDto, BlueprintFilter } from '../types'
 const blueprintService = new BlueprintService()
 export const useBlueprintStore = defineStore('blueprint', () => {
   const blueprints = ref<BlueprintDto[]>([])
-  const isCreateDialogOpen = ref<boolean>(false)
   const totalPages = ref(0)
   const isLoading = ref(false)
   const filters = ref<BlueprintFilter>({
+    page: 1,
     pageSize: 50,
-    pageNumber: 1,
     search: null,
     questionBankId: null,
-    minGrade: null,
-    maxGrade: null,
-    subjectId: null,
+    successGrade: null,
+    fullGrade: null,
     topicId: null,
   })
   const getBlueprints = async () => {
@@ -22,14 +19,14 @@ export const useBlueprintStore = defineStore('blueprint', () => {
       isLoading.value = true
 
       const response = await blueprintService.get(filters.value)
-      blueprints.value = response.data
-      totalPages.value = response.pagesCount
+      blueprints.value = response.items
+      totalPages.value = response.pageCount
     } catch (error) {
     } finally {
       isLoading.value = false
     }
   }
-  const create = async (blueprint: Blueprint) => {
+  const create = async (blueprint: BlueprintCreate) => {
     try {
       isLoading.value = true
       await blueprintService.create(blueprint)
@@ -40,6 +37,18 @@ export const useBlueprintStore = defineStore('blueprint', () => {
       isLoading.value = false
     }
   }
+
+  const update = async (id: string, blueprint: BlueprintCreate) => {
+    try {
+      isLoading.value = true
+      await blueprintService.update(id, blueprint)
+    } catch (error) {
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   const deleteBlueprint = async (id: string) => {
     try {
       isLoading.value = true
@@ -59,27 +68,17 @@ export const useBlueprintStore = defineStore('blueprint', () => {
       isLoading.value = false
     }
   }
+  
 
-  const getQuestionBankBlueprintDetails = async (questionBankId: string): Promise<QuestionBankBlueprintDetails | null> => {
-    try {
-      isLoading.value = true
-      return await blueprintService.getQuestionBankBlueprintDetails(questionBankId)
-    } catch (error) {
-      return null
-    } finally {
-      isLoading.value = false
-    }
-  }
   return {
     blueprints,
-    isCreateDialogOpen,
     getBlueprints,
     isLoading,
     totalPages,
     filters,
     create,
+    update,
     getById,
     deleteBlueprint,
-    getQuestionBankBlueprintDetails,
   }
 })
