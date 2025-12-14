@@ -178,7 +178,9 @@
   "proficiency-exam-group-required": "مجموعة امتحان الكفاءة مطلوبة",
   "duration-in-minutes": "المدة (بالدقائق)",
   "enter-duration": "أدخل المدة",
-  "enterance-time-allowed-in-minutes": "الوقت المسموح به للدخول (بالدقائق)",
+  "enterance-time-allowed-before": "الوقت المسموح به للدخول (قبل البدء)",
+  "enterance-time-allowed-after": "الوقت المسموح به للدخول (بعد البدء)",
+  "exit-time-allowed": "الوقت المسموح به للخروج",
   "enter-enterance-time-allowed": "أدخل الوقت المسموح به للدخول",
   "blueprint": "نموذج الاسئلة",
   "no-blueprint": "لا يوجد نموذج اسئلة محدد ",
@@ -812,5 +814,15 @@
   "click-to-view-changes": "انقر لمشاهدة التعديلات",
   "old-value": "القديم",
   "new-value": "الجديد",
-  "no-audit-logs-found": "لم يتم العثور على سجلات تعديلات"
+  "no-audit-logs-found": "لم يتم العثور على سجلات تعديلات",
+  "start-date-from": "تاريخ البدء من",
+  "start-date-to": "تاريخ البدء إلى",
+  "extend-duration": "تمديد المدة",
+  "question-replace": "استبدال الاسئلة",
+  "question-reshuffle": "اعادة خلط الاسئلة",
+  "update-schedule": "تعديل الموعد",
+  "select-duration": "اختر المدة",
+  "minutes": "دقيقة",
+  "are-you-sure-you-want-to-reshuffle-the-questions": "هل أنت متأكد من أنك تريد اعادة خلط الاسئلة؟",
+  "group": "المجموعة"
 }

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { helpers, requiredIf } from '@vuelidate/validators'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { useI18n } from 'vue-i18n'
@@ -7,14 +6,12 @@ import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vu
 import { createValidator } from '~/services/validationWithI18n'
 import { Validator } from '~/services/validator'
 import { useExamStore } from '../store/index'
-import { ExamType, examTypesOptions, type ExamCreate } from '../types/index'
+import { type ExamCreate } from '../types/index'
 import ExamCardCreationResult from './ExamCardCreationResult.vue'
 
 
 
 const examStore = useExamStore()
-
-const { isCreateDialogOpen } = storeToRefs(examStore)
 
 const { t } = useI18n()
 const editorModules = {
@@ -31,17 +28,14 @@ const editorModules = {
 }
 // Create formData separately so we can reference it in validation rules
 const formData = reactive<ExamCreate>({
-    duration: null,
     title: null,
     examTemplateId: null,
-    startDate: null,
-    startTime: null,
-    endTime: null,
-    examType: null,
-    enterTimeAllowed: null,
-    examGroups: [],
-    instructions: '',
-
+    startAt: null,
+    durationMinutes: undefined,
+    allowEnterBeforeMinutes: undefined,
+    allowEnterAfterMinutes: undefined,
+    groupId: null,
+    description: '',
 })
 
 const validator = new Validator<ExamCreate>(
@@ -54,106 +48,40 @@ const validator = new Validator<ExamCreate>(
         examTemplateId: {
             required: createValidator(t, 'blueprint', 'required'),
         },
-        startDate: {
+        startAt: {
             required: createValidator(t, 'start-date', 'required'),
         },
-        startTime: {
-            required: createValidator(t, 'start-time', 'required'),
-        },
-        endTime: {
-            required: createValidator(t, 'end-time', 'required'),
-        },
-        examType: {
-            required: createValidator(t, 'exam-type', 'required'),
-        },
-        duration: {
+        durationMinutes: {
             required: createValidator(t, 'duration', 'required'),
             minValue: createValidator(t, 'duration', 'minValue', 30),
         },
-        enterTimeAllowed: {
-            required: createValidator(t, 'enterance-time-allowed', 'required'),
-            minValue: createValidator(t, 'enterance-time-allowed', 'minValue', 1),
-            lessThanDuration: helpers.withMessage(
-                () => t('validation.maxValue', { field:"وقت التأخير", max: formData.duration ?? 0 }),
-                (value: number) => !value || !formData.duration || value < formData.duration
-            ),
+        allowEnterBeforeMinutes: {
+            required: createValidator(t, 'enterance-time-allowed-before', 'required'),
+            minValue: createValidator(t, 'enterance-time-allowed-before', 'minValue', 1),
         },
-        examGroups: {
-            requiredIfFinal: helpers.withMessage(
-                () => t('validation.required', { field: t('groups') }),
-                requiredIf(computed(() => formData.examType === ExamType.Final))
-            ),
+        allowEnterAfterMinutes: {
+            required: createValidator(t, 'enterance-time-allowed-after', 'required'),
+            minValue: createValidator(t, 'enterance-time-allowed-after', 'minValue', 1),
         },
     }
 )
 
 const body = validator.validation
-const calculateDuration = () => {
-    const now = new Date().toISOString().split('T')[0]
-    if (
-        isNullOrEmpty(body.value.startTime.$model as string) ||
-        isNullOrEmpty(body.value.endTime.$model as string)
-    ) {
-        return
-    }
-    const start = new Date(`${now}T${body.value.startTime.$model}`)
-    const end = new Date(`${now}T${body.value.endTime.$model}`)
-    const diff = end.getTime() - start.getTime()
-    const minutes = Math.floor(diff / 60000)
-    // Only set duration if it's positive
-    if (minutes > 0) {
-        body.value.duration.$model = minutes
-    } else {
-        body.value.duration.$model = null
-        // Trigger validation error on endTime
-        body.value.endTime.$touch()
-    }
-}
-watchDeep(body, calculateDuration)
+
 const router = useRouter()
 const submit = async () => {
     const isValid = await body.value.$validate()
-
-
     if (!isValid) {
         return
     }
-
     try {
         await examStore.createExam(validator.extractBody())
         validator.resetBody()
         router.push('/exams')
-        isCreateDialogOpen.value = false
-    } catch (error) { }
+    } catch (error) {
+        console.error(error)
+    }
 }
-
-
-const updateInstructions = (content: string) => {
-    // Remove HTML tags and trim whitespace to check if content is empty
-    // const plainText = content.replace(/<[^>]*>/g, '').trim();
-
-    body.value.instructions.$model = content
-}
-
-const updateExamType = (type: ExamType) => {
-    body.value.examType.$model = type;
-    window.setTimeout(() => {
-    }, 1300);
-}
-
-onMounted(() => {
-    body.value.examType.$model = examTypesOptions(t)[0].value
-})
-
-
-const selectedGroupObjects = ref([])
-
-function onSelectedGroups(items: any) {
-    selectedGroupObjects.value = items
-}
-
-
-
 
 </script>
 
@@ -162,13 +90,10 @@ function onSelectedGroups(items: any) {
         <div class="relative mb-6 col-span-2">
             <!-- Tabs -->
             <div class="flex gap-2 absolute -top-10 right-4">
-                <button v-for="type in examTypesOptions($t)" :key="type.value" @click="updateExamType(type.value)"
-                    class="px-4 py-1.5 text-lg font-bold rounded-t-lg border transition-all duration-200" :class="[
-                        body.examType.$model === type.value
-                            ? 'bg-white border-gray-300 border-b-white text-primary'
-                            : 'bg-gray-200 text-gray-600 border-transparent hover:bg-gray-300'
-                    ]">
-                    {{ type.label }}
+                <button
+                    class="px-4 py-1.5 text-lg font-bold rounded-t-lg border transition-all duration-200 bg-white border-gray-300 border-b-white text-primary
+                    " >
+                    {{ $t('create-exams') }}
                 </button>
             </div>
 
@@ -184,70 +109,48 @@ function onSelectedGroups(items: any) {
                             {{ $t('create-exams-with-filters') }}
                         </p>
                     </div>
-                    <div class="flex flex-col gap-5 rounded-3xl p-3" v-if="body.examType.$model">
+                    <div class="flex flex-col gap-5 rounded-3xl p-3">
                         <AppFieldAppInputField v-model="body.title.$model" :errors="body.title.$errors"
                             :label="$t('title')" :placeholder="$t('enter-title')" />
                         <div class="grid gap-5 md:grid-cols-1">
                             <AppAutoCompleteField v-model="body.examTemplateId.$model" fetch-on-search
                                 search-key="search" :errors="body.examTemplateId.$errors" :label="$t('blueprint')"
-                                :placeholder="$t('blueprint')" get-url="/examtemplate" item-label="name"
+                                :placeholder="$t('blueprint')" get-url="/exam-templates" item-label="title"
                                 item-value="id" />
-                            <!-- <AppAutoCompleteField v-model="body.examType.$model" :items="examTypesOptions($t)"
-                                item-label="label" item-value="value" :errors="body.examType.$errors"
-                                :label="$t('exam-type')" :placeholder="$t('exam-type')" /> -->
-
-
+                                <AppAutoCompleteField 
+                                    v-model="body.groupId.$model" fetch-on-search search-key="name"
+                                    :errors="body.groupId.$errors" :label="$t('group')" :placeholder="$t('group')"
+                                    get-url="/groups/lookup" without-data item-label="title" item-value="id"
+                                    />
 
                         </div>
                     
                         <div class="grid gap-5 md:grid-cols-2">
 
-                            <AppAutoCompleteField v-if="body.examType.$model == ExamType.Final"
-                                v-model="body.examGroups.$model" fetch-on-search search-key="name"
-                                :errors="body.examGroups.$errors" :label="$t('groups')" :placeholder="$t('groups')"
-                                get-url="/groups/lookup" without-data multiple item-label="title" item-value="id"
-                                @update:objectValue="onSelectedGroups" />
-                            <AppFieldAppInputField v-model="body.startDate.$model" :errors="body.startDate.$errors"
-                                :label="$t('start-date')" :placeholder="$t('enter-start-date')" type="date" />
-                        </div>
-                        <!-- <div class="grid gap-5 md:grid-cols-2">
-                            <AppFieldAppInputField v-model="body.endDate.$model" :errors="body.endDate.$errors"
-                                :label="$t('end-date')" :placeholder="$t('enter-end-date')" type="date" />
-                        </div> -->
-                        <div class="grid gap-5 md:grid-cols-2">
-
-                            <AppFieldAppInputField v-model="body.startTime.$model" :errors="body.startTime.$errors"
-                                :label="$t('start-time')" :placeholder="$t('enter-start-time')" type="time" />
-                            <AppFieldAppInputField v-model="body.endTime.$model" :errors="body.endTime.$errors"
-                                :label="$t('end-time')" :placeholder="$t('enter-end-time')" type="time" />
-
-                        </div>
-                        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-                            <AppFieldAppInputField v-model="body.duration.$model" :errors="body.duration.$errors"
-                                :label="$t('duration-in-minutes')" :placeholder="$t('enter-duration')" disabled />
-                            <AppFieldAppInputField v-model="body.enterTimeAllowed.$model"
-                                :errors="body.enterTimeAllowed.$errors" :label="$t('enterance-time-allowed-in-minutes')"
-                                :placeholder="$t('enter-enterance-time-allowed')" />
+                            <AppFieldAppInputField v-model="body.startAt.$model" :errors="body.startAt.$errors"
+                                :label="$t('start-date')" :placeholder="$t('enter-start-date')" type="datetime-local" />
+                            <AppFieldAppInputField v-model="body.durationMinutes.$model" :errors="body.durationMinutes.$errors"
+                                :label="$t('duration-in-minutes')" :placeholder="$t('enter-duration')" />
+                            <AppFieldAppInputField v-model="body.allowEnterBeforeMinutes.$model"
+                                :errors="body.allowEnterBeforeMinutes.$errors" :label="$t('enterance-time-allowed-before')"
+                                :placeholder="$t('enterance-time-allowed-before')" />
+                            <AppFieldAppInputField v-model="body.allowEnterAfterMinutes.$model"
+                                :errors="body.allowEnterAfterMinutes.$errors"
+                                :label="$t('enterance-time-allowed-after')"
+                                :placeholder="$t('enterance-time-allowed-after')" />
                         </div>
 
                         <div class="quill-editor-container bg-white p-4 ">
                             <label class="mb-2 block text-sm font-medium text-gray-700">
                                 {{ $t('exam-instructions') }}
                             </label>
-                            <QuillEditor :value="body.instructions.$model" content-type="html" theme="snow"
+                            <QuillEditor :value="body.description.$model" content-type="html" theme="snow"
                                 :toolbar="editorModules.toolbar" :clipboard="editorModules.clipboard"
-                                class="quill-editor" @update:content="updateInstructions" />
+                                class="quill-editor" />
                         </div>
                     </div>
 
-                    <div v-else class="flex items-center justify-center h-full my-10">
-                        <div class="flex flex-col gap-4 items-center justify-center">
-                            <Icon name="ph-info-duotone" class="text-primary size-25" />
-                            <h1 class="text-2xl font-bold">
-                                قم بتحديد نوع الامتحان ليتم تحديد الاعدادات الخاصة به
-                            </h1>
-                        </div>
-                    </div>
+
                 </div>
 
                 <BaseButton color="primary" :loading="examStore.isLoading" class=" w-full " @click="submit">
@@ -259,12 +162,12 @@ function onSelectedGroups(items: any) {
         </div>
         <div class="flex flex-col gap-4">
             <ExamCardCreationResult
-                :title="examTypesOptions($t).find((type) => type.value === body.examType.$model)?.label"
-                :description="body.title.$model as string ?? ''" :groups="selectedGroupObjects"
-                :start-time="body.startTime.$model as string ?? '09:00'"
-                :end-time="body.endTime.$model as string ?? '09:00'" :start-date="body.startDate.$model as Date ?? new Date('2026-01-01')"
-                :blueprint-id="body.examTemplateId.$model as number" :duration="body.duration.$model as number" />
-
+             :title="body.title.$model as string ?? ''"
+                :description="body.description.$model as string ?? ''" :groups="body.groupId.$model as string[]"
+                :start-at="body.startAt.$model as Date ?? new Date('2026-01-01')"
+                :blueprint-id="body.examTemplateId.$model as number"
+                :duration-minutes="body.durationMinutes.$model as number ?? 0"
+            />
         </div>
 
     </div>

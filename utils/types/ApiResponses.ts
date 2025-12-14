@@ -22,9 +22,9 @@ export interface SingleObjectResponse<T> {
   error?: null
 }
 export interface BaseFilters extends Record<string, any> {
-  Page: number
-  PageSize: number
-  Search: string
+  page: number
+  pageSize: number
+  search: string
 }
 
 export type ApiError<T> = AxiosError<PaginatedResponse<T>>
