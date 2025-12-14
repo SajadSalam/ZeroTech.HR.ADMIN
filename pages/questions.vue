@@ -120,14 +120,12 @@ const toggleSelectAllQuestions = () => {
 
 <template>
     <div>
-        <AppCrud v-model:current-page="filters.page" pagination :total-pages="questionsStore.totalPages"
-            hide-create>
+        <AppCrud v-model:current-page="filters.page" pagination :total-pages="questionsStore.totalPages" hide-create>
             <template #filters>
                 <BaseInput v-model="searchInput" :placeholder="$t('search')" />
                 <AppAutoCompleteField v-model="filters.questionBankId" fetch-on-search search-key="name"
-                    :placeholder="$t('questions-bank')" get-url="/question-banks/lookup"
-                    without-data
-                    item-label="title" item-value="id" />
+                    :placeholder="$t('questions-bank')" get-url="/question-banks/lookup" without-data item-label="title"
+                    item-value="id" />
                 <AppAutoCompleteField v-model="filters.questionType" :items="questionTypeOptions($t)"
                     :placeholder="$t('select-a-question-type')" item-label="label" item-value="value" />
                 <AppAutoCompleteField v-model="filters.difficulty" :items="difficultyOptions($t)"
@@ -154,23 +152,25 @@ const toggleSelectAllQuestions = () => {
                     </div>
                 </template>
                 <template #data-actions="{ item }">
-                    <div class="flex items-center justify-center gap-3">
-                        <BaseButtonIcon :data-nui-tooltip="$t('view')" variant="outline" rounded="full" color="primary"
-                            size="sm" @click="openView(item)">
-                            <Icon name="ph-eye" size="18" />
-                        </BaseButtonIcon>
+                    <div class="grid grid-cols-2 items-center justify-center gap-2">
                         <BaseButton v-if="
-                            item.status === AuditStatus.Pending 
-                        " :data-nui-tooltip="$t('approve')" 
-                        color="success" variant="pastel" size="sm"
+                            item.status === AuditStatus.Pending
+                        " :data-nui-tooltip="$t('approve')" color="success" variant="pastel" size="sm"
                             @click="questionsStore.approveQuestion(item.id)" :loading="questionsStore.isLoading"
                             :disabled="questionsStore.isLoading">
                             <Icon name="ph-check" />
-                            {{ $t('approve') }}
                         </BaseButton>
 
                         <BaseButton v-if="
-                            item.status === AuditStatus.Pending 
+                            item.status === AuditStatus.Pending
+                        " :data-nui-tooltip="$t('cancel')" color="danger" variant="pastel" size="sm"
+                            @click="openCancel(item)" :loading="questionsStore.isLoading"
+                            :disabled="questionsStore.isLoading">
+                            <Icon name="ph-x" />
+                        </BaseButton>
+
+                        <BaseButton class="col-span-2" v-if="
+                            item.status === AuditStatus.Pending
                         " :data-nui-tooltip="$t('request-update')" color="warning" variant="pastel" size="sm"
                             @click="openRequestUpdate(item)" :loading="questionsStore.isLoading"
                             :disabled="questionsStore.isLoading">
@@ -178,14 +178,14 @@ const toggleSelectAllQuestions = () => {
                             {{ $t('request-update') }}
                         </BaseButton>
 
-                        <BaseButton v-if="
-                            item.status === AuditStatus.Pending 
-                        " :data-nui-tooltip="$t('cancel')" color="danger" variant="pastel" size="sm"
-                            @click="openCancel(item)" :loading="questionsStore.isLoading"
-                            :disabled="questionsStore.isLoading">
-                            <Icon name="ph-x" />
-                            {{ $t('cancel') }}
-                        </BaseButton>
+
+                        <BaseButtonIcon :data-nui-tooltip="$t('view')" variant="outline" rounded="full" color="primary"
+                            size="sm" @click="openView(item)">
+                            <Icon name="ph-eye" size="16" />
+                        </BaseButtonIcon>
+
+
+
                         <AuditLogBtn :entity-id="item.id" />
 
                     </div>
@@ -198,14 +198,14 @@ const toggleSelectAllQuestions = () => {
                 </template>
                 <template #data-type="{ item }">
                     <span class="text-primary-500">
-                      
-                    {{ getQuestionTypeLabel(item.questionType as QuestionType, $t) }}    
+
+                        {{ getQuestionTypeLabel(item.questionType as QuestionType, $t) }}
                     </span>
                 </template>
                 <template #data-difficulty="{ item }">
                     <span class="text-primary-500">{{
                         getDifficultyConfig(item.difficulty as Difficulty, $t).label
-                        }}</span>
+                    }}</span>
                 </template>
                 <template #data-creatorFullName="{ item }">
                     <span>{{ item.creator?.name || '-' }}</span>
@@ -217,16 +217,16 @@ const toggleSelectAllQuestions = () => {
                     <span>{{ item.topic?.titleAr || item.topic?.titleEn || '-' }}</span>
                 </template>
                 <template #data-auditStatus="{ item }">
-                    <BaseTag variant="pastel" :color="
-                        item.status === AuditStatus.Pending
+                    <BaseTag variant="pastel" :color="item.status === AuditStatus.Pending
                             ? 'warning'
                             : item.status === AuditStatus.Approve
-                            ? 'success'
-                            : item.status === AuditStatus.RequestUpdate
-                            ? 'info'
-                            : 'danger'
-                    ">
-                        {{ $t(typeof item.status === 'string' ? item.status : AuditStatus[item.status ?? AuditStatus.Pending]) }}
+                                ? 'success'
+                                : item.status === AuditStatus.RequestUpdate
+                                    ? 'info'
+                                    : 'danger'
+                        ">
+                        {{ $t(typeof item.status === 'string' ? item.status : AuditStatus[item.status ??
+                        AuditStatus.Pending]) }}
                     </BaseTag>
                 </template>
                 <template #data-auditDate="{ item }">
