@@ -15,7 +15,7 @@ import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vu
 import { useAuthStore } from '~/views/auth/store/auth'
 import CancelDialog from '~/views/questions/components/CancelDialog.vue'
 import RequestUpdateDialog from '~/views/questions/components/RequestUpdateDialog.vue'
-// import ViewQuestion from '~/views/questions/components/ViewQuestion.vue'
+import ViewQuestionDialog from '~/views/questions/components/ViewQuestionDialog.vue'
 import type { QuestionFilters } from '~/views/questions/service'
 import { useQuestionStore } from '~/views/questions/store'
 import {
@@ -66,12 +66,16 @@ watchDebounced(
     },
     { deep: true, debounce: 500 }
 )
-const openView = (item: Question) => {
-    questionsStore.selectedQuestion = {
-        ...item,
-    }
+const openView = async (item: Question) => {
     questionsStore.selectedQuestionId = item.id!
-    questionsStore.isEditDialogOpen = true
+    try {
+        // Fetch full question details from API
+        const fullQuestion = await questionsStore.getQuestionById(item.id!)
+        questionsStore.selectedQuestion = fullQuestion
+        questionsStore.isEditDialogOpen = true
+    } catch (error) {
+        console.error('Failed to fetch question details:', error)
+    }
 }
 
 const openCancel = (item: Question) => {
@@ -232,7 +236,7 @@ const toggleSelectAllQuestions = () => {
         </AppCrud>
     </div>
 
-    <!-- <ViewQuestion /> -->
+    <ViewQuestionDialog />
     <CancelDialog @update="getQuestions()" />
     <RequestUpdateDialog @update="getQuestions()" />
 </template>

@@ -898,5 +898,21 @@
   "no-patterns-defined": "No patterns defined",
   "at-least-one-pattern-required": "At least one answer pattern is required",
   "fix-invalid-patterns": "Please fix invalid regex patterns before saving",
-  "choices": "choices"
+  "choices": "choices",
+  "view-question": "View Question",
+  "multiple-choices": "Multiple Choices",
+  "correct-answer": "Correct Answer",
+  "true-false-answer": "True/False Answer",
+  "true": "True",
+  "false": "False",
+  "correct-order": "Correct Order",
+  "matching-pairs": "Matching Pairs",
+  "left-item": "Left Item",
+  "right-item": "Right Item",
+  "acceptable-answers": "Acceptable Answers",
+  "acceptable-patterns": "Acceptable Patterns",
+  "created-by": "Created By",
+  "unknown": "Unknown",
+  "created-at": "Created At",
+  "updated-at": "Updated At"
 }

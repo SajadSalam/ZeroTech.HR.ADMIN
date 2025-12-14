@@ -925,5 +925,21 @@
   "no-patterns-defined": "لم يتم تعريف أنماط",
   "at-least-one-pattern-required": "يجب إدخال نمط إجابة واحد على الأقل",
   "fix-invalid-patterns": "يرجى إصلاح التعبيرات النمطية غير الصالحة قبل الحفظ",
-  "choices": "اختيارات"
+  "choices": "اختيارات",
+  "view-question": "عرض السؤال",
+  "multiple-choices": "اختيارات متعددة",
+  "correct-answer": "الإجابة الصحيحة",
+  "true-false-answer": "إجابة صح/خطأ",
+  "true": "صح",
+  "false": "خطأ",
+  "correct-order": "الترتيب الصحيح",
+  "matching-pairs": "أزواج المطابقة",
+  "left-item": "العنصر الأيسر",
+  "right-item": "العنصر الأيمن",
+  "acceptable-answers": "الإجابات المقبولة",
+  "acceptable-patterns": "الأنماط المقبولة",
+  "created-by": "أنشئ بواسطة",
+  "unknown": "غير معروف",
+  "created-at": "تاريخ الإنشاء",
+  "updated-at": "تاريخ التحديث"
 }
