@@ -2,6 +2,8 @@ import axios from '~/services/app-client/axios'
 import type { PaginatedResponse } from '~/utils/types/ApiResponses'
 import type { Employee } from '~/views/employee/types'
 import type {
+    ImportQuestionResponse,
+    ImportQuestionTypeOption,
     QuestionBankCreateDto,
     QuestionBankDto,
     QuestionBankFilters,
@@ -18,8 +20,9 @@ interface IQuestionBankService {
   getById: (id: string) => Promise<QuestionBankDto>
   assignEmployees: (questionBankId: string, data: AssignForm) => Promise<void>
   getAssignedEmployees: (questionBankId: string, type: AssignType) => Promise<Employee[]>
+  downloadTemplate: (questionBankId: string, templateEndpoint: string) => Promise<Blob>
+  importQuestions: (questionBankId: string, file: File, option: ImportQuestionTypeOption) => Promise<ImportQuestionResponse>
 }
-
 export class QuestionBankService implements IQuestionBankService {
 
   async get(filters: QuestionBankFilters): Promise<PaginatedResponse<QuestionBankDto>> {
@@ -50,10 +53,6 @@ export class QuestionBankService implements IQuestionBankService {
     const response = await axios.get<Employee[]>(`/question-banks/${questionBankId}/employees?type=${type}`)
     return response.data
   }
-  async getCountByQuestionBankId(questionBankId: string): Promise<CountDetails> {
-    const response = await axios.get<CountDetails>(`/question-banks/${questionBankId}/count-details`)
-    return response.data
-  }
 
   async removeTopic(questionBankId: string, topicId: string): Promise<void> {
     await axios.delete(`/question-banks/${questionBankId}/topics/${topicId}`)
@@ -63,4 +62,54 @@ export class QuestionBankService implements IQuestionBankService {
     await axios.post(`/question-banks/${questionBankId}/topics`, { topicId })
   }
 
+  async downloadTemplate(questionBankId: string, templateEndpoint: string): Promise<Blob> {
+    const response = await axios.get(`/questions/${questionBankId}/${templateEndpoint}`, {
+      responseType: 'blob',
+    })
+    return response.data
+  }
+
+  async importQuestions(
+    questionBankId: string,
+    file: File,
+    option: ImportQuestionTypeOption
+  ): Promise<ImportQuestionResponse> {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    // Build URL with query parameter for choice-based questions
+    let url = `/questions/${questionBankId}/${option.endpoint}`
+    if (option.endpoint === 'import-choices') {
+      url += `?questionType=${option.value}`
+    }
+
+    const response = await axios.post<ImportQuestionResponse>(url, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+
+    // Parse response to match expected format
+    const data = response.data
+    
+    // If API returns simple message format, transform it
+    if (data.message && !data.hasErrors) {
+      return {
+        message: data.message,
+        totalRows: 0,
+        successCount: 0,
+        errorCount: 0,
+        hasErrors: false,
+        errors: [],
+      }
+    }
+
+    return data
+  }
+    async getCountByQuestionBankId(questionBankId: string): Promise<CountDetails> {
+    const response = await axios.get<CountDetails>(`/question-banks/${questionBankId}/count-details`)
+    return response.data
+  }
+
 }
+

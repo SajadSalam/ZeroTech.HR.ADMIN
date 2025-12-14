@@ -3,11 +3,12 @@ import type { Employee } from '~/views/employee/types'
 import type { } from '~/views/questions/types'
 import { QuestionBankService } from '../service'
 import {
-  type QuestionBankCreateDto,
-  type QuestionBankDto,
-  type QuestionBankFilters,
+    type QuestionBankCreateDto,
+    type QuestionBankDto,
+    type QuestionBankFilters,
 } from '../types'
 import { AssignType, type AssignForm } from '../types/assign'
+import type { ImportQuestionResponse, ImportQuestionTypeOption } from '../types/import'
 
 const questionBankService = new QuestionBankService()
 
@@ -30,6 +31,7 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
   const assignType = ref<AssignType>(AssignType.Creator)
   const totalPages = ref(0)
   const isAddTopicOpen = ref(false)
+  const importDialogOpen = ref(false)
   const getQuestionBanks = async (questionBankFilters: QuestionBankFilters) => {
     try {
       isLoading.value = true
@@ -146,6 +148,62 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
     }
   }
 
+  /**
+   * Download template for importing questions
+   * @param option - The import question type option containing template endpoint
+   */
+  const downloadTemplate = async (questionBankId: string, option: ImportQuestionTypeOption) => {
+    try {
+      const blob = await questionBankService.downloadTemplate(
+        questionBankId,
+        option.templateEndpoint
+      )
+
+      // Create download link
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      
+      // Set filename based on question type
+      const filename = option.templateEndpoint.split('-').join('_') + '_template.xlsx'
+      link.setAttribute('download', filename)
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  /**
+   * Import questions from Excel file
+   * @param questionBankId - The question bank ID
+   * @param file - The Excel file to import
+   * @param option - The import question type option
+   */
+  const importQuestions = async (
+    questionBankId: string,
+    file: File,
+    option: ImportQuestionTypeOption | null
+  ): Promise<ImportQuestionResponse> => {
+    try {
+      if (!option) {
+        throw new Error('Question type option is required')
+      }
+
+      const response = await questionBankService.importQuestions(
+        questionBankId,
+        file,
+        option
+      )
+
+      return response
+    } catch (error) {
+      throw error
+    }
+  }
+
   return {
     questionBanks,
     isLoading,
@@ -168,5 +226,8 @@ export const useQuestionBankStore = defineStore('questionBank', () => {
     removeTopic,
     addTopic,
     isAddTopicOpen,
+    importDialogOpen,
+    downloadTemplate,
+    importQuestions,
   }
 })

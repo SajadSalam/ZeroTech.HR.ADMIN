@@ -19,13 +19,14 @@ export enum Difficulty {
 
 export enum AuditStatus {
     Pending = 1,
-    Approved = 2,
-    Rejected = 3,
+    RequestUpdate = 2,
+    Approve = 3    ,
+    Cancel = 4,
 }
 
 // QuestionChoice interfaces
 export interface QuestionChoice {
-    questionId: string
+    id?: string
     text: string
     isCorrect: boolean
 }
@@ -34,7 +35,7 @@ export type QuestionChoiceDto = BaseDto & QuestionChoice
 
 // QuestionTextAnswerPattern interfaces
 export interface QuestionTextAnswerPattern {
-    questionId: string
+    id?: string
     pattern: string
 }
 
@@ -42,7 +43,7 @@ export type QuestionTextAnswerPatternDto = BaseDto & QuestionTextAnswerPattern
 
 // QuestionOrderingItem interfaces
 export interface QuestionOrderingItem {
-    questionId: string
+    id?: string
     text: string
     correctOrderIndex: number
 }
@@ -51,7 +52,7 @@ export type QuestionOrderingItemDto = BaseDto & QuestionOrderingItem
 
 // MatchingRightItem interfaces
 export interface MatchingRightItem {
-    questionId: string
+    id?: string
     text: string
 }
 
@@ -59,7 +60,7 @@ export type MatchingRightItemDto = BaseDto & MatchingRightItem
 
 // MatchingLeftItem interfaces
 export interface MatchingLeftItem {
-    questionId: string
+    id?: string
     text: string
     correctRightItemId: string
     order: number
@@ -69,14 +70,30 @@ export type MatchingLeftItemDto = BaseDto & MatchingLeftItem
 
 // Question interfaces
 export interface Question {
+    id?: string
     questionBankId: string
     topicId: string
+    topic?: {
+        id: string
+        titleEn: string
+        titleAr: string
+    }
     titleEn: string
     titleAr: string
-    questionType: QuestionType
-    difficulty: Difficulty
+    questionType: QuestionType | string
+    difficulty: Difficulty | string
     isActive: boolean
-    status: AuditStatus
+    status: AuditStatus | string
+    auditStatus?: AuditStatus
+    creator?: {
+        id: number
+        name: string
+    }
+    auditor?: {
+        id: number
+        name: string
+    } | null
+    auditDate?: string | null
     explanation?: string | null
     attachments?: unknown[] // Attachment type would need to be defined elsewhere
     choices?: QuestionChoiceDto[]
@@ -84,6 +101,8 @@ export interface Question {
     matchingLeftItems?: MatchingLeftItemDto[]
     matchingRightItems?: MatchingRightItemDto[]
     textAnswerPatterns?: QuestionTextAnswerPatternDto[]
+    createdAtUtc?: string
+    updateAtUtc?: string
 }
 
 export type QuestionDto = BaseDto & Question

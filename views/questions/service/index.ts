@@ -17,6 +17,9 @@ export interface IQuestionService {
     create: (data: QuestionRequest) => Promise<QuestionDto>
     update: (id: string, data: QuestionRequest) => Promise<QuestionDto>
     delete: (id: string) => Promise<void>
+    approve: (id: string) => Promise<void>
+    cancel: (id: string, reason: string) => Promise<void>
+    requestUpdate: (id: string, reason: string) => Promise<void>
 }
 
 export class QuestionService implements IQuestionService {
@@ -60,5 +63,20 @@ export class QuestionService implements IQuestionService {
      */
     async delete(id: string): Promise<void> {
         await axiosIns.delete(`/questions/${id}`)
+    }
+    async approve(id: string): Promise<void> {
+        await axiosIns.put(`/questions/${id}/approve`)
+    }
+    async cancel(id: string, reason: string): Promise<void> {
+        await axiosIns.put(`/questions/${id}/cancel`, { reason })
+    }
+    /**
+     * Requests an update for a question by its ID.
+     * @param id - The ID of the question to request update for.
+     * @param reason - The reason for requesting the update.
+     * @returns A promise that resolves when the request is sent.
+     */
+    async requestUpdate(id: string, reason: string): Promise<void> {
+        await axiosIns.put(`/questions/${id}/request-update`, { actionReason: reason })
     }
 }

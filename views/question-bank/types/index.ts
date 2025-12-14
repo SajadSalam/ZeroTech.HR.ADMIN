@@ -31,3 +31,7 @@ export type QuestionBankFilters = {
   topics?: string[] | null
 } & BaseFilters
 
+// Re-export import types
+export type { ImportQuestionTypeOption, ImportQuestionResponse, ImportQuestionError } from './import'
+export { importQuestionTypeOptions } from './import'
+
