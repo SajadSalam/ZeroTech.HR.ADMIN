@@ -1,8 +1,9 @@
 <script lang="ts" setup>
+import AppInputField from '~/components/app-field/AppInputField.vue'
 import { Validator } from '~/services/validator'
+import { formatUtcToLocal } from '~/utils'
 import { useExamStore } from '../store/index'
 import type { ScheduleExam } from '../types'
-import AppInputField from '~/components/app-field/AppInputField.vue'
 
 const examStore = useExamStore()
 
@@ -21,8 +22,9 @@ const updateSchedule = async () => {
 }
 watch(() => examStore.isUpdateScheduleDialogOpen, (value) => {
     if (value) {
+        const date = formatUtcToLocal(examStore.exam?.startAtUtc as string)
         validator.fillBody({
-            startAt: new Date(examStore.exam?.startAtUtc as string).toISOString().slice(0, 16),
+            startAt: date,
             durationMinutes: examStore.exam?.durationMinutes,
         })
     } else {

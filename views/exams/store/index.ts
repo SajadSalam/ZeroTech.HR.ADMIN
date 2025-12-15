@@ -89,6 +89,7 @@ export const useExamStore = defineStore('exam', () => {
   const updateSchedule = async (schedule: ScheduleExam) => {
     try {
       isLoading.value = true
+      schedule.startAt = formatDateWithTimezone(schedule.startAt!)
       const res = await examService.updateSchedule(exam.value?.id as string, schedule)
       exam.value = null
       return res
