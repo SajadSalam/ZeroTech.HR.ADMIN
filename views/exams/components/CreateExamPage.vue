@@ -67,7 +67,7 @@ const validator = new Validator<ExamCreate>(
 )
 
 const body = validator.validation
-
+const examFormData = computed(() => validator.extractBody())
 const router = useRouter()
 const submit = async () => {
     const isValid = await body.value.$validate()
@@ -162,11 +162,11 @@ const submit = async () => {
         </div>
         <div class="flex flex-col gap-4">
             <ExamCardCreationResult
-             :title="body.title.$model ?? ''"
-                :description="body.description.$model ?? ''" :group="body.groupId.$model"
-                :start-at="body.startAt.$model"
-                :blueprint-id="body.examTemplateId.$model ?? 0"
-                :duration-minutes="body.durationMinutes.$model ?? 0"
+             :title="examFormData.title ?? ''"
+                :description="examFormData.description ?? ''" :group="examFormData.groupId ?? ''"
+                :start-at="examFormData.startAt ?? ''"
+                :blueprint-id="examFormData.examTemplateId"
+                :duration-minutes="examFormData.durationMinutes"
             />
         </div>
 

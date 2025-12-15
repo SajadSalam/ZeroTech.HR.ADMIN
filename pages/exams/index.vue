@@ -69,8 +69,8 @@ const handleUpdateSchedule = (exam: ExamDto) => {
         </template>
       <template #additional-filters>
         <div class="flex gap-4">
-          <AppFieldAppInputField v-model="filters.StartDateFrom" type="date" :label="$t('start-date-from')" />
-          <AppFieldAppInputField v-model="filters.StartDateTo" type="date" :label="$t('start-date-to')" />
+          <AppFieldAppInputField v-model="filters.startDateFrom" type="date" :label="$t('start-date-from')" />
+          <AppFieldAppInputField v-model="filters.startDateTo" type="date" :label="$t('start-date-to')" />
         </div>
       </template>
       <AppTable title="Exams" :headers="tableHeaders($t)" :items="exams">

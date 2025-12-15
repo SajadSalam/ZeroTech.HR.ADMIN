@@ -22,7 +22,7 @@ const updateSchedule = async () => {
 watch(() => examStore.isUpdateScheduleDialogOpen, (value) => {
     if (value) {
         validator.fillBody({
-            startAt: examStore.exam?.startAtUtc,
+            startAt: new Date(examStore.exam?.startAtUtc as string).toISOString().slice(0, 16),
             durationMinutes: examStore.exam?.durationMinutes,
         })
     } else {

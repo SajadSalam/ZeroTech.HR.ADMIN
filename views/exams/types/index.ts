@@ -38,8 +38,8 @@ export type ExamDto = Exam &
   export type ExamFilters = {
     examTemplateId: string | null
     groupId: string | null
-    StartDateFrom: string | null
-    StartDateTo: string | null
+    startDateFrom: string | null
+    startDateTo: string | null
   } & BaseFilters
 
   export interface ScheduleExam {

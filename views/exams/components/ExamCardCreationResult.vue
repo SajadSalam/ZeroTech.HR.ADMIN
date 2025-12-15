@@ -9,8 +9,8 @@ interface Props {
   description?: string
   group: string
   startAt?: string
-  blueprintId?: null | number
-  durationMinutes?: number
+  blueprintId?: null | string
+  durationMinutes: number | null
 }
 const groupStore = useGroupStore()
 const props = withDefaults(defineProps<Props>(), {

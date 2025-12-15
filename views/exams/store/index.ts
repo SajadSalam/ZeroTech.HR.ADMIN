@@ -11,8 +11,8 @@ export const useExamStore = defineStore('exam', () => {
         search: '',
         examTemplateId: null,
         groupId: null,
-        StartDateFrom: null,
-        StartDateTo: null
+        startDateFrom: null,
+        startDateTo: null
     })
     const isQuestionReplaceDialogOpen = ref(false)
     const isExtendDurationDialogOpen = ref(false)
@@ -27,7 +27,7 @@ export const useExamStore = defineStore('exam', () => {
       isLoading.value = true
       const response = await examService.get(filters.value)
       exams.value = response.items
-      totalPages.value = response.pagesCount
+      totalPages.value = response.pageCount
     } catch (error) {
     } finally {
       isLoading.value = false
