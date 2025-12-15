@@ -1,127 +1,48 @@
 import type { BaseFilters } from '~/utils/types/ApiResponses'
-import type { BaseDto } from '~/utils/types/base-dto'
-import type { BlueprintDto } from '~/views/blueprint/types'
-import type { ExaminationCenterDto } from '~/views/examination-centers/types'
-import ExamEdit from '~/views/exams/components/ExamEdit.vue'
-import type { QuestionDto } from '~/views/questions/types'
-import type { Student } from '~/views/students/types'
+import type { BaseDto } from '~/utils/types/base-dto' 
 
 export interface Exam {
-  title: string | null
-  examType: ExamType | null
-  examTemplateId: string | null
-  startDate: string | null
-  startTime: string | null
-  endTime: string | null
-  duration: number | null
-  enterTimeAllowed: number | null
-  instructions: string | null
+  title: string;
+  description: string;
+  examTemplateId: string;
+  examTemplateTitle: string;
+  totalQuestionsGrade: number;
+  fullGrade: number;
+  successGrade: number;
+  startAtUtc: string;
+  endAtUtc: string;
+  durationMinutes: number;
+  allowEnterBeforeMinutes: number;
+  allowEnterAfterMinutes: number;
+  displayResult: boolean;
+  moveBetweenQuestion: boolean;
+  randomizeAnswer: boolean;
+  randomizeChoices: boolean;
+  groupId: string;
+  groupTitle: string;
 }
+
 export type ExamDto = Exam &
-  BaseDto & {
-    orgnaizations: string[]
-    examTemplate: BlueprintDto
-    time?: string
-    attendance?: number
-    pass?: number
-    fail?: number
-    templateName?: string
+  BaseDto
+  
+  export interface ExamCreate {
+    title: string | null;
+    examTemplateId: string | null;
+    startAt: string | null;
+    durationMinutes: number | null;
+    allowEnterBeforeMinutes: number | null;
+    allowEnterAfterMinutes: number | null;
+    groupId: string | null;
+    description: string | null;
   }
-export type ExamDetailed = ExamDto & {
-  questions: QuestionDto[]
-}
+  export type ExamFilters = {
+    examTemplateId: string | null
+    groupId: string | null
+    startDateFrom: string | null
+    startDateTo: string | null
+  } & BaseFilters
 
-export type ExamCreate = Exam & {
-  examGroups: string[] | null
-}
-export type ExamFilters = {
-  search: string | null
-  type: ExamType | null
-  status: ExamStatus | null
-  examTemplateId: string | null
-} & BaseFilters
-export enum ExamType {
-  Quarterly = 0,
-  SemiAnnual = 1,
-  Final = 2,
-  Postgraduate = 3,
-  EvaluationProficiency = 4,
-  Mock = 5,
-}
-
-export enum ProficiencyExamGroup {
-  English = 1,      // اللغة الانجليزية
-  Arabic = 2,       // اللغة العربية
-  Computer = 3      // الحاسوب
-}
-
-export interface LinkedExam {
-  id: number
-  name: string
-  emsExamId: string
-  sisCourseId: number
-  studyProgramId: number
-  gradeTermId: number
-  students: Student[]
-}
-
-
-export const examTypesOptions = (t: (key: string) => string) => {
-  return [
-    { 
-        label: t('final'),
-        value: ExamType.Final,
-        description:t('final-description')
-    },
-    // { 
-    //     label: t('evaulation-proficiency'),
-    //      value: ExamType.EvaluationProficiency,
-    //     description:t('evaulation-proficiency-description')
-    //  },
-  ]
-}
-
-export const proficiencyExamGroupOptions = (t: (key: string) => string) => {
-  return [
-    { label: t('english'), value: ProficiencyExamGroup.English },
-    { label: t('arabic'), value: ProficiencyExamGroup.Arabic },
-    { label: t('computer'), value: ProficiencyExamGroup.Computer },
-  ]
-}
-
-export enum ExamStatus {
-  Pending = 1,
-  Expired = 2,
-  Completed = 3,
-}
-
-export enum ExamGradeTypes {
-  Curve = 0,
-  ClassAverage = 1,
-}
-export const examGradeTypesOptions = (t: (key: string) => string) => {
-  return [
-    { label: t('curve'), value: ExamGradeTypes.Curve },
-    { label: t('class-average'), value: ExamGradeTypes.ClassAverage },
-  ]
-}
-export const examStatusOptions = (t: (key: string) => string) => {
-  return [
-    { label: t('Pending'), value: ExamStatus.Pending },
-    { label: t('expired'), value: ExamStatus.Expired },
-    { label: t('completed'), value: ExamStatus.Completed },
-  ]
-}
-
-export type ExamDetail = ExamDto & {
-  questions: QuestionDto[]
-  examGroups: string[] | null
-  examCenters: ExaminationCenterDto[]
-}
-
-export type ExamEdit = {
-  examDate?: string | null
-  startTime?: string | null
-  endTime?: string | null
-  enterTimeAllowed?: number | null
-}
+  export interface ScheduleExam {
+    startAt?: string;
+    durationMinutes?: number;
+  }

@@ -1,70 +1,41 @@
 import axiosIns from '~/services/app-client/axios'
 import type { BaseFilters, PaginatedResponse } from '~/utils/types/ApiResponses'
-import type { QuestionDto } from '~/views/questions/types'
-import type { StudentFilters } from '~/views/students/types'
-import type { ExamCreate, ExamDetailed, ExamDto, ExamEdit, LinkedExam } from '../types'
+import type { ExamCreate, ExamDto, ScheduleExam } from '../types'
 
 interface IExamService {
   get: (filters: BaseFilters) => Promise<PaginatedResponse<ExamDto>>
-  create: (blueprint: ExamCreate) => Promise<ExamDto>
-  delete: (id: string) => Promise<void>
-  getById: (id: string) => Promise<ExamDetailed>
-  getLinkedStudents: (id: string, filters: StudentFilters) => Promise<LinkedExam>
-  replaceQuestion: (examId: string, questionId: string) => Promise<QuestionDto>
-  getQuestions: (examId: string, date: string) => Promise<QuestionDto[]>
+  create: (Exam: ExamCreate) => Promise<ExamDto>
+  reshuffleQuestions: (examId: string) => Promise<void>
+  extendDuration: (examId: string, durationMinutes: number) => Promise<void>
+  replace: (examId: string, questionId: string) => Promise<void>
+  updateSchedule: (examId: string, schedule: ScheduleExam) => Promise<void>
 }
 
 export class ExamService implements IExamService {
   async get(filters: BaseFilters): Promise<PaginatedResponse<ExamDto>> {
-    const response = await axiosIns.get<PaginatedResponse<ExamDto>>('/exam', { params: filters })
+    const response = await axiosIns.get<PaginatedResponse<ExamDto>>('/exams', { params: filters })
     return response.data
   }
 
   async create(blueprint: ExamCreate): Promise<ExamDto> {
-    const response = await axiosIns.post<ExamDto>('/exam', blueprint)
+    const response = await axiosIns.post<ExamDto>('/exams', blueprint)
     return response.data
   }
 
-  async delete(id: string): Promise<void> {
-    await axiosIns.delete(`/exam/${id}`)
-  }
-
-  async getById(id: string): Promise<ExamDetailed> {
-    const response = await axiosIns.get<ExamDetailed>(`/exam/${id}`)
+  async reshuffleQuestions(examId: string): Promise<void> {
+    const response = await axiosIns.post<void>(`/exams/${examId}/questions/reshuffle`)
     return response.data
   }
-
-  async getLinkedStudents(id: string, filters: StudentFilters): Promise<LinkedExam> {
-    const response = await axiosIns.get<LinkedExam>(`/exam/${id}/linked-exam`, {
-      params: filters,
-    })
+  async extendDuration(examId: string, durationMinutes: number): Promise<void> {
+    const response = await axiosIns.put<void>(`/exams/${examId}/extend-duration`, { additionalMinutes: durationMinutes })
     return response.data
   }
-
-  async replaceQuestion(examId: string, questionId: string): Promise<QuestionDto> {
-    const response = await axiosIns.put<QuestionDto>(
-      `/exam/${examId}/replace-question/${questionId}`
-    )
+  async replace(examId: string, examQuestionId: string): Promise<void> {
+    const response = await axiosIns.put<void>(`/exams/${examId}/questions/replace`, { questionId: examQuestionId })
     return response.data
   }
-  async getQuestions(examId: string, date: string): Promise<QuestionDto[]> {
-    const response = await axiosIns.get<QuestionDto[]>(`/exam/${examId}/questions/?examDate=${date}`)
-    return response.data
-  }
-  // reshuffling
-  async reshuffleQuestions(examId: string, date: string): Promise<QuestionDto[]> {
-    const response = await axiosIns.post<QuestionDto[]>(`/exam/${examId}/reshuffling?examDate=${date}`)
-    return response.data
-  }
-  async update(id: string, data: ExamEdit): Promise<ExamDto> {
-    const response = await axiosIns.put<ExamDto>('/exam/' + id, data)
-    return response.data
-  }
-  async cancel(id: string): Promise<void> {
-    await axiosIns.delete(`/exam/${id}/cancel`)
-  }
-  async addCurve(id: string, data: { curveValue: number; curveType: number }): Promise<ExamDto> {
-    const response = await axiosIns.post<ExamDto>(`/exam/${id}/add-curve`, data)
+  async updateSchedule(examId: string, schedule: ScheduleExam): Promise<void> {
+    const response = await axiosIns.put<void>(`/exams/${examId}/schedule`, schedule)
     return response.data
   }
 }

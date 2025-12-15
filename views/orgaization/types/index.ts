@@ -1,10 +1,7 @@
 export interface Organization {
-  arabicName: string
-  englishName: string
   parentId: number | null
   uniteTypeId: number
-  fullNameAr: string
-  fullNameEn: string
+  name: string
   children?: (() => Promise<Organization[]>) | Organization[]
   id: number
 }

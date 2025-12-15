@@ -1,36 +1,34 @@
-import type { BaseFilters } from '~/utils/types/ApiResponses'
-import type { QuestionDto } from '~/views/questions/types'
-import type { StudentFilters } from '~/views/students/types'
+import { formatDateWithTimezone } from '~/utils'
 import { ExamService } from '../service'
-import { type Exam, type ExamCreate, type ExamDto, type ExamFilters } from '../types'
+import { type ExamCreate, type ExamDto, type ExamFilters, type ScheduleExam } from '../types'
 
 const examService = new ExamService()
 export const useExamStore = defineStore('exam', () => {
     const exams = ref<ExamDto[]>([])
     const isLoading = ref(false)
     const filters = ref<ExamFilters>({
+        page: 1,
         pageSize: 50,
-        pageNumber: 1,
+        search: '',
         examTemplateId: null,
-        type: null,
-        search: null,
-        status: null
+        groupId: null,
+        startDateFrom: null,
+        startDateTo: null
     })
-    const isCreateDialogOpen = ref(false)
     const isQuestionReplaceDialogOpen = ref(false)
-    const exam = ref<Exam | null>(null)
+    const isExtendDurationDialogOpen = ref(false)
+    const isQuestionReshuffleDialogOpen = ref(false)
+    const isUpdateScheduleDialogOpen = ref(false)
+    const exam = ref<ExamDto | null>(null)
     const questionId = ref<string | null>(null)
     const totalPages = ref(0)
-    const isUpdateDialogOpen = ref(false);
-    const isCurveDialogOpen = ref(false)
-    const questions = ref<QuestionDto[]>([])
     
-  const getExams = async (examFilters: BaseFilters) => {
+  const getExams = async () => {
     try {
       isLoading.value = true
-      const response = await examService.get(examFilters)
-      exams.value = response.data
-      totalPages.value = response.pagesCount
+      const response = await examService.get(filters.value)
+      exams.value = response.items
+      totalPages.value = response.pageCount
     } catch (error) {
     } finally {
       isLoading.value = false
@@ -40,8 +38,11 @@ export const useExamStore = defineStore('exam', () => {
   const createExam = async (data: ExamCreate) => {
     try {
       isLoading.value = true
+      data.startAt = formatDateWithTimezone(data.startAt!)
+      console.log(data.startAt);
+      
       await examService.create(data)
-      await getExams(filters.value)
+      await getExams()
     } catch (error) {
       throw error
     } finally {
@@ -49,126 +50,71 @@ export const useExamStore = defineStore('exam', () => {
     }
   }
 
-  const getById = async (id: string) => {
+  const replaceQuestion = async (questionId: string) => {
     try {
       isLoading.value = true
-      return await examService.getById(id)
+      const res=await examService.replace(exam.value?.id as string, questionId)
+      exam.value = null
+      return res
     } catch (error) {
     } finally {
       isLoading.value = false
     }
   }
 
-  const getStudents = async (id: string, filters: StudentFilters) => {
+  const reshuffleQuestions = async () => {
     try {
       isLoading.value = true
-      const data = await examService.getLinkedStudents(id, filters)
-      // remove who have same universityIDNumber
-      data.students = data.students.filter(
-        (student, index, self) =>
-          index === self.findIndex((t) => t.universityIDNumber === student.universityIDNumber)
-      )
-
-      return data
+      const res = await examService.reshuffleQuestions(exam.value?.id as string)
+      exam.value = null
+      return res
     } catch (error) {
     } finally {
       isLoading.value = false
     }
   }
 
-  const replaceQuestion = async (examId: string, questionId: string) => {
+  const extendDuration = async (durationMinutes: number) => {
     try {
       isLoading.value = true
-      return await examService.replaceQuestion(examId, questionId)
+      const res = await examService.extendDuration(exam.value?.id as string, durationMinutes)
+      exam.value = null
+      return res
     } catch (error) {
     } finally {
       isLoading.value = false
     }
   }
 
-  const deleteExam = async (id: string) => {
+  const updateSchedule = async (schedule: ScheduleExam) => {
     try {
       isLoading.value = true
-      await examService.delete(id)
-      await getExams(filters.value)
+      schedule.startAt = formatDateWithTimezone(schedule.startAt!)
+      const res = await examService.updateSchedule(exam.value?.id as string, schedule)
+      exam.value = null
+      return res
     } catch (error) {
     } finally {
       isLoading.value = false
     }
   }
-  const updateExam = async (examId: string, data: Exam) => {
-    try {
-      isLoading.value = true
-      await examService.update(examId, data)
-      await getExams(filters.value)
-    } catch (error) {
-    } finally {
-      isLoading.value = false
-    }
-  }
-  const cancelExam = async (examId: string) => {
-    try {
-      isLoading.value = true
-      await examService.cancel(examId)
-      await getExams(filters.value)
-    } catch (error) {
-    } finally {
-      isLoading.value = false
-    }
-  }
-
-  const addCurve = async (examId: string, data: { curveValue: number; curveType: number }) => {
-    try {
-      isLoading.value = true
-      await examService.addCurve(examId, data)
-      await getExams(filters.value)
-    } catch (error) {
-    } finally {
-      isLoading.value = false
-    }
-  }
-
-  const getQuestions = async (examId: string, date: string) => {
-    try {
-      isLoading.value = true
-      return await examService.getQuestions(examId, date)
-    } catch (error) {
-    } finally {
-      isLoading.value = false
-    }
-  }
-  const reshuffleQuestions = async (examId: string, date: string) => {
-    try {
-      isLoading.value = true
-      return await examService.reshuffleQuestions(examId, date)
-    } catch (error) {
-    } finally {
-      isLoading.value = false
-    }
-  }
-
     return {
         exams,
-        isCreateDialogOpen,
         isLoading,
         filters,
         totalPages,
         getExams,
         createExam,
-        getById,
-        getStudents,
         exam,
         isQuestionReplaceDialogOpen,
         replaceQuestion,
         questionId,
-        deleteExam,
-        updateExam,
-        cancelExam,
-        isUpdateDialogOpen,
-        isCurveDialogOpen,
-        addCurve,
-            getQuestions,
-        reshuffleQuestions
+        reshuffleQuestions,
+        extendDuration,
+        updateSchedule,
+        isExtendDurationDialogOpen,
+        isQuestionReshuffleDialogOpen,
+        isUpdateScheduleDialogOpen
     }
 
 })
