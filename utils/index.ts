@@ -46,3 +46,28 @@ export const getChanges = (
 
   return changes
 }
+
+/**
+ * Formats a date to ISO 8601 format with local timezone offset
+ * @param date - The date to format (Date object or date string)
+ * @returns Formatted date string like "2025-12-15T11:29:00+03:00"
+ * @example
+ * formatDateWithTimezone(new Date()) // "2025-12-15T11:29:00+03:00"
+ * formatDateWithTimezone("2025-12-15T11:29:00") // "2025-12-15T11:29:00+03:00"
+ */
+export const formatDateWithTimezone = (date: Date | string): string => {
+  const dateObj = new Date(date)
+  const offset = -dateObj.getTimezoneOffset()
+  const sign = offset >= 0 ? '+' : '-'
+  const hours = String(Math.floor(Math.abs(offset) / 60)).padStart(2, '0')
+  const minutes = String(Math.abs(offset) % 60).padStart(2, '0')
+  
+  const year = dateObj.getFullYear()
+  const month = String(dateObj.getMonth() + 1).padStart(2, '0')
+  const day = String(dateObj.getDate()).padStart(2, '0')
+  const hour = String(dateObj.getHours()).padStart(2, '0')
+  const minute = String(dateObj.getMinutes()).padStart(2, '0')
+  const second = String(dateObj.getSeconds()).padStart(2, '0')
+  
+  return `${year}-${month}-${day}T${hour}:${minute}:${second}${sign}${hours}:${minutes}`
+}

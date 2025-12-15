@@ -1,3 +1,4 @@
+import { formatDateWithTimezone } from '~/utils'
 import { ExamService } from '../service'
 import { type ExamCreate, type ExamDto, type ExamFilters, type ScheduleExam } from '../types'
 
@@ -37,6 +38,9 @@ export const useExamStore = defineStore('exam', () => {
   const createExam = async (data: ExamCreate) => {
     try {
       isLoading.value = true
+      data.startAt = formatDateWithTimezone(data.startAt!)
+      console.log(data.startAt);
+      
       await examService.create(data)
       await getExams()
     } catch (error) {
