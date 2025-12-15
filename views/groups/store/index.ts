@@ -64,6 +64,17 @@ export const useGroupStore = defineStore('group', () => {
       isLoading.value = false
     }
   }
+  const getGroupById = async (id: string) => {
+    try {
+      isLoading.value = true
+      const response = await groupService.getById(id)
+      selectedGroup.value = response
+    } catch (error) {
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
 
   return {
     groups,
@@ -78,5 +89,6 @@ export const useGroupStore = defineStore('group', () => {
     selectedGroup,
     totalPages,
     updateGroup,
+    getGroupById,
   }
 })

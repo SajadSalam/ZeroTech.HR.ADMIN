@@ -19,6 +19,11 @@ export class GroupService implements IGroupService {
     return response.data
   }
 
+  async getById(id: string): Promise<GroupDto> {
+    const response = await axios.get<GroupDto>('/groups/' + id)
+    return response.data
+  }
+
   async create(data: Group): Promise<boolean> {
     const response = await axios.post<boolean>('/groups', data)
     return response.data

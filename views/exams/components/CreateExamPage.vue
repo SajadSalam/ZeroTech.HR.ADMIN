@@ -8,11 +8,11 @@ import { Validator } from '~/services/validator'
 import { useExamStore } from '../store/index'
 import { type ExamCreate } from '../types/index'
 import ExamCardCreationResult from './ExamCardCreationResult.vue'
+import AppInputField from '~/components/app-field/AppInputField.vue'
 
 
 
 const examStore = useExamStore()
-
 const { t } = useI18n()
 const editorModules = {
     toolbar: [
@@ -31,9 +31,9 @@ const formData = reactive<ExamCreate>({
     title: null,
     examTemplateId: null,
     startAt: null,
-    durationMinutes: undefined,
-    allowEnterBeforeMinutes: undefined,
-    allowEnterAfterMinutes: undefined,
+    durationMinutes: null,
+    allowEnterBeforeMinutes: null,
+    allowEnterAfterMinutes: null,
     groupId: null,
     description: '',
 })
@@ -110,7 +110,7 @@ const submit = async () => {
                         </p>
                     </div>
                     <div class="flex flex-col gap-5 rounded-3xl p-3">
-                        <AppFieldAppInputField v-model="body.title.$model" :errors="body.title.$errors"
+                        <AppInputField v-model="body.title.$model" :errors="body.title.$errors"
                             :label="$t('title')" :placeholder="$t('enter-title')" />
                         <div class="grid gap-5 md:grid-cols-1">
                             <AppAutoCompleteField v-model="body.examTemplateId.$model" fetch-on-search
@@ -127,17 +127,17 @@ const submit = async () => {
                     
                         <div class="grid gap-5 md:grid-cols-2">
 
-                            <AppFieldAppInputField v-model="body.startAt.$model" :errors="body.startAt.$errors"
+                            <AppInputField v-model="body.startAt.$model" :errors="body.startAt.$errors"
                                 :label="$t('start-date')" :placeholder="$t('enter-start-date')" type="datetime-local" />
-                            <AppFieldAppInputField v-model="body.durationMinutes.$model" :errors="body.durationMinutes.$errors"
-                                :label="$t('duration-in-minutes')" :placeholder="$t('enter-duration')" />
-                            <AppFieldAppInputField v-model="body.allowEnterBeforeMinutes.$model"
+                            <AppInputField v-model="body.durationMinutes.$model" :errors="body.durationMinutes.$errors"
+                                :label="$t('duration-in-minutes')" :placeholder="$t('enter-duration')" type="number" />
+                            <AppInputField v-model="body.allowEnterBeforeMinutes.$model"
                                 :errors="body.allowEnterBeforeMinutes.$errors" :label="$t('enterance-time-allowed-before')"
-                                :placeholder="$t('enterance-time-allowed-before')" />
-                            <AppFieldAppInputField v-model="body.allowEnterAfterMinutes.$model"
+                                :placeholder="$t('enterance-time-allowed-before')" type="number" />
+                            <AppInputField v-model="body.allowEnterAfterMinutes.$model"
                                 :errors="body.allowEnterAfterMinutes.$errors"
                                 :label="$t('enterance-time-allowed-after')"
-                                :placeholder="$t('enterance-time-allowed-after')" />
+                                :placeholder="$t('enterance-time-allowed-after')" type="number" />
                         </div>
 
                         <div class="quill-editor-container bg-white p-4 ">
@@ -153,7 +153,7 @@ const submit = async () => {
 
                 </div>
 
-                <BaseButton color="primary" :loading="examStore.isLoading" class=" w-full " @click="submit">
+                <BaseButton color="primary" :loading="examStore.isLoading" :disabled="examStore.isLoading" class=" w-full " @click="submit">
                     <Icon name="ph:upload-simple-duotone" class="size-5 me-3" />
                     {{ $t('save-change') }}
                 </BaseButton>
@@ -162,11 +162,11 @@ const submit = async () => {
         </div>
         <div class="flex flex-col gap-4">
             <ExamCardCreationResult
-             :title="body.title.$model as string ?? ''"
-                :description="body.description.$model as string ?? ''" :groups="body.groupId.$model as string[]"
-                :start-at="body.startAt.$model as Date ?? new Date('2026-01-01')"
-                :blueprint-id="body.examTemplateId.$model as number"
-                :duration-minutes="body.durationMinutes.$model as number ?? 0"
+             :title="body.title.$model ?? ''"
+                :description="body.description.$model ?? ''" :group="body.groupId.$model"
+                :start-at="body.startAt.$model"
+                :blueprint-id="body.examTemplateId.$model ?? 0"
+                :duration-minutes="body.durationMinutes.$model ?? 0"
             />
         </div>
 

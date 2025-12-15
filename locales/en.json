@@ -920,5 +920,9 @@
   "minutes": "Minutes",
   "are-you-sure-you-want-to-reshuffle-the-questions": "Are you sure you want to reshuffle the questions?",
   "group": "Group",
-
+  "one-group-selected": "One group selected",
+  "no-group-selected": "No group selected",
+  "see-organizational-structure": "See Organizational Structure",
+  "exam-details": "Exam Details",
+  "see-blueprint": "See Blueprint"  
 }

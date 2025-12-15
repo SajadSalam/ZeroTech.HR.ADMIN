@@ -938,5 +938,10 @@
     "created-by": "أنشئ بواسطة",
     "unknown": "غير معروف",
     "created-at": "تاريخ الإنشاء",
-    "updated-at": "تاريخ التحديث"
+    "updated-at": "تاريخ التحديث",
+    "one-group-selected": "تم تحديد مجموعة واحدة",
+    "no-group-selected": "لم يتم تحديد مجموعة",
+    "see-organizational-structure": "عرض الهيكل التنظيمي",
+    "exam-details": "تفاصيل الامتحان",
+    "see-blueprint": "يوجد نموذج محدد انقر للعرض"
 }

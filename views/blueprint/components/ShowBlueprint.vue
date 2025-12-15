@@ -6,7 +6,10 @@ import { difficultyOptions, questionTypeOptions } from '~/views/question-bank'
 import type { BlueprintDetails, BlueprintQuestionBank, BlueprintTopic } from '../types'
 const { t } = useI18n()
 const route = useRoute()
-const blueprintId = computed(() => route.params.id)
+const props = defineProps<{
+  blueprintId?: number
+}>()
+const blueprintId = computed(() => props.blueprintId || route.params.id)
 const blueprint = ref<BlueprintDetails | null>(null)
 
 const blueprintStore = useBlueprintStore()

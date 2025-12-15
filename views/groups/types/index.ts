@@ -3,12 +3,12 @@ import type { BaseDto } from '~/utils/types/base-dto'
 import type { Organization } from '~/views/orgaization/types'
 
 export interface Group {
-  name: string
+  title: string
 }
 
 export type GroupDto = Group &
   BaseDto & {
-    organizationalStructures: Organization[]
+    organizationalStructureGroups: Organization[]
   }
 
 export type GroupCreate = Group & {

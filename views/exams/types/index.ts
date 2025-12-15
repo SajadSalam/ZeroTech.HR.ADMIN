@@ -29,11 +29,11 @@ export type ExamDto = Exam &
     title: string | null;
     examTemplateId: string | null;
     startAt: string | null;
-    durationMinutes?: number;
-    allowEnterBeforeMinutes?: number;
-    allowEnterAfterMinutes?: number;
+    durationMinutes: number | null;
+    allowEnterBeforeMinutes: number | null;
+    allowEnterAfterMinutes: number | null;
     groupId: string | null;
-    description?: string;
+    description: string | null;
   }
   export type ExamFilters = {
     examTemplateId: string | null
