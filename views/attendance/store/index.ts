@@ -17,7 +17,7 @@ export const useAttendanceStore = defineStore('attendance', () => {
         pageNumber: 1,
         startDate: '',
         endDate: '',
-        employeeId: 5,
+        employeeId: '',
     })
     const isStatusDialogOpen = ref(false)
     const selectedEmployeeId = ref<number | null>(null)
@@ -32,7 +32,7 @@ export const useAttendanceStore = defineStore('attendance', () => {
 
         filters.value.startDate = startDate.toISOString().split('T')[0]
         filters.value.endDate = endDate.toISOString().split('T')[0]
-        filters.value.employeeId = 5
+        filters.value.employeeId = ''
     }
 
     // Initialize dates on store creation
