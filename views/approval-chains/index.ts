@@ -96,7 +96,6 @@ export const fakeData: ApprovalChainDto[] = [
         isActive: true,
         createdAt: '2024-01-15T10:30:00Z',
         updatedAt: '2024-03-20T14:45:00Z',
-        isActive: true,
       },
       {
         id: 2,
@@ -122,7 +121,6 @@ export const fakeData: ApprovalChainDto[] = [
     ],
     createdAt: '2024-01-15T10:30:00Z',
     updatedAt: '2024-03-20T14:45:00Z',
-    isActive: true,
   },
   {
     id: 2,
@@ -172,7 +170,6 @@ export const fakeData: ApprovalChainDto[] = [
     ],
     createdAt: '2024-01-20T10:30:00Z',
     updatedAt: '2024-03-18T14:45:00Z',
-    isActive: true,
   },
   {
     id: 3,
@@ -217,7 +214,6 @@ export const fakeData: ApprovalChainDto[] = [
         isActive: true,
         createdAt: '2024-02-01T10:30:00Z',
         updatedAt: '2024-03-15T14:45:00Z',
-        isActive: true,
       },
       {
         id: 5,
@@ -243,7 +239,6 @@ export const fakeData: ApprovalChainDto[] = [
     ],
     createdAt: '2024-02-01T10:30:00Z',
     updatedAt: '2024-03-15T14:45:00Z',
-    isActive: true,
   },
   {
     id: 4,
