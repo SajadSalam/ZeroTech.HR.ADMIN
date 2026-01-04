@@ -2,7 +2,7 @@
 import AppCrudActions from '~/components/app-crud/components/AppCrudActions.vue'
 import AppTable from '~/components/app-table/AppTable.vue'
 import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
-import { formatDate, formatFlexibility, formatScheduleType, formatShifts, formatassignments, tableHeader } from '~/views/work-schedules'
+import { formatDate, formatFlexibility, formatLateAttendanceRules, formatScheduleType, formatShifts, formatassignments, tableHeader } from '~/views/work-schedules'
 import UserAssignmentDialog from '~/views/work-schedules/components/UserAssignmentDialog.vue'
 import WorkScheduleCreate from '~/views/work-schedules/components/WorkScheduleCreate.vue'
 import WorkScheduleEdit from '~/views/work-schedules/components/WorkScheduleEdit.vue'
@@ -218,6 +218,27 @@ const handleDelete = async (id: number) => {
               <Icon name="ph:user-plus" class="size-3" />
               تعيين
             </BaseButton>
+          </div>
+        </template>
+
+        <!-- Late Attendance Rules -->
+        <template #data-lateAttendanceRules="{ item }">
+          <div class="flex flex-col">
+            <span class="text-sm font-medium text-muted-800 dark:text-muted-100">
+              {{ formatLateAttendanceRules(item.lateAttendanceRules) }}
+            </span>
+            <div v-if="item.lateAttendanceRules && item.lateAttendanceRules.length > 0" class="mt-1 flex flex-wrap gap-1">
+              <span
+                v-for="rule in item.lateAttendanceRules.slice(0, 2)"
+                :key="rule.id"
+                class="text-xs text-muted-500"
+              >
+                {{ rule.lateMinutesThreshold }}دق-{{ rule.deductionAmount.toLocaleString() }}
+              </span>
+              <span v-if="item.lateAttendanceRules.length > 2" class="text-xs text-muted-400">
+                +{{ item.lateAttendanceRules.length - 2 }} أخرى
+              </span>
+            </div>
           </div>
         </template>
 

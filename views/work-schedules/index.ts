@@ -39,6 +39,12 @@ export const tableHeader = (): TableHeader[] => [
     visible: true,
   },
   {
+    key: 'lateAttendanceRules',
+    label: 'قواعد التأخير',
+    sortable: false,
+    visible: true,
+  },
+  {
     key: 'createdAt',
     label: 'تاريخ الإنشاء',
     sortable: true,
@@ -81,6 +87,7 @@ export const formatShifts = (shifts: any[]) => {
   return `${shifts.length} ورديات`
 }
 
+
 export const formatassignments = (assignments: any[]) => {
   if (!assignments || assignments.length === 0) return 'لا يوجد مستخدمين'
   
@@ -89,6 +96,16 @@ export const formatassignments = (assignments: any[]) => {
   }
   
   return `${assignments.length} مستخدمين`
+}
+
+export const formatLateAttendanceRules = (rules: any[]) => {
+  if (!rules || rules.length === 0) return 'لا توجد قواعد'
+  
+  if (rules.length === 1) {
+    return `قاعدة واحدة (${rules[0].lateMinutesThreshold} دقيقة)`
+  }
+  
+  return `${rules.length} قواعد`
 }
 
 export const formatDate = (dateString: string) => {

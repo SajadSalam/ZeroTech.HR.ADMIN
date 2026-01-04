@@ -5,7 +5,7 @@ import AppTextAreaField from '~/components/app-field/AppTextAreaField.vue'
 import { requiredValidator } from '~/services/validation'
 import { Validator } from '~/services/validator'
 import { useWorkScheduleStore } from '../store'
-import type { Shift, WorkScheduleUpdateDto } from '../types'
+import type { LateAttendanceRule, Shift, WorkScheduleUpdateDto } from '../types'
 import ShiftForm from './ShiftForm.vue'
 
 const workScheduleStore = useWorkScheduleStore()
@@ -20,6 +20,7 @@ const validator = new Validator<WorkScheduleUpdateDto>(
     isGeneralTemplate: true,
     specificUserId: null,
     shifts: [],
+    lateAttendanceRules: [],
   },
   {
     name: {
@@ -85,6 +86,22 @@ const updateShift = (index: number, shift: Shift & { id?: number }) => {
   body.value.shifts.$model[index] = shift
 }
 
+const addLateAttendanceRule = () => {
+  const newRule: LateAttendanceRule & { id?: number } = {
+    lateMinutesThreshold: 0,
+    deductionAmount: 0,
+  }
+  body.value.lateAttendanceRules.$model.push(newRule)
+}
+
+const removeLateAttendanceRule = (index: number) => {
+  body.value.lateAttendanceRules.$model.splice(index, 1)
+}
+
+const updateLateAttendanceRule = (index: number, field: keyof LateAttendanceRule, value: number) => {
+  body.value.lateAttendanceRules.$model[index][field] = value
+}
+
 const updateWorkSchedule = async () => {
   const isValid = await body.value.$validate()
   if (!isValid) return
@@ -142,6 +159,11 @@ watch(() => workScheduleStore.isEditDialogOpen, (val: boolean) => {
       isGeneralTemplate: schedule.isGeneralTemplate,
       specificUserId: schedule.specificUserId,
       shifts: shiftsWithId,
+      lateAttendanceRules: schedule.lateAttendanceRules?.map(rule => ({
+        id: rule.id,
+        lateMinutesThreshold: rule.lateMinutesThreshold,
+        deductionAmount: rule.deductionAmount,
+      })) || [],
     })
   }
 })
@@ -279,6 +301,66 @@ watch(() => workScheduleStore.isEditDialogOpen, (val: boolean) => {
 
         <div v-if="body.shifts.$errors.length" class="text-sm text-red-500">
           {{ body.shifts.$errors.map(e => e.$message).join(', ') }}
+        </div>
+      </div>
+
+      <!-- Late Attendance Rules Section -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-muted-800 dark:text-muted-200">
+            قواعد التأخير
+          </h3>
+          <BaseButton
+            size="sm"
+            color="primary"
+            variant="pastel"
+            @click="addLateAttendanceRule"
+          >
+            <Icon name="ph:plus" class="size-4" />
+            إضافة قاعدة
+          </BaseButton>
+        </div>
+
+        <div v-if="body.lateAttendanceRules.$model.length === 0" class="text-sm text-muted-500 dark:text-muted-400">
+          لا توجد قواعد تأخير. يمكنك إضافة قواعد لخصم المبالغ حسب دقائق التأخير.
+        </div>
+
+        <div class="space-y-3">
+          <div
+            v-for="(rule, index) in body.lateAttendanceRules.$model"
+            :key="rule.id || index"
+            class="flex items-end gap-4 p-4 bg-muted-50 dark:bg-muted-800/50 rounded-lg"
+          >
+            <div class="flex-1">
+              <AppInputField
+                :model-value="rule.lateMinutesThreshold"
+                label="حد دقائق التأخير"
+                placeholder="مثال: 1440"
+                type="number"
+                :min="0"
+                @update:model-value="updateLateAttendanceRule(index, 'lateMinutesThreshold', Number($event))"
+              />
+            </div>
+            <div class="flex-1">
+              <AppInputField
+                :model-value="rule.deductionAmount"
+                label="مبلغ الخصم"
+                placeholder="مثال: 1000000000"
+                type="number"
+                :min="0"
+                @update:model-value="updateLateAttendanceRule(index, 'deductionAmount', Number($event))"
+              />
+            </div>
+            <BaseButton
+              size="sm"
+              color="danger"
+              variant="pastel"
+              class="mb-1"
+              @click="removeLateAttendanceRule(index)"
+            >
+              <Icon name="ph:trash" class="size-4" />
+            </BaseButton>
+          </div>
         </div>
       </div>
     </div>

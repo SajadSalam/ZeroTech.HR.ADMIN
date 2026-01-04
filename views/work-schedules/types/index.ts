@@ -38,6 +38,12 @@ export type UserAssignment = {
   notes?: string
 }
 
+// Late attendance rule type
+export type LateAttendanceRule = {
+  lateMinutesThreshold: number
+  deductionAmount: number
+}
+
 // User assignment DTO
 export type UserAssignmentDto = BaseDto & UserAssignment & {
   id: number
@@ -54,6 +60,7 @@ export type WorkSchedule = {
   isGeneralTemplate: boolean
   specificUserId?: number | null
   shifts: Shift[]
+  lateAttendanceRules: LateAttendanceRule[]
 }
 
 // Work schedule DTO with BaseDto extension
@@ -68,6 +75,7 @@ export type WorkScheduleDto = BaseDto & {
   specificUser?: User | null
   shifts: ShiftDto[]
   assignments: UserAssignmentDto[]
+  lateAttendanceRules: (LateAttendanceRule & { id: number })[]
   totalWeeklyHours: number
 }
 
@@ -78,6 +86,7 @@ export type WorkScheduleCreateDto = WorkSchedule
 export type WorkScheduleUpdateDto = WorkSchedule & {
   id: number
   shifts: (Shift & { id?: number })[]
+  lateAttendanceRules: (LateAttendanceRule & { id?: number })[]
 }
 
 // Filters extending BaseFilters
