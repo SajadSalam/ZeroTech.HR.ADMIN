@@ -83,5 +83,5 @@ import type { BaseFilters } from '~/utils/types/ApiResponses'
 export type AttendanceFilters = BaseFilters & {
     startDate: string
     endDate: string
-    employeeId: number
+    employeeId: number | null
 }

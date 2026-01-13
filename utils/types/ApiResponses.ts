@@ -1,7 +1,7 @@
 import type { AxiosError } from 'axios'
 
 export interface PaginatedResponse<T> {
-  data: T[]
+  items: T[]
   pagesCount: number
   currentPage: number
   type: string
@@ -9,10 +9,10 @@ export interface PaginatedResponse<T> {
 }
 
 export interface WithoutPagination<T> {
-  data: T[]
+  items: T[]
 }
 export interface SingleObjectResponse<T> {
-  data: T
+  item: T
   code: number
   message?: string
   error?: null

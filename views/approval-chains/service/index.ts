@@ -1,5 +1,5 @@
 import axios from '~/services/app-client/axios'
-import type { PaginatedResponse } from '~/utils/types'
+import type { PaginatedResponse } from '~/utils/types/ApiResponses'
 import type {
   ApprovalChainDto,
   ApprovalChainCreateDto,

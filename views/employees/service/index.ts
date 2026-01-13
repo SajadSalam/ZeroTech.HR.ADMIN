@@ -1,16 +1,12 @@
 import axios from '~/services/app-client/axios'
-import type { PaginatedResponse } from '~/utils/types'
+import type { PaginatedResponse } from '~/utils/types/ApiResponses'
 import type { EmployeeDto, EmployeeFilters } from '../types'
 import type { EmployeeCreateDto } from '../types'
 import type { EmployeeUpdateDto } from '../types'
 
 interface IEmployeeService {
     get: (filters: EmployeeFilters) => Promise<PaginatedResponse<EmployeeDto>>
-    getEnabled: () => Promise<EmployeeDto[]>
-    getWithCounts: () => Promise<EmployeeDto[]>
     getById: (id: string | number) => Promise<EmployeeDto>
-    getByCode: (code: string) => Promise<EmployeeDto>
-    getWithRequestTypes: (id: string | number) => Promise<EmployeeDto>
     create: (data: EmployeeCreateDto) => Promise<EmployeeDto>
     update: (
         id: string | number,

@@ -165,7 +165,7 @@ async function fetchData() {
       if (search.value) params = { ...params, [searchKey.value]: search.value }
     }
     const res = await axiosInstance.get(props.getUrl, { params })
-    items.value = res.data.data
+    items.value = res.data.items
   }
 }
 

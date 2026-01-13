@@ -256,7 +256,11 @@ watch(filters, () => { loadData() }, { deep: true })
             </div>
         </div>
 
-        <AppCrud hide-create title="سجلات الحضور">
+        <AppCrud 
+        :total-pages="attendanceStore.totalPages"
+        hide-create title="سجلات الحضور"
+        @update:current-page="filters.pageNumber = $event"
+        >
             <template #filters>
                 <BaseInput v-model="filters.startDate" type="date" placeholder="من تاريخ" required />
                 <BaseInput v-model="filters.endDate" type="date" placeholder="إلى تاريخ" required />
@@ -330,6 +334,7 @@ watch(filters, () => { loadData() }, { deep: true })
         <EmployeeStatusDialog />
         <ProcessPayrollDialog v-model="isProcessPayrollDialogOpen" :employee-ids="selectedEmployeeIds"
             @done="handlePayrollProcessed" />
-        <ManualAttendanceDialog />
     </div>
+        <ManualAttendanceDialog />
+
 </template>

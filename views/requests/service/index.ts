@@ -1,5 +1,5 @@
 import axios from '~/services/app-client/axios'
-import type { PaginatedResponse } from '~/utils/types/index'
+import type { PaginatedResponse } from '~/utils/types/ApiResponses'
 import type {
     CancelRequestDto,
     EmployeeBalanceDto,

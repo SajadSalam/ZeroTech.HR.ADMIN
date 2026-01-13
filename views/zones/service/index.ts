@@ -1,14 +1,14 @@
 import axios from '~/services/app-client/axios'
-import type { PaginatedResponse } from '~/utils/types'
+import type { PaginatedResponse } from '~/utils/types/ApiResponses'
 import type {
-  ZoneDto,
-  ZoneCreateDto,
-  ZoneUpdateDto,
-  ZoneFilters,
-  ZoneStatsDto,
-  PointInZoneRequest,
-  BulkZoneOperationRequest,
-  MapBounds,
+    BulkZoneOperationRequest,
+    MapBounds,
+    PointInZoneRequest,
+    ZoneCreateDto,
+    ZoneDto,
+    ZoneFilters,
+    ZoneStatsDto,
+    ZoneUpdateDto,
 } from '../types'
 
 interface IZoneService {
@@ -39,7 +39,6 @@ export class ZoneService implements IZoneService {
 
   async getPaged(filters: ZoneFilters): Promise<PaginatedResponse<ZoneDto>> {
     try {
-      const params = new URLSearchParams()
       
  
       const response = await axios.get(`${this.baseUrl}/paged`, { params:filters as any })

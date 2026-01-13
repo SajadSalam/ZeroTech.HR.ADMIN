@@ -23,6 +23,7 @@ export const useAttendanceStore = defineStore('attendance', () => {
     const selectedEmployeeId = ref<number | null>(null)
     const employeeStatus = ref<EmployeeAttendanceOverview | null>(null)
     const isManualAttendanceDialogOpen = ref(false)
+    const totalPages = ref(0)
 
     // Initialize default dates (one week from today)
     const initializeDates = () => {
@@ -44,7 +45,8 @@ export const useAttendanceStore = defineStore('attendance', () => {
         try {
             isLoading.value = true
             const response = await attendanceService.getRecords(filters.value)
-            records.value = response
+            records.value = response.items
+            totalPages.value = response.pagesCount
         } catch (error) {
             console.error('Error fetching attendance records:', error)
             throw error
@@ -241,5 +243,6 @@ export const useAttendanceStore = defineStore('attendance', () => {
         processPayroll,
         checkIn,
         checkOut,
+        totalPages,
     }
 })

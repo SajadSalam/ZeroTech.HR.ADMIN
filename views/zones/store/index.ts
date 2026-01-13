@@ -51,7 +51,7 @@ export const useZoneStore = defineStore('zone', () => {
     try {
       isLoading.value = true
       const response = await zoneService.getPaged(filters.value)
-      zones.value = response.data
+      zones.value = response.items
       totalPages.value = response.pagesCount
     } catch (error) {
       console.error('Error fetching zones:', error)

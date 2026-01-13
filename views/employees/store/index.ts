@@ -28,9 +28,9 @@ export const useEmployeeStore = defineStore('employee', () => {
     try {
       isLoading.value = true
       const response = await employeeService.get(filters.value)
-      employees.value = response.data
+      employees.value = response.items
       console.log(response)
-      totalPages.value = response.totalPages
+      totalPages.value = response.pagesCount
     } catch (error) {
       console.error('Error fetching employees:', error)
     } finally {

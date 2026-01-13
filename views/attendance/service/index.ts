@@ -1,4 +1,5 @@
 import axios from '~/services/app-client/axios'
+import type { PaginatedResponse } from '~/utils/types/ApiResponses'
 import type {
     AttendanceFilters,
     AttendanceRecord,
@@ -25,7 +26,7 @@ interface CheckOutDto {
 }
 
 interface IAttendanceService {
-    getRecords: (filters: AttendanceFilters) => Promise<AttendanceRecord[]>
+    getRecords: (filters: AttendanceFilters) => Promise<PaginatedResponse<AttendanceRecord>>
     getStatistics: (
         filters: AttendanceFilters
     ) => Promise<EmployeeAttendanceStats>
@@ -42,9 +43,9 @@ interface IAttendanceService {
 export class AttendanceService implements IAttendanceService {
     private readonly baseUrl = '/Attendance'
 
-    async getRecords(filters: AttendanceFilters): Promise<AttendanceRecord[]> {
+    async getRecords(filters: AttendanceFilters): Promise<PaginatedResponse<AttendanceRecord>> {
         try {
-            const response = await axios.get<AttendanceRecord[]>(
+            const response = await axios.get<PaginatedResponse<AttendanceRecord>>(
                 `${this.baseUrl}/records`,
                 { params:filters as any }
             )
