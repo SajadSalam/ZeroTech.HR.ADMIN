@@ -41,7 +41,7 @@ export const useApprovalChainStore = defineStore('approvalChain', () => {
     try {
       isLoading.value = true
       const response = await approvalChainService.get(filters.value)
-      approvalChains.value = response.data
+      approvalChains.value = response.items
       totalPages.value = response.pagesCount
     } catch (error) {
       console.error('Error fetching approval chains:', error)
