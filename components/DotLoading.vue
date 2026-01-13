@@ -1,68 +1,119 @@
-<script setup lang="ts">
-interface Props {
-    size?: 'sm' | 'md' | 'lg'
-    color?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info'
-}
-
-const props = withDefaults(defineProps<Props>(), {
-    size: 'md',
-    color: 'primary',
-})
-
-const sizeClasses: Record<'sm' | 'md' | 'lg', string> = {
-    sm: 'size-2',
-    md: 'size-3',
-    lg: 'size-4',
-}
-
-const colorClasses: Record<string, string> = {
-    primary: 'bg-primary-500',
-    secondary: 'bg-secondary-500',
-    success: 'bg-success-500',
-    danger: 'bg-danger-500',
-    warning: 'bg-warning-500',
-    info: 'bg-info-500',
-}
-
-const dotSize = computed(() => {
-    const size: 'sm' | 'md' | 'lg' = props.size || 'md'
-    return sizeClasses[size]
-})
-const dotColor = computed(() => {
-    const color = props.color || 'primary'
-    return colorClasses[color] || colorClasses.primary
-})
-</script>
-
 <template>
-    <div class="flex items-center justify-center gap-1.5">
-        <div v-for="i in 3" :key="i" :class="[
-            dotSize,
-            'rounded-full',
-            dotColor,
-            'animate-spin-dot',
-        ]" :style="{
-        animationDelay: `${(i - 1) * 0.15}s`,
-    }" />
+    <div class="dot-spinner">
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
     </div>
 </template>
 
-<style scoped>
-@keyframes spin-dot {
+<style>
+/* From Uiverse.io by abrahamcalsin */
+.dot-spinner {
+    --uib-size: 4rem;
+    --uib-speed: 0.9s;
+    --uib-color: #034fc9;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: var(--uib-size);
+    width: var(--uib-size);
+}
 
+.dot-spinner__dot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+    width: 100%;
+}
+
+.dot-spinner__dot::before {
+    content: '';
+    height: 20%;
+    width: 20%;
+    border-radius: 50%;
+    background-color: var(--uib-color);
+    transform: scale(0);
+    opacity: 0.5;
+    animation: pulse0112 calc(var(--uib-speed) * 1.111) ease-in-out infinite;
+    box-shadow: 0 0 20px #034fc95a;
+}
+
+.dot-spinner__dot:nth-child(2) {
+    transform: rotate(45deg);
+}
+
+.dot-spinner__dot:nth-child(2)::before {
+    animation-delay: calc(var(--uib-speed) * -0.875);
+}
+
+.dot-spinner__dot:nth-child(3) {
+    transform: rotate(90deg);
+}
+
+.dot-spinner__dot:nth-child(3)::before {
+    animation-delay: calc(var(--uib-speed) * -0.75);
+}
+
+.dot-spinner__dot:nth-child(4) {
+    transform: rotate(135deg);
+}
+
+.dot-spinner__dot:nth-child(4)::before {
+    animation-delay: calc(var(--uib-speed) * -0.625);
+}
+
+.dot-spinner__dot:nth-child(5) {
+    transform: rotate(180deg);
+}
+
+.dot-spinner__dot:nth-child(5)::before {
+    animation-delay: calc(var(--uib-speed) * -0.5);
+}
+
+.dot-spinner__dot:nth-child(6) {
+    transform: rotate(225deg);
+}
+
+.dot-spinner__dot:nth-child(6)::before {
+    animation-delay: calc(var(--uib-speed) * -0.375);
+}
+
+.dot-spinner__dot:nth-child(7) {
+    transform: rotate(270deg);
+}
+
+.dot-spinner__dot:nth-child(7)::before {
+    animation-delay: calc(var(--uib-speed) * -0.25);
+}
+
+.dot-spinner__dot:nth-child(8) {
+    transform: rotate(315deg);
+}
+
+.dot-spinner__dot:nth-child(8)::before {
+    animation-delay: calc(var(--uib-speed) * -0.125);
+}
+
+@keyframes pulse0112 {
     0%,
     100% {
-        transform: translateY(0) scale(1);
-        opacity: 1;
+        transform: scale(0);
+        opacity: 0.5;
     }
 
     50% {
-        transform: translateY(-8px) scale(1.1);
-        opacity: 0.7;
+        transform: scale(1);
+        opacity: 1;
     }
-}
-
-.animate-spin-dot {
-    animation: spin-dot 0.8s ease-in-out infinite;
 }
 </style>
