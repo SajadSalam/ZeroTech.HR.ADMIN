@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import DotLoading from '~/components/global/DotLoading.vue';
 import { fakeData } from '~/views/employees';
 import Attachments from '~/views/employees/components/Attachments.vue';
 import EmployeeDetailSection from '~/views/employees/components/EmployeeDetailSection.vue';
@@ -9,6 +8,7 @@ import ProfileHeader from '~/views/employees/components/ProfileHeader.vue';
 import StatsCard from '~/views/employees/components/StatsCard.vue';
 import { useEmployeeStore } from '~/views/employees/store';
 import type { EmployeeDto } from '~/views/employees/types';
+import DotLoading from '~/components/DotLoading.vue';
 
 const employee = ref<EmployeeDto | null>(null)
 definePageMeta({
