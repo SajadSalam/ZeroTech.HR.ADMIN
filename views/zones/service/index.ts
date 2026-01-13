@@ -41,25 +41,8 @@ export class ZoneService implements IZoneService {
     try {
       const params = new URLSearchParams()
       
-      if (filters.pageNumber) params.append('pageNumber', filters.pageNumber.toString())
-      if (filters.pageSize) params.append('pageSize', filters.pageSize.toString())
-      if (filters.name) params.append('name', filters.name)
-      if (filters.description) params.append('description', filters.description)
-      if (filters.zoneType) params.append('zoneType', filters.zoneType)
-      if (filters.isOperational !== undefined) params.append('isOperational', filters.isOperational.toString())
-      if (filters.searchTerm) params.append('searchTerm', filters.searchTerm)
-      if (filters.minPriority) params.append('minPriority', filters.minPriority.toString())
-      if (filters.maxPriority) params.append('maxPriority', filters.maxPriority.toString())
-      if (filters.minAreaSquareMeters) params.append('minAreaSquareMeters', filters.minAreaSquareMeters.toString())
-      if (filters.maxAreaSquareMeters) params.append('maxAreaSquareMeters', filters.maxAreaSquareMeters.toString())
-      if (filters.northLatitude) params.append('northLatitude', filters.northLatitude.toString())
-      if (filters.southLatitude) params.append('southLatitude', filters.southLatitude.toString())
-      if (filters.eastLongitude) params.append('eastLongitude', filters.eastLongitude.toString())
-      if (filters.westLongitude) params.append('westLongitude', filters.westLongitude.toString())
-      if (filters.includePolygonCoordinates !== undefined) params.append('includePolygonCoordinates', filters.includePolygonCoordinates.toString())
-      if (filters.includeParsedPolygon !== undefined) params.append('includeParsedPolygon', filters.includeParsedPolygon.toString())
-
-      const response = await axios.get(`${this.baseUrl}/paged?${params.toString()}`)
+ 
+      const response = await axios.get(`${this.baseUrl}/paged`, { params:filters as any })
       return response.data
     } catch (error) {
       console.error('Error fetching paged zones:', error)
@@ -79,14 +62,7 @@ export class ZoneService implements IZoneService {
 
   async getByBounds(bounds: MapBounds): Promise<ZoneDto[]> {
     try {
-      const params = new URLSearchParams()
-      params.append('northLatitude', bounds.north.toString())
-      params.append('southLatitude', bounds.south.toString())
-      params.append('eastLongitude', bounds.east.toString())
-      params.append('westLongitude', bounds.west.toString())
-      params.append('includeParsedPolygon', 'true')
-
-      const response = await axios.get(`${this.baseUrl}/paged?${params.toString()}`)
+      const response = await axios.get(`${this.baseUrl}/paged`, { params: { ...bounds, includeParsedPolygon: true } as any })
       return response.data.data || response.data
     } catch (error) {
       console.error('Error fetching zones by bounds:', error)

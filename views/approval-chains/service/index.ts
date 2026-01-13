@@ -37,17 +37,7 @@ export class ApprovalChainService implements IApprovalChainService {
   // Approval Chain methods
   async get(filters: ApprovalChainFilters): Promise<PaginatedResponse<ApprovalChainDto>> {
     try {
-      const params = new URLSearchParams()
-      
-      if (filters.pageNumber) params.append('pageNumber', filters.pageNumber.toString())
-      if (filters.pageSize) params.append('pageSize', filters.pageSize.toString())
-      if (filters.name) params.append('name', filters.name)
-      if (filters.requestTypeId) params.append('requestTypeId', filters.requestTypeId.toString())
-      if (filters.departmentId) params.append('departmentId', filters.departmentId.toString())
-      if (filters.isActive !== undefined) params.append('isActive', filters.isActive.toString())
-      if (filters.priority) params.append('priority', filters.priority.toString())
-
-      const response = await axios.get(`${this.baseUrl}?${params.toString()}`)
+      const response = await axios.get<PaginatedResponse<ApprovalChainDto>>(`${this.baseUrl}`, { params:filters as any })
       return response.data
     } catch (error) {
       console.error('Error fetching approval chains:', error)

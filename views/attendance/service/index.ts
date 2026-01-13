@@ -1,7 +1,7 @@
 import axios from '~/services/app-client/axios'
 import type {
-    AttendanceRecord,
     AttendanceFilters,
+    AttendanceRecord,
     EmployeeAttendanceOverview,
     EmployeeAttendanceStats,
 } from '../types'
@@ -10,6 +10,18 @@ interface ProcessPayrollDto {
     payrollEndDate: string
     employeeIds: number[]
     processedAt: string
+}
+
+interface CheckInDto {
+    employeeId: number
+    checkInTime: string
+    notes?: string
+}
+
+interface CheckOutDto {
+    employeeId: number
+    checkOutTime: string
+    notes?: string
 }
 
 interface IAttendanceService {
@@ -23,6 +35,8 @@ interface IAttendanceService {
     exportMonthlyPayroll: (filters: AttendanceFilters) => Promise<Blob>
     exportRecordsExcel: (filters: AttendanceFilters) => Promise<Blob>
     processPayroll: (data: ProcessPayrollDto) => Promise<void>
+    checkIn: (data: CheckInDto) => Promise<void>
+    checkOut: (data: CheckOutDto) => Promise<void>
 }
 
 export class AttendanceService implements IAttendanceService {
@@ -30,17 +44,9 @@ export class AttendanceService implements IAttendanceService {
 
     async getRecords(filters: AttendanceFilters): Promise<AttendanceRecord[]> {
         try {
-            const params = new URLSearchParams()
-            params.append('startDate', filters.startDate)
-            params.append('endDate', filters.endDate)
-            params.append('employeeId', filters.employeeId.toString())
-            if (filters.pageNumber)
-                params.append('pageNumber', filters.pageNumber.toString())
-            if (filters.pageSize)
-                params.append('pageSize', filters.pageSize.toString())
-
             const response = await axios.get<AttendanceRecord[]>(
-                `${this.baseUrl}/records?${params.toString()}`
+                `${this.baseUrl}/records`,
+                { params:filters as any }
             )
             return response.data
         } catch (error) {
@@ -53,12 +59,9 @@ export class AttendanceService implements IAttendanceService {
         filters: AttendanceFilters
     ): Promise<EmployeeAttendanceStats> {
         try {
-            const params = new URLSearchParams()
-            params.append('startDate', filters.startDate)
-            params.append('endDate', filters.endDate)
-            params.append('employeeId', filters.employeeId.toString())
             const response = await axios.get<EmployeeAttendanceStats>(
-                `${this.baseUrl}/statistics?${params.toString()}`
+                `${this.baseUrl}/statistics`,
+                { params:filters as any }
             )
             return response.data
         } catch (error) {
@@ -72,7 +75,7 @@ export class AttendanceService implements IAttendanceService {
             const response = await axios.get<EmployeeAttendanceOverview>(
                 `${this.baseUrl}/status`,
                 {
-                    params: { employeeId },
+                    params: { employeeId } as any,
                 }
             )
             return response.data
@@ -84,15 +87,9 @@ export class AttendanceService implements IAttendanceService {
 
     async exportRecordsCSV(filters: AttendanceFilters): Promise<Blob> {
         try {
-            const params = new URLSearchParams()
-            params.append('startDate', filters.startDate)
-            params.append('endDate', filters.endDate)
-
             const response = await axios.get(
-                `${this.baseUrl}/export/csv?${params.toString()}`,
-                {
-                    responseType: 'blob',
-                }
+                `${this.baseUrl}/export/csv`,
+                { params:filters as any , responseType: 'blob' },
             )
             return response.data
         } catch (error) {
@@ -103,15 +100,9 @@ export class AttendanceService implements IAttendanceService {
 
     async exportSummaryCSV(filters: AttendanceFilters): Promise<Blob> {
         try {
-            const params = new URLSearchParams()
-            params.append('startDate', filters.startDate)
-            params.append('endDate', filters.endDate)
-
             const response = await axios.get(
-                `${this.baseUrl}/export/summary/csv?${params.toString()}`,
-                {
-                    responseType: 'blob',
-                }
+                `${this.baseUrl}/export/summary/csv`,
+                { params:filters as any, responseType: 'blob' },
             )
             return response.data
         } catch (error) {
@@ -122,15 +113,9 @@ export class AttendanceService implements IAttendanceService {
 
     async exportMonthlyPayroll(filters: AttendanceFilters): Promise<Blob> {
         try {
-            const params = new URLSearchParams()
-            params.append('startDate', filters.startDate)
-            params.append('endDate', filters.endDate)
-
             const response = await axios.get(
-                `${this.baseUrl}/export/payroll/monthly?${params.toString()}`,
-                {
-                    responseType: 'blob',
-                }
+                `${this.baseUrl}/export/payroll/monthly`,
+                { params:filters as any, responseType: 'blob' },
             )
             return response.data
         } catch (error) {
@@ -141,15 +126,9 @@ export class AttendanceService implements IAttendanceService {
 
     async exportRecordsExcel(filters: AttendanceFilters): Promise<Blob> {
         try {
-            const params = new URLSearchParams()
-            params.append('startDate', filters.startDate)
-            params.append('endDate', filters.endDate)
-
             const response = await axios.get(
-                `${this.baseUrl}/export/excel?${params.toString()}`,
-                {
-                    responseType: 'blob',
-                }
+                `${this.baseUrl}/export/excel`,
+                { params:filters as any, responseType: 'blob' },
             )
             return response.data
         } catch (error) {
@@ -163,6 +142,24 @@ export class AttendanceService implements IAttendanceService {
             await axios.post(`${this.baseUrl}/payroll/process`, data)
         } catch (error) {
             console.error('Error processing payroll:', error)
+            throw error
+        }
+    }
+
+    async checkIn(data: CheckInDto): Promise<void> {
+        try {
+            await axios.post(`${this.baseUrl}/check-in`, data)
+        } catch (error) {
+            console.error('Error checking in:', error)
+            throw error
+        }
+    }
+
+    async checkOut(data: CheckOutDto): Promise<void> {
+        try {
+            await axios.post(`${this.baseUrl}/check-out`, data)
+        } catch (error) {
+            console.error('Error checking out:', error)
             throw error
         }
     }

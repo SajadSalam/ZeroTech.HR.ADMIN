@@ -26,25 +26,13 @@ export class EmployeeService implements IEmployeeService {
         filters: EmployeeFilters
     ): Promise<PaginatedResponse<EmployeeDto>> {
         try {
-            const params = new URLSearchParams()
-
-            if (filters.pageNumber)
-                params.append('pageNumber', filters.pageNumber.toString())
-            if (filters.pageSize)
-                params.append('pageSize', filters.pageSize.toString())
-            if (filters.name) params.append('name', filters.name)
-            if (filters.code) params.append('code', filters.code)
-            if (filters.department)
-                params.append('department', filters.department)
-            if (filters.zone) params.append('zone', filters.zone)
-            if (filters.status) params.append('status', filters.status)
-
-            const response = await axios.get(
-                `${this.baseUrl}?${params.toString()}`
+            const response = await axios.get<PaginatedResponse<EmployeeDto>>(
+                `${this.baseUrl}`,
+                { params:filters as any }
             )
             return response.data
         } catch (error) {
-            console.error('Error fetching request categories:', error)
+            console.error('Error fetching employees:', error)
             throw error
         }
     }
@@ -55,7 +43,7 @@ export class EmployeeService implements IEmployeeService {
             return response.data
         } catch (error) {
             console.error(
-                `Error fetching request category with id ${id}:`,
+                `Error fetching employee with id ${id}:`,
                 error
             )
             throw error
@@ -68,7 +56,7 @@ export class EmployeeService implements IEmployeeService {
             return response.data
         } catch (error) {
             console.error(
-                `Error fetching request category with code ${code}:`,
+                `Error fetching employee with code ${code}:`,
                 error
             )
             throw error
@@ -79,7 +67,7 @@ export class EmployeeService implements IEmployeeService {
             const response = await axios.post(this.baseUrl, data)
             return response.data
         } catch (error) {
-            console.error('Error creating employee:', error)
+            console.error('Error creating employees:', error)
             throw error
         }
     }
@@ -92,7 +80,7 @@ export class EmployeeService implements IEmployeeService {
             const response = await axios.put(`${this.baseUrl}/${id}`, data)
             return response.data
         } catch (error) {
-            console.error(`Error updating employee with id ${id}:`, error)
+            console.error(`Error updating employees with id ${id}:`, error)
             throw error
         }
     }
@@ -101,7 +89,7 @@ export class EmployeeService implements IEmployeeService {
         try {
             await axios.delete(`${this.baseUrl}/${id}`)
         } catch (error) {
-            console.error(`Error deleting employee with id ${id}:`, error)
+            console.error(`Error deleting employees with id ${id}:`, error)
             throw error
         }
     }

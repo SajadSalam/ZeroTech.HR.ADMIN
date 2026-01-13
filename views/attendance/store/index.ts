@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import { attendanceService } from '../service'
 import type {
-    AttendanceRecord,
     AttendanceFilters,
+    AttendanceRecord,
     EmployeeAttendanceOverview,
     EmployeeAttendanceStats,
 } from '../types'
@@ -17,11 +17,12 @@ export const useAttendanceStore = defineStore('attendance', () => {
         pageNumber: 1,
         startDate: '',
         endDate: '',
-        employeeId: '',
+        employeeId: null,
     })
     const isStatusDialogOpen = ref(false)
     const selectedEmployeeId = ref<number | null>(null)
     const employeeStatus = ref<EmployeeAttendanceOverview | null>(null)
+    const isManualAttendanceDialogOpen = ref(false)
 
     // Initialize default dates (one week from today)
     const initializeDates = () => {
@@ -32,7 +33,7 @@ export const useAttendanceStore = defineStore('attendance', () => {
 
         filters.value.startDate = startDate.toISOString().split('T')[0]
         filters.value.endDate = endDate.toISOString().split('T')[0]
-        filters.value.employeeId = ''
+        filters.value.employeeId = null
     }
 
     // Initialize dates on store creation
@@ -59,7 +60,7 @@ export const useAttendanceStore = defineStore('attendance', () => {
                 startDate: filters.value.startDate,
                 endDate: filters.value.endDate,
                 employeeId: filters.value.employeeId,
-            })
+            } as AttendanceFilters)
             statistics.value = response
         } catch (error) {
             console.error('Error fetching attendance statistics:', error)
@@ -185,6 +186,42 @@ export const useAttendanceStore = defineStore('attendance', () => {
         }
     }
 
+    const checkIn = async (data: {
+        employeeId: number
+        checkInTime: string
+        notes?: string
+    }) => {
+        try {
+            isLoading.value = true
+            await attendanceService.checkIn(data)
+            await getRecords()
+            await getStatistics()
+        } catch (error) {
+            console.error('Error checking in:', error)
+            throw error
+        } finally {
+            isLoading.value = false
+        }
+    }
+
+    const checkOut = async (data: {
+        employeeId: number
+        checkOutTime: string
+        notes?: string
+    }) => {
+        try {
+            isLoading.value = true
+            await attendanceService.checkOut(data)
+            await getRecords()
+            await getStatistics()
+        } catch (error) {
+            console.error('Error checking out:', error)
+            throw error
+        } finally {
+            isLoading.value = false
+        }
+    }
+
     return {
         records,
         statistics,
@@ -193,6 +230,7 @@ export const useAttendanceStore = defineStore('attendance', () => {
         isStatusDialogOpen,
         selectedEmployeeId,
         employeeStatus,
+        isManualAttendanceDialogOpen,
         getRecords,
         getStatistics,
         getEmployeeStatus,
@@ -201,5 +239,7 @@ export const useAttendanceStore = defineStore('attendance', () => {
         exportMonthlyPayroll,
         exportRecordsExcel,
         processPayroll,
+        checkIn,
+        checkOut,
     }
 })

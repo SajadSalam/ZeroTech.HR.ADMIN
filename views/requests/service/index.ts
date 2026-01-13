@@ -31,18 +31,7 @@ export class RequestService implements IRequestService {
 
   async get(filters: RequestFilters): Promise<PaginatedResponse<RequestDto>> {
     try {
-      const params = new URLSearchParams()
-      
-      if (filters.pageNumber) params.append('pageNumber', filters.pageNumber.toString())
-      if (filters.pageSize) params.append('pageSize', filters.pageSize.toString())
-      if (filters.employeeId) params.append('employeeId', filters.employeeId.toString())
-      if (filters.requestTypeId) params.append('requestTypeId', filters.requestTypeId.toString())
-      if (filters.status) params.append('status', filters.status.toString())
-      if (filters.startDate) params.append('startDate', filters.startDate)
-      if (filters.endDate) params.append('endDate', filters.endDate)
-      if (filters.affectsBalance !== undefined) params.append('affectsBalance', filters.affectsBalance.toString())
-
-      const response = await axios.get<PaginatedResponse<RequestDto>>(`${this.baseUrl}?${params.toString()}`)
+      const response = await axios.get<PaginatedResponse<RequestDto>>(`${this.baseUrl}`, { params:filters as any })
       return response.data
     } catch (error) {
       console.error('Error fetching requests:', error)
@@ -62,10 +51,7 @@ export class RequestService implements IRequestService {
 
   async getByEmployee(employeeId: number, status?: RequestStatus): Promise<RequestDto[]> {
     try {
-      const params = new URLSearchParams()
-      if (status) params.append('status', status.toString())
-
-      const response = await axios.get<RequestDto[]>(`${this.baseUrl}/employee/${employeeId}?${params.toString()}`)
+      const response = await axios.get<RequestDto[]>(`${this.baseUrl}/employee/${employeeId}`, { params: { status } as any })
       return response.data
     } catch (error) {
       console.error(`Error fetching requests for employee ${employeeId}:`, error)
@@ -75,7 +61,7 @@ export class RequestService implements IRequestService {
 
   async getByStatus(status: RequestStatus): Promise<RequestDto[]> {
     try {
-      const response = await axios.get<RequestDto[]>(`${this.baseUrl}/status/${status}`)
+      const response = await axios.get<RequestDto[]>(`${this.baseUrl}/status/${status}`, { params: { status } as any })
       return response.data
     } catch (error) {
       console.error(`Error fetching requests with status ${status}:`, error)

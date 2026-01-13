@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
 import AppTable from '~/components/app-table/AppTable.vue'
+import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
 import { tableHeader } from '~/views/attendance'
-import { useAttendanceStore } from '~/views/attendance/store'
-import type { AttendanceRecord, AttendanceFilters } from '~/views/attendance/types'
 import EmployeeStatusDialog from '~/views/attendance/components/EmployeeStatusDialog.vue'
+import ManualAttendanceDialog from '~/views/attendance/components/ManualAttendanceDialog.vue'
 import ProcessPayrollDialog from '~/views/attendance/components/ProcessPayrollDialog.vue'
+import { useAttendanceStore } from '~/views/attendance/store'
+import type { AttendanceFilters, AttendanceRecord } from '~/views/attendance/types'
 
 definePageMeta({
     title: 'سجلات الحضور',
@@ -49,21 +50,7 @@ const handleExportRecordsCSV = async () => {
     }
 }
 
-const handleExportSummaryCSV = async () => {
-    try {
-        await attendanceStore.exportSummaryCSV()
-    } catch (error) {
-        console.error('Error exporting summary CSV:', error)
-    }
-}
 
-const handleExportMonthlyPayroll = async () => {
-    try {
-        await attendanceStore.exportMonthlyPayroll()
-    } catch (error) {
-        console.error('Error exporting monthly payroll:', error)
-    }
-}
 
 const handleExportRecordsExcel = async () => {
     try {
@@ -201,12 +188,13 @@ const selectedEmployeeIds = computed(() => {
     return Array.from(selectedIds)
 })
 
-const handleProcessPayroll = () => {
-    isProcessPayrollDialogOpen.value = true
-}
 
 const handlePayrollProcessed = () => {
     getRecords()
+}
+
+const handleManualAttendance = () => {
+    attendanceStore.isManualAttendanceDialogOpen = true
 }
 
 // Initialize data
@@ -282,15 +270,11 @@ watch(filters, () => { loadData() }, { deep: true })
                     <Icon name="ph:file-csv-duotone" class="size-5" />
                     تصدير CSV
                 </BaseButton>
-                <BaseButton color="info" variant="outline" class="gap-2" :loading="isLoading"
-                    @click="handleExportSummaryCSV">
-                    <Icon name="ph:file-csv-duotone" class="size-5" />
-                    تصدير الملخص CSV
-                </BaseButton>
+               
                 <BaseButton color="warning" variant="outline" class="gap-2" :loading="isLoading"
-                    @click="handleExportMonthlyPayroll">
-                    <Icon name="ph:currency-circle-dollar-duotone" class="size-5" />
-                    تصدير الرواتب الشهرية
+                    @click="handleManualAttendance">
+                    <Icon name="ph:clock-user-duotone" class="size-5" />
+                    تسجيل حضور يدوياً
                 </BaseButton>
                 <BaseButton color="primary" variant="outline" class="gap-2" :loading="isLoading"
                     @click="handleExportRecordsExcel">
@@ -346,5 +330,6 @@ watch(filters, () => { loadData() }, { deep: true })
         <EmployeeStatusDialog />
         <ProcessPayrollDialog v-model="isProcessPayrollDialogOpen" :employee-ids="selectedEmployeeIds"
             @done="handlePayrollProcessed" />
+        <ManualAttendanceDialog />
     </div>
 </template>
