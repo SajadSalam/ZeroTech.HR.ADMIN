@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DotLoading from '~/components/global/DotLoading.vue';
+import DotLoading from '~/components/DotLoading.vue';
 import { fakeData } from '~/views/employees';
 import Attachments from '~/views/employees/components/Attachments.vue';
 import EmployeeDetailSection from '~/views/employees/components/EmployeeDetailSection.vue';
