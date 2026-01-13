@@ -297,7 +297,7 @@ watch(filters, () => { loadData() }, { deep: true })
                     {{ formatTime(item.checkInTime) }}
                 </template>
 
-                <template #data-checkOutTime="{ item }">
+                <template #data-checkOutTime="{ item }">``
                     {{ formatTime(item.checkOutTime) }}
                 </template>
 
