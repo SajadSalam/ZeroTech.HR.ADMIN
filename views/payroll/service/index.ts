@@ -3,7 +3,7 @@ import type { PaginatedResponse } from '~/utils/types/ApiResponses'
 import type {
     EmployeePayrollDto,
     EmployeePayrollFilters,
-    PayrollBatch,
+    PayrollBatchCreateDto,
     PayrollBatchDto,
     PayrollBatchFilters,
     PayrollBatchPaginationResponse,
@@ -15,7 +15,7 @@ interface IPayrollService {
   // Payroll Batch operations
   getBatches: (filters: PayrollBatchFilters) => Promise<PayrollBatchPaginationResponse>
   getBatchById: (id: number) => Promise<PayrollBatchDto>
-  createBatch: (data: PayrollBatch) => Promise<PayrollBatchDto>
+  createBatch: (data: PayrollBatchCreateDto) => Promise<PayrollBatchDto>
   updateBatch: (id: number, data: PayrollBatchUpdateDto) => Promise<PayrollBatchDto>
   deleteBatch: (id: number) => Promise<void>
   
@@ -45,7 +45,7 @@ export class PayrollService implements IPayrollService {
     return response.data
   }
 
-  async createBatch(data: PayrollBatch): Promise<PayrollBatchDto> {
+  async createBatch(data: PayrollBatchCreateDto): Promise<PayrollBatchDto> {
     const response = await axios.post<PayrollBatchDto>('/Payroll/batch', data)
     return response.data
   }

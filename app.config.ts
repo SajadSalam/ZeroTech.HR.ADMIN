@@ -2,7 +2,7 @@ import pages from './navigation'
 
 export default defineAppConfig({
   tairo: {
-    title: 'UMS - Exam Management System',
+    title: 'ZeroTech - Human Resources Management System',
     collapse: {
       toolbar: {
         enabled: true,

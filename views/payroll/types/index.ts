@@ -100,7 +100,12 @@ export type EmployeePayrollDto = BaseDto & EmployeePayroll & {
 }
 
 // Create DTOs
-export type PayrollBatchCreateDto = PayrollBatch
+export type PayrollBatchCreateDto = PayrollBatch & {
+  includeAllEmployees: boolean
+  employeeIds?: number[] | null
+  autoCalculate?: boolean
+  overtimeMultiplier?: number
+}
 
 export type PayrollCalculationDto = {
   batchId: number

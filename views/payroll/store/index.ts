@@ -2,7 +2,7 @@ import { payrollService } from '../service'
 import type {
     EmployeePayrollDto,
     EmployeePayrollFilters,
-    PayrollBatch,
+    PayrollBatchCreateDto,
     PayrollBatchDto,
     PayrollBatchFilters,
     PayrollBatchUpdateDto,
@@ -89,7 +89,7 @@ export const usePayrollStore = defineStore('payroll', () => {
     }
   }
 
-  const createPayrollBatch = async (data: PayrollBatch) => {
+  const createPayrollBatch = async (data: PayrollBatchCreateDto) => {
     try {
       isLoading.value = true
       await payrollService.createBatch(data)
