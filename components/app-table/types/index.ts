@@ -3,6 +3,8 @@ export interface TableHeader {
   center?: boolean
   key: string
   icon?: string
+  sortable?: boolean
+  render?: (item: any) => string
 }
 export type HeaderSlotKey<T> = T extends string ? `header-${T}` : never
 export type DataSlotKey<T> = T extends string ? `data-${T}` : never

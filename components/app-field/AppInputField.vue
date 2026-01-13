@@ -18,6 +18,8 @@ const props = defineProps<{
   clearable?: boolean
   disabled?: boolean
   className?: string
+  min?: number
+  max?: number
 }>()
 type TimeModel = {
   hours: number | string
@@ -31,10 +33,6 @@ const color = useColorMode()
 const error = computed(() => {
   return props.errors?.length ? props.errors.map((e) => e.$message).join(', ') : ''
 })
-const showPassword = ref(false)
-const type = computed(() => {
-  return props.type === 'password' ? (showPassword.value ? 'text' : 'password') : props.type
-})
 </script>
 
 <template>
@@ -45,23 +43,15 @@ const type = computed(() => {
       :size="props.size ?? 'md'"
       :label="props.label ? props.label + (props.label && props.required ? '*' : '') : ''"
       :placeholder="props.placeholder"
-      :type="type"
+      :type="props.type ?? 'text'"
       :rounded="props.rounded ?? 'sm'"
       contrast="default"
       :error="error"
-      :icon="props.icon ?? (props.type === 'password' ? 'ph:eye-duotone' : props.icon)"
-
+      :icon="props.icon"
       :disabled="props.disabled"
-    >
-        <template #icon>
-            <Icon 
-                v-if="props.type === 'password'"
-                :name="showPassword ? 'ph:eye-duotone' : 'ph:eye-slash-duotone'" 
-                class="cursor-pointer text-gray-500" 
-                @click="showPassword = !showPassword"
-            />
-        </template>
-    </BaseInput>
+      :min="props.min"
+      :max="props.max"
+    />
 
     <!-- Color Input -->
     <div v-if="props.type === 'color'" class="flex flex-col justify-between">
@@ -75,7 +65,7 @@ const type = computed(() => {
     <!-- Date Picker Input -->
     <template v-else-if="props.type === 'date'">
       <div class="flex flex-col justify-between">
-        <span v-if="props.label" class="dp__label p-1">
+        <span v-if="props.label" class="dp__label mb-2">
           {{ props.label }}
         </span>
 
@@ -94,7 +84,7 @@ const type = computed(() => {
     </template>
     <template v-else-if="props.type === 'time'">
       <div class="flex flex-col justify-between">
-        <span v-if="props.label" class="dp__label">
+        <span v-if="props.label" class="dp__label mb-2">
           {{ props.label }}
         </span>
         <flat-pickr

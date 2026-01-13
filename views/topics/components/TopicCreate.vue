@@ -1,25 +1,22 @@
 <script setup lang="ts">
 import AppInputField from '~/components/app-field/AppInputField.vue'
 import { Validator } from '~/services/validator'
-import { createValidator } from '~/services/validationWithI18n'
+import { requiredValidator } from '~/services/validation'
 import { useTopicStore } from '../store'
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import { UserRoles } from '~/utils/constants/enum'
 import type { Topic, TopicCreateDto } from '../types'
-import { useI18n } from 'vue-i18n'
 
 const topicStore = useTopicStore()
-const { t } = useI18n()
 
 const validator = new Validator<TopicCreateDto>(
   {
-    titleAr: '',
-    titleEn: '',
+    name: '',
     subjectId: '',
   },
   {
-    titleAr: {
-      required: createValidator(t, 'topic-name', 'required'),
+    name: {
+      required: requiredValidator('Topic name'),
     },
   }
 )
@@ -57,16 +54,10 @@ watch(
     <div class="rounded-3xl p-3">
       <div class="flex flex-col gap-4">
         <AppInputField
-          v-model="body.titleAr.$model"
-          :errors="body.titleAr.$errors"
+          v-model="body.name.$model"
+          :errors="body.name.$errors"
           size="md"
           :label="$t('topic-name')"
-        />
-        <AppInputField
-          v-model="body.titleEn.$model"
-          :errors="body.titleEn.$errors"
-          size="md"
-          :label="$t('topic-name-en')"
         />
         <AppAutoCompleteField
           v-model="body.subjectId.$model"
@@ -75,9 +66,8 @@ watch(
           :errors="body.subjectId.$errors"
           size="md"
           :label="$t('subject')"
-          get-url="/subjects/lookup"
-          without-data
-          item-label="title"
+          get-url="/subjects"
+          item-label="name"
           item-value="id"
         />
       </div>

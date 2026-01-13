@@ -1,3 +1,4 @@
+import { fakeData } from '..'
 import { SubjectService } from '../service'
 import type { Subject, SubjectDto, SubjectFilters } from '../types'
 
@@ -6,12 +7,9 @@ export const useSubjectStore = defineStore('subject', () => {
   const subjects = ref<SubjectDto[]>([])
   const isLoading = ref(false)
   const filters = ref<SubjectFilters>({
-    Page: 1,
-    PageSize: 50,
-    Search: '',
-    titleAr: null,
-    code: null,
-    titleEn: null,
+    pageSize: 10,
+    pageNumber: 1,
+    name: null,
   })
   const isCreateDialogOpen = ref(false)
   const isEditDialogOpen = ref(false)
@@ -23,9 +21,7 @@ export const useSubjectStore = defineStore('subject', () => {
     try {
       isLoading.value = true
       const response = await subjectService.get(filters.value)
-      console.log(response);
-      
-      subjects.value = response.items
+      subjects.value = response.data
       totalPages.value = response.pagesCount
     } catch (error) {
     } finally {

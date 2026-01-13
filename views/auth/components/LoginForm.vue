@@ -2,18 +2,18 @@
 import AppInputField from '~/components/app-field/AppInputField.vue'
 import { requiredValidator } from '~/services/validation'
 import { Validator } from '~/services/validator'
-import { findFirstAccessiblePage } from '~/utils/navigation-helpers'
 import { useAuthStore } from '../store/auth'
-import type { LoginBody } from '../types/index'
+import type { LoginBody, MeResponse } from '../types/index'
 
 const body = ref<LoginBody>({
-  email: '',
+  loginIdentifier: '',
   password: '',
+  rememberMe: true,
 })
 const isError = ref(false)
 const isLoading = ref(false)
 const validator = new Validator<LoginBody>(body.value, {
-  email: {
+  loginIdentifier: {
     required: requiredValidator(''),
   },
   password: {
@@ -30,12 +30,14 @@ const login = async () => {
     isError.value = false
     await authStore.login(body.value)
 
-    window.location.href = '/'
-    
-    
-    // Find first accessible page and navigate there
-    // const firstAccessiblePage = await findFirstAccessiblePage()
-    // await navigateTo(firstAccessiblePage)
+    const userDataStr = localStorage.getItem('userData')
+    if (userDataStr) {
+      const userData = JSON.parse(userDataStr) as MeResponse
+      // Check roles array for navigation
+      const userRoles = userData.roles?.map((role: any) => role.name) || []
+        window.location.href = '/'
+     
+    }
   } catch (error) {
     isError.value = true
   } finally {
@@ -51,11 +53,11 @@ onMounted(() => {})
   <form @submit.prevent="login">
     <div class="w-[100%] flex flex-col gap-3 !text-black">
       <AppInputField
-        v-model="validator.validation.value.email.$model"
-        :errors="validator.validation.value.email.$errors"
+        v-model="validator.validation.value.loginIdentifier.$model"
+        :errors="validator.validation.value.loginIdentifier.$errors"
         rounded="lg"
-        :placeholder="$t('fill-email')"
-        :label="$t('email')"
+        placeholder="ادخل اسم المستخدم"
+        label="اسم المستخدم"
         class="rounded-full"
       />
       <AppInputField
@@ -63,17 +65,19 @@ onMounted(() => {})
         :errors="validator.validation.value.password.$errors"
         type="password"
         rounded="lg"
-        :placeholder="$t('password')"
-        :label="$t('password')"
+        placeholder="ادخل كلمة المرور"
+        label="كلمة المرور"
         class="rounded-full"
       />
+      
+      
       <p v-if="isError" class="text-red text-sm">
-        {{ $t('username-or-password-is-incorrect') }}
+        اسم المستخدم أو كلمة المرور غير صحيحة
       </p>
 
       <div class="flex w-full flex-col items-center gap-3">
         <BaseButton :loading="isLoading" type="submit" class="w-full" color="primary">
-          {{ $t('login') }}
+          تسجيل الدخول
         </BaseButton>
       </div>
     </div>

@@ -1,3 +1,4 @@
+import { fakeData } from '..'
 import { TopicService } from '../service'
 import type { Topic, TopicDto, TopicFilters } from '../types'
 
@@ -6,12 +7,10 @@ export const useTopicStore = defineStore('topic', () => {
   const topics = ref<TopicDto[]>([])
   const isLoading = ref(false)
   const filters = ref<TopicFilters>({
-    Page: 1,
-    PageSize: 50,
-    Search: '',
+    pageSize: 10,
+    pageNumber: 1,
     subjectId: null,
-    titleAr: null,
-    titleEn: null,
+    name: null,
   })
   const isCreateDialogOpen = ref(false)
   const isEditDialogOpen = ref(false)
@@ -23,7 +22,11 @@ export const useTopicStore = defineStore('topic', () => {
     try {
       isLoading.value = true
       const response = await topicService.get(topicFilters)
-      topics.value = response.items
+      topics.value = response.data.map((topic) => ({
+        ...topic,
+        subjectId: topic.subject.id,
+        subjectName: topic.subject.name,
+      }))
       totalPages.value = response.pagesCount
     } catch (error) {
     } finally {

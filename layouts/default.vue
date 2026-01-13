@@ -2,5 +2,4 @@
   <TairoCollapseLayout>
     <slot />
   </TairoCollapseLayout>
-  <AuditLogDialog />
 </template>

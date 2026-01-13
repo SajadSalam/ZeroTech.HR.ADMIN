@@ -9,7 +9,6 @@ interface Props {
   pagination?: boolean
   totalPages?: number
   hideCreate?: boolean
-  createLink?:string
   addBtnAction?: () => void
 }
 const props = defineProps<Props>()
@@ -33,7 +32,7 @@ const hasSlot = (name: string) => !!slots[name]
 const isFiltersOpen = ref(false)    
 </script>
 <template>
-  <div class="bg-white pa-5 rounded-lg">
+  <div class="bg-white pa-5 border border shadow-md rounded-lg">
     <h1 class="text-2xl font-bold">{{ props.title }}</h1>
     <div class="pa-3 flex w-full items-center justify-between rounded-lg bg-white">
     <div class="flex items-center gap-5">
@@ -48,25 +47,15 @@ const isFiltersOpen = ref(false)
       >
         <Icon name="carbon:filter-edit" size="23" />
       </BaseButtonIcon>
-      <BaseButton v-if="!hideCreate && !props.createLink" class="gap-1" color="primary" @click="addBtnAction">
+      <BaseButton v-if="!hideCreate" class="gap-1" color="primary" @click="addBtnAction">
         <Icon name="ph-plus-circle-duotone" size="20" />
-        {{ addButtonText || $t('add') }}
+        {{ addButtonText || 'إضافة' }}
       </BaseButton>
-      <NuxtLink
-          v-if="!hideCreate && props.createLink"
-          :to="props.createLink"
-          class="flex items-center gap-1 btn btn-primary"
-        >
-        <BaseButton v-if="!hideCreate && props.createLink" class="gap-1" color="primary" @click="addBtnAction">
-          <Icon name="ph-plus-circle-duotone" size="20" />
-          {{ addButtonText || $t('add') }}
-        </BaseButton>
-      </NuxtLink>
     </div>
   </div>
   <transition name="slide-fade">
     <div v-if="isFiltersOpen" class="pa-5 my-2 rounded-lg bg-white">
-      <h1 class="mb-2 text-lg font-bold">{{ $t('filters_title') }}</h1>
+      <h1 class="mb-2 text-lg font-bold">فلترة البيانات</h1>
       <slot name="additional-filters" />
     </div>
   </transition>

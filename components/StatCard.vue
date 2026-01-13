@@ -2,7 +2,7 @@
   <BaseCard class="flex items-center gap-4 p-3">
     <BaseIconBox
       size="md"
-      class="bg-primary-100 text-primary-500 dark:border-2 dark:border-primary-500 dark:bg-primary-500/20 dark:text-primary-400"
+      :class="`bg-${color}-100 text-${color}-500 dark:border-2 dark:border-${color}-500 dark:bg-${color}-500/20 dark:text-${color}-400`"
       rounded="full"
       color="none"
     >
@@ -30,10 +30,12 @@ interface Props {
   label: string
   value: string | number
   iconName?: string
+  color?: string
 }
 
 withDefaults(defineProps<Props>(), {
   iconName: 'i-mynaui-chart-bar-one-solid',
+  color: 'primary',
 })
 </script>
 

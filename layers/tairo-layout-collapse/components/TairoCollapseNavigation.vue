@@ -1,68 +1,51 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '~/views/auth/store/auth'
 import { useCollapse } from '../composables/collapse'
 const { isOpen, isMobileOpen, menuItems } = useCollapse()
 const app = useAppConfig()
-const {locale} = useI18n()
-const authStore = useAuthStore()
 
-const isUserHasRole = (role: string | string[]) => {
-
-    return authStore.hasRole(role)
-}
 const startMenuItems = computed(() =>
-
     menuItems.value?.filter((sidebar) => !sidebar.position || sidebar.position === 'start')
 )
 const endMenuItems = computed(() =>
     menuItems.value?.filter((sidebar) => sidebar.position === 'end')
 )
-
-const hasRoleOrPrivilege = (item: any) => {
-    if(!item.role && !item.privilege) return true
-    if (item.role) {
-        return isUserHasRole(item.role)
-    }
-    if (item.privilege) {
-        return authStore.hasPrivilege(item.privilege)
-    }
-}
-
+const authStore = useAuthStore()
 
 </script>
 
 <template>
-    <div class="dark:bg-muted-800 border-muted-200 dark:border-muted-700 fixed start-0 top-0 z-[60] flex h-full flex-col border-r bg-#121420 transition-all duration-300"
+    <div class="sidebar-bg dark:bg-muted-800 border-muted-200 dark:border-muted-700 fixed start-0 top-0 z-[60] flex h-full flex-col border-r transition-all duration-300"
         :class="[
             !isOpen ? 'w-[80px]' : 'w-[250px]',
-            isMobileOpen ? 'translate-x-0 lg:translate-x-0' : `${locale == 'ar' ? '' : '-'}translate-x-full lg:translate-x-0 `,
-        ]">
+            isMobileOpen ? 'translate-x-0 lg:translate-x-0' : `translate-x-full lg:translate-x-0`,
+        ]"
+        >
         <!--Header-->
         <slot name="header">
-            <component :is="resolveComponentOrNative(app.tairo?.collapse?.navigation?.header?.component)"
+            <component class="my-10" :is="resolveComponentOrNative(app.tairo?.collapse?.navigation?.header?.component)"
                 v-if="app.tairo?.collapse?.navigation?.header?.component" :is-open="isOpen" />
         </slot>
         <!--Body-->
-        <div class="relative flex w-full grow flex-col py-6"
+        <div class="relative flex w-full grow flex-col py-10"
             :class="!isOpen ? 'px-4' : 'nui-slimscroll overflow-y-auto px-6'">
             <!--Menu-->
             <ul v-if="startMenuItems?.length" class="space-y-2">
                 <!--Menu item-->
                 <template v-for="(item, index) in startMenuItems">
-                    <li v-if="hasRoleOrPrivilege(item)" :key="index">
+                    <li v-if="item.permissions ? authStore.hasPermission(item.permissions) : true" :key="index">
                         <component :is="resolveComponentOrNative(item?.component?.name)" v-if="item?.component?.name"
                             v-bind="item?.component?.props" />
                         <TairoCollapseNavigationCollapseLinks v-else-if="item.children" :item="item" :expanded="isOpen"
                             @clicked="isOpen = true" />
                         <NuxtLink v-else-if="item.to" :to="item.to" :data-nui-tooltip="isOpen ? undefined : item.name"
                             data-nui-tooltip-position="end"
-                            exact-active-class="!bg-white/20 !text-white font-bold"
-                            class="nui-focus flex cursor-pointer items-center gap-4 rounded-lg py-3 text-white transition-colors duration-300 hover:bg-muted-100 hover:text-muted-600 dark:text-muted-400/80 dark:hover:bg-muted-700/60 dark:hover:text-muted-200"
+                            exact-active-class="!bg-secondary-500  !bg-op-20 !border !border-secondary-500 !border-2  !text-secondary-500 font-bold"
+                            class="nui-focus flex cursor-pointer items-center gap-4 rounded-full py-3 text-white transition-colors duration-300 hover:bg-muted-100 hover:text-muted-600 dark:text-muted-400/80 dark:hover:bg-muted-700/60 dark:hover:text-muted-200"
                             :class="!isOpen ? 'justify-center px-1' : 'px-4'">
                             <Icon :name="item.icon.name" :class="item.icon.class" />
                             <span class="whitespace font-sans text-sm" :class="!isOpen ? 'hidden' : 'block'">
-                                {{ $t(item.name) }}
+                                {{ item.name }}
                             </span>
                         </NuxtLink>
                         <div v-else-if="item.divider"
@@ -72,7 +55,7 @@ const hasRoleOrPrivilege = (item: any) => {
                             :class="!isOpen ? 'justify-center px-1' : 'px-4'" @click="item.click">
                             <Icon :name="item.icon.name" :class="item.icon.class" />
                             <span class="whitespace-nowrap font-sans text-sm" :class="!isOpen ? 'hidden' : 'block'">
-                                {{ $t(item.name) }}
+                                {{ item.name }}
                             </span>
                         </button>
                     </li>
@@ -83,17 +66,18 @@ const hasRoleOrPrivilege = (item: any) => {
             <ul v-if="endMenuItems?.length" class="space-y-2">
                 <!--Menu item-->
                 <li v-for="(item, index) in endMenuItems" :key="index">
+                    
                     <component :is="resolveComponentOrNative(item?.component?.name)" v-if="item?.component?.name"
                         v-bind="item?.component?.props" />
                     <TairoCollapseNavigationCollapseLinks v-else-if="item.children" :item="item" :expanded="isOpen"
                         @clicked="isOpen = true" />
                     <NuxtLink v-else-if="item.to" :to="item.to"
-                        exact-active-class="!bg-primary-gradient !text-white font-bold"
-                        class="nui-focus flex cursor-pointer items-center gap-4 rounded-lg py-3 text-white transition-colors duration-300 hover:bg-muted-100 hover:text-muted-600 dark:text-muted-400/80 dark:hover:bg-muted-700/60 dark:hover:text-muted-200"
+                        exact-active-class="!bg-secondary-500 !bg-op-20 !border !border-secondary-500 !border-2  !text-secondary-500"
+                        class="nui-focus flex cursor-pointer items-center gap-4 rounded-full py-3 text-white transition-colors duration-300 hover:bg-muted-100 hover:text-muted-600 dark:text-muted-400/80 dark:hover:bg-muted-700/60 dark:hover:text-muted-200"
                         :class="!isOpen ? 'justify-center px-1' : 'px-4'">
                         <Icon :name="item.icon.name" :class="item.icon.class" />
                         <span class="whitespace-nowrap font-sans text-sm" :class="!isOpen ? 'hidden' : 'block'">
-                            {{ $t(item.name) }}
+                            {{ item.name }}
                         </span>
                     </NuxtLink>
                     <div v-else-if="item.divider"
@@ -103,7 +87,7 @@ const hasRoleOrPrivilege = (item: any) => {
                         :class="!isOpen ? 'justify-center px-1' : 'px-4'" @click="item.click">
                         <Icon :name="item.icon.name" :class="item.icon.class" />
                         <span class="whitespace-nowrap font-sans text-sm" :class="!isOpen ? 'hidden' : 'block'">
-                            {{ $t(item.name) }}
+                            {{ item.name }}
                         </span>
                     </button>
                 </li>
@@ -116,3 +100,9 @@ const hasRoleOrPrivilege = (item: any) => {
         </slot>
     </div>
 </template>
+<style lang="scss">
+.sidebar-bg {
+    background-image: url('/sidebar-bg.svg');
+
+}
+</style>

@@ -1,7 +1,6 @@
 // uno.config.ts
-import { defineConfig } from 'unocss'
 import colors from 'tailwindcss/colors'
-import tailwindConfig from './tailwind.config'
+import { defineConfig } from 'unocss'
 
 
 export default defineConfig({
@@ -10,36 +9,36 @@ export default defineConfig({
         colors: {
             veryCool: '#0000ff', // class="text-very-cool"
             brand: {
-                primary: '#91271b', //class="bg-brand-primary"
-                DEFAULT: '#91271b', //class="bg-brand"
+                primary: '#1A2951', //class="bg-brand-primary"
+                DEFAULT: '#1A2951', //class="bg-brand"
             },
             primary: {
-                DEFAULT: '#A9321E',
-                '50': '#FDF5F4',
-                '100': '#F8DBD8',
-                '200': '#EEA8A0',
-                '300': '#E47667',
-                '400': '#DA462F',
-                '500': '#A9321E',
-                '600': '#8B2B19',
-                '700': '#6C2213',
-                '800': '#4E1A0E',
-                '900': '#301008',
-                '950': '#210B06',
+               DEFAULT: '#1A2951',
+                50: '#5978CA',
+                100: '#496BC5',
+                200: '#3858AE',
+                300: '#2E488F',
+                400: '#243970',
+                500: '#1A2951',
+                600: '#0C1427',
+                700: '#000000',
+                800: '#000000',
+                900: '#000000',
+                950: '#000000'
             },
             secondary: {
-                DEFAULT: '#121420',
-                50: '#FDF5F4',
-                100: '#F8DBD8',
-                200: '#EEA8A0',
-                300: '#E47667',
-                400: '#DA462F',
-                500: '#121420',
-                600: '#8B2B19',
-                700: '#6C2213',
-                800: '#4E1A0E',
-                900: '#301008',
-                950: '#210B06',
+                 DEFAULT: '#AA80FF',
+                50: '#FFFFFF',
+                100: '#FFFFFF',
+                200: '#FCFAFF',
+                300: '#E1D2FF',
+                400: '#C5A9FF',
+                500: '#AA80FF',
+                600: '#8448FF',
+                700: '#5F10FF',
+                800: '#4700D7',
+                900: '#34009F',
+                950: '#2B0083'
             },
             muted: colors.slate,
             neutral: {
@@ -82,7 +81,7 @@ export default defineConfig({
                 300: '#FEF7CD',
                 400: '#FCEE9C',
                 500: '#FF9B2A',
-                600: '#EA580C',
+                600: '#9F8804',
                 700: '#776603',
                 800: '#504402',
                 900: '#282201',

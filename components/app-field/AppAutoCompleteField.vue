@@ -1,7 +1,7 @@
 <script lang="ts" setup generic="T, TModel">
-import type { ErrorObject } from '@vuelidate/core';
-import { get } from 'lodash-es';
-import axiosInstance from '~/services/app-client/axios';
+import axiosInstance from '~/services/app-client/axios'
+import type { ErrorObject } from '@vuelidate/core'
+import { get } from 'lodash-es'
 interface Props {
   items?: T[]
   itemLabel?: string
@@ -14,13 +14,11 @@ interface Props {
   fetchOnSearch?: boolean
   searchKey?: string
   multiple?: boolean
+  placeholder?: string
   modelValue?: TModel
   disabled?: boolean
   allowCreate?: boolean
   oldData?: T[]
-  placeholder?: string
-  selectAll?: boolean
-  withoutData?: boolean
 }
 const emits = defineEmits(['update:objectValue', 'update:modelValue', 'create:item'])
 const createNewItem = () => {
@@ -61,6 +59,28 @@ const items = computed({
 })
 const searchKey = computed(() => props.searchKey || 'name')
 const selectedItems = ref<T[]>([])
+
+// const getValueFromModel = async (v: any) => {
+//     if (!props.getUrl || !props.fetchOnSearch) return
+//     if (typeof v != 'object') {
+//         const newVal = await axiosInstance.get(props.getUrl + '/' + v)
+//         modelValue.value = newVal.data
+//     } else if (Array.isArray(v) && v.some((i: any) => typeof i != 'object')) {
+//         const newArray = await axiosInstance.get(props.getUrl + '/' + v)
+//         modelValue.value = newArray.data
+//     }
+// }
+
+// watch(
+//     () => modelValue.value,
+//     (v) => {
+//         if (v == 0) return
+//         if (!v || v == undefined || v == null) modelValue.value = undefined
+//         else if (!modelValue.value && v) modelValue.value = v
+//         if (v || v == 0) getValueFromModel(v)
+//     },
+//     { immediate: true, deep: true }
+// )
 
 function itemWithLabel(item: T): string {
   if (!item || !item[props.itemLabel! as keyof T]) return modelValue.value as string
@@ -145,22 +165,17 @@ async function fetchData() {
       if (search.value) params = { ...params, [searchKey.value]: search.value }
     }
     const res = await axiosInstance.get(props.getUrl, { params })
-    if (props.withoutData) {
-      items.value = res.data
-    } else {
-      items.value = res.data.items
-    }
+    items.value = res.data.data
   }
 }
 
-onMounted(async () => {
+onMounted(() => {
   onClickOutside(menu, () => {
     isOpen.value = false
   })
-  if (props.getUrl){ await fetchData()}
+  if (props.getUrl) fetchData()
   if (modelValue.value !== '' && !props.multiple && modelValue.value !== null) {
     const item = items.value.find((i) => i[props!.itemValue]! === modelValue.value)
-    
 
     selectItem(item as T)
   }
@@ -191,12 +206,7 @@ const clearSelected = () => {
   selectedItems.value = []
   search.value = ''
 }
-
-const selectAllItems = () => {
-  selectedItems.value = items.value
-}
-
-
+const oldData = computed(() => props.oldData)
 // watchDeep(() => oldData.value,() => {
 //     items.value [...oldData.value]
 // })
@@ -226,13 +236,13 @@ const selectAllItems = () => {
         :icon="isAnySelected ? 's' : null"
         :error="error"
         :disabled="props.disabled"
-        :placeholder="placeholder"
         :label="label"
+        :placeholder="placeholder"
         @focus="isOpen = true"
       >
         <template #icon>
           <Icon
-            v-if="selectedItems.length > 0 && !props.disabled"
+            v-if="selectedItems.length > 0"
             name="ph-x"
             class="cursor-pointer text-red-500"
             size="20"
@@ -240,7 +250,7 @@ const selectAllItems = () => {
           />
         </template>
       </BaseInput>
-      <div v-if="props.multiple" class="mt-2 flex flex-wrap items-center gap-2">
+      <div v-if="props.multiple" class="mt-2 flex items-center gap-2">
         <BaseTag
           v-for="item in selectedItems"
           :key="itemWithValue(item)"
@@ -256,10 +266,7 @@ const selectAllItems = () => {
     <div
       v-if="isOpen"
       class="max-h-[200px] rounded-box dark:bg-dark absolute z-[99] flex flex-col overflow-y-auto rounded-xl border bg-white p-2 shadow dark:text-white"
-      :style="{ 
-
-        width: menuWidth + 'px',
-       }"
+      :style="{ width: `${menuWidth}px` }"
     >
       <!-- Add create option when no exact match is found -->
       <div
@@ -277,11 +284,6 @@ const selectAllItems = () => {
           <Icon name="ph-plus" class="text-green-500" size="20" />
           <p>Create "{{ search }}"</p>
         </div>
-      </div>
-      <div v-if="props.selectAll">
-        <BaseButton size="sm" color="primary" variant="pastel" @click="selectAllItems">
-          {{ $t('select-all') }}
-        </BaseButton>
       </div>
       <div
         v-for="item in filteredItems"
@@ -312,7 +314,7 @@ const selectAllItems = () => {
         class="pa-3 flex items-center justify-center text-center"
       >
         <p class="text-gray-500 dark:text-gray-400">
-          {{ $t('no-data-found') }}
+          لا يوجد نتائج
         </p>
       </div>
     </div>

@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+import { Menu, MenuButton, MenuItems } from '@headlessui/vue'
 import { useAuthStore } from '~/views/auth/store/auth'
 
 const authStore = useAuthStore()
-const fullName = computed(() => authStore.userData.name || 'Sajad Salam')
-const role = computed(
-    () =>
-        authStore.userData.roles.map(c=> c.name).join(', ') ||
-        'SuperAdmin'
-)
-const orgStructure = computed(() => authStore.userData.organizationalStructure?.fullNameAr || '-')
-console.log('orgStructure', orgStructure.value)
+const userData = computed(() => authStore.userData)
+const fullName = computed(() => userData.value.fullName || userData.value.username || 'Sajad Salam')
+const role = computed(() => {
+  if (userData.value.roles && userData.value.roles.length > 0) {
+    return userData.value.roles[0].name
+  }
+  return 'SuperAdmin'
+})
 </script>
 
 <template>
@@ -28,7 +28,7 @@ console.log('orgStructure', orgStructure.value)
                     >
                         <img
                             src="/img/avatars/3.svg"
-                            class="max-w-full z-40 rounded-full object-cover  dark:border-transparent"
+                            class="max-w-full z-40 rounded-full object-cover shadow-sm dark:border-transparent"
                             alt=""
                         />
                         <div class="absolute -left-1 bg-white w-3 h-4 z-20" />
@@ -69,23 +69,19 @@ console.log('orgStructure', orgStructure.value)
                         >
                             <img
                                 src="/img/avatars/2.svg"
-                                class="max-w-full rounded-full object-cover  dark:border-transparent"
+                                class="max-w-full rounded-full object-cover shadow-sm dark:border-transparent"
                                 alt=""
                             />
                         </div>
                         <div class="mt-3">
                             <h6
-                                class="font-heading font-bold text-muted-800 lg font-medium dark:text-white"
+                                class="font-heading font-medium text-muted-800 lg dark:text-white"
                             >
                                 {{ fullName }}
                             </h6>
                             <p class="text-muted-400 text-xs">
-                            {{ orgStructure }}
-                             </p>
-                            <p class="text-muted-400 text-xs">
                                 {{ role }}
                             </p>
-                             
                         </div>
                     </div>
 
@@ -100,7 +96,7 @@ console.log('orgStructure', orgStructure.value)
                                 <h6
                                     class="font-heading text-muted-800 text-xs font-medium leading-none dark:text-white"
                                 >
-                                    {{ $t('logout') }}
+                                    تسجيل الخروج
                                 </h6>
                             </div>
                         </BaseButton>

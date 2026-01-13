@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { RouteLocationRaw } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 
 const props = withDefaults(
   defineProps<{
@@ -106,8 +105,8 @@ const props = withDefaults(
     currentPage: 1,
     maxLinksDisplayed: 3,
     routerQueryKey: 'page',
-    previousIcon: undefined,
-    nextIcon: undefined,
+    previousIcon: 'lucide:chevron-right',
+    nextIcon: 'lucide:chevron-left',
     ellipsis: '…',
     classes: () => ({}),
   },
@@ -116,22 +115,8 @@ const emits = defineEmits<{
   'update:currentPage': [currentPage: number]
 }>()
 
-const { locale } = useI18n()
 const color = useNuiDefaultProperty(props, 'BasePagination', 'color')
 const rounded = useNuiDefaultProperty(props, 'BasePagination', 'rounded')
-
-// Compute icons based on locale direction
-const isRTL = computed(() => locale.value === 'ar')
-
-const previousIcon = computed(() => {
-  if (props.previousIcon) return props.previousIcon
-  return isRTL.value ? 'lucide:chevron-right' : 'lucide:chevron-left'
-})
-
-const nextIcon = computed(() => {
-  if (props.nextIcon) return props.nextIcon
-  return isRTL.value ? 'lucide:chevron-left' : 'lucide:chevron-right'
-})
 
 const radiuses = {
   none: '',

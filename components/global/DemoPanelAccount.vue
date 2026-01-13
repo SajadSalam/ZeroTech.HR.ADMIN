@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FocusTrap } from '@headlessui/vue'
+import { FocusTrap } from '@headlessui/vue';
 
 const props = withDefaults(
   defineProps<{
@@ -104,7 +104,7 @@ function useDemoAreaBalance() {
       >
         <BaseHeading
           as="h3"
-          size="xs"
+          size="sm"
           weight="semibold"
           class="text-muted-500 dark:text-muted-100 uppercase"
         >
@@ -140,7 +140,7 @@ function useDemoAreaBalance() {
           </div>
           <!--Balance-->
           <div class="py-6 pe-4 text-end">
-            <BaseParagraph size="xs" class="text-muted-400 mb-1">
+            <BaseParagraph size="sm" class="text-muted-400 mb-1">
               Account balance
             </BaseParagraph>
             <BaseParagraph

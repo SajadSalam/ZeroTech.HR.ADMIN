@@ -26,7 +26,7 @@ const deleteItem = async () => {
   <AppDialog
     v-model="isDeleteModalOpen"
     size="lg"
-    :title="$t('confirm-delete')"
+    title="تأكيد الحذف"
     :loading="isLoading"
     color="none"
   >
@@ -34,12 +34,12 @@ const deleteItem = async () => {
       <img src="~/assets/images/trash.gif" class="mx-auto h-[200px]" >
     </div>
     <div class="mt-4 w-full text-center text-xl font-bold text-danger-600">
-      {{ $t('delete-confirmation') }}
+      هل أنت متأكد أنك تريد حذف هذا العنصر؟
     </div>
     <div class="mt-2 flex w-full items-center gap-2">
       <BaseButton :loading="isLoading" color="danger" class="flex-grow gap-1" @click="deleteItem">
         <Icon name="ph:trash" />
-        {{ $t('delete') }}
+        حذف
       </BaseButton>
       <BaseButton
         :loading="isLoading"
@@ -48,7 +48,7 @@ const deleteItem = async () => {
         class="flex-grow gap-1"
         @click="isDeleteModalOpen = false"
       >
-        {{ $t('cancel') }}
+        إلغاء
       </BaseButton>
     </div>
   </AppDialog>

@@ -37,11 +37,6 @@ const colorMode = useColorMode()
 colorMode.value = 'light'
 colorMode.preference = 'light'
 
-onMounted(() => {
-    const auth = useAuthStore()
-    auth.fetchUserPrivileges()
-})
-
 
 </script>
 

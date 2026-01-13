@@ -1,26 +1,24 @@
 <script setup lang="ts">
 import AppInputField from '~/components/app-field/AppInputField.vue'
 import { Validator } from '~/services/validator'
-import { createValidator } from '~/services/validationWithI18n'
+import { requiredValidator } from '~/services/validation'
 import { useSubjectStore } from '../store'
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import { UserRoles } from '~/utils/constants/enum'
 import type { Subject } from '../types'
-import { useI18n } from 'vue-i18n'
 
 const subjectStore = useSubjectStore()
-const { t } = useI18n()
 
 const selectedSubject = computed(() => subjectStore.selectedSubject)
 const validator = new Validator<Subject>(
   {
-    titleAr: selectedSubject.value?.titleAr as string,
+    name: selectedSubject.value?.name as string,
     code: selectedSubject.value?.code as string,
-    titleEn: selectedSubject.value?.titleEn as string,
+    englishName: selectedSubject.value?.englishName as string,
   },
   {
-    titleAr: {
-      required: createValidator(t, 'subject-name', 'required'),
+    name: {
+      required: requiredValidator('Subject name'),
     },
   }
 )
@@ -46,9 +44,9 @@ watch(
       validator.resetBody()
     } else {
       validator.fillBody({
-        titleAr: selectedSubject.value?.titleAr as string,
+        name: selectedSubject.value?.name as string,
         code: selectedSubject.value?.code as string,
-        titleEn: selectedSubject.value?.titleEn as string,
+        englishName: selectedSubject.value?.englishName as string,
       })
     }
   }
@@ -64,8 +62,8 @@ watch(
     <div class="rounded-3xl p-3">
       <div class="flex flex-col gap-4">
         <AppInputField
-          v-model="body.titleAr.$model"
-          :errors="body.titleAr.$errors"
+          v-model="body.name.$model"
+          :errors="body.name.$errors"
           size="md"
           :label="$t('subject-name')"
         />
@@ -76,8 +74,8 @@ watch(
           :label="$t('subject_code')"
         />
         <AppInputField
-          v-model="body.titleEn.$model"
-          :errors="body.titleEn.$errors"
+          v-model="body.englishName.$model"
+          :errors="body.englishName.$errors"
           size="md"
           :label="$t('subject_english_name')"
         />
@@ -85,7 +83,7 @@ watch(
     </div>
     <template #actions>
       <BaseButton color="primary" class="gap-1" :loading="isLoading" @click="updateSubject">
-        <Icon name="ph:upload-simple-duotone" class="size-5" />
+        <Icon name="ph:check-circle-duotone" class="size-5" />
         {{ $t('save') }}
       </BaseButton>
     </template>

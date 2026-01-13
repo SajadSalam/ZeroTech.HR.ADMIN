@@ -9,7 +9,6 @@ import AppCrudActions from '~/components/app-crud/components/AppCrudActions.vue'
 import SubjectEdit from '~/views/subjects/components/SubjectEdit.vue'
 import type { Subject, SubjectDto, SubjectFilters } from '~/views/subjects/types'
 import { useAuthStore } from '~/views/auth/store/auth'
-import AuditLogBtn from '~/components/global/AuditLogBtn.vue'
 definePageMeta({
   title: 'subjects',
   description: 'create-and-manage-subjects',
@@ -44,30 +43,46 @@ watch(
   { deep: true }
 )
 const openEdit = (item: SubjectDto) => {}
-const { hasPrivilege } = useAuthStore()
 </script>
 
 <template>
   <div>
-    <AppCrud :add-button-text="$t('add-new-subject')" :add-btn-action="() => (subjectStore.isCreateDialogOpen = true)"
-      :pagination="true" :total-pages="subjectStore.totalPages" :title="$t('subjects')"
-      :hide-create="!hasPrivilege('ums:ems:subjects:create')" @update:current-page="filters.Page = $event">
+    <AppCrud
+      :add-button-text="$t('add-new-subject')"
+      :add-btn-action="() => (subjectStore.isCreateDialogOpen = true)"
+      :pagination="true"
+      :total-pages="subjectStore.totalPages"
+      :title="$t('subjects')"
+      @update:current-page="filters.pageNumber = $event"
+    >
       <template #filters>
         <BaseInput v-model="filters.name" :placeholder="$t('search')" />
+        <AppAutoCompleteField
+          v-model="filters.subjectId"
+          :placeholder="$t('subject')"
+          get-url="/subjects"
+          item-label="name"
+          item-value="id"
+        />
       </template>
-      <AppTable title="Subjects" :headers="tableHeader($t)" :items="subjects" :is-loading="isLoading">
+      <AppTable
+        title="Subjects"
+        :headers="tableHeader($t)"
+        :items="subjects"
+        :is-loading="isLoading"
+      >
         <template #data-actions="{ item }">
-          <div class="flex items-center justify-center">
-          <AppCrudActions :item="item" :hide-update="!hasPrivilege('ums:ems:subjects:update')"
-            :hide-delete="!hasPrivilege('ums:ems:subjects:delete')" :edit-button-action="
+          <AppCrudActions
+            :item="item"
+            :edit-button-action="
               () => {
                 subjectStore.selectedSubject = item
                 subjectStore.selectedSubjectId = item.id
                 subjectStore.isEditDialogOpen = true
               }
-            " :delete-service="subjectStore.deleteSubject" />
-          <AuditLogBtn :entity-id="item.id" />
-          </div>
+            "
+            :delete-service="subjectStore.deleteSubject"
+          />
         </template>
       </AppTable>
     </AppCrud>

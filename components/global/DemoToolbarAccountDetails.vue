@@ -2,8 +2,20 @@
 import { useAuthStore } from '~/views/auth/store/auth'
 
 const authStore = useAuthStore()
-const fullName = computed(() => authStore.userData.name || 'Sajad Salam')
-const role = computed(() => authStore.userData.roles.map(c=> c.name).join(', ') || 'SuperAdmin')
+const userData = computed(() => authStore.userData || {
+    employee_name: {
+        ar: 'Sajad Salam',
+        en: 'Sajad Salam',
+    },
+    organizational_structure: {
+        name: {
+            ar: 'SuperAdmin',
+            en: 'SuperAdmin',
+        },
+    },
+})
+const fullName = computed(() => userData.value.employee_name.ar || 'Sajad Salam')
+const role = computed(() => userData.value.organizational_structure.name.ar || 'SuperAdmin')
 </script>
 <template>
     <div>

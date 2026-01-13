@@ -3,11 +3,11 @@ const props = defineProps({
   cols: Number,
   title: {
     type: String,
-    default: 'no-data-found',
+    default: 'لا يوجد بيانات',
   },
   subtitle: {
     type: String,
-    default: 'no-data-found-subtitle',
+    default: 'قم بإضافة بيانات للعرض',
   },
 })
 </script>
@@ -15,7 +15,7 @@ const props = defineProps({
 <template>
   <TairoTableRow :hoverable="false">
     <TairoTableCell class="!rounded" :colspan="props.cols">
-      <BasePlaceholderPage :title="$t(props.title)" :subtitle="$t(props.subtitle)" />
+      <BasePlaceholderPage :title="props.title" :subtitle="props.subtitle" />
     </TairoTableCell>
   </TairoTableRow>
 </template>

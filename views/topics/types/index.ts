@@ -1,10 +1,9 @@
 import type { BaseFilters } from '~/utils/types/ApiResponses'
 import type { BaseDto } from '~/utils/types/base-dto'
-import type { Subject, SubjectDto } from '~/views/subjects/types'
+import type { SubjectDto } from '~/views/subjects/types'
 
 export type Topic = {
-  titleAr: string | null
-  titleEn: string | null
+  name: string | null
 }
 
 export type TopicDto = BaseDto &
@@ -14,9 +13,7 @@ export type TopicDto = BaseDto &
     subject: SubjectDto
   }
 export type TopicCreateDto = Topic & {
-  subject: Subje  ct | null
-  titleAr: string | null
-  titleEn: string | null
+  subjectId: string | null
 }
 
 export type TopicFilters = BaseFilters & {

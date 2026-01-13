@@ -14,10 +14,10 @@
 .nui-autocomplete-input,
 .nui-textarea,
 .flatpickr-input {
-    background: white !important;
-    color: #54575E !important;
+    background: #F9FAFB !important;
+    color: #424B60 !important;
     border: 1px solid #F1F3F9 !important;
-    border-radius: 8px !important;
+    border-radius: 12px !important;
 
     &::placeholder {
         color: #96A0B6 !important;
@@ -88,9 +88,7 @@
     }
 }
 
-.nui-button.nui-button-solid.nui-button-primary {
-    @apply bg-primary-gradient;
-}
+
 
 
 .chip {

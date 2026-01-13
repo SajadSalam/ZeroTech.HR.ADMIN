@@ -1,15 +1,24 @@
 <script setup lang="ts">
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
-import { useAuthStore } from '~/views/auth/store/auth';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+import { useAuthStore } from '~/views/auth/store/auth'
 
 const props = defineProps<{
     horizontal?: boolean
 }>()
 const authStore = useAuthStore()
-const fullName = computed(() => authStore.userData.name || 'Sajad Salam')
+
+const userData = computed(() => authStore.userData || {
+    name: 'Sajad Salam',
+    roles: [{
+        name: 'SuperAdmin',
+        slug: 'super-admin',
+    }],
+    permissions: ['ums:ems:question:view-any'],
+})
+const fullName = computed(() => userData.value.name || 'Sajad Salam')
 const role = computed(
     () =>
-        authStore.userData.roles.map((c) => c.name).join(', ') ||
+        userData.value.roles.find((c) => c.slug.includes('ems'))?.name ||
         'SuperAdmin'
 )
 </script>
@@ -33,7 +42,7 @@ const role = computed(
                     >
                         <img
                             src="/img/avatars/2.svg"
-                            class="max-w-full rounded-full object-cover  dark:border-transparent"
+                            class="max-w-full rounded-full object-cover shadow-sm dark:border-transparent"
                             alt=""
                         />
                     </div>
@@ -63,7 +72,7 @@ const role = computed(
                             >
                                 <img
                                     src="/img/avatars/2.svg"
-                                    class="max-w-full rounded-full object-cover  dark:border-transparent"
+                                    class="max-w-full rounded-full object-cover shadow-sm dark:border-transparent"
                                     alt=""
                                 />
                             </div>

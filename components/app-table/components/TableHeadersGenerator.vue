@@ -3,7 +3,10 @@ import type { TableHeader } from '../types'
 
 interface Props {
   headers: TableHeader[]
+  hasSelect?: boolean
 }
+const allSlotsSelectedIndicator = defineModel()
+const emit = defineEmits(['check'])
 const props = defineProps<Props>()
 const headers = computed(() => props.headers)
 const slots = useSlots()
@@ -11,17 +14,16 @@ const hasSlot = (name: string) => !!slots[name]
 </script>
 <template>
   <tr>
-    <th
-      v-for="header in headers"
-      :key="header.key"
-      uppercase
-      spaced
-      :class="`${header.center ? 'text-center' : 'text-start'}`"
-    >
-      <div v-if="!hasSlot(`header-${header.key}`)" :id="`header-${header.key}`" class="flex  gap-2">
-        <Icon v-if="header.icon" :name="header.icon" class="size-4" />
+    <th v-if="hasSelect" uppercase spaced class="text-center">
+      <span :id="`header-select`" class="text-sm">
+        <BaseCheckbox class="!size-4 mx-2" :checked="allSlotsSelectedIndicator" @change="() => emit('check')" />
+      </span>
+    </th>
+    <th v-for="header in headers" :key="header.key" uppercase spaced
+      :class="`${header.center ? 'text-center' : 'text-start'}`">
+      <span v-if="!hasSlot(`header-${header.key}`)" :id="`header-${header.key}`">
         {{ header.label }}
-      </div>
+      </span>
       <slot v-else :name="`header-${header.key}`" />
     </th>
   </tr>

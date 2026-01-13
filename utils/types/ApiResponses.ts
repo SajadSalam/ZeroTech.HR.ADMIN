@@ -1,15 +1,11 @@
 import type { AxiosError } from 'axios'
 
 export interface PaginatedResponse<T> {
-  items: T[]
-  pageCount: number
+  data: T[]
+  pagesCount: number
   currentPage: number
   type: string
-  pageSize: number
-  rowCount: number
-  firstRowOnPage: number
-  lastRowOnPage: number
-  isLastPage: boolean
+  totalItems?: number
 }
 
 export interface WithoutPagination<T> {
@@ -22,9 +18,8 @@ export interface SingleObjectResponse<T> {
   error?: null
 }
 export interface BaseFilters extends Record<string, any> {
-  page?: number
-  pageSize?: number
-  search?: string | null
+  pageNumber: number
+  pageSize: number
 }
 
 export type ApiError<T> = AxiosError<PaginatedResponse<T>>

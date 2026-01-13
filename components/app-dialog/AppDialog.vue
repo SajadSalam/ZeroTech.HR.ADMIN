@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
 
 interface Props {
   size: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'
@@ -7,8 +6,7 @@ interface Props {
   loading?: boolean
   overflowY?: 'auto' | 'visible' // New prop for overflow-y
 }
-const i18n = useI18n()
-const title = computed(() => props.title ?? i18n.t('add'))
+const title = computed(() => props.title ?? 'اضافة')
 const props = withDefaults(defineProps<Props>(), {
   size: 'md',
   title: 'Add',
@@ -27,19 +25,16 @@ const hasSlot = (name: string) => !!slots[name]
     :open="isDialogOpen"
     :size="size"
     :overflow="props.overflowY"
-    :dir="$i18n.locale === 'ar' ? 'rtl' : 'ltr'"
+    dir="rtl"
     class="w-[100px] !bg-white dark:!bg-[#010518] dark:text-white"
     @close="isDialogOpen = true"
   >
     <template #header>
       <!-- Header -->
-      <div class="flex w-full items-center justify-between p-4">
-        <div v-if="!hasSlot('header')" class="flex items-center gap-2">
-            <h3 class="font-heading text-2xl font-bold leading-6 text-muted-900 dark:text-white">
-                 {{ title }}
-            </h3>
-        <slot name="header" />
-        </div>
+      <div v-if="!hasSlot('header')" class="flex w-full items-center justify-between p-4">
+        <h3 class="font-heading text-2xl font-bold leading-6 text-muted-900 dark:text-white">
+          {{ title }}
+        </h3>
 
         <BaseButton
           rounded="full"
@@ -51,6 +46,7 @@ const hasSlot = (name: string) => !!slots[name]
           <Icon name="material-symbols:close-rounded" class="size-5" />
         </BaseButton>
       </div>
+      <slot name="header" />
     </template>
 
     <!-- Body -->

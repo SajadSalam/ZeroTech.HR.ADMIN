@@ -1,10 +1,8 @@
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n'
 import { FileService } from '~/services/app-client/fileService'
-import AppImagePreviewModal from '../AppImagePreviewModal.vue'
 import AppFileUploaderButton from './AppFileUploaderButton.vue'
+import AppImagePreviewModal from '../AppImagePreviewModal.vue'
 
-const { t } = useI18n()
 
 const props = defineProps<{
   input: string
@@ -13,7 +11,6 @@ const props = defineProps<{
   size?: 'sm' | 'md' | 'lg' | 'xl'
   label?: string
   disabled?: boolean
-  type?: 'text' | 'textarea'
 }>()
 
 const emit = defineEmits(['update:input', 'update:file'])
@@ -35,21 +32,10 @@ const fileService = new FileService()
 const showModal = ref(false)
 watch(fileModel, async (value: File | null) => {
   if (value) {
-    // Check file size (1MB = 1024 * 1024 bytes)
-    const maxSize = 1024 * 1024 // 1MB in bytes
-    if (value.size > maxSize) {
-      useToast({
-        message: t('file_size_error'),
-        isError: true,
-      })
-      fileModel.value = null
-      return
-    }
-
     try {
       isUploading.value = true
       useToast({
-        message: t('image_uploading'),
+        message: 'image_uploading',
         isError: false,
       })
 
@@ -59,12 +45,12 @@ watch(fileModel, async (value: File | null) => {
 
       // Show success notification
       useToast({
-        message: t('image_upload_success'),
+        message: 'image_upload_success',
         isError: false,
       })
     } catch {
       useToast({
-        message: t('image_upload_failed'),
+        message: 'image_upload_failed',
         isError: true,
       })
     } finally {
@@ -94,24 +80,12 @@ const removeImage = () => {
   </p>
   <div class="flex w-full items-center gap-2">
     <BaseInput
-      v-if="type === 'text'"
       v-model="input"
-      :placeholder="placeholder || $t('enter-the-text')"
-      :size="size || 'md'"
-      :classes="{
-        wrapper: 'w-full ',
-      }"
-      :disabled="disabled"
-    />
-    <BaseTextarea
-      v-if="type === 'textarea'"
-      v-model="input"
-      :placeholder="placeholder || $t('enter-the-text')"
+        :placeholder="placeholder || 'enter-the-text'"
       :size="size || 'md'"
       :classes="{
         wrapper: 'w-full',
       }"
-      class="w-full"
       :disabled="disabled"
     />
     <AppFileUploaderButton v-model="fileModel">
