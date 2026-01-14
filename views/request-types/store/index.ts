@@ -37,7 +37,7 @@ export const useRequestTypeStore = defineStore('requestType', () => {
         isLoading.value = true
         const response = await requestTypeService.get(filters.value)
         requestTypes.value = response.items
-        totalPages.value = response.pagesCount
+        totalPages.value = response.calculatedTotalPages
       } catch (error) {
         console.error('Error fetching request types:', error)
         throw error

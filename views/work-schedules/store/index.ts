@@ -31,8 +31,8 @@ export const useWorkScheduleStore = defineStore('workSchedule', () => {
     try {
       isLoading.value = true
       const response = await workScheduleService.get(filters.value)
-      workSchedules.value = response.data
-      totalPages.value = response.pagesCount
+      workSchedules.value = response.items
+      totalPages.value = response.calculatedTotalPages
     } catch (error) {
       console.error('Error fetching work schedules:', error)
       throw error
@@ -58,8 +58,8 @@ export const useWorkScheduleStore = defineStore('workSchedule', () => {
     try {
       isLoading.value = true
       const response = await workScheduleService.getTemplates(filters.value)
-      workSchedules.value = response.data
-      totalPages.value = response.pagesCount
+      workSchedules.value = response.items
+      totalPages.value = response.calculatedTotalPages
     } catch (error) {
       console.error('Error fetching work schedule templates:', error)
       throw error

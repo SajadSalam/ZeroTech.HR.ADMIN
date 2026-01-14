@@ -20,7 +20,7 @@ export const useRoleStore = defineStore('role', () => {
             isLoading.value = true
             const response = await roleService.get(filters.value)
             roles.value = response.items
-            totalPages.value = response.pagesCount
+            totalPages.value = response.calculatedTotalPages
         } catch (error) {
             console.error('Error fetching roles:', error)
             throw error

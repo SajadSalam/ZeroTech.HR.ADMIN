@@ -53,8 +53,8 @@ export const useUserStore = defineStore('user', () => {
         try {
             isLoading.value = true
             const response = await userService.get(filters.value)
-            users.value = response.data
-            totalPages.value = response.pagesCount
+            users.value = response.items
+            totalPages.value = response.calculatedTotalPages
         } catch (error) {
             console.error('Error fetching users:', error)
             throw error

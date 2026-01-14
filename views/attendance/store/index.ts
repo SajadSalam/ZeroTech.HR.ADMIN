@@ -46,7 +46,7 @@ export const useAttendanceStore = defineStore('attendance', () => {
             isLoading.value = true
             const response = await attendanceService.getRecords(filters.value)
             records.value = response.items
-            totalPages.value = response.pagesCount
+            totalPages.value = response.calculatedTotalPages
         } catch (error) {
             console.error('Error fetching attendance records:', error)
             throw error

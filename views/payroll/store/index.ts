@@ -195,8 +195,8 @@ export const usePayrollStore = defineStore('payroll', () => {
     try {
       isLoading.value = true
       const response = await payrollService.getEmployeePayrolls(employeePayrollFilters.value)
-      employeePayrolls.value = response.data
-      employeePayrollTotalPages.value = response.pagesCount
+      employeePayrolls.value = response.items
+      employeePayrollTotalPages.value = response.calculatedTotalPages
     } catch (error) {
       console.error('Error fetching employee payrolls:', error)
       throw error

@@ -33,7 +33,7 @@ export const useRequestCategoryStore = defineStore('requestCategory', () => {
       isLoading.value = true
       const response = await requestCategoryService.get(filters.value)
       requestCategories.value = response.items
-      totalPages.value = response.pagesCount
+      totalPages.value = response.calculatedTotalPages
     } catch (error) {
       console.error('Error fetching request categories:', error)
       throw error
