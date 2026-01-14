@@ -11,6 +11,7 @@ import AvailabilityChecker from '~/views/request-types/components/AvailabilityCh
 import CategoryView from '~/views/request-types/components/CategoryView.vue'
 import type { RequestTypeDto, RequestTypeFilters } from '~/views/request-types/types'
 import { useAuthStore } from '~/views/auth/store/auth'
+import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 
 definePageMeta({
   title: 'أنواع الطلبات',
@@ -149,11 +150,13 @@ watch(
             item-label="name"
             item-value="id"
           />
-          <BaseSelect v-model="filters.isEnabled" placeholder="الحالة">
-            <option value="">جميع الحالات</option>
-            <option :value="true">مفعل</option>
-            <option :value="false">غير مفعل</option>
-          </BaseSelect>
+          <AppAutoCompleteField
+            v-model="filters.isEnabled"
+            placeholder="الحالة"
+            :items="[{ value: true, label: 'مفعل' }, { value: false, label: 'غير مفعل' }]"
+            item-label="label"
+            item-value="value"
+          />
         </template>
         <AppTable
           title="أنواع الطلبات"
@@ -200,7 +203,7 @@ watch(
                 />
               </div>
               <span class="text-muted-800 dark:text-muted-100">
-                {{ item.category.name }}
+                {{ item.category?.name }}
               </span>
             </div>
             <span v-else class="text-muted-500">-</span>

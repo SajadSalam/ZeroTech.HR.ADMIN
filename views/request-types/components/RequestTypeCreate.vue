@@ -6,6 +6,7 @@ import { requiredValidator } from '~/services/validation'
 import { Validator } from '~/services/validator'
 import { useRequestTypeStore } from '../store'
 import type { RequestTypeCreateDto } from '../types'
+import type { ApiError } from '~/utils/types/ApiResponses'
 
 const requestTypeStore = useRequestTypeStore()
 
@@ -58,9 +59,19 @@ const createRequestType = async () => {
     const isValid = await body.value.$validate()
 
     if (!isValid) return
+    try {
     await requestTypeStore.createRequestType(validator.extractBody())
-    validator.resetBody()
-    requestTypeStore.isCreateDialogOpen = false
+      validator.resetBody()
+      requestTypeStore.isCreateDialogOpen = false
+    } catch (error) {
+      useToast(
+        {
+          message: (error as ApiError).response?.data.title,
+          isError: true
+        }
+      )
+      validator.setExternalErrors((error as ApiError).response?.data?.errors ?? {})
+    }
 }
 
 watch(
@@ -133,102 +144,53 @@ watch(
 
                 <!-- Settings -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="flex items-center gap-2">
-                        <input
-                            id="isEnabled"
-                            v-model="body.isEnabled.$model"
-                            type="checkbox"
-                            class="rounded border-gray-300"
-                        />
-                        <label
-                            for="isEnabled"
-                            class="text-sm font-medium text-gray-700"
-                            >مفعل</label
-                        >
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <input
-                            id="requiresApproval"
-                            v-model="body.requiresApproval.$model"
-                            type="checkbox"
-                            class="rounded border-gray-300"
-                        />
-                        <label
-                            for="requiresApproval"
-                            class="text-sm font-medium text-gray-700"
-                            >يتطلب موافقة</label
-                        >
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <input
-                            id="allowsAttachments"
-                            v-model="body.allowsAttachments.$model"
-                            type="checkbox"
-                            class="rounded border-gray-300"
-                        />
-                        <label
-                            for="allowsAttachments"
-                            class="text-sm font-medium text-gray-700"
-                            >يسمح بالمرفقات</label
-                        >
-                    </div>
+                    <BaseCheckbox
+                        v-model="body.isEnabled.$model"
+                        label="مفعل"
+                        :trueValue="true"
+                        :falseValue="false"
+                    />
+                    <BaseCheckbox
+                        v-model="body.requiresApproval.$model"
+                        label="يتطلب موافقة"
+                        :trueValue="true"
+                        :falseValue="false"
+                    />
+                    <BaseCheckbox
+                        v-model="body.allowsAttachments.$model"
+                        label="يسمح بالمرفقات"
+                        :trueValue="true"
+                        :falseValue="false"
+                    />
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="flex items-center gap-2">
-                        <input
-                            id="requiresAttachments"
-                            v-model="body.requiresAttachments.$model"
-                            type="checkbox"
-                            class="rounded border-gray-300"
-                        />
-                        <label
-                            for="requiresAttachments"
-                            class="text-sm font-medium text-gray-700"
-                            >يتطلب مرفقات</label
-                        >
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <input
-                            id="affectsAttendance"
-                            v-model="body.affectsAttendance.$model"
-                            type="checkbox"
-                            class="rounded border-gray-300"
-                        />
-                        <label
-                            for="affectsAttendance"
-                            class="text-sm font-medium text-gray-700"
-                            >يؤثر على الحضور</label
-                        >
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <input
-                            id="affectsPayroll"
-                            v-model="body.affectsPayroll.$model"
-                            type="checkbox"
-                            class="rounded border-gray-300"
-                        />
-                        <label
-                            for="affectsPayroll"
-                            class="text-sm font-medium text-gray-700"
-                            >يؤثر على الراتب</label
-                        >
-                    </div>
+                    <BaseCheckbox
+                        v-model="body.requiresAttachments.$model"
+                        label="يتطلب مرفقات"
+                        :trueValue="true"
+                        :falseValue="false"
+                    />
+                    <BaseCheckbox
+                        v-model="body.affectsAttendance.$model"
+                        label="يؤثر على الحضور"
+                        :trueValue="true"
+                        :falseValue="false"
+                    />
+                    <BaseCheckbox
+                        v-model="body.affectsPayroll.$model"
+                        label="يؤثر على الراتب"
+                        :trueValue="true"
+                        :falseValue="false"
+                    />
                 </div>
 
-                <div class="flex items-center gap-2">
-                    <input
-                        id="isPaidTime"
-                        v-model="body.isPaidTime.$model"
-                        type="checkbox"
-                        class="rounded border-gray-300"
-                    />
-                    <label
-                        for="isPaidTime"
-                        class="text-sm font-medium text-gray-700"
-                        >وقت مدفوع</label
-                    >
-                </div>
+                <BaseCheckbox
+                    v-model="body.isPaidTime.$model"
+                    label="وقت مدفوع"
+                    :trueValue="true"
+                    :falseValue="false"
+                />
 
                 <!-- Duration Settings -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
