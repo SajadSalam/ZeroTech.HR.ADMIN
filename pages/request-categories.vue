@@ -8,6 +8,7 @@ import AppCrudActions from '~/components/app-crud/components/AppCrudActions.vue'
 import RequestCategoryEdit from '~/views/request-categories/components/RequestCategoryEdit.vue'
 import type { RequestCategoryDto, RequestCategoryFilters } from '~/views/request-categories/types'
 import { useAuthStore } from '~/views/auth/store/auth'
+import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 
 definePageMeta({
   title: 'فئات الطلبات',
@@ -57,14 +58,13 @@ watch(filters, () => { getRequestCategories() }, { deep: true })
           v-model="filters.code" 
           placeholder="البحث بالرمز" 
         />
-        <BaseSelect
+        <AppAutoCompleteField
           v-model="filters.isEnabled"
           placeholder="الحالة"
-        >
-          <option :value="undefined">جميع الحالات</option>
-          <option :value="true">مفعل</option>
-          <option :value="false">غير مفعل</option>
-        </BaseSelect>
+          :items="[{ value: true, label: 'مفعل' }, { value: false, label: 'غير مفعل' }]"
+          item-label="label"
+          item-value="value"
+        />
       </template>
       
       <AppTable

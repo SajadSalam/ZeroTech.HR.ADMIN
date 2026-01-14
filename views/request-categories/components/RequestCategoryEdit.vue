@@ -5,6 +5,7 @@ import { requiredValidator } from '~/services/validation'
 import { Validator } from '~/services/validator'
 import { useRequestCategoryStore } from '../store'
 import type { RequestCategoryUpdateDto } from '../types'
+import type { ApiError } from '~/utils/types/ApiResponses'
 
 const requestCategoryStore = useRequestCategoryStore()
 
@@ -41,6 +42,13 @@ const updateRequestCategory = async () => {
     validator.resetBody()
     requestCategoryStore.isEditDialogOpen = false
   } catch (error) {
+    useToast(
+      {
+        message: (error as ApiError).response?.data.title,
+        isError: true
+      }
+    )
+    validator.setExternalErrors((error as ApiError).response?.data?.errors ?? {})
     console.error('Error updating request category:', error)
   }
 }
