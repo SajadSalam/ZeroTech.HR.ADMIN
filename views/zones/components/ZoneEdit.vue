@@ -6,6 +6,10 @@ import { Validator } from '~/services/validator'
 import { useZoneStore } from '../store'
 import type { ZoneUpdateDto } from '../types'
 import ZoneMap from './ZoneMap.vue'
+import type { ApiError } from '~/utils/types/ApiResponses'
+import { zoneTypes } from '..'
+import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
+import { parseGeoJsonPolygon } from '../service/utils'
 
 const zoneStore = useZoneStore()
 
@@ -28,14 +32,6 @@ const validator = new Validator<ZoneUpdateDto>(
     },
   }
 )
-
-const zoneTypes = [
-  { value: 'Commercial', label: 'تجاري' },
-  { value: 'Residential', label: 'سكني' },
-  { value: 'Industrial', label: 'صناعي' },
-  { value: 'Mixed-Use', label: 'مختلط' },
-  { value: 'Recreational', label: 'ترفيهي' },
-]
 
 const body = validator.validation
 const isLoading = computed(() => zoneStore.isLoading)
@@ -73,7 +69,13 @@ const updateZone = async () => {
     zoneStore.clearCurrentPolygon()
     zoneStore.isEditDialogOpen = false
   } catch (error) {
-    console.error('Error updating zone:', error)
+    useToast(
+      {
+        message: (error as ApiError).response?.data.title,
+        isError: true
+      }
+    )
+    validator.setExternalErrors((error as ApiError).response?.data?.errors ?? {})
   }
 }
 
@@ -88,7 +90,8 @@ const enableDrawing = () => {
 watch(() => zoneStore.isEditDialogOpen, (val: boolean) => {
   if (val && zoneStore.selectedZone) {
     const zone = zoneStore.selectedZone
-    validator.setBody({
+    console.log(zone)
+    validator.fillBody({
       id: zone.id,
       name: zone.name,
       description: zone.description || '',
@@ -100,7 +103,12 @@ watch(() => zoneStore.isEditDialogOpen, (val: boolean) => {
       metadata: zone.metadata || '',
       isOperational: zone.isOperational,
     })
-    // Polygon coordinates are already set in the store when opening edit dialog
+    
+    // Parse polygonCoordinates GeoJSON string and set in store
+    const coordinates = parseGeoJsonPolygon(zone.polygonCoordinates)
+    if (coordinates.length > 0) {
+      zoneStore.setCurrentPolygon(coordinates)
+    }
   }
 })
 </script>
@@ -130,19 +138,14 @@ watch(() => zoneStore.isEditDialogOpen, (val: boolean) => {
           />
 
           <div class="space-y-2">
-            <label class="text-sm font-medium text-muted-700 dark:text-muted-300">
-              نوع المنطقة
-            </label>
-            <BaseSelect v-model="body.zoneType.$model">
-              <option value="">اختر نوع المنطقة</option>
-              <option
-                v-for="type in zoneTypes"
-                :key="type.value"
-                :value="type.value"
-              >
-                {{ type.label }}
-              </option>
-            </BaseSelect>
+            <AppAutoCompleteField
+              v-model="body.zoneType.$model"
+              label="نوع المنطقة"
+              placeholder="اختر نوع المنطقة"
+              :items="zoneTypes"
+              item-label="label"
+              item-value="value"
+            />
           </div>
         </div>
 

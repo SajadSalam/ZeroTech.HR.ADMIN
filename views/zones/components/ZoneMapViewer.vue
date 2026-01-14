@@ -1,14 +1,26 @@
 <script setup lang="ts">
 import { useZoneStore } from '../store'
 import ZoneMap from './ZoneMap.vue'
+import { parseGeoJsonPolygon } from '../service/utils'
 
 const zoneStore = useZoneStore()
 
 const selectedZone = computed(() => zoneStore.selectedZone)
+const currentPolygon = computed(() => zoneStore.currentPolygon)
 
 const closeDialog = () => {
   zoneStore.isMapDialogOpen = false
 }
+
+// Watch for dialog open and parse polygon coordinates
+watch(() => zoneStore.isMapDialogOpen, (val: boolean) => {
+  if (val && selectedZone.value?.polygonCoordinates) {
+    const coordinates = parseGeoJsonPolygon(selectedZone.value.polygonCoordinates)
+    if (coordinates.length > 0) {
+      zoneStore.setCurrentPolygon(coordinates)
+    }
+  }
+})
 </script>
 
 <template>
@@ -44,7 +56,7 @@ const closeDialog = () => {
           </div>
           <div>
             <div class="text-sm font-medium text-muted-700 dark:text-muted-300">عدد النقاط</div>
-            <div class="text-muted-900 dark:text-muted-100">{{ selectedZone.polygon.coordinates.length }}</div>
+            <div class="text-muted-900 dark:text-muted-100">{{ currentPolygon.length }}</div>
           </div>
         </div>
         

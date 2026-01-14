@@ -6,6 +6,7 @@ import { Validator } from '~/services/validator'
 import { useZoneStore } from '../store'
 import type { ZoneCreateDto } from '../types'
 import ZoneMap from './ZoneMap.vue'
+import type { ApiError } from '~/utils/types/ApiResponses'
 
 const zoneStore = useZoneStore()
 
@@ -25,14 +26,6 @@ const validator = new Validator<ZoneCreateDto>(
     },
   }
 )
-
-const zoneTypes = [
-  { value: 'Commercial', label: 'تجاري' },
-  { value: 'Residential', label: 'سكني' },
-  { value: 'Industrial', label: 'صناعي' },
-  { value: 'Mixed-Use', label: 'مختلط' },
-  { value: 'Recreational', label: 'ترفيهي' },
-]
 
 const body = validator.validation
 const isLoading = computed(() => zoneStore.isLoading)
@@ -75,6 +68,13 @@ const createZone = async () => {
     zoneStore.clearCurrentPolygon()
     zoneStore.isCreateDialogOpen = false
   } catch (error) {
+    useToast(
+      {
+        message: (error as ApiError).response?.data.title,
+        isError: true
+      }
+    )
+    validator.setExternalErrors((error as ApiError).response?.data?.errors ?? {})
     console.error('Error creating zone:', error)
   }
 }

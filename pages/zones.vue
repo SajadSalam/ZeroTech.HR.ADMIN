@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import AppCrudActions from '~/components/app-crud/components/AppCrudActions.vue'
+import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import AppTable from '~/components/app-table/AppTable.vue'
 import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
-import { tableHeader } from '~/views/zones'
+import { tableHeader, zoneTypes } from '~/views/zones'
 import ZoneCreate from '~/views/zones/components/ZoneCreate.vue'
 import ZoneEdit from '~/views/zones/components/ZoneEdit.vue'
 import ZoneMapViewer from '~/views/zones/components/ZoneMapViewer.vue'
@@ -27,14 +28,6 @@ const filters = computed<ZoneFilters>({
     zoneStore.filters = value
   },
 })
-
-const zoneTypes = [
-  { value: 'Commercial', label: 'تجاري' },
-  { value: 'Residential', label: 'سكني' },
-  { value: 'Industrial', label: 'صناعي' },
-  { value: 'Mixed-Use', label: 'مختلط' },
-  { value: 'Recreational', label: 'ترفيهي' },
-]
 
 const getZones = async () => {
   appTableStore.setLoading(true)
@@ -83,27 +76,20 @@ watch(filters, () => { getZones() }, { deep: true })
           v-model="filters.searchTerm" 
           placeholder="البحث في الاسم والوصف" 
         />
-        <BaseSelect
+        <AppAutoCompleteField
           v-model="filters.zoneType"
           placeholder="نوع المنطقة"
-        >
-          <option value="">جميع الأنواع</option>
-          <option
-            v-for="type in zoneTypes"
-            :key="type.value"
-            :value="type.value"
-          >
-            {{ type.label }}
-          </option>
-        </BaseSelect>
-        <BaseSelect
+          :items="zoneTypes"
+          item-label="label"
+          item-value="value"
+        />
+        <AppAutoCompleteField
           v-model="filters.isOperational"
           placeholder="الحالة التشغيلية"
-        >
-          <option :value="undefined">جميع الحالات</option>
-          <option :value="true">تشغيلي</option>
-          <option :value="false">غير تشغيلي</option>
-        </BaseSelect>
+          :items="[{ value: true, label: 'تشغيلي' }, { value: false, label: 'غير تشغيلي' }]"
+          item-label="label"
+          item-value="value"
+        />
       </template>
       
       <AppTable
