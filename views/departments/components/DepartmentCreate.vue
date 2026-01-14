@@ -6,6 +6,7 @@ import { requiredValidator } from '~/services/validation'
 import { Validator } from '~/services/validator'
 import { useDepartmentStore } from '../store'
 import type { DepartmentCreateDto } from '../types'
+import type { ApiError } from '~/utils/types/ApiResponses'
 
 const departmentStore = useDepartmentStore()
 
@@ -41,9 +42,23 @@ const createDepartment = async () => {
   const isValid = await body.value.$validate()
 
   if (!isValid) return
-  await departmentStore.createDepartment(validator.extractBody())
-  validator.resetBody()
-  departmentStore.isCreateDialogOpen = false
+  try {
+    await departmentStore.createDepartment(validator.extractBody())
+    validator.resetBody()
+    departmentStore.isCreateDialogOpen = false
+  } catch (error) {
+    console.error('Error creating department:', error)
+    const errors = (error as ApiError).response?.data?.errors
+    if (errors) {
+      validator.setExternalErrors(errors)
+    }
+    useToast(
+      {
+        message: (error as ApiError).response?.data.title,
+        isError: true
+      }
+    )
+  }
 }
 
 watch(

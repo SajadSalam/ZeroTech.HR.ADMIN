@@ -116,6 +116,13 @@ const updateWorkSchedule = async () => {
     validator.resetBody()
     workScheduleStore.isEditDialogOpen = false
   } catch (error) {
+    useToast(
+      {
+        message: (error as ApiError).response?.data.title,
+        isError: true
+      }
+    )
+    validator.setExternalErrors((error as ApiError).response?.data?.errors ?? {})
     console.error('Error updating work schedule:', error)
   }
 }
@@ -243,17 +250,10 @@ watch(() => workScheduleStore.isEditDialogOpen, (val: boolean) => {
 
         <!-- Flexibility Settings -->
         <div class="space-y-4">
-          <div class="flex items-center gap-3">
-            <input
-              id="isFlexible"
-              v-model="body.isFlexible.$model"
-              type="checkbox"
-              class="size-4 rounded border-muted-300 text-primary-500 focus:ring-primary-500"
-            >
-            <label for="isFlexible" class="text-sm font-medium text-muted-700 dark:text-muted-300">
-              جدول عمل مرن
-            </label>
-          </div>
+          <BaseCheckbox
+            v-model="body.isFlexible.$model"
+            label="جدول عمل مرن"
+          />
 
           <div v-if="body.isFlexible.$model">
             <AppInputField

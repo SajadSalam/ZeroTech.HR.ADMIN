@@ -36,15 +36,14 @@ export const useDepartmentStore = defineStore('department', () => {
         try {
             isLoading.value = true
             const response = await departmentService.get(filters.value)
-            departments.value = response.data
-            totalPages.value = response.pagesCount
+            departments.value = response.items
+            totalPages.value = response.calculatedTotalPages
         } catch (error) {
             console.error('Error fetching departments:', error)
         } finally {
             isLoading.value = false
         }
     }
-
     const getDepartmentById = async (
         id: number,
         includeSubDepartments?: boolean
@@ -85,8 +84,8 @@ export const useDepartmentStore = defineStore('department', () => {
             isLoading.value = true
             const response =
                 await departmentService.getTopLevel(departmentFilters)
-            departments.value = response.data
-            totalPages.value = response.pagesCount
+            departments.value = response.items
+            totalPages.value = response.calculatedTotalPages
         } catch (error) {
             console.error('Error fetching top-level departments:', error)
         } finally {
@@ -101,8 +100,8 @@ export const useDepartmentStore = defineStore('department', () => {
             isLoading.value = true
             const response =
                 await departmentService.getWithBudget(departmentFilters)
-            departments.value = response.data
-            totalPages.value = response.pagesCount
+            departments.value = response.items
+            totalPages.value = response.calculatedTotalPages
         } catch (error) {
             console.error('Error fetching departments with budget:', error)
         } finally {

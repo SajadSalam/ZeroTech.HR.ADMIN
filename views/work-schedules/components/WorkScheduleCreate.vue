@@ -7,6 +7,7 @@ import { Validator } from '~/services/validator'
 import { useWorkScheduleStore } from '../store'
 import type { LateAttendanceRule, Shift, WorkScheduleCreateDto } from '../types'
 import ShiftForm from './ShiftForm.vue'
+import type { ApiError } from '~/utils/types/ApiResponses'
 
 const workScheduleStore = useWorkScheduleStore()
 
@@ -118,11 +119,17 @@ const createWorkSchedule = async () => {
     // Ensure boolean values are properly set
     bodyData.isFlexible = body.value.isFlexible.$model === true
     bodyData.isGeneralTemplate = body.value.isGeneralTemplate.$model === true
-    
     await workScheduleStore.createWorkSchedule(bodyData)
     validator.resetBody()
     workScheduleStore.isCreateDialogOpen = false
   } catch (error) {
+    useToast(
+      {
+        message: (error as ApiError).response?.data.title,
+        isError: true
+      }
+    )
+    validator.setExternalErrors((error as ApiError).response?.data?.errors ?? {})
     console.error('Error creating work schedule:', error)
   }
 }
@@ -227,15 +234,10 @@ watch(() => workScheduleStore.isCreateDialogOpen, (val: boolean) => {
         <!-- Flexibility Settings -->
         <div class="space-y-4">
           <div class="flex items-center gap-3">
-            <input
-              id="isFlexible"
+            <BaseCheckbox
               v-model="body.isFlexible.$model"
-              type="checkbox"
-              class="size-4 rounded border-muted-300 text-primary-500 focus:ring-primary-500"
-            >
-            <label for="isFlexible" class="text-sm font-medium text-muted-700 dark:text-muted-300">
-              جدول عمل مرن
-            </label>
+              label="جدول عمل مرن"
+            />
           </div>
 
           <div v-if="body.isFlexible.$model">

@@ -6,6 +6,7 @@ import { requiredValidator } from '~/services/validation'
 import { Validator } from '~/services/validator'
 import { useDepartmentStore } from '../store'
 import type { DepartmentUpdateDto } from '../types'
+import type { ApiError } from '~/utils/types/ApiResponses'
 
 const departmentStore = useDepartmentStore()
 
@@ -13,7 +14,7 @@ const selectedDepartment = computed(() => departmentStore.selectedDepartment)
 
 const validator = new Validator<DepartmentUpdateDto>(
   {
-    id: selectedDepartment.value?.id as number,
+    id: selectedDepartment.value?.id as unknown as number,
     name: selectedDepartment.value?.name as string,
     description: selectedDepartment.value?.description as string,
     code: selectedDepartment.value?.code as string,
@@ -43,9 +44,22 @@ const isLoading = computed(() => {
 const updateDepartment = async () => {
   const isValid = await body.value.$validate()
   if (!isValid) return
-  await departmentStore.updateDepartment(validator.extractBody())
-  validator.resetBody()
-  departmentStore.isEditDialogOpen = false
+  try {
+    await departmentStore.updateDepartment(validator.extractBody())
+    departmentStore.isEditDialogOpen = false
+    validator.resetBody()
+  } catch (error) {
+    const errors = (error as ApiError).response?.data?.errors
+    if (errors) {
+      validator.setExternalErrors(errors)
+    }
+    useToast(
+      {
+        message: (error as ApiError).response?.data.title,
+        isError: true
+      }
+    )
+  }
 }
 
 watch(
@@ -55,7 +69,7 @@ watch(
       validator.resetBody()
     } else {
       validator.fillBody({
-        id: selectedDepartment.value?.id as number,
+        id: selectedDepartment.value?.id as unknown as number,
         name: selectedDepartment.value?.name as string,
         description: selectedDepartment.value?.description as string,
         code: selectedDepartment.value?.code as string,
