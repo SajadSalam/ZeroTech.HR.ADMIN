@@ -12,6 +12,7 @@ import {
     type RequestFilters,
     type RequestUpdateDto,
 } from '../types'
+import type { ApiError } from '~/utils/types/ApiResponses'
 
 export const useRequestStore = defineStore('request', () => {
   // State
@@ -58,8 +59,8 @@ export const useRequestStore = defineStore('request', () => {
     try {
       isLoading.value = true
       const response = await requestService.get(filters.value)
-      requests.value = response.items || response.data || []
-      totalPages.value = response.totalPages || response.pagesCount || 0
+      requests.value = response.items
+      totalPages.value = response.calculatedTotalPages || 0
     } catch (error) {
       console.error('Error fetching requests:', error)
       throw error
@@ -143,6 +144,12 @@ export const useRequestStore = defineStore('request', () => {
       await getRequests()
       return newRequest
     } catch (error) {
+      useToast(
+        {
+          message: (error as ApiError).response?.data.title,
+          isError: true
+        }
+      )
       console.error('Error creating request:', error)
       throw error
     } finally {
@@ -157,6 +164,12 @@ export const useRequestStore = defineStore('request', () => {
       await getRequests()
       return updatedRequest
     } catch (error) {
+      useToast(
+        {
+          message: (error as ApiError).response?.data.title,
+          isError: true
+        }
+      )
       console.error(`Error updating request ${data.id}:`, error)
       throw error
     } finally {

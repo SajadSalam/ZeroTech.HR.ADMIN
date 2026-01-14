@@ -11,6 +11,7 @@ import { useRequestTypeStore } from '~/views/request-types/store'
 import { useRequestStore } from '../store'
 import type { RequestUpdateDto } from '../types'
 import { RequestStatus } from '../types'
+import type { ApiError } from '~/utils/types/ApiResponses'
 
 const requestStore = useRequestStore()
 const requestTypesStore = useRequestTypeStore()
@@ -111,6 +112,13 @@ const updateRequest = async () => {
     validator.resetBody()
     requestStore.isEditDialogOpen = false
   } catch (error) {
+    useToast(
+      {
+        message: (error as ApiError).response?.data.title,
+        isError: true
+      }
+    )
+    validator.setExternalErrors((error as ApiError).response?.data?.errors ?? {})
     console.error('Error updating request:', error)
   }
 }

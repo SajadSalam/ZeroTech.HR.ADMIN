@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import AppCrud from '~/components/app-crud/AppCrud.vue'
+import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import AppTable from '~/components/app-table/AppTable.vue'
 import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
-import { tableHeader } from '~/views/requests'
+import { statusOptions, tableHeader } from '~/views/requests'
 import CancelRequest from '~/views/requests/components/CancelRequest.vue'
 import RequestCreate from '~/views/requests/components/RequestCreate.vue'
 import RequestDetailsDialog from '~/views/requests/components/RequestDetailsDialog.vue'
@@ -35,33 +36,6 @@ const getRequests = async () => {
   appTableStore.setLoading(false)
 }
 
-// Status filter options
-const statusOptions = [
-  { value: '', label: 'جميع الحالات' },
-  { value: RequestStatus.Submitted, label: 'مُقدم' },
-  { value: RequestStatus.InProgress, label: 'قيد المراجعة' },
-  { value: RequestStatus.ApprovedPartially, label: 'موافق عليه جزئياً' },
-  { value: RequestStatus.Approved, label: 'موافق عليه' },
-  { value: RequestStatus.Rejected, label: 'مرفوض' },
-  { value: RequestStatus.Completed, label: 'مكتمل' },
-  { value: RequestStatus.Cancelled, label: 'ملغي' },
-]
-
-const selectedStatus = ref('')
-
-// Watch for status filter changes
-watch(selectedStatus, (newStatus) => {
-  filters.value.status = newStatus ? Number(newStatus) : undefined
-})
-
-// Custom actions for requests
-const handleEdit = (item: RequestDto) => {
-  // Only allow editing if request is in editable state
-  if (item.status === RequestStatus.Submitted || item.status === RequestStatus.InProgress) {
-    requestStore.openEditDialog(item)
-  }
-}
-
 const handleCancel = (item: RequestDto) => {
   // Only allow cancelling if request is in cancellable state
   if (item.status === RequestStatus.Submitted || 
@@ -69,14 +43,6 @@ const handleCancel = (item: RequestDto) => {
       item.status === RequestStatus.ApprovedPartially) {
     requestStore.openCancelDialog(item)
   }
-}
-
-
-
-
-// Open request details
-const openDetails = (requestId: number) => {
-  requestStore.openDetailsDialog(requestId)
 }
 
 // Load data on mount
@@ -108,14 +74,14 @@ watch(filters, () => { getRequests() }, { deep: true })
           />
           
           <!-- Status filter -->
-          <select 
-            v-model="selectedStatus"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-          >
-            <option v-for="option in statusOptions" :key="option.value" :value="option.value">
-              {{ option.label }}
-            </option>
-          </select>
+          <AppAutoCompleteField
+            v-model="filters.status"
+            placeholder="الحالة"
+            :items="statusOptions"
+            item-label="label"
+            item-value="value"
+            clearable
+          />
 
           <!-- Date range filter -->
           <BaseInput 

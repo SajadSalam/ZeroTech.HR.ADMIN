@@ -1,4 +1,5 @@
 import type { TableHeader } from '~/components/app-table/types'
+import { RequestStatus } from './types'
 
 export const tableHeader = (): TableHeader[] => [
   {
@@ -72,4 +73,16 @@ export const tableHeader = (): TableHeader[] => [
     label: 'الإجراءات',
     sortable: false,
   },
+]
+
+
+// Status filter options
+export const statusOptions = [
+  { value: RequestStatus.Submitted, label: 'مُقدم' },
+  { value: RequestStatus.InProgress, label: 'قيد المراجعة' },
+  { value: RequestStatus.ApprovedPartially, label: 'موافق عليه جزئياً' },
+  { value: RequestStatus.Approved, label: 'موافق عليه' },
+  { value: RequestStatus.Rejected, label: 'مرفوض' },
+  { value: RequestStatus.Completed, label: 'مكتمل' },
+  { value: RequestStatus.Cancelled, label: 'ملغي' },
 ]

@@ -20,7 +20,7 @@ export enum ApprovalStatus {
 
 // Base Request Type
 export type Request = {
-  employeeId: number
+  employeeId: number | null
   requestTypeId: number
   startDate: string
   endDate: string

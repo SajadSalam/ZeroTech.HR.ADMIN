@@ -9,6 +9,7 @@ import { useEmployeeStore } from '~/views/employees/store'
 import { useRequestTypeStore } from '~/views/request-types/store'
 import { useRequestStore } from '../store'
 import type { RequestCreateDto } from '../types'
+import type { ApiError } from '~/utils/types/ApiResponses'
 
 const requestStore = useRequestStore()
 const requestTypesStore = useRequestTypeStore()
@@ -17,7 +18,7 @@ const authStore = useAuthStore()
 
 const validator = new Validator<RequestCreateDto>(
   {
-    employeeId: authStore.userData?.id || 0,
+    employeeId: null,
     requestTypeId: 0,
     startDate: '',
     endDate: '',
@@ -100,6 +101,13 @@ const createRequest = async () => {
     validator.resetBody()
     requestStore.isCreateDialogOpen = false
   } catch (error) {
+    useToast(
+      {
+        message: (error as ApiError).response?.data.title,
+        isError: true
+      }
+    )
+    validator.setExternalErrors((error as ApiError).response?.data?.errors ?? {})
     console.error('Error creating request:', error)
   }
 }
