@@ -1,8 +1,8 @@
 <script lang="ts" setup generic="T, TModel">
-import axiosInstance from '~/services/app-client/axios'
-import type { ErrorObject } from '@vuelidate/core'
-import { get } from 'lodash-es'
-interface Props {
+import type { ErrorObject } from '@vuelidate/core';
+import { get } from 'lodash-es';
+import axiosInstance from '~/services/app-client/axios';
+export interface Props {
   items?: T[]
   itemLabel?: string
   itemValue?: string
@@ -14,12 +14,27 @@ interface Props {
   fetchOnSearch?: boolean
   searchKey?: string
   multiple?: boolean
-  placeholder?: string
   modelValue?: TModel
   disabled?: boolean
   allowCreate?: boolean
   oldData?: T[]
+  placeholder?: string
+  selectAll?: boolean
+  withoutData?: boolean
 }
+const anchorName = computed(() => {
+  function makeid() {
+    var result = "";
+    var characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var charactersLength = characters.length;
+    for (var i = 0; i < 5; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
+  return "--anchor-name-" + makeid();
+});
 const emits = defineEmits(['update:objectValue', 'update:modelValue', 'create:item'])
 const createNewItem = () => {
   if (!search.value.trim()) return
@@ -59,28 +74,8 @@ const items = computed({
 })
 const searchKey = computed(() => props.searchKey || 'name')
 const selectedItems = ref<T[]>([])
-
-// const getValueFromModel = async (v: any) => {
-//     if (!props.getUrl || !props.fetchOnSearch) return
-//     if (typeof v != 'object') {
-//         const newVal = await axiosInstance.get(props.getUrl + '/' + v)
-//         modelValue.value = newVal.data
-//     } else if (Array.isArray(v) && v.some((i: any) => typeof i != 'object')) {
-//         const newArray = await axiosInstance.get(props.getUrl + '/' + v)
-//         modelValue.value = newArray.data
-//     }
-// }
-
-// watch(
-//     () => modelValue.value,
-//     (v) => {
-//         if (v == 0) return
-//         if (!v || v == undefined || v == null) modelValue.value = undefined
-//         else if (!modelValue.value && v) modelValue.value = v
-//         if (v || v == 0) getValueFromModel(v)
-//     },
-//     { immediate: true, deep: true }
-// )
+// Flag to prevent circular updates between selectedItems and modelValue watchers
+const isInternalUpdate = ref(false)
 
 function itemWithLabel(item: T): string {
   if (!item || !item[props.itemLabel! as keyof T]) return modelValue.value as string
@@ -142,6 +137,9 @@ function removeItem(item: T) {
 watchDeep(
   () => selectedItems.value,
   () => {
+    // Skip if triggered by modelValue watcher to prevent circular updates
+    if (isInternalUpdate.value) return
+
     if (props.multiple) {
       modelValue.value = selectedItems.value.map((i) => itemWithValue(i as T))
       emits('update:objectValue', selectedItems.value)
@@ -158,6 +156,46 @@ watchDeep(
     }
   }
 )
+
+// Watch for external modelValue changes and sync to selectedItems
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    // Set flag to prevent circular updates
+    isInternalUpdate.value = true
+    if (props.multiple) {
+      // For multiple selection, if modelValue is cleared externally, clear selectedItems
+      if (!newValue || newValue.length === 0) {
+        selectedItems.value = []
+        search.value = ''
+      } else if (newValue) {
+        // Sync selectedItems with modelValue
+        selectedItems.value = items.value.filter((item) =>
+          (newValue as (string | number)[]).includes(itemWithValue(item as T))
+        )
+      }
+    } else {
+      // For single selection
+      if (newValue === null || newValue === '' || newValue === undefined) {
+        selectedItems.value = []
+        search.value = ''
+      } else {
+        const item = items.value.find((i) => itemWithValue(i as T) === newValue)
+        if (item) {
+          selectedItems.value = [item]
+          selectItem(item as T)
+        }
+      }
+    }
+
+    // Reset flag after Vue processes the change
+    nextTick(() => {
+      isInternalUpdate.value = false
+    })
+  },
+  { deep: true }
+)
+
 async function fetchData() {
   if (props.getUrl) {
     let params = { pageSize: pageSize } // default pageSize
@@ -165,17 +203,22 @@ async function fetchData() {
       if (search.value) params = { ...params, [searchKey.value]: search.value }
     }
     const res = await axiosInstance.get(props.getUrl, { params })
-    items.value = res.data.items
+    if (props.withoutData) {
+      items.value = res.data
+    } else {
+      items.value = res.data.items
+    }
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   onClickOutside(menu, () => {
     isOpen.value = false
   })
-  if (props.getUrl) fetchData()
+  if (props.getUrl){ await fetchData()}
   if (modelValue.value !== '' && !props.multiple && modelValue.value !== null) {
     const item = items.value.find((i) => i[props!.itemValue]! === modelValue.value)
+    
 
     selectItem(item as T)
   }
@@ -206,14 +249,41 @@ const clearSelected = () => {
   selectedItems.value = []
   search.value = ''
 }
-const oldData = computed(() => props.oldData)
+
+const selectAllItems = () => {
+  selectedItems.value = items.value
+}
+
+watch(isOpen, (v) => {
+  if (v) {
+    nextTick(() => {
+      const el = document.getElementById(anchorName.value);
+
+      if (!el) return;
+
+      const elRect = el.getBoundingClientRect();
+      const docHeight = document.documentElement.scrollHeight;
+      const scrollY = window.scrollY;
+      const elBottomAbs = elRect.bottom + scrollY;
+
+      const spaceBelow = docHeight - elBottomAbs;
+
+      let offset = 0;
+      if (spaceBelow < 300) {
+        offset = 300 - spaceBelow - 10;
+      }
+      el.style.top = `calc(anchor(bottom)`;
+    });
+  }
+});
+
 // watchDeep(() => oldData.value,() => {
 //     items.value [...oldData.value]
 // })
 </script>
 
 <template>
-  <div ref="menu" relative>
+  <div ref="menu" class="autocomplete-container-anchor" relative>
     <div class="relative">
       <div class="text-gray pointer-events-none absolute inset-y-0 start-0 flex items-center ps-5">
         <i :class="appendIcon" />
@@ -236,13 +306,13 @@ const oldData = computed(() => props.oldData)
         :icon="isAnySelected ? 's' : null"
         :error="error"
         :disabled="props.disabled"
-        :label="label"
         :placeholder="placeholder"
+        :label="label"
         @focus="isOpen = true"
       >
         <template #icon>
           <Icon
-            v-if="selectedItems.length > 0"
+            v-if="selectedItems.length > 0 && !props.disabled"
             name="ph-x"
             class="cursor-pointer text-red-500"
             size="20"
@@ -250,7 +320,7 @@ const oldData = computed(() => props.oldData)
           />
         </template>
       </BaseInput>
-      <div v-if="props.multiple" class="mt-2 flex items-center gap-2">
+      <div v-if="props.multiple" class="mt-2 flex flex-wrap items-center gap-2">
         <BaseTag
           v-for="item in selectedItems"
           :key="itemWithValue(item)"
@@ -265,8 +335,11 @@ const oldData = computed(() => props.oldData)
     </div>
     <div
       v-if="isOpen"
-      class="max-h-[200px] rounded-box dark:bg-dark absolute z-[99] flex flex-col overflow-y-auto rounded-xl border bg-white p-2 shadow dark:text-white"
-      :style="{ width: `${menuWidth}px` }"
+      class="autocomplete-container max-h-[200px] rounded-box dark:bg-dark absolute z-[99] flex flex-col overflow-y-auto rounded-xl border bg-white p-2 shadow dark:text-white"
+      :style="{ 
+
+        width: menuWidth + 'px',
+       }"
     >
       <!-- Add create option when no exact match is found -->
       <div
@@ -284,6 +357,11 @@ const oldData = computed(() => props.oldData)
           <Icon name="ph-plus" class="text-green-500" size="20" />
           <p>Create "{{ search }}"</p>
         </div>
+      </div>
+      <div v-if="props.selectAll">
+        <BaseButton size="sm" color="primary" variant="pastel" @click="selectAllItems">
+          {{ $t('select-all') }}
+        </BaseButton>
       </div>
       <div
         v-for="item in filteredItems"
@@ -314,9 +392,22 @@ const oldData = computed(() => props.oldData)
         class="pa-3 flex items-center justify-center text-center"
       >
         <p class="text-gray-500 dark:text-gray-400">
-          لا يوجد نتائج
+          {{ $t('no-data-found') }}
         </p>
       </div>
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.autocomplete-container-anchor {
+  anchor-name: v-bind("anchorName");
+}
+
+.autocomplete-container {
+  position: absolute;
+  position-anchor: v-bind("anchorName");
+  position-visibility: always;
+  top: calc(anchor(bottom));
+}
+</style>
