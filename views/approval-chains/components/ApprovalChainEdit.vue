@@ -6,6 +6,8 @@ import { requiredValidator } from '~/services/validation'
 import { Validator } from '~/services/validator'
 import { useApprovalChainStore } from '../store'
 import type { ApprovalChainUpdateDto } from '../types'
+import type { ApiError } from '~/utils/types/ApiResponses'
+import { timeoutActions } from '..'
 
 const approvalChainStore = useApprovalChainStore()
 
@@ -41,13 +43,6 @@ const validator = new Validator<ApprovalChainUpdateDto>(
 const body = validator.validation
 const isLoading = computed(() => approvalChainStore.isLoading)
 
-const timeoutActions = [
-  { value: 'AutoApprove', label: 'موافقة تلقائية' },
-  { value: 'AutoReject', label: 'رفض تلقائي' },
-  { value: 'Escalate', label: 'تصعيد' },
-  { value: 'Notify', label: 'إشعار فقط' },
-]
-
 const updateApprovalChain = async () => {
   const isValid = await body.value.$validate()
   if (!isValid) return
@@ -57,7 +52,13 @@ const updateApprovalChain = async () => {
     validator.resetBody()
     approvalChainStore.isEditDialogOpen = false
   } catch (error) {
-    console.error('Error updating approval chain:', error)
+    useToast(
+      {
+        message: (error as ApiError).response?.data.title,
+        isError: true
+      }
+    )
+    validator.setExternalErrors((error as ApiError).response?.data?.errors ?? {})
   }
 }
 
@@ -173,16 +174,14 @@ watch(() => approvalChainStore.isEditDialogOpen, (val: boolean) => {
             <label class="text-sm font-medium text-muted-700 dark:text-muted-300">
               إجراء انتهاء المهلة
             </label>
-            <BaseSelect v-model="body.timeoutAction.$model">
-              <option value="">اختر الإجراء</option>
-              <option
-                v-for="action in timeoutActions"
-                :key="action.value"
-                :value="action.value"
-              >
-                {{ action.label }}
-              </option>
-            </BaseSelect>
+            <AppAutoCompleteField
+              v-model="body.timeoutAction.$model"
+              label="إجراء انتهاء المهلة"
+              placeholder="اختر الإجراء"
+              :items="timeoutActions"
+              item-label="label"
+              item-value="value"
+            />
           </div>
         </div>
 

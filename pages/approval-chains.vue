@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import AppCrudActions from '~/components/app-crud/components/AppCrudActions.vue'
+import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import AppTable from '~/components/app-table/AppTable.vue'
 import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
-import { tableHeader } from '~/views/approval-chains'
+import { ActiveStatusOptions, tableHeader } from '~/views/approval-chains'
 import ApprovalChainCreate from '~/views/approval-chains/components/ApprovalChainCreate.vue'
 import ApprovalChainEdit from '~/views/approval-chains/components/ApprovalChainEdit.vue'
 import { useApprovalChainStore } from '~/views/approval-chains/store'
@@ -82,11 +83,13 @@ watch(
                     fetch-on-search
                     search-key="name"
                 />
-                <BaseSelect v-model="filters.isActive" placeholder="الحالة">
-                    <option :value="undefined">جميع الحالات</option>
-                    <option :value="true">نشط</option>
-                    <option :value="false">غير نشط</option>
-                </BaseSelect>
+                <AppAutoCompleteField
+                    v-model="filters.isActive"
+                    placeholder="الحالة"
+                    :items="ActiveStatusOptions"
+                    item-label="label"
+                    item-value="value"
+                />
             </template>
 
             <AppTable
