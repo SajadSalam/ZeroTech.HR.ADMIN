@@ -1,15 +1,21 @@
 import useVuelidate from '@vuelidate/core'
 import { reactive, computed, ref, type Reactive } from 'vue'
 import type { Validation, ValidationRuleCollection } from '@vuelidate/core'
+import { helpers } from '@vuelidate/validators'
+import { pascalToCamel } from '~/utils'
+// No-op validator that always passes - enables $externalResults for fields without other validators
+const alwaysValid = helpers.withMessage('', () => true)
 
 export class Validator<T extends object> {
   public formData: Reactive<T>
   public rules: Partial<Record<keyof T, ValidationRuleCollection>>
   public validation: Ref<Validation<T>>
+  public externalErrors: Ref<Record<string, string[]>>
 
   constructor(formData: T, rules: Partial<Record<keyof T, ValidationRuleCollection>> = {}) {
     this.formData = reactive(formData)
     this.rules = rules
+    this.externalErrors = ref({})
     this.validation = this.createValidation()
   }
 
@@ -18,18 +24,46 @@ export class Validator<T extends object> {
       this.formData
     ).reduce(
       (acc, key) => {
-        acc[key as keyof T] = (this.rules[key as keyof T] || []) as ValidationRuleCollection
+        acc[key as keyof T] = (this.rules[key as keyof T] || { alwaysValid }) as ValidationRuleCollection
 
-        return acc
-      },
-      {} as Record<keyof T, ValidationRuleCollection>
-    )
+      return acc
+    },
+    {} as Record<keyof T, ValidationRuleCollection>
+  )
 
     const computedRules = computed(() => defaultRules)
 
-    const validation = useVuelidate(computedRules.value, this.formData) as Ref<Validation<T>>
+    // Pass externalErrors as the third argument for server-side validation
+    const validation = useVuelidate(
+      computedRules.value,
+      this.formData,
+      { $externalResults: this.externalErrors }
+    ) as Ref<Validation<T>>
 
     return validation
+  }
+
+  // Set external validation errors to display under corresponding fields
+  setExternalErrors(errors: Record<string, string[]>): void {
+    const mappedErrors: Record<string, string[]> = {}
+
+    for (const [key, messages] of Object.entries(errors)) {
+      // Convert PascalCase to camelCase to match form field names
+      const camelKey = pascalToCamel(key) as keyof T
+
+      // Only set error if the field exists in the form
+      if (camelKey in this.formData) {
+        console.log(camelKey, messages)
+        mappedErrors[camelKey.toString()] = messages
+      }
+    }
+
+    this.externalErrors.value = mappedErrors
+  }
+
+  // Clear external errors
+  clearExternalErrors(): void {
+    this.externalErrors.value = {}
   }
   public addRule(key: keyof T, rule: ValidationRuleCollection): void {
     this.rules[key] = rule
@@ -60,6 +94,7 @@ export class Validator<T extends object> {
       }
     })
     await this.validation.value.$reset()
+    this.clearExternalErrors()
   }
   fillBody(data: T, customKeys?: { fromKey: string; toKey: string }[]): void {
     const keys = Object.keys(this.validation.value) as (keyof T)[]
@@ -96,5 +131,6 @@ export class Validator<T extends object> {
   }
   resetErrors(): void {
     this.validation.value.$reset()
+    this.clearExternalErrors()
   }
 }

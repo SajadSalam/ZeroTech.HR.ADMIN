@@ -6,6 +6,10 @@ export interface PaginatedResponse<T> {
   currentPage: number
   type: string
   totalItems?: number
+  calculatedTotalPages: number
+  currentPageSize: number
+  totalCount: number
+  totalPages: number
 }
 
 export interface WithoutPagination<T> {
@@ -21,5 +25,10 @@ export interface BaseFilters extends Record<string, any> {
   pageNumber: number
   pageSize: number
 }
-
-export type ApiError<T> = AxiosError<PaginatedResponse<T>>
+export type ValidationErrors = Record<string, string[]>
+export interface ApiErrorResponse {
+  errors?: ValidationErrors
+  title?: string
+  detail?: string
+}
+export type ApiError = AxiosError<ApiErrorResponse>

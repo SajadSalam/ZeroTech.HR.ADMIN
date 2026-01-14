@@ -11,3 +11,6 @@ export const generateGuid = () => {
 export const isNullOrEmpty = (str: string | null) => {
   return str == null || str == '' || str == undefined
 }
+export const pascalToCamel = (str: string): string => {
+  return str.charAt(0).toLowerCase() + str.slice(1)
+}
