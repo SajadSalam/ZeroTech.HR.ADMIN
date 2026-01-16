@@ -46,6 +46,7 @@ colorMode.preference = 'light'
             <NuxtLoadingIndicator color="rgb(var(--color-primary-500))" />
             <NuxtPage />
         </NuxtLayout>
+        <AccountProfileDialog />
     </div>
 </template>
 <style lang="scss">

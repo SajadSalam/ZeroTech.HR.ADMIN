@@ -1,13 +1,17 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { UserDto, UserFilters, AssignRoleDto } from '../types'
+import type { UserDto, UserFilters, AssignRoleDto, UserProfileUpdateDto } from '../types'
 import type { RoleDto } from '~/views/roles/types'
 import { userService } from '../service'
+import { useAuthStore } from '~/views/auth/store/auth'
 
 export const useUserStore = defineStore('user', () => {
     // State
+    const authStore = useAuthStore()
     const users = ref<UserDto[]>([])
     const isLoading = ref(false)
+    const isProfileUpdating = ref(false)
+    const isProfileDialogOpen = ref(false)
     const filters = ref<UserFilters>({
         pageSize: 10,
         pageNumber: 1,
@@ -114,9 +118,25 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
+    const updateProfile = async (data: UserProfileUpdateDto) => {
+        try {
+            isProfileUpdating.value = true
+            const response = await userService.updateProfile(data)
+            authStore.setUserData(response)
+            return response 
+        } catch (error) {
+            console.error('Error updating profile:', error)
+            throw error
+        } finally {
+            isProfileUpdating.value = false
+        }
+    }
+
     return {
         users,
         isLoading,
+        isProfileUpdating,
+        isProfileDialogOpen,
         filters,
         totalPages,
         isRolesDialogOpen,
@@ -129,6 +149,7 @@ export const useUserStore = defineStore('user', () => {
         assignRole,
         removeRole,
         unlockUser,
+        updateProfile,
     }
 })
 

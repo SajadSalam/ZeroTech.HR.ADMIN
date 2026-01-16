@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { Menu, MenuButton, MenuItems } from '@headlessui/vue'
 import { useAuthStore } from '~/views/auth/store/auth'
+import { useUserStore } from '~/views/users/store'
 
 const authStore = useAuthStore()
+const userStore = useUserStore()
 const userData = computed(() => authStore.userData)
 const fullName = computed(() => userData.value.fullName || userData.value.username || 'Sajad Salam')
 const role = computed(() => {
@@ -11,6 +13,11 @@ const role = computed(() => {
   }
   return 'SuperAdmin'
 })
+
+const openProfileDialog = (close: () => void) => {
+  userStore.isProfileDialogOpen = true
+  close()
+}
 </script>
 
 <template>
@@ -85,7 +92,21 @@ const role = computed(() => {
                         </div>
                     </div>
 
-                    <div class="p-6">
+                    <div class="p-6 space-y-2">
+                        <BaseButton
+                            rounded="lg"
+                            class="group flex w-full items-center rounded-md p-3 text-sm transition-colors duration-300"
+                            @click="openProfileDialog(close)"
+                        >
+                            <Icon name="mdi:account-edit-outline" class="size-5" />
+                            <div class="ms-3">
+                                <h6
+                                    class="font-heading text-muted-800 text-xs font-medium leading-none dark:text-white"
+                                >
+                                    تعديل معلومات الحساب
+                                </h6>
+                            </div>
+                        </BaseButton>
                         <BaseButton
                             rounded="lg"
                             class="group flex w-full items-center rounded-md p-3 text-sm transition-colors duration-300"

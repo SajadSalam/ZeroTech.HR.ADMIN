@@ -30,3 +30,8 @@ export type AssignRoleDto = {
     effectiveTo: string
 }
 
+export type UserProfileUpdateDto = {
+    firstName: string
+    lastName: string
+    phoneNumber: string
+}

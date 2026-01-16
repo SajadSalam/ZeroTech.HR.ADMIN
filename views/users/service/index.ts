@@ -1,5 +1,6 @@
 import type { PaginatedResponse } from '~/utils/types/ApiResponses'
-import type { UserDto, UserFilters, AssignRoleDto } from '../types'
+import type { UserDto, UserFilters, AssignRoleDto, UserProfileUpdateDto } from '../types'
+import type { MeResponse } from '~/views/auth/types'
 import type { RoleDto } from '~/views/roles/types'
 import axiosIns from '~/services/app-client/axios'
 
@@ -8,6 +9,7 @@ interface IUserService {
     getUserRoles: (userId: number) => Promise<RoleDto[]>
     assignRole: (data: AssignRoleDto) => Promise<void>
     removeRole: (userId: number, roleId: string) => Promise<void>
+    updateProfile: (data: UserProfileUpdateDto) => Promise<MeResponse>
 }
 
 export class UserService implements IUserService {
@@ -36,6 +38,11 @@ export class UserService implements IUserService {
 
     async unlockUser(userId: number): Promise<void> {
         await axiosIns.post(`/User/${userId}/unlock`)
+    }
+
+    async updateProfile(data: UserProfileUpdateDto): Promise<MeResponse> {
+        const response = await axiosIns.put<MeResponse>('/User/profile', data)
+        return response.data
     }
 }
 

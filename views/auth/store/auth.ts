@@ -7,9 +7,28 @@ const authService = new AuthService()
 export const useAuthStore = defineStore('auth-store', () => {
   const isLoading = ref(false)
 
+  const readTokenData = (): Token => {
+    if (typeof window === 'undefined') return {} as Token
+    const stored = localStorage.getItem('tokenData')
+    return stored ? (JSON.parse(stored) as Token) : ({} as Token)
+  }
+
+  const readUserData = (): MeResponse => {
+    if (typeof window === 'undefined') return {} as MeResponse
+    const stored = localStorage.getItem('userData')
+    return stored ? (JSON.parse(stored) as MeResponse) : ({} as MeResponse)
+  }
+
+  const tokenState = ref(
+    typeof window !== 'undefined' ? localStorage.getItem('token') || '' : ''
+  )
+  const tokenDataState = ref<Token>(readTokenData())
+  const userDataState = ref<MeResponse>(readUserData())
+
   const token = computed({
-    get: () => typeof window !== 'undefined' ? localStorage.getItem('token') || '' : '',
+    get: () => tokenState.value,
     set: (value: string) => {
+      tokenState.value = value
       if (typeof window !== 'undefined') {
         localStorage.setItem('token', value)
       }
@@ -17,12 +36,9 @@ export const useAuthStore = defineStore('auth-store', () => {
   })
 
   const tokenData = computed({
-    get: () => {
-      if (typeof window === 'undefined') return {} as Token
-      const stored = localStorage.getItem('tokenData')
-      return stored ? JSON.parse(stored) as Token : {} as Token
-    },
+    get: () => tokenDataState.value,
     set: (value: Token) => {
+      tokenDataState.value = value
       if (typeof window !== 'undefined') {
         localStorage.setItem('tokenData', JSON.stringify(value))
       }
@@ -30,12 +46,9 @@ export const useAuthStore = defineStore('auth-store', () => {
   })
 
   const userData = computed({
-    get: () => {
-      if (typeof window === 'undefined') return {} as MeResponse
-      const stored = localStorage.getItem('userData')
-      return stored ? JSON.parse(stored) as MeResponse : {} as MeResponse
-    },
+    get: () => userDataState.value,
     set: (value: MeResponse) => {
+      userDataState.value = value
       if (typeof window !== 'undefined') {
         localStorage.setItem('userData', JSON.stringify(value))
       }
@@ -43,6 +56,10 @@ export const useAuthStore = defineStore('auth-store', () => {
   })
 
   const isLogged = computed(() => !!token.value)
+
+  const setUserData = (value: MeResponse) => {
+    userData.value = value
+  }
 
 
   const login = async (body: LoginBody) => {
@@ -101,6 +118,9 @@ export const useAuthStore = defineStore('auth-store', () => {
   }
 
   const logout = () => {
+    token.value = ''
+    tokenData.value = {} as Token
+    userData.value = {} as MeResponse
     if (typeof window !== 'undefined') {
       localStorage.removeItem('token')
       localStorage.removeItem('tokenData')
@@ -114,6 +134,7 @@ export const useAuthStore = defineStore('auth-store', () => {
     token,
     tokenData,
     userData,
+    setUserData,
     login,
     logout,
     isLogged,
