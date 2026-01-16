@@ -2,20 +2,33 @@
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue';
 import AppInputField from '~/components/app-field/AppInputField.vue';
 import AppFileField from '~/components/app-field/AppFileField.vue';
+import DotLoading from '~/components/DotLoading.vue';
 import { useEmployeeStore } from '~/views/employees/store';
-definePageMeta({
-  title: 'إضافة موظف جديد',
-  description: 'إضافة موظف جديد في النظام',
-})
+import type { EmployeeDto } from '~/views/employees/types'
 const employeeStore = useEmployeeStore()
 const isLoading = computed(() => employeeStore.isLoading)
+const isFetchingEmployee = ref(false)
+const route = useRoute()
+const router = useRouter()
+
+const employeeId = computed(() => route.query.id as string)
+const pageTitle = computed(() => employeeId.value ? 'تعديل موظف' : 'إضافة موظف جديد')
+
+definePageMeta({
+    title: "ادارة الموظفين",
+    description: 'إدارة بيانات الموظف في النظام',
+})
+
+useHead(() => ({
+  title: pageTitle.value,
+}))
 interface Shift {
     id: number
     startTime: string
     endTime: string
 }
 
-const form = ref({
+const createEmptyForm = () => ({
     fullName: '',
     name: '',
     email: '',
@@ -36,15 +49,74 @@ const form = ref({
     password: '',
     username: '',
 })
+const form = ref(createEmptyForm())
 
-const addEmployee = async () => {
-    await employeeStore.createEmployee(form.value)
-    useRouter().push('/employees')
+const normalizeDate = (value?: string | null) => {
+    if (!value) return ''
+    return value.split('T')[0]
+}
+
+const fillFormFromEmployee = (employee: EmployeeDto) => {
+    form.value = {
+        ...createEmptyForm(),
+        fullName: employee.fullName ?? '',
+        name: employee.fullName ?? '',
+        email: employee.email ?? '',
+        phone: employee.phone ?? '',
+        identityNumber: employee.identityNumber ?? '',
+        gender: employee.gender ?? undefined,
+        birthDate: normalizeDate(employee.birthDate),
+        employeeNumber: employee.employeeNumber ?? '',
+        departmentId: employee.departmentId ?? '',
+        branchId: employee.branchId ?? '',
+        jobTitle: employee.jobTitle ?? '',
+        contractType: employee.contractType ?? '',
+        hireDate: normalizeDate(employee.hireDate),
+        salary: employee.salary ?? '',
+        workScheduleId: employee.workScheduleId ?? '',
+        username: employee.user?.username ?? '',
+        firstName: employee.user?.firstName ?? '',
+        lastName: employee.user?.lastName ?? '',
+    }
+}
+
+const loadEmployee = async (id: number) => {
+    isFetchingEmployee.value = true
+    try {
+        const employee = await employeeStore.getEmployeeById(id)
+        if (!employee) return
+        employeeStore.setSelectedEmployee(employee)
+        fillFormFromEmployee(employee)
+    } finally {
+        isFetchingEmployee.value = false
+    }
+}
+
+onMounted(async () => {
+    if (employeeId.value) {
+        await loadEmployee(Number(employeeId.value))
+    }
+})
+
+const submitEmployee = async () => {
+    if (employeeId.value) {
+        employeeStore.selectedEmployeeId = employeeId.value
+        await employeeStore.updateEmployee({
+            ...(form.value as any),
+            id: employeeId.value,
+        })
+    } else {
+        await employeeStore.createEmployee(form.value as any)
+    }
+    router.push('/employees')
 }
 </script>
 <template>
-    <div class="flex flex-col gap-6 mb-4">
-        <div>
+    <div v-if="isFetchingEmployee" class="flex justify-center items-center h-96">
+        <DotLoading />
+    </div>
+    <div v-else class="flex flex-col gap-6 mb-4">
+        <div class="container">
             <div class="mb-2 text-lg font-bold">البيانات الشخصية</div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <AppInputField
@@ -89,7 +161,7 @@ const addEmployee = async () => {
                 />
             </div>
         </div>
-        <div>
+        <div class="container">
             <div class="mb-2 text-lg font-bold">المعلومات الوظيفية</div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <AppInputField
@@ -168,21 +240,10 @@ const addEmployee = async () => {
                 />
             </div>
         </div>
-        <div>
+        <div class="container">
             <div class="mb-2 text-lg font-bold">معلومات حساب النظام</div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <AppInputField
-                    v-model="form.password"
-                    label="كلمة المرور"
-                    placeholder="كلمة المرور"
-                    type="password"
-                />
-                <AppInputField
-                    v-model="form.username"
-                    label="اسم المستخدم"
-                    placeholder="اسم المستخدم"
-                />
-                 <AppInputField
                     v-model="form.firstName"
                     label="الاسم الأول"
                     placeholder="الاسم الأول"
@@ -192,36 +253,20 @@ const addEmployee = async () => {
                     label="الاسم العائلة"
                     placeholder="الاسم العائلة"
                 />
+                <AppInputField
+                    v-model="form.username"
+                    label="اسم المستخدم"
+                    placeholder="اسم المستخدم"
+                />
+                <AppInputField
+                    v-if="!employeeId"
+                    v-model="form.password"
+                    label="كلمة المرور"
+                    placeholder="كلمة المرور"
+                    type="password"
+                />
             </div>
         </div>
-
-        <!-- <div>
-            <div class="mb-2 text-lg font-bold">الوثائق</div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <div class="mb-2 text-sm font-medium text-gray-700">الصورة الشخصية</div>
-                    <AppFileField
-                        v-model="form.personalPhoto"
-                        accept="image/*"
-                    />
-                </div>
-                <div>
-                    <div class="mb-2 text-sm font-medium text-gray-700">الشهادات</div>
-                    <AppFileField
-                        v-model="form.certificates"
-                        accept="application/pdf,image/*"
-                        :multiple="true"
-                    />
-                </div>
-                <div>
-                    <div class="mb-2 text-sm font-medium text-gray-700">صورة الهوية</div>
-                    <AppFileField
-                        v-model="form.idPhoto"
-                        accept="image/*"
-                    />
-                </div>
-            </div>
-        </div> -->
         <div class="flex justify-end mt-2">
             <BaseButton 
                 variant="solid" 
@@ -230,11 +275,17 @@ const addEmployee = async () => {
                 rounded="sm" 
                 :loading="isLoading"
                 :disabled="isLoading"
-                @click="addEmployee"
+                @click="submitEmployee"
             >
-                اضافة 
+                {{ employeeId ? 'تعديل' : 'اضافة' }}
             </BaseButton>
             
         </div>
     </div>
 </template>
+
+<style scoped>
+    .container {
+        @apply bg-white rounded-lg p-4;
+    }
+</style>

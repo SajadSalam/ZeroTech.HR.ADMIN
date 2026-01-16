@@ -39,6 +39,12 @@ const getEmployees = async () => {
 const viewEmployeeDetails = (item: EmployeeDto) => {
     useRouter().push(`/employees/${item.id}`)
 }
+const editEmployee = (item: EmployeeDto) => {
+    useRouter().push({
+        path: '/employees/form',
+        query: { id: item.id },
+    })
+}
 
 const viewVacationBalance = async (item: EmployeeDto) => {
     await vacationStore.getEmployeeVacationBalance(item.id)
@@ -107,6 +113,15 @@ watch(
                             name="ph:eye-duotone"
                             class="size-5 text-primary-500 cursor-pointer"
                         />
+                        <BaseButton
+                            size="sm"
+                            color="warning"
+                            class="gap-1"
+                            @click="editEmployee(item)"
+                        >
+                            <Icon name="ph:pencil-duotone" class="size-4" />
+                            تعديل
+                        </BaseButton>
                         <BaseButton
                             size="sm"
                             color="primary"
