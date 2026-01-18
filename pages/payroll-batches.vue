@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import AppTable from '~/components/app-table/AppTable.vue'
 import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
 import { payrollBatchTableHeaders } from '~/views/payroll'
@@ -104,23 +105,12 @@ watch(
           placeholder="البحث في العنوان" 
         />
         
-        <BaseSelect
+        <AppAutoCompleteField
           v-model="filters.status"
           placeholder="حالة الدفعة"
-          :options="statusOptions"
-          clearable
-        />
-        
-        <BaseInput
-          v-model="filters.startDate"
-          type="date"
-          placeholder="تاريخ البداية من"
-        />
-        
-        <BaseInput
-          v-model="filters.endDate"
-          type="date"
-          placeholder="تاريخ البداية إلى"
+          :items="statusOptions"
+          item-label="label"
+          item-value="value"
         />
       </template>
       

@@ -73,8 +73,8 @@ watch(filters, () => { getZones() }, { deep: true })
     >
       <template #filters>
         <BaseInput 
-          v-model="filters.searchTerm" 
-          placeholder="البحث في الاسم والوصف" 
+          v-model="filters.name" 
+          placeholder="البحث في الاسم" 
         />
         <AppAutoCompleteField
           v-model="filters.zoneType"

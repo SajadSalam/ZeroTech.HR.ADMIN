@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppCrudActions from '~/components/app-crud/components/AppCrudActions.vue'
+import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import AppTable from '~/components/app-table/AppTable.vue'
 import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
 import { formatDate, formatFlexibility, formatLateAttendanceRules, formatScheduleType, formatShifts, formatassignments, tableHeader } from '~/views/work-schedules'
@@ -116,11 +117,14 @@ const handleDelete = async (id: number) => {
           placeholder="البحث في أسماء الجداول" 
         />
         
-        <BaseSelect v-model="filters.isFlexible">
-          <option value="">جميع الأنواع</option>
-          <option :value="true">جداول مرنة</option>
-          <option :value="false">جداول ثابتة</option>
-        </BaseSelect>
+        <AppAutoCompleteField
+          v-model="filters.isFlexible"
+          placeholder="جدول مرن"
+          :items="[{ value: true, label: 'جدول مرن' }, { value: false, label: 'جدول ثابت' }]"
+          item-label="label"
+          item-value="value"
+        />
+
 
         <AppAutoCompleteField
           v-if="viewMode === 'all'"

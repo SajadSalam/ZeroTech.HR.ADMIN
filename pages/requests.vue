@@ -64,35 +64,6 @@ watch(filters, () => { getRequests() }, { deep: true })
       title="إدارة الطلبات"
       @update:current-page="filters.pageNumber = $event"
     >
-      <template #filters>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- Search by description -->
-          <BaseInput 
-            v-model="filters.description" 
-            placeholder="البحث في وصف الطلبات" 
-            class="w-full"
-          />
-          
-          <!-- Status filter -->
-          <AppAutoCompleteField
-            v-model="filters.status"
-            placeholder="الحالة"
-            :items="statusOptions"
-            item-label="label"
-            item-value="value"
-            clearable
-          />
-
-          <!-- Date range filter -->
-          <BaseInput 
-            v-model="filters.startDate" 
-            type="date"
-            placeholder="من تاريخ" 
-            class="w-full"
-          />
-        </div>
-      </template>
-
       <AppTable
         title="قائمة الطلبات"
         :headers="tableHeader()"

@@ -69,13 +69,9 @@ watch(
         >
             <template #filters>
                 <BaseInput
-                    v-model="filters.username"
+                    v-model="filters.search"
                     placeholder="البحث باسم المستخدم"
                     class="ml-2"
-                />
-                <BaseInput
-                    v-model="filters.email"
-                    placeholder="البحث بالبريد الإلكتروني"
                 />
             </template>
             <AppTable

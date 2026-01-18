@@ -63,35 +63,6 @@ watch(
             title="سلاسل الموافقات"
             @update:current-page="filters.pageNumber = $event"
         >
-            <template #filters>
-                <BaseInput v-model="filters.name" placeholder="البحث بالاسم" />
-                <AppAutoCompleteField
-                    v-model="filters.requestTypeId"
-                    placeholder="نوع الطلب"
-                    get-url="/RequestType/enabled"
-                    item-label="name"
-                    item-value="id"
-                    fetch-on-search
-                    search-key="name"
-                />
-                <AppAutoCompleteField
-                    v-model="filters.departmentId"
-                    placeholder="القسم"
-                    get-url="/Department"
-                    item-label="name"
-                    item-value="id"
-                    fetch-on-search
-                    search-key="name"
-                />
-                <AppAutoCompleteField
-                    v-model="filters.isActive"
-                    placeholder="الحالة"
-                    :items="ActiveStatusOptions"
-                    item-label="label"
-                    item-value="value"
-                />
-            </template>
-
             <AppTable
                 title="قائمة سلاسل الموافقات"
                 :headers="tableHeader()"

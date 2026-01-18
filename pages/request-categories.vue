@@ -54,10 +54,6 @@ watch(filters, () => { getRequestCategories() }, { deep: true })
           v-model="filters.name" 
           placeholder="البحث بالاسم" 
         />
-        <BaseInput 
-          v-model="filters.code" 
-          placeholder="البحث بالرمز" 
-        />
         <AppAutoCompleteField
           v-model="filters.isEnabled"
           placeholder="الحالة"
