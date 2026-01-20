@@ -24,7 +24,7 @@ const body = validator.validation
 const isLoading = computed(() => workScheduleStore.isLoading)
 
 const defaultAssignment: UserAssignment = {
-  userId: 0,
+  userId: null,
   effectiveDate: new Date().toISOString().split('T')[0],
   expiryDate: null,
   isPrimary: true,
@@ -186,18 +186,11 @@ const getAssignmentErrors = (index: number, field: string) => {
 
               <!-- Primary Schedule Toggle -->
               <div class="md:col-span-2">
-                <div class="flex items-center gap-3">
-                  <input
-                    :id="`isPrimary-${index}`"
-                    :checked="assignment.isPrimary"
-                    type="checkbox"
-                    class="size-4 rounded border-muted-300 text-primary-500 focus:ring-primary-500"
-                    @change="updateAssignment(index, 'isPrimary', $event.target.checked)"
-                  >
-                  <label :for="`isPrimary-${index}`" class="text-sm font-medium text-muted-700 dark:text-muted-300">
-                    جدول العمل الأساسي للمستخدم
-                  </label>
-                </div>
+                <BaseCheckbox
+                  :model-value="assignment.isPrimary"
+                  label="جدول العمل الأساسي للمستخدم"
+                  @update:model-value="updateAssignment(index, 'isPrimary', $event)"
+                />
                 <p class="mt-1 text-xs text-muted-500">
                   إذا كان هذا هو جدول العمل الأساسي للمستخدم، سيتم استخدامه كافتراضي في النظام
                 </p>

@@ -66,6 +66,10 @@ onMounted(async () => {
         },
        ]
 })
+onUnmounted(() => {
+    employeeStore.selectedEmployeeId = null
+    employeeStore.selectedEmployee = null
+})
 </script>
 
 <template>

@@ -61,6 +61,10 @@ onMounted(async () => {
         await attendanceStore.getRecords()
     }
 })
+
+onUnmounted(() => {
+    attendanceStore.filters.employeeId = null
+})
 </script>
 
 <template>

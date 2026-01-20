@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import AppTable from '~/components/app-table/AppTable.vue'
 import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
 import { tableHeader } from '~/views/attendance'
@@ -34,12 +35,8 @@ const getRecords = async () => {
     appTableStore.setLoading(false)
 }
 
-const getStatistics = async () => {
-    await attendanceStore.getStatistics()
-}
-
 const loadData = async () => {
-    await Promise.all([getRecords(), getStatistics()])
+    await Promise.all([getRecords(), attendanceStore.getStatistics()])
 }
 
 const handleExportRecordsCSV = async () => {
@@ -206,10 +203,22 @@ watch(filters, () => { loadData() }, { deep: true })
 <template>
     <div>
         <!-- Statistics Cards -->
-        <div v-if="statistics" class="mb-6">
+        <div class="mb-6">
             <!-- Employee Info Card -->
-            <BaseCard class="p-4 mb-4">
-                <div class="flex items-center justify-between">
+            <BaseCard class="p-4 mb-4 space-y-4">
+                <AppAutoCompleteField
+                    v-model="filters.employeeId"
+                    label="الموظف"
+                    placeholder="يرجى اختيار الموظف"
+                    get-url="/Employee"
+                    item-label="fullName"
+                    item-value="id"
+                />
+                <p v-if="!filters.employeeId" class="text-sm text-warning-500 dark:text-warning-400 flex items-center gap-2">
+                    <Icon name="ph:warning-duotone" class="size-4" />
+                    يرجى اختيار الموظف لعرض الاحصائيات
+                </p>
+                <div v-if="filters.employeeId && statistics" class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <div class="bg-info-500/10 rounded-full p-3">
                             <Icon name="ph:user-duotone" class="size-6 text-info-500" />
@@ -239,7 +248,7 @@ watch(filters, () => { loadData() }, { deep: true })
             </BaseCard>
 
             <!-- Statistics Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div v-if="filters.employeeId" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <BaseCard v-for="stat in statisticsConfig" :key="stat.key" class="p-4">
                     <div class="flex items-center gap-3">
                         <div :class="`${getStatBgClass(stat.color)} rounded-full p-3`">
@@ -264,8 +273,6 @@ watch(filters, () => { loadData() }, { deep: true })
             <template #filters>
                 <BaseInput v-model="filters.startDate" type="date" placeholder="من تاريخ" required />
                 <BaseInput v-model="filters.endDate" type="date" placeholder="إلى تاريخ" required />
-                <AppAutoCompleteField v-model="filters.employeeId" get-url="/Employee" item-label="name" item-value="id"
-                    placeholder="الموظف" required />
             </template>
 
             <template #headerActions>
