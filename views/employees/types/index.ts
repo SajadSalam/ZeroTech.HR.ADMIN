@@ -36,6 +36,11 @@ export type Employee = {
   attachments: Attachment[]
   attachmentCount: number
   isActive: boolean
+  zone: {
+    id: number
+    name: string
+  }
+  zoneId: number
 }
 
 // Employee DTO with BaseDto extension

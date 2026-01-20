@@ -12,10 +12,12 @@ const form = reactive<UserProfileUpdateDto>({
   firstName: '',
   lastName: '',
   phoneNumber: '',
+  newPassword: null,
+  username: '',
 })
 
 const isLoading = computed(() => userStore.isProfileUpdating)
-
+const isPasswordChange = ref(false)
 const fillFromUserData = () => {
   const data = authStore.userData
   form.firstName = data?.firstName ?? ''
@@ -45,16 +47,19 @@ watch(
     }
   }
 )
+watch(isPasswordChange, () => {
+    form.newPassword = null
+})
 </script>
 
 <template>
   <AppDialog
     v-model="userStore.isProfileDialogOpen"
     title="تعديل معلومات الحساب"
-    size="md"
+    size="lg"
     overflow-y="visible"
   >
-    <div class="space-y-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <AppInputField
         v-model="form.firstName"
         label="الاسم الأول"
@@ -72,6 +77,26 @@ watch(
         label="رقم الهاتف"
         placeholder="أدخل رقم الهاتف"
         :disabled="isLoading"
+      />
+      <AppInputField
+        v-model="form.username"
+        label="اسم المستخدم"
+        placeholder="أدخل اسم المستخدم"
+        :disabled="isLoading"
+      />
+      <BaseCheckbox
+        v-model="isPasswordChange"
+        label="تغيير كلمة المرور"
+        :disabled="isLoading"
+      />
+      <AppInputField
+        v-if="isPasswordChange"
+        v-model="form.newPassword"
+        label="كلمة المرور"
+        placeholder="أدخل كلمة المرور"
+        type="password"
+        :disabled="isLoading"
+        class="col-span-2"
       />
     </div>
 

@@ -48,6 +48,7 @@ const createEmptyForm = () => ({
     lastName: '',
     password: '',
     username: '',
+    zoneId: '',
 })
 const form = ref(createEmptyForm())
 
@@ -77,6 +78,7 @@ const fillFormFromEmployee = (employee: EmployeeDto) => {
         username: employee.user?.username ?? '',
         firstName: employee.user?.firstName ?? '',
         lastName: employee.user?.lastName ?? '',
+        zoneId: employee.zoneId ?? '',
     }
 }
 
@@ -169,27 +171,37 @@ const submitEmployee = async () => {
                     label="الرقم الوظيفي"
                     placeholder="الرقم الوظيفي"
                 />
-                <AppAutoCompleteField
+                <AppInputField
+                    v-model="form.jobTitle"
+                    label="المسمى الوظيفي"
+                    placeholder="المسمى الوظيفي"
+                />
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:col-span-2">
+                    <AppAutoCompleteField
                     v-model="form.departmentId"
                     label="القسم"
                     placeholder="القسم"
                     get-url="/Department"
                     item-label="name"
                     item-value="id"
-                />
-                <AppAutoCompleteField
+                    />
+                    <AppAutoCompleteField
                     v-model="form.branchId"
                     label="الفرع"
                     placeholder="الفرع"
                     get-url="/Governorate"
                     item-label="name"
                     item-value="id"
-                />
-                <AppInputField
-                    v-model="form.jobTitle"
-                    label="المسمى الوظيفي"
-                    placeholder="المسمى الوظيفي"
-                />
+                    />
+                    <AppAutoCompleteField
+                    label="المنطقة الجغرافية"
+                    v-model="form.zoneId"
+                    placeholder="المنطقة الجغرافية"
+                    get-url="/Zone/paged"
+                    item-label="name"
+                    item-value="id"
+                    />
+                </div>
                 <AppAutoCompleteField
                     v-model="form.contractType"
                     label="نوع العقد"

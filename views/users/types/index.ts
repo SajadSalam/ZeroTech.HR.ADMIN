@@ -34,4 +34,6 @@ export type UserProfileUpdateDto = {
     firstName: string
     lastName: string
     phoneNumber: string
+    username: string
+    newPassword?: string | null
 }

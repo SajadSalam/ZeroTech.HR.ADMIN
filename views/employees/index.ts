@@ -19,6 +19,10 @@ export const tableHeader = () => {
       label: 'المنطقة',
     },
     {
+      key: 'zone.name',
+      label: 'المنطقة الجغرافية',
+    },
+    {
       key: 'contractType',
       label: 'نوع العقد',
     },
