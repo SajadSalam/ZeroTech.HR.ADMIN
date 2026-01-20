@@ -5,6 +5,7 @@ import type {
     AttendanceRecord,
     EmployeeAttendanceOverview,
     EmployeeAttendanceStats,
+    LocationTimestampDto,
 } from '../types'
 
 export const useAttendanceStore = defineStore('attendance', () => {
@@ -24,6 +25,7 @@ export const useAttendanceStore = defineStore('attendance', () => {
     const employeeStatus = ref<EmployeeAttendanceOverview | null>(null)
     const isManualAttendanceDialogOpen = ref(false)
     const totalPages = ref(0)
+    const locationTimestamps = ref<LocationTimestampDto[]>([])
 
     // Initialize default dates (one week from today)
     const initializeDates = () => {
@@ -224,6 +226,21 @@ export const useAttendanceStore = defineStore('attendance', () => {
         }
     }
 
+    const getLocationTimestamp = async () => {
+        try {
+            isLoading.value = true
+            const response = await attendanceService.getLocationTimestamp()
+            locationTimestamps.value = response.items
+            totalPages.value = response.calculatedTotalPages
+            return response.items
+        } catch (error) {
+            console.error('Error getting location timestamp:', error)
+            throw error
+        } finally {
+            isLoading.value = false
+        }
+    }
+
     return {
         records,
         statistics,
@@ -244,5 +261,7 @@ export const useAttendanceStore = defineStore('attendance', () => {
         checkIn,
         checkOut,
         totalPages,
+        getLocationTimestamp,
+        locationTimestamps,
     }
 })

@@ -5,6 +5,7 @@ import type {
     AttendanceRecord,
     EmployeeAttendanceOverview,
     EmployeeAttendanceStats,
+    LocationTimestampDto,
 } from '../types'
 
 interface ProcessPayrollDto {
@@ -38,6 +39,7 @@ interface IAttendanceService {
     processPayroll: (data: ProcessPayrollDto) => Promise<void>
     checkIn: (data: CheckInDto) => Promise<void>
     checkOut: (data: CheckOutDto) => Promise<void>
+    getLocationTimestamp: () => Promise<PaginatedResponse<LocationTimestampDto>>
 }
 
 export class AttendanceService implements IAttendanceService {
@@ -161,6 +163,15 @@ export class AttendanceService implements IAttendanceService {
             await axios.post(`${this.baseUrl}/check-out`, data)
         } catch (error) {
             console.error('Error checking out:', error)
+            throw error
+        }
+    }
+    async getLocationTimestamp(): Promise<PaginatedResponse<LocationTimestampDto>> {
+        try {
+            const response = await axios.get(`${this.baseUrl}/employees-location`)
+            return response.data
+        } catch (error) {
+            console.error('Error getting location timestamp:', error)
             throw error
         }
     }

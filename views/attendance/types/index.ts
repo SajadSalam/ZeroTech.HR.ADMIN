@@ -85,3 +85,23 @@ export type AttendanceFilters = BaseFilters & {
     endDate: string
     employeeId: number | null
 }
+
+export interface LocationTimestampDto  {
+  id: number
+  fullName: string
+  employeeNumber: string
+  email: string
+  phone: string
+  jobTitle: string
+  departmentId: number
+  departmentName: string
+  branchId: number
+  branchName: string
+  currentLatitude: number
+  currentLongitude: number
+  lastLocationUpdateAt: string // ISO date string
+  hasLocation: boolean
+  isLocationRecent: boolean
+  timeSinceLastUpdate: string
+  isActive: boolean
+}

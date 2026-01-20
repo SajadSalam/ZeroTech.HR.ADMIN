@@ -6,6 +6,11 @@ export default [
        to: '/departments',
    },
    {
+    name: 'تتبع الموظفين',
+    icon: { name: 'ph-map-pin-duotone', class: 'w-5 h-5' },
+    to: '/tracking',
+   },
+   {
        name: 'إدارة الطلبات',
        icon: { name: 'ph-clipboard-text-duotone', class: 'w-5 h-5' },
        children: [
