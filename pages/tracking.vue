@@ -29,14 +29,15 @@ getLocationTimestamps()
 </script>
 
 <template>
-  <div>
-    <AppCrud
-      :pagination="true"
-      :total-pages="attendanceStore.totalPages"
-      title="تتبع الموظفين"
-      :is-loading="isLoading"
-    >
+  <div class="flex flex-col gap-4 bg-white p-4 rounded-lg">
+    <div>
+      <h1 class="text-xl font-bold">
+        تتبع الموظفين
+      </h1>
+        <p>
+          يمكنك تتبع الموظفين ومعرفة مكانهم في الوقت الفعلي.
+        </p>
+    </div>
       <EmployeeTrackingMap />
-    </AppCrud>
   </div>
 </template>
