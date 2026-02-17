@@ -7,10 +7,8 @@ import RequestTypeCreate from '~/views/request-types/components/RequestTypeCreat
 import AppCrudActions from '~/components/app-crud/components/AppCrudActions.vue'
 import RequestTypeEdit from '~/views/request-types/components/RequestTypeEdit.vue'
 import RequestTypeDetail from '~/views/request-types/components/RequestTypeDetail.vue'
-import AvailabilityChecker from '~/views/request-types/components/AvailabilityChecker.vue'
 import CategoryView from '~/views/request-types/components/CategoryView.vue'
 import type { RequestTypeDto, RequestTypeFilters } from '~/views/request-types/types'
-import { useAuthStore } from '~/views/auth/store/auth'
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 
 definePageMeta({
@@ -107,14 +105,7 @@ onUnmounted(() => {
               <Icon name="ph:folder-duotone" class="size-4 mr-2" />
               الفئات
             </BaseButton>
-            <BaseButton
-              :variant="activeView === 'availability' ? 'solid' : 'outline'"
-              size="sm"
-              @click="activeView = 'availability'"
-            >
-              <Icon name="ph:magnifying-glass-duotone" class="size-4 mr-2" />
-              فحص التوفر
-            </BaseButton>
+
           </div>
         </div>
         
@@ -283,9 +274,6 @@ onUnmounted(() => {
 
     <!-- Categories View -->
     <CategoryView v-else-if="activeView === 'categories'" />
-
-    <!-- Availability Checker View -->
-    <AvailabilityChecker v-else-if="activeView === 'availability'" />
 
     <!-- Detail View -->
     <RequestTypeDetail

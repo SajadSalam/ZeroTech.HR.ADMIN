@@ -28,11 +28,6 @@ const loadRequestType = async () => {
   }
 }
 
-const toggleRestrictions = async () => {
-  showRestrictions.value = !showRestrictions.value
-  await loadRequestType()
-}
-
 const parseJsonField = (jsonString: string | null) => {
   if (!jsonString) return null
   try {
@@ -88,13 +83,6 @@ watch(() => props.requestTypeId, () => {
         >
           {{ requestType.isEnabled ? 'مفعل' : 'غير مفعل' }}
         </BaseTag>
-        <BaseButton
-          size="sm"
-          variant="outline"
-          @click="toggleRestrictions"
-        >
-          {{ showRestrictions ? 'إخفاء القيود' : 'عرض القيود' }}
-        </BaseButton>
       </div>
     </div>
 
@@ -211,40 +199,6 @@ watch(() => props.requestTypeId, () => {
         </div>
       </div>
     </div>
-
-    <!-- Restrictions (shown when toggled) -->
-    <div v-if="showRestrictions && (requestType.allowedDepartments?.length || requestType.allowedRoles?.length)" class="space-y-4">
-      <!-- Allowed Departments -->
-      <div v-if="requestType.allowedDepartments?.length" class="bg-white dark:bg-gray-800 rounded-lg p-6 border">
-        <h3 class="font-semibold text-gray-900 dark:text-white mb-4">الأقسام المسموحة</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          <div
-            v-for="dept in requestType.allowedDepartments"
-            :key="dept.id"
-            class="flex items-center gap-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg"
-          >
-            <Icon name="ph:buildings-duotone" class="text-blue-600 size-5" />
-            <span class="font-medium">{{ dept.department.name }}</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Allowed Roles -->
-      <div v-if="requestType.allowedRoles?.length" class="bg-white dark:bg-gray-800 rounded-lg p-6 border">
-        <h3 class="font-semibold text-gray-900 dark:text-white mb-4">الأدوار المسموحة</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          <div
-            v-for="role in requestType.allowedRoles"
-            :key="role.id"
-            class="flex items-center gap-2 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg"
-          >
-            <Icon name="ph:user-duotone" class="text-green-600 size-5" />
-            <span class="font-medium">{{ role.role.name }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- JSON Configuration -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Validation Rules -->
