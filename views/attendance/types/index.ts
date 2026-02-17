@@ -86,6 +86,17 @@ export type AttendanceFilters = BaseFilters & {
     employeeId: number | null
 }
 
+/** Minimal zone data for display on the tracking map */
+export interface MapZoneDisplay {
+  id: string | number
+  name: string
+  /** GeoJSON Polygon as string, e.g. {"type":"Polygon","coordinates":[[[lng,lat],...]]} */
+  polygonCoordinates?: string
+  color?: string
+  opacity?: number
+  isOperational?: boolean
+}
+
 export interface LocationTimestampDto  {
   id: number
   fullName: string

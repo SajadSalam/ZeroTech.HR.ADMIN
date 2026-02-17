@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { LocationTimestampDto } from '../types'
+import type { LocationTimestampDto, MapZoneDisplay } from '../types'
 import { useGoogleMaps } from '../composables/useGoogleMaps'
 import { useAvatarCache } from '../composables/useAvatarCache'
 import { useEmployeeMarkers } from '../composables/useEmployeeMarkers'
@@ -8,12 +8,15 @@ import { useAttendanceStore } from '../store'
 interface Props {
   height?: string
   refreshInterval?: number
+  /** Optional zones to display on the map (id, name, polygon, etc.) */
+  zonesToDisplay?: MapZoneDisplay[]
 }
 
 const attendanceStore = useAttendanceStore()
 const props = withDefaults(defineProps<Props>(), {
   height: '600px',
   refreshInterval: 60000,
+  zonesToDisplay: () => [],
 })
 
 const { 
@@ -28,6 +31,61 @@ const {
 const { cache: avatarCache, preloadAvatars } = useAvatarCache()
 
 const { updateMarkers, clearMarkers } = useEmployeeMarkers(map, avatarCache)
+
+const zoneOverlays = ref<any[]>([])
+
+const drawZonesOnMap = () => {
+  if (!map.value || !window.google || !props.zonesToDisplay?.length) return
+
+  zoneOverlays.value.forEach(overlay => overlay.setMap(null))
+  zoneOverlays.value = []
+
+  props.zonesToDisplay.forEach(zone => {
+    let geoCoords: number[][] | null = null
+    if (zone.polygonCoordinates) {
+      try {
+        const parsed = JSON.parse(zone.polygonCoordinates) as { type: string; coordinates: number[][][] }
+        if (parsed?.type === 'Polygon' && parsed.coordinates?.[0]) {
+          geoCoords = parsed.coordinates[0]
+        }
+      } catch {
+        // ignore invalid JSON
+      }
+    }
+    if (geoCoords && geoCoords.length > 0) {
+      const path = geoCoords.map(coord =>
+        new window.google.maps.LatLng(coord[1], coord[0])
+      )
+
+      const polygon = new window.google.maps.Polygon({
+        paths: path,
+        fillColor: zone.color || (zone.isOperational ? '#10B981' : '#6B7280'),
+        fillOpacity: zone.opacity ?? 0.2,
+        strokeColor: zone.color || (zone.isOperational ? '#059669' : '#4B5563'),
+        strokeWeight: 2,
+        clickable: true,
+      })
+
+      polygon.setMap(map.value)
+      zoneOverlays.value.push(polygon)
+
+      polygon.addListener('click', () => {
+        const infoWindow = new window.google.maps.InfoWindow({
+          content: `<div class="p-2"><h4 class="font-semibold">${zone.name}</h4></div>`,
+        })
+        const bounds = new window.google.maps.LatLngBounds()
+        path.forEach((p: any) => bounds.extend(p))
+        infoWindow.setPosition(bounds.getCenter())
+        infoWindow.open(map.value)
+      })
+    }
+  })
+}
+
+const clearZoneOverlays = () => {
+  zoneOverlays.value.forEach(overlay => overlay.setMap(null))
+  zoneOverlays.value = []
+}
 
 const employees = ref<LocationTimestampDto[]>([])
 const isLoadingData = ref(false)
@@ -63,6 +121,7 @@ onMounted(async () => {
     await preloadAvatars()
     initializeMap()
     loadEmployeeLocations()
+    drawZonesOnMap()
 
     if (props.refreshInterval > 0) {
       refreshIntervalId = setInterval(refreshData, props.refreshInterval)
@@ -72,8 +131,13 @@ onMounted(async () => {
   }
 })
 
+watch(() => props.zonesToDisplay, () => {
+  drawZonesOnMap()
+}, { deep: true })
+
 onUnmounted(() => {
   clearMarkers()
+  clearZoneOverlays()
   if (refreshIntervalId) {
     clearInterval(refreshIntervalId)
   }
