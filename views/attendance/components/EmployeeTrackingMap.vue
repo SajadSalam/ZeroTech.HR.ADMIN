@@ -31,6 +31,7 @@ const { updateMarkers, clearMarkers } = useEmployeeMarkers(map, avatarCache)
 
 const employees = ref<LocationTimestampDto[]>([])
 const isLoadingData = ref(false)
+const isInitialLoad = ref(true)
 
 const loadEmployeeLocations = async () => {
   if (!map.value) return
@@ -38,9 +39,10 @@ const loadEmployeeLocations = async () => {
   try {
     isLoadingData.value = true
 
-      await attendanceStore.getLocationTimestamp()
-      employees.value = attendanceStore.locationTimestamps
-    updateMarkers(employees.value)
+    await attendanceStore.getLocationTimestamp()
+    employees.value = attendanceStore.locationTimestamps
+    updateMarkers(employees.value, !isInitialLoad.value)
+    isInitialLoad.value = false
   } catch (error) {
     console.error('Error loading employee locations:', error)
   } finally {

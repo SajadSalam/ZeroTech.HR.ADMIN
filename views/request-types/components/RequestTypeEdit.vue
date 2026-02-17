@@ -197,12 +197,6 @@ watch(
             label="يؤثر على الراتب"
           />
         </div>
-
-        <BaseCheckbox
-          v-model="body.isPaidTime.$model"
-          label="وقت مدفوع"
-        />
-
         <!-- Duration Settings -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <AppInputField
@@ -260,34 +254,6 @@ watch(
             placeholder="fas fa-calendar-alt"
           />
         </div>
-
-        <!-- JSON Fields -->
-        <AppTextAreaField
-          v-model="body.validationRules.$model"
-          :errors="body.validationRules.$errors"
-          size="md"
-          label="قواعد التحقق (JSON)"
-          rows="3"
-          placeholder='{"maxConsecutiveDays": 14}'
-        />
-
-        <AppTextAreaField
-          v-model="body.customFields.$model"
-          :errors="body.customFields.$errors"
-          size="md"
-          label="الحقول المخصصة (JSON)"
-          rows="3"
-          placeholder='[{"name":"reason","type":"text","required":true}]'
-        />
-
-        <AppTextAreaField
-          v-model="body.notificationSettings.$model"
-          :errors="body.notificationSettings.$errors"
-          size="md"
-          label="إعدادات الإشعارات (JSON)"
-          rows="3"
-          placeholder='{"notifyManager": true, "notifyHR": false}'
-        />
       </div>
     </div>
     <template #actions>

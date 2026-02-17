@@ -136,13 +136,6 @@ watch(() => zoneStore.isCreateDialogOpen, (val: boolean) => {
             placeholder="أدخل وصف المنطقة"
             rows="3"
           />
-
-          <AppTextAreaField
-            v-model="body.metadata.$model"
-            label="البيانات الإضافية (JSON)"
-            placeholder='{"maxBuildings": 50, "parkingSpaces": 200}'
-            rows="3"
-          />
         </div>
       </div>
 

@@ -255,19 +255,6 @@ const isAdmin = computed(() => authStore.userData?.roles.some(role => role.name 
           required
         />
       </div>
-
-      <!-- Additional Request Data -->
-      <div class="md:col-span-2">
-        <AppTextAreaField
-          v-model="body.requestData.$model"
-          label="بيانات إضافية (JSON)"
-          placeholder='{"destination": "الرياض", "contactNumber": "+966501234567"}'
-          rows="3"
-        />
-        <p class="text-xs text-gray-500 mt-1">
-          يمكنك إضافة بيانات إضافية بصيغة JSON (اختياري)
-        </p>
-      </div>
     </div>
 
     <template #actions>

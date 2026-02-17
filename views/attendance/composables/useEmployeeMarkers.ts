@@ -111,8 +111,9 @@ export function useEmployeeMarkers(
 
   /**
    * Update markers for a list of employees
+   * @param preserveView - If true, keeps the current zoom and center instead of fitting bounds
    */
-  const updateMarkers = (employees: LocationTimestampDto[]): google.maps.LatLngBounds | null => {
+  const updateMarkers = (employees: LocationTimestampDto[], preserveView = false): google.maps.LatLngBounds | null => {
     if (!map.value || !window.google) return null
 
     // Clear existing markers
@@ -135,8 +136,8 @@ export function useEmployeeMarkers(
       }
     })
 
-    // Fit map to bounds if we have locations
-    if (hasValidLocations) {
+    // Fit map to bounds if we have locations and not preserving view
+    if (hasValidLocations && !preserveView) {
       if (markers.value.length > 1) {
         map.value.fitBounds(bounds)
       } else if (markers.value.length === 1) {

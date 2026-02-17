@@ -226,20 +226,6 @@ watch(() => approvalChainStore.isEditDialogOpen, (val: boolean) => {
         </div>
       </div>
 
-      <!-- Advanced Settings -->
-      <div class="space-y-4">
-        <h3 class="text-lg font-semibold text-muted-800 dark:text-muted-100">
-          الإعدادات المتقدمة
-        </h3>
-
-        <AppTextAreaField
-          v-model="body.activationConditions.$model"
-          label="شروط التفعيل (JSON)"
-          placeholder='{"minDays": 5, "maxAmount": 10000}'
-          rows="3"
-        />
-      </div>
-
       <!-- Preview -->
       <div class="p-4 bg-muted-50 dark:bg-muted-800 rounded-lg">
         <h4 class="text-sm font-medium text-muted-700 dark:text-muted-300 mb-3">
