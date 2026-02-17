@@ -8,6 +8,7 @@ import BalanceCreate from '~/views/employee-balances/components/BalanceCreate.vu
 import BalanceDeduct from '~/views/employee-balances/components/BalanceDeduct.vue'
 import BalanceAdd from '~/views/employee-balances/components/BalanceAdd.vue'
 import type { Balance } from '~/views/employee-balances/types'
+import { formatDate } from '~/services/formatters'
 
 definePageMeta({
     title: 'رصيد الموظف',
@@ -35,11 +36,6 @@ const getEmployeeBalance = async () => {
     appTableStore.setLoading(true)
     await balanceStore.getEmployeeBalance(employeeId.value)
     appTableStore.setLoading(false)
-}
-
-const formatDate = (dateString: string) => {
-    if (!dateString) return '-'
-    return new Date(dateString).toLocaleDateString('en-US')
 }
 
 const openDeductDialog = (balance: Balance) => {

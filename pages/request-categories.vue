@@ -37,6 +37,14 @@ const getRequestCategories = async () => {
 
 getRequestCategories()
 watch(filters, () => { getRequestCategories() }, { deep: true })
+
+onUnmounted(() => {
+  requestCategoryStore.filters = {
+    pageSize: 10,
+    pageNumber: 1,
+    name: null,
+  }
+})
 </script>
 
 <template>

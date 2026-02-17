@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatDate, formatDateTime } from '~/services/formatters'
 import ApprovalProcess from '~/views/requests/components/ApprovalProcess.vue'
 import { useRequestStore } from '~/views/requests/store'
 import type { PendingApprovalDto } from '~/views/requests/types'
@@ -13,25 +14,6 @@ const requestStore = useRequestStore()
 const isLoading = computed(() => requestStore.isLoading)
 const pendingApprovals = computed(() => requestStore.pendingApprovals || [])
 
-const formatDate = (dateString: string) => {
-  if (!dateString) return ''
-  return new Date(dateString).toLocaleDateString('ar-SA', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-}
-
-const formatDateTime = (dateString: string) => {
-  if (!dateString) return ''
-  return new Date(dateString).toLocaleString('ar-SA', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
-}
 
 const isOverdue = (dueDate: string) => {
   return new Date(dueDate) < new Date()

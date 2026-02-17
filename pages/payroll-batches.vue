@@ -2,6 +2,7 @@
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import AppTable from '~/components/app-table/AppTable.vue'
 import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
+import { formatDate } from '~/services/formatters'
 import { payrollBatchTableHeaders } from '~/views/payroll'
 import EmployeePayrollDetails from '~/views/payroll/components/EmployeePayrollDetails.vue'
 import PayrollBatchCalculate from '~/views/payroll/components/PayrollBatchCalculate.vue'
@@ -41,10 +42,6 @@ const formatCurrency = (amount: number) => {
     style: 'currency',
     currency: 'IQD',
   }).format(amount)
-}
-
-const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('en-US')
 }
 
 const formatPercentage = (percentage: number) => {
@@ -87,6 +84,14 @@ watch(
   },
   { deep: true }
 )
+
+onUnmounted(() => {
+  payrollStore.filters = {
+    pageSize: 10,
+    pageNumber: 1,
+    status: null,
+  }
+})
 </script>
 
 <template>

@@ -40,6 +40,15 @@ watch(
     },
     { deep: true }
 )
+onUnmounted(() => {
+    departmentStore.filters = {
+        pageSize: 10,
+        pageNumber: 1,
+        name: null,
+        code: null,
+        managerId: null,
+    }
+})
 </script>
 
 <template>

@@ -3,6 +3,7 @@ import AppCrud from '~/components/app-crud/AppCrud.vue'
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import AppTable from '~/components/app-table/AppTable.vue'
 import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
+import { formatDate } from '~/services/formatters'
 import { statusOptions, tableHeader } from '~/views/requests'
 import CancelRequest from '~/views/requests/components/CancelRequest.vue'
 import RequestCreate from '~/views/requests/components/RequestCreate.vue'
@@ -52,6 +53,14 @@ onMounted(() => {
 
 // Watch filters for changes
 watch(filters, () => { getRequests() }, { deep: true })
+
+onUnmounted(() => {
+  requestStore.filters = {
+    pageSize: 10,
+    pageNumber: 1,
+    status: null,
+  }
+})
 </script>
 
 <template>
@@ -76,6 +85,15 @@ watch(filters, () => { getRequests() }, { deep: true })
                 :class="`bg-${requestStore.getStatusColor(item.status)}-100 text-${requestStore.getStatusColor(item.status)}-800`">
             {{ requestStore.getStatusText(item.status) }}
           </span>
+        </template>
+        <template #data-startDate="{ item }">
+          {{ formatDate(item.startDate || '') }} 
+        </template>
+        <template #data-endDate="{ item }">
+          {{ formatDate(item.endDate || '') }}
+        </template>
+        <template #data-submittedAt="{ item }">
+          {{ formatDate(item.submittedAt || '') }}
         </template>
 
         <!-- Employee column with full name -->

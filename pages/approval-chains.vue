@@ -49,6 +49,16 @@ watch(
     },
     { deep: true }
 )
+
+onUnmounted(() => {
+    approvalChainStore.filters = {
+        pageSize: 10,
+        pageNumber: 1,
+        name: null,
+        requestTypeId: null,
+        departmentId: null,
+    }
+})
 </script>
 
 <template>
@@ -161,7 +171,7 @@ watch(
               variant="outline"
               @click="viewTimeline(item)"
             >
-              <Icon name="ph:timeline-duotone" class="size-4" />
+              <Icon name="ph:timeline" class="size-4" />
             </BaseButton>
             <AppCrudActions
               :item="item"

@@ -68,6 +68,14 @@ watch(
   },
   { deep: true }
 )
+
+onUnmounted(() => {
+  payrollStore.employeePayrollFilters = {
+    pageSize: 10,
+    pageNumber: 1,
+    employeeId: null,
+  }
+})
 </script>
 
 <template>

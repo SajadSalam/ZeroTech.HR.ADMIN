@@ -9,6 +9,7 @@ import CreateRequestDialog from '~/views/requests/components/CreateRequestDialog
 import RequestDetailsDialog from '~/views/requests/components/RequestDetailsDialog.vue'
 import ApproveRequestDialog from '~/views/requests/components/ApproveRequestDialog.vue'
 import CancelRequestDialog from '~/views/requests/components/CancelRequestDialog.vue'
+import { formatDate } from '~/services/formatters'
 
 definePageMeta({
     title: 'الطلبات',
@@ -92,13 +93,13 @@ const statusOptions = [
                 :is-loading="isLoading"
             >
                 <template #data-startDate="{ item }">
-                    {{ item.startDate?.split('T')[0] }}
+                    {{ formatDate(item.startDate) }}
                 </template>
                 <template #data-endDate="{ item }">
-                    {{ item.endDate?.split('T')[0] }}
+                    {{ formatDate(item.endDate) }}
                 </template>
                 <template #data-submittedAt="{ item }">
-                    {{ item.submittedAt?.split('T')[0] }}
+                    {{ formatDate(item.submittedAt) }}
                 </template>
                 <template #data-progressPercentage="{ item }">
                     <div class="flex items-center gap-2">

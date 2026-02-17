@@ -71,6 +71,16 @@ watch(
   { deep: true }
 )
 
+onUnmounted(() => {
+  requestTypeStore.filters = {
+    pageSize: 10,
+    pageNumber: 1,
+    name: null,
+    code: null,
+    categoryId: null,
+  }
+})
+
 </script>
 
 <template>

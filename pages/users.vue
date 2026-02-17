@@ -6,6 +6,7 @@ import { tableHeader } from '~/views/users'
 import UserRolesDialog from '~/views/users/components/UserRolesDialog.vue'
 import UserAssignRole from '~/views/users/components/UserAssignRole.vue'
 import type { UserDto, UserFilters } from '~/views/users/types'
+import { formatDateTime } from '~/services/formatters'
 
 definePageMeta({
     title: 'المستخدمين',
@@ -55,6 +56,14 @@ watch(
     },
     { deep: true }
 )
+
+onUnmounted(() => {
+    userStore.filters = {
+        pageSize: 10,
+        pageNumber: 1,
+        search: null,
+    }
+})
 </script>
 
 <template>
@@ -84,9 +93,7 @@ watch(
                     <span>
                         {{
                             item.lastLoginAt
-                                ? new Date(item.lastLoginAt).toLocaleDateString(
-                                      'en-US'
-                                  )
+                                ? formatDateTime(item.lastLoginAt)
                                 : 'لم يسجل دخول'
                         }}
                     </span>

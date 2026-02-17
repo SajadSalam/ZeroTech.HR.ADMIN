@@ -57,6 +57,16 @@ watch(
     },
     { deep: true }
 )
+
+onUnmounted(() => {
+    employeeStore.filters = {
+        pageSize: 10,
+        pageNumber: 1,
+        fullName: null,
+        email: null,
+        phone: null,
+    }
+})
 </script>
 
 <template>
@@ -97,7 +107,7 @@ watch(
                 :is-loading="isLoading"
             >
                 <template #data-hireDate="{ item }">
-                    {{ item.hireDate.split('T')[0] }}
+                    {{ formatDate(item.hireDate) }}
                 </template>
                 <template #data-contractType="{ item }">
                     {{

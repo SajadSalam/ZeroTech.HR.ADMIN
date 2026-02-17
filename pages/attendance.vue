@@ -2,6 +2,7 @@
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import AppTable from '~/components/app-table/AppTable.vue'
 import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
+import { formatDate } from '~/services/formatters'
 import { tableHeader } from '~/views/attendance'
 import EmployeeStatusDialog from '~/views/attendance/components/EmployeeStatusDialog.vue'
 import ManualAttendanceDialog from '~/views/attendance/components/ManualAttendanceDialog.vue'
@@ -61,10 +62,6 @@ const viewEmployeeStatus = (record: AttendanceRecord) => {
     attendanceStore.getEmployeeStatus(record.employeeId)
 }
 
-const formatDate = (dateString: string) => {
-    if (!dateString) return '-'
-    return new Date(dateString).toLocaleDateString('en-US')
-}
 
 const formatTime = (timeString: string) => {
     if (!timeString) return '-'
@@ -198,6 +195,15 @@ const handleManualAttendance = () => {
 loadData()
 watch(filters, () => { loadData() }, { deep: true })
 
+onUnmounted(() => {
+    attendanceStore.filters = {
+        pageSize: 10,
+        pageNumber: 1,
+        startDate: null,
+        endDate: null,
+        employeeId: null,
+    }
+})
 </script>
 
 <template>

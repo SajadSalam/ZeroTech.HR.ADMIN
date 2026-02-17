@@ -53,12 +53,16 @@ const getPriorityColor = (priority?: number) => {
   return 'success'
 }
 
-const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('en-US')
-}
-
 getZones()
 watch(filters, () => { getZones() }, { deep: true })
+
+onUnmounted(() => {
+  zoneStore.filters = {
+    pageSize: 10,
+    pageNumber: 1,
+    name: null,
+  }
+})
 </script>
 
 <template>

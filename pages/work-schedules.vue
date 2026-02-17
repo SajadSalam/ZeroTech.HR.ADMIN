@@ -78,6 +78,18 @@ const handleAssignUsers = (item: WorkScheduleDto) => {
 const handleDelete = async (id: number) => {
   await workScheduleStore.deleteWorkSchedule(id)
 }
+
+onUnmounted(() => {
+  workScheduleStore.filters = {
+    pageSize: 10,
+    pageNumber: 1,
+    name: null,
+    isFlexible: null,
+    isGeneralTemplate: null,
+    specificUserId: null,
+  }
+})
+
 </script>
 
 <template>
