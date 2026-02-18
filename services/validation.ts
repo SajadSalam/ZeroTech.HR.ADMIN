@@ -16,6 +16,7 @@ export type ValidationRule =
   | 'mobileValidator'
   | 'latValidator' // Added
   | 'lngValidator' // Added
+  | 'capitalLetterValidator' // Added
 export const requiredValidator = (fieldName: string) =>
   validations.helpers.withMessage(`حقل ${fieldName} مطلوب`, validations.required)
 export const emailValidator = (fieldName: string) =>
@@ -91,3 +92,13 @@ export const lngValidator = (fieldName: string) =>
       return value >= -180 && value <= 180
     }
   )
+export const capitalLetterValidator = (fieldName: string) =>
+  validations.helpers.withMessage(
+    `حقل ${fieldName} يجب أن يحتوي على احرف كبيرة فقط`,
+    (value: string) => {
+      if (!value) return true;
+      const lettersOnly = value.replace(/[^a-zA-Z\u0600-\u06FF]/g, '');
+      if (lettersOnly.length === 0) return true;
+      return !/[a-z]/.test(lettersOnly);
+    }
+  );

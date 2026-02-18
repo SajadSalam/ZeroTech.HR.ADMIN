@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppInputField from '~/components/app-field/AppInputField.vue'
 import AppTextAreaField from '~/components/app-field/AppTextAreaField.vue'
-import { requiredValidator } from '~/services/validation'
+import { requiredValidator, capitalLetterValidator } from '~/services/validation'
 import { Validator } from '~/services/validator'
 import { useRequestCategoryStore } from '../store'
 import type { RequestCategoryCreateDto } from '../types'
@@ -25,6 +25,7 @@ const validator = new Validator<RequestCategoryCreateDto>(
     },
     code: {
       required: requiredValidator('رمز الفئة مطلوب'),
+      capitalLetter: capitalLetterValidator('رمز الفئة'),
     },
   }
 )

@@ -18,8 +18,8 @@ const authStore = useAuthStore()
 
 const validator = new Validator<RequestCreateDto>(
   {
-    employeeId: null,
-    requestTypeId: 0,
+    employeeId: undefined,
+    requestTypeId: undefined,
     startDate: '',
     endDate: '',
     description: '',
@@ -103,7 +103,7 @@ const createRequest = async () => {
   } catch (error) {
     useToast(
       {
-        message: (error as ApiError).response?.data.title,
+        message: (error as ApiError).response?.data?.detail || (error as ApiError).response?.data as string,
         isError: true
       }
     )
@@ -116,7 +116,7 @@ watch(() => requestStore.isCreateDialogOpen, (val: boolean) => {
   if (val) {
     validator.resetBody()
     // Set default employee ID for current user
-    body.value.employeeId.$model = authStore.userData?.employeeId || 0
+    body.value.employeeId.$model = authStore.userData?.employeeId || undefined
     if (body.value.employeeId.$model) {
       requestStore.getEmployeeBalance(body.value.employeeId.$model)
     }
@@ -141,13 +141,11 @@ const isAdmin = computed(() => authStore.userData?.roles.some(role => role.name 
           label="الموظف"
           placeholder="البحث عن موظف..."
           get-url="/employee"
-          :fetch-on-search="true"
+          fetch-on-search
           search-key="search"
           item-label="fullName"
           item-value="id"
-          item-subtitle="employeeNumber"
           :error="body.employeeId.$error"
-          :error-message="body.employeeId.$errors[0]?.$message"
           required
         >
           <template #item="{ item }">
@@ -171,14 +169,13 @@ const isAdmin = computed(() => authStore.userData?.roles.some(role => role.name 
           label="نوع الطلب"
           placeholder="اختر نوع الطلب"
           :items="requestTypes"
-          item-title="name"
+          item-label="name"
           item-value="id"
           :error="body.requestTypeId.$error"
-          :error-message="body.requestTypeId.$errors[0]?.$message"
           required
         >
           <template #item="{ item }">
-            <div>
+            <div class="flex flex-col justify-between w-full">
               <div class="font-medium">{{ item.name }}</div>
               <div class="text-sm text-gray-500">{{ item.description }}</div>
             </div>

@@ -54,7 +54,7 @@ export type RequestDto = BaseDto & Request & {
 }
 
 // Request Create DTO
-export type RequestCreateDto = Request
+export type RequestCreateDto = Partial<Request>
 
 // Request Update DTO
 export type RequestUpdateDto = Request & {

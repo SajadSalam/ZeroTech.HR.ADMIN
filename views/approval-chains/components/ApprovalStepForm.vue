@@ -77,44 +77,6 @@ const saveStep = async () => {
   }
 }
 
-// Watch for dialog open/close and step selection
-// watch(() => approvalChainStore.isStepDialogOpen, (val: boolean) => {
-//   if (val) {
-//     if (isEditing.value && selectedStep.value) {
-//       // Pre-fill form with existing step data
-//       const step = selectedStep.value
-//       validator.setBody({
-//         approvalChainId: step.approvalChainId,
-//         name: step.name,
-//         description: step.description || '',
-//         stepOrder: step.stepOrder,
-//         isRequired: step.isRequired,
-//         allowsAutoApproval: step.allowsAutoApproval || false,
-//         autoApprovalConditions: step.autoApprovalConditions || '',
-//         allowsParallelApproval: step.allowsParallelApproval || false,
-//         minRequiredApprovals: step.minRequiredApprovals || 1,
-//         requiresAllApprovers: step.requiresAllApprovers || false,
-//         maxCompletionHours: step.maxCompletionHours || 24,
-//         sendReminders: step.sendReminders || true,
-//         firstReminderHours: step.firstReminderHours || 12,
-//         reminderIntervalHours: step.reminderIntervalHours || 6,
-//         maxReminders: step.maxReminders || 3,
-//         timeoutAction: step.timeoutAction || 'Escalate',
-//         escalationUserId: step.escalationUserId,
-//         activationConditions: step.activationConditions || '',
-//         isActive: step.isActive,
-//         roleIds: step.approvalStepRoles?.map(r => r.roleId) || [],
-//         userIds: step.approvalStepUsers?.map(u => u.userId) || [],
-//       })
-//     } else {
-//       // Reset form for new step
-//       validator.resetBody()
-//       // Set next step order
-//       const maxOrder = Math.max(...(approvalChainStore.approvalSteps.map(s => s.stepOrder) || [0]))
-//       body.value.stepOrder.$model = maxOrder + 1
-//     }
-//   }
-// })
 </script>
 
 <template>
@@ -307,31 +269,6 @@ const saveStep = async () => {
           />
         </div>
       </div>
-
-      <!-- Advanced Settings -->
-      <div class="space-y-4">
-        <h3 class="text-lg font-semibold text-muted-800 dark:text-muted-100">
-          الإعدادات المتقدمة
-        </h3>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <AppTextAreaField
-            v-model="body.activationConditions.$model"
-            label="شروط التفعيل (JSON)"
-            placeholder='{"minAmount": 1000}'
-            rows="3"
-          />
-
-          <AppTextAreaField
-            v-if="body.allowsAutoApproval.$model"
-            v-model="body.autoApprovalConditions.$model"
-            label="شروط الموافقة التلقائية (JSON)"
-            placeholder='{"department": "Finance"}'
-            rows="3"
-          />
-        </div>
-      </div>
-
       <!-- Preview -->
       <div class="p-4 bg-muted-50 dark:bg-muted-800 rounded-lg">
         <h4 class="text-sm font-medium text-muted-700 dark:text-muted-300 mb-3">

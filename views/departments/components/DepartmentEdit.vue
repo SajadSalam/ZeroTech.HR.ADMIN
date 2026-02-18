@@ -2,7 +2,7 @@
 import AppAutoCompleteField from '~/components/app-field/AppAutoCompleteField.vue'
 import AppInputField from '~/components/app-field/AppInputField.vue'
 import AppTextAreaField from '~/components/app-field/AppTextAreaField.vue'
-import { requiredValidator } from '~/services/validation'
+import { requiredValidator, capitalLetterValidator } from '~/services/validation'
 import { Validator } from '~/services/validator'
 import { useDepartmentStore } from '../store'
 import type { DepartmentUpdateDto } from '../types'
@@ -31,6 +31,7 @@ const validator = new Validator<DepartmentUpdateDto>(
     },
     code: {
       required: requiredValidator('رمز القسم'),
+      capitalLetter: capitalLetterValidator('رمز القسم'),
     },
   }
 )
