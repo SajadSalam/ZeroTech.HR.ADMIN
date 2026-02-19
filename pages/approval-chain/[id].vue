@@ -148,14 +148,6 @@ watch(() => route.params.id, () => {
           تفاصيل سلسلة الموافقات
         </h1>
       </div>
-      <BaseButton
-        v-if="selectedChain"
-        color="primary"
-        @click="editApprovalChain"
-      >
-        <Icon name="ph:pencil-duotone" class="size-4 mr-2" />
-        تعديل
-      </BaseButton>
     </div>
 
     <div v-if="isLoading && !selectedChain" class="flex items-center justify-center p-12">

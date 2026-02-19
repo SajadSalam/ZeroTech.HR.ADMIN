@@ -6,55 +6,46 @@ export const tableHeader = (): TableHeader[] => [
     key: 'name',
     label: 'اسم جدول العمل',
     sortable: true,
-    visible: true,
   },
   {
     key: 'type',
     label: 'النوع',
     sortable: false,
-    visible: true,
   },
   {
     key: 'flexibility',
     label: 'المرونة',
     sortable: true,
-    visible: true,
   },
   {
     key: 'totalWeeklyHours',
     label: 'الساعات الأسبوعية',
     sortable: true,
-    visible: true,
   },
   {
     key: 'shifts',
     label: 'الشفتات',
     sortable: false,
-    visible: true,
   },
-  {
-    key: 'assignments',
-    label: 'المستخدمين المعينين',
-    sortable: false,
-    visible: true,
-  },
+  // {
+  //   key: 'assignments',
+  //   label: 'المستخدمين المعينين',
+  //   sortable: false,
+  // },
   {
     key: 'lateAttendanceRules',
     label: 'قواعد التأخير',
     sortable: false,
-    visible: true,
   },
   {
     key: 'createdAt',
     label: 'تاريخ الإنشاء',
     sortable: true,
-    visible: true,
   },
   {
     key: 'actions',
     label: 'الإجراءات',
     sortable: false,
-    visible: true,
   },
 ]
 

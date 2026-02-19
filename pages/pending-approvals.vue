@@ -134,12 +134,12 @@ onUnmounted(() => {
                 <span class="text-sm text-gray-500">تاريخ النهاية:</span>
                 <div class="font-medium">{{ formatDate(approval.request.endDate) }}</div>
               </div>
-              <div>
+              <!-- <div>
                 <span class="text-sm text-gray-500">موعد الاستحقاق:</span>
                 <div class="font-medium" :class="{ 'text-red-600': isOverdue(approval.dueAt) }">
                   {{ formatDateTime(approval.dueAt) }}
                 </div>
-              </div>
+              </div> -->
             </div>
 
             <!-- Request Description -->
@@ -163,14 +163,14 @@ onUnmounted(() => {
             </div>
 
             <!-- Due Date Warning -->
-            <div v-if="isOverdue(approval.dueAt)" class="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+            <!-- <div v-if="isOverdue(approval.dueAt)" class="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
               <div class="flex items-center gap-2 text-red-800">
                 <Icon name="ph:warning-duotone" class="size-4" />
                 <span class="text-sm font-medium">
                   هذا الطلب متأخر عن موعد الاستحقاق بـ {{ Math.abs(getDaysUntilDue(approval.dueAt)) }} يوم
                 </span>
               </div>
-            </div>
+            </div> -->
 
             <!-- Reminder Count -->
             <div v-if="approval.reminderCount > 0" class="text-sm text-gray-500 mb-4">
@@ -187,16 +187,6 @@ onUnmounted(() => {
             >
               <Icon name="ph:check-circle-duotone" class="size-4 ml-1" />
               معالجة
-            </BaseButton>
-
-            <BaseButton
-              color="gray"
-              variant="outline"
-              size="sm"
-              @click="$router.push(`/requests/${approval.request.id}`)"
-            >
-              <Icon name="ph:eye-duotone" class="size-4 ml-1" />
-              التفاصيل
             </BaseButton>
           </div>
         </div>

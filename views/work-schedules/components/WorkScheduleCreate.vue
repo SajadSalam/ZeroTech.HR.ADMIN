@@ -45,14 +45,6 @@ const validator = new Validator<WorkScheduleCreateDto>(
         return true
       },
     },
-    specificUserId: {
-      required: (value: any, data: any) => {
-        if (!data.isGeneralTemplate && !value) {
-          return 'يجب اختيار المستخدم للجدول الخاص'
-        }
-        return true
-      },
-    },
   }
 )
 
@@ -63,13 +55,6 @@ const isLoading = computed(() => workScheduleStore.isLoading)
 watch(() => body.value.isFlexible.$model, (isFlexible) => {
   if (!isFlexible) {
     body.value.flexibleHoursRequired.$model = null
-  }
-})
-
-// Watch for template type changes
-watch(() => body.value.isGeneralTemplate.$model, (isGeneralTemplate) => {
-  if (isGeneralTemplate) {
-    body.value.specificUserId.$model = null
   }
 })
 
@@ -181,32 +166,6 @@ watch(() => workScheduleStore.isCreateDialogOpen, (val: boolean) => {
             :errors="body.name.$errors"
             required
           />
-
-          <div class="space-y-2">
-            <label class="text-sm font-medium text-muted-700 dark:text-muted-300">
-              نوع الجدول
-            </label>
-            <div class="flex gap-4">
-              <label class="flex items-center gap-2">
-                <input
-                  v-model="body.isGeneralTemplate.$model"
-                  type="radio"
-                  :value="true"
-                  class="text-primary-500"
-                >
-                <span class="text-sm">قالب عام</span>
-              </label>
-              <label class="flex items-center gap-2">
-                <input
-                  v-model="body.isGeneralTemplate.$model"
-                  type="radio"
-                  :value="false"
-                  class="text-primary-500"
-                >
-                <span class="text-sm">خاص بمستخدم</span>
-              </label>
-            </div>
-          </div>
         </div>
 
         <AppTextAreaField
@@ -215,21 +174,6 @@ watch(() => workScheduleStore.isCreateDialogOpen, (val: boolean) => {
           placeholder="وصف جدول العمل..."
           :errors="body.description.$errors"
         />
-
-        <!-- User Selection (if not general template) -->
-        <div v-if="!body.isGeneralTemplate.$model">
-          <AppAutoCompleteField
-            v-model="body.specificUserId.$model"
-            label="المستخدم المخصص"
-            placeholder="اختر المستخدم..."
-            get-url="/user"
-            item-label="fullName"
-            item-value="id"
-            fetch-on-search
-            search-key="fullName"
-            :errors="body.specificUserId.$errors"
-          />
-        </div>
 
         <!-- Flexibility Settings -->
         <div class="space-y-4">

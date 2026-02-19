@@ -32,8 +32,8 @@ export class WorkScheduleService implements IWorkScheduleService {
     return response.data
   }
 
-  async getTemplates(filters: WorkScheduleFilters): Promise<PaginatedResponse<WorkScheduleDto>> {
-    const response = await axios.get<PaginatedResponse<WorkScheduleDto>>('/workschedule/templates', { params: filters })
+  async getTemplates(filters: WorkScheduleFilters): Promise<WorkScheduleDto[]> {
+    const response = await axios.get<WorkScheduleDto[]>('/workschedule/templates', { params: filters })
     return response.data
   }
 

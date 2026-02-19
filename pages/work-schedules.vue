@@ -43,14 +43,23 @@ const getTemplatesOnly = async () => {
 // View mode toggle
 const viewMode = ref<'all' | 'templates'>('all')
 
-const switchViewMode = (mode: 'all' | 'templates') => {
-  viewMode.value = mode
-  if (mode === 'templates') {
-    getTemplatesOnly()
-  } else {
-    getWorkSchedules()
-  }
-}
+// const switchViewMode = (mode: 'all' | 'templates') => {
+//   viewMode.value = mode
+//   if (mode === 'templates') {
+//     // reset filters
+//     filters.value = {
+//       pageSize: 10,
+//       pageNumber: 1,
+//       name: null,
+//       isFlexible: null,
+//       isGeneralTemplate: null,
+//       specificUserId: null,
+//     }
+//     getTemplatesOnly()
+//   } else {
+//     getWorkSchedules()
+//   }
+// }
 
 // Initialize
 getWorkSchedules()
@@ -58,7 +67,7 @@ watch(
   filters,
   () => {
     if (viewMode.value === 'templates') {
-      getTemplatesOnly()
+      return
     } else {
       getWorkSchedules()
     }
@@ -103,8 +112,7 @@ onUnmounted(() => {
       @update:current-page="filters.pageNumber = $event"
     >
       <template #filters>
-        <!-- View Mode Toggle -->
-        <div class="flex gap-2">
+        <!-- <div class="flex gap-2">
           <BaseButton
             :color="viewMode === 'all' ? 'primary' : 'muted'"
             :variant="viewMode === 'all' ? 'solid' : 'pastel'"
@@ -121,15 +129,17 @@ onUnmounted(() => {
           >
             القوالب العامة
           </BaseButton>
-        </div>
+        </div> -->
 
         <!-- Search Filters -->
         <BaseInput 
+          v-if="viewMode === 'all'"
           v-model="filters.name" 
           placeholder="البحث في أسماء الجداول" 
         />
         
         <AppAutoCompleteField
+          v-if="viewMode === 'all'"
           v-model="filters.isFlexible"
           placeholder="جدول مرن"
           :items="[{ value: true, label: 'جدول مرن' }, { value: false, label: 'جدول ثابت' }]"
@@ -138,7 +148,7 @@ onUnmounted(() => {
         />
 
 
-        <AppAutoCompleteField
+        <!-- <AppAutoCompleteField
           v-if="viewMode === 'all'"
           v-model="filters.specificUserId"
           placeholder="تصفية حسب المستخدم"
@@ -147,7 +157,7 @@ onUnmounted(() => {
           item-value="id"
           fetch-on-search
           search-key="fullName"
-        />
+        /> -->
       </template>
 
       <AppTable
@@ -219,7 +229,7 @@ onUnmounted(() => {
         </template>
 
         <!-- User Assignments -->
-        <template #data-assignments="{ item }">
+        <!-- <template #data-assignments="{ item }">
           <div class="flex items-center gap-2">
             <span class="text-sm text-muted-800 dark:text-muted-100">
               {{ formatassignments(item.assignments) }}
@@ -235,7 +245,7 @@ onUnmounted(() => {
               تعيين
             </BaseButton>
           </div>
-        </template>
+        </template> -->
 
         <!-- Late Attendance Rules -->
         <template #data-lateAttendanceRules="{ item }">
@@ -269,7 +279,7 @@ onUnmounted(() => {
         <template #data-actions="{ item }">
           <div class="flex items-center gap-2">
             <!-- Assign Users Button (for templates) -->
-            <BaseButton
+            <!-- <BaseButton
               v-if="item.isGeneralTemplate"
               size="sm"
               color="info"
@@ -277,7 +287,7 @@ onUnmounted(() => {
               @click="handleAssignUsers(item)"
             >
               <Icon name="ph:user-plus" class="size-4" />
-            </BaseButton>
+            </BaseButton> -->
 
             <!-- Standard CRUD Actions -->
             <AppCrudActions

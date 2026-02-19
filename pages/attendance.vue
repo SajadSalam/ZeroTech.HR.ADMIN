@@ -191,14 +191,25 @@ const handleManualAttendance = () => {
     attendanceStore.isManualAttendanceDialogOpen = true
 }
 
-// Initialize data
-loadData()
-watch(filters, () => { loadData() }, { deep: true })
+
+watch(filters, () => { 
+    if (filters.value.employeeId) {
+        loadData()
+    } else if (!filters.value.employeeId) {
+        attendanceStore.filters = {
+            pageSize: 10,
+            page: 1,
+            startDate: null,
+            endDate: null,
+            employeeId: null,
+        }
+    }
+}, { deep: true })
 
 onUnmounted(() => {
     attendanceStore.filters = {
         pageSize: 10,
-        pageNumber: 1,
+        page: 1,
         startDate: null,
         endDate: null,
         employeeId: null,
@@ -274,7 +285,9 @@ onUnmounted(() => {
         <AppCrud 
         :total-pages="attendanceStore.totalPages"
         hide-create title="سجلات الحضور"
-        @update:current-page="filters.pageNumber = $event"
+        :pagination="true"
+        @update:current-page="filters.page = $event"
+        v-if="filters.employeeId"
         >
             <template #filters>
                 <BaseInput v-model="filters.startDate" type="date" placeholder="من تاريخ" required />
