@@ -5,7 +5,9 @@ import type {
     AttendanceRecord,
     EmployeeAttendanceOverview,
     EmployeeAttendanceStats,
+    EmployeeLocationTimestamp,
     LocationTimestampDto,
+    LocationTimestampFilters,
 } from '../types'
 
 interface ProcessPayrollDto {
@@ -39,7 +41,8 @@ interface IAttendanceService {
     processPayroll: (data: ProcessPayrollDto) => Promise<void>
     checkIn: (data: CheckInDto) => Promise<void>
     checkOut: (data: CheckOutDto) => Promise<void>
-    getLocationTimestamp: () => Promise<PaginatedResponse<LocationTimestampDto>>
+    getLocationTimestamp: (filters: LocationTimestampFilters) => Promise<LocationTimestampDto[]>
+    getEmployeeLocationTimestamp: (employeeId: number) => Promise<EmployeeLocationTimestamp>
 }
 
 export class AttendanceService implements IAttendanceService {
@@ -166,9 +169,19 @@ export class AttendanceService implements IAttendanceService {
             throw error
         }
     }
-    async getLocationTimestamp(): Promise<PaginatedResponse<LocationTimestampDto>> {
+    async getLocationTimestamp(filters: LocationTimestampFilters): Promise<LocationTimestampDto[]> {
         try {
-            const response = await axios.get(`${this.baseUrl}/employees-location`)
+            const response = await axios.get<LocationTimestampDto[]>(`${this.baseUrl}/location-history`, { params: filters as any })
+            return response.data
+        } catch (error) {
+            console.error('Error getting location timestamp:', error)
+            throw error
+        }
+    }
+
+    async getEmployeeLocationTimestamp(employeeId: number): Promise<EmployeeLocationTimestamp> {
+        try {
+            const response = await axios.get(`${this.baseUrl}/records/${employeeId}`)
             return response.data
         } catch (error) {
             console.error('Error getting location timestamp:', error)

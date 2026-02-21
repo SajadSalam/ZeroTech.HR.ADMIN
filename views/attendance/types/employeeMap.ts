@@ -1,10 +1,8 @@
 import type { LocationTimestampDto } from "."
 
 export interface TooltipData {
-  fullName: string
-  branchName: string
-  isOnline: boolean
-  timeSinceLastUpdate?: string
+  employeeId: number
+  recordedAt?: string
 }
 
 export interface TooltipStyles {
@@ -38,5 +36,7 @@ export interface MapOptions {
 }
 
 export interface UseEmployeeMarkersOptions {
-  onMarkerClick?: (employee: LocationTimestampDto) => void
+  onMarkerClick?: (point: LocationTimestampDto) => void
+  /** When false, hides the "View Details" button in the marker tooltip */
+  showDetailsButton?: boolean
 }

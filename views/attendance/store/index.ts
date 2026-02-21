@@ -5,7 +5,9 @@ import type {
     AttendanceRecord,
     EmployeeAttendanceOverview,
     EmployeeAttendanceStats,
+    EmployeeLocationTimestamp,
     LocationTimestampDto,
+    LocationTimestampFilters,
 } from '../types'
 
 export const useAttendanceStore = defineStore('attendance', () => {
@@ -26,6 +28,25 @@ export const useAttendanceStore = defineStore('attendance', () => {
     const isManualAttendanceDialogOpen = ref(false)
     const totalPages = ref(0)
     const locationTimestamps = ref<LocationTimestampDto[]>([])
+    const employeeLocation = ref<EmployeeLocationTimestamp | null>(null)
+
+    const locationTimestampFilters = ref<LocationTimestampFilters>({
+        from: '',
+        to: '',
+    })
+
+    const initializeLocationTimestampFilters = () => {
+        const today = new Date()
+        const to = new Date(today)
+        const from = new Date(today)
+        from.setDate(today.getDate() - 7)
+        locationTimestampFilters.value = {
+            from: from.toISOString().split('T')[0],
+            to: to.toISOString().split('T')[0],
+        }
+    }
+
+    initializeLocationTimestampFilters()
 
     // Initialize default dates (one week from today)
     const initializeDates = () => {
@@ -227,14 +248,30 @@ export const useAttendanceStore = defineStore('attendance', () => {
     }
 
     const getLocationTimestamp = async () => {
+        const { from, to } = locationTimestampFilters.value
+        if (!from || !to) return []
+
         try {
             isLoading.value = true
-            const response = await attendanceService.getLocationTimestamp()
-            locationTimestamps.value = response.items
-            totalPages.value = response.calculatedTotalPages
-            return response.items
+            const response = await attendanceService.getLocationTimestamp({ from, to })
+            locationTimestamps.value = response
+            return response
         } catch (error) {
             console.error('Error getting location timestamp:', error)
+            throw error
+        } finally {
+            isLoading.value = false
+        }
+    }
+
+    const getEmployeeLocationTimestamp = async (employeeId: number) => {
+        try {
+            isLoading.value = true
+            const response = await attendanceService.getEmployeeLocationTimestamp(employeeId)
+            employeeLocation.value = response
+            return response
+        } catch (error) {
+            console.error('Error getting employee location timestamp:', error)
             throw error
         } finally {
             isLoading.value = false
@@ -263,5 +300,8 @@ export const useAttendanceStore = defineStore('attendance', () => {
         totalPages,
         getLocationTimestamp,
         locationTimestamps,
+        locationTimestampFilters,
+        getEmployeeLocationTimestamp,
+        employeeLocation,
     }
 })

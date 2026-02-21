@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
 import EmployeeTrackingMap from '~/views/attendance/components/EmployeeTrackingMap.vue'
 import { useAttendanceStore } from '~/views/attendance/store'
 import { zoneService } from '~/views/zones/service'
@@ -11,17 +10,7 @@ definePageMeta({
 })
 
 const attendanceStore = useAttendanceStore()
-const appTableStore = useAppTableStore()
-const isLoading = computed(() => attendanceStore.isLoading)
-const locationTimestamps = computed(() => attendanceStore.locationTimestamps || [])
 const zonesToDisplay = ref<MapZoneDisplay[]>([])
-
-const getLocationTimestamps = async () => {
-  appTableStore.setLoading(true)
-  await attendanceStore.getLocationTimestamp()
-  appTableStore.setLoading(false)
-}
-
 const loadZonesForMap = async () => {
   try {
     const response = await zoneService.getPaged({
@@ -43,9 +32,14 @@ const loadZonesForMap = async () => {
   }
 }
 
+const router = useRouter()
+
+const handleEmployeeClicked = (employeeId: number) => {
+    router.push(`/tracking/${employeeId}`)
+}
+
 onMounted(async () => {
-  await loadZonesForMap()
-  getLocationTimestamps()
+    await loadZonesForMap()
 })
 
 onUnmounted(() => {
@@ -56,6 +50,7 @@ onUnmounted(() => {
     endDate: '',
     employeeId: null,
   }
+  attendanceStore.locationTimestamps = []
 })
 
 </script>
@@ -70,6 +65,6 @@ onUnmounted(() => {
           يمكنك تتبع الموظفين ومعرفة مكانهم في الوقت الفعلي.
         </p>
     </div>
-      <EmployeeTrackingMap :zones-to-display="zonesToDisplay" />
+      <EmployeeTrackingMap :zones-to-display="zonesToDisplay" @employee-clicked="handleEmployeeClicked" :show-details-button="false" />
   </div>
 </template>

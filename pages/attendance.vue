@@ -4,6 +4,7 @@ import AppTable from '~/components/app-table/AppTable.vue'
 import { useAppTableStore } from '~/components/app-table/stores/AppTableStore'
 import { formatDate } from '~/services/formatters'
 import { tableHeader } from '~/views/attendance'
+import AttendanceRecordMapDialog from '~/views/attendance/components/AttendanceRecordMapDialog.vue'
 import EmployeeStatusDialog from '~/views/attendance/components/EmployeeStatusDialog.vue'
 import ManualAttendanceDialog from '~/views/attendance/components/ManualAttendanceDialog.vue'
 import ProcessPayrollDialog from '~/views/attendance/components/ProcessPayrollDialog.vue'
@@ -60,6 +61,14 @@ const handleExportRecordsExcel = async () => {
 
 const viewEmployeeStatus = (record: AttendanceRecord) => {
     attendanceStore.getEmployeeStatus(record.employeeId)
+}
+
+const selectedRecordForMap = ref<AttendanceRecord | null>(null)
+const isMapDialogOpen = ref(false)
+
+const viewRecordOnMap = (record: AttendanceRecord) => {
+    selectedRecordForMap.value = record
+    isMapDialogOpen.value = true
 }
 
 
@@ -323,7 +332,7 @@ onUnmounted(() => {
                     {{ formatTime(item.checkInTime) }}
                 </template>
 
-                <template #data-checkOutTime="{ item }">``
+                <template #data-checkOutTime="{ item }">
                     {{ formatTime(item.checkOutTime) }}
                 </template>
 
@@ -348,15 +357,23 @@ onUnmounted(() => {
                 </template>
 
                 <template #data-actions="{ item }">
-                    <BaseButton size="sm" variant="outline" color="info" class="gap-1"
-                        @click="viewEmployeeStatus(item)">
-                        <Icon name="ph:info-duotone" class="size-4" />
-                        الحالة
-                    </BaseButton>
+                    <div class="flex items-center gap-2">
+                        <BaseButton size="sm" variant="outline" color="primary" class="gap-1"
+                            @click="viewRecordOnMap(item)">
+                            <Icon name="ph:map-trifold-duotone" class="size-4" />
+                            عرض الخريطة
+                        </BaseButton>
+                        <BaseButton size="sm" variant="outline" color="info" class="gap-1"
+                            @click="viewEmployeeStatus(item)">
+                            <Icon name="ph:info-duotone" class="size-4" />
+                            الحالة
+                        </BaseButton>
+                    </div>
                 </template>
             </AppTable>
         </AppCrud>
 
+        <AttendanceRecordMapDialog v-model="isMapDialogOpen" :record="selectedRecordForMap" />
         <EmployeeStatusDialog />
         <ProcessPayrollDialog v-model="isProcessPayrollDialogOpen" :employee-ids="selectedEmployeeIds"
             @done="handlePayrollProcessed" />

@@ -48,6 +48,10 @@ export interface AttendanceRecord {
     isComplete: boolean
     totalWorkingTime: TimeSpan
     netWorkingTime: TimeSpan
+    checkInLatitude: number
+    checkInLongitude: number
+    checkOutLatitude: number
+    checkOutLongitude: number
 }
 
 export interface EmployeeAttendanceOverview {
@@ -99,20 +103,21 @@ export interface MapZoneDisplay {
 
 export interface LocationTimestampDto  {
   id: number
-  fullName: string
-  employeeNumber: string
-  email: string
-  phone: string
-  jobTitle: string
-  departmentId: number
-  departmentName: string
-  branchId: number
-  branchName: string
-  currentLatitude: number
-  currentLongitude: number
-  lastLocationUpdateAt: string // ISO date string
-  hasLocation: boolean
-  isLocationRecent: boolean
-  timeSinceLastUpdate: string
-  isActive: boolean
+  employeeId: number
+  latitude: number
+  longitude: number
+  recordedAt: string
+  clientTimestamp: string
+}
+
+export interface EmployeeLocationTimestamp {
+  checkInLatitude: number
+  checkInLongitude: number
+  checkOutLatitude: number
+  checkOutLongitude: number
+}
+
+export interface LocationTimestampFilters {
+  from: string
+  to: string
 }

@@ -10,13 +10,26 @@ interface Props {
   refreshInterval?: number
   /** Optional zones to display on the map (id, name, polygon, etc.) */
   zonesToDisplay?: MapZoneDisplay[]
+  /** When false, hides the "View Details" button in marker tooltips */
+  showDetailsButton?: boolean
+  /** When provided, use this data instead of loading from the API (e.g. for single-employee view) */
+  employeesToDisplay?: LocationTimestampDto[]
+  /** When false, hides the stats header (online/offline count) and refresh button */
+  showStatsHeader?: boolean
 }
+
+const emit = defineEmits<{
+  'employee-clicked': [employeeId: number]
+}>()
 
 const attendanceStore = useAttendanceStore()
 const props = withDefaults(defineProps<Props>(), {
   height: '600px',
   refreshInterval: 60000,
   zonesToDisplay: () => [],
+  showDetailsButton: true,
+  employeesToDisplay: undefined,
+  showStatsHeader: true,
 })
 
 const { 
@@ -30,7 +43,12 @@ const {
 
 const { cache: avatarCache, preloadAvatars } = useAvatarCache()
 
-const { updateMarkers, clearMarkers } = useEmployeeMarkers(map, avatarCache)
+const { updateMarkers, clearMarkers } = useEmployeeMarkers(map, avatarCache, {
+  onMarkerClick: (point) => {
+    emit('employee-clicked', point.employeeId)
+  },
+  showDetailsButton: props.showDetailsButton,
+})
 
 const zoneOverlays = ref<any[]>([])
 
@@ -91,15 +109,37 @@ const employees = ref<LocationTimestampDto[]>([])
 const isLoadingData = ref(false)
 const isInitialLoad = ref(true)
 
+/** Group location history by employeeId and keep latest recorded point per employee */
+function getLatestPerEmployee(points: LocationTimestampDto[]): LocationTimestampDto[] {
+  const byEmployee = new Map<number, LocationTimestampDto>()
+  for (const p of points) {
+    const existing = byEmployee.get(p.employeeId)
+    if (!existing || new Date(p.recordedAt) > new Date(existing.recordedAt)) {
+      byEmployee.set(p.employeeId, p)
+    }
+  }
+  return Array.from(byEmployee.values())
+}
+
 const loadEmployeeLocations = async () => {
   if (!map.value) return
 
   try {
     isLoadingData.value = true
 
-    await attendanceStore.getLocationTimestamp()
-    employees.value = attendanceStore.locationTimestamps
-    updateMarkers(employees.value, !isInitialLoad.value)
+    if (props.employeesToDisplay) {
+      employees.value = props.employeesToDisplay
+      updateMarkers(employees.value, !isInitialLoad.value)
+    } else {
+      const { from, to } = attendanceStore.locationTimestampFilters
+      if (!from || !to) {
+        employees.value = []
+        return
+      }
+      await attendanceStore.getLocationTimestamp()
+      employees.value = getLatestPerEmployee(attendanceStore.locationTimestamps)
+      updateMarkers(employees.value, !isInitialLoad.value)
+    }
     isInitialLoad.value = false
   } catch (error) {
     console.error('Error loading employee locations:', error)
@@ -123,7 +163,7 @@ onMounted(async () => {
     loadEmployeeLocations()
     drawZonesOnMap()
 
-    if (props.refreshInterval > 0) {
+    if (props.refreshInterval > 0 && !props.employeesToDisplay) {
       refreshIntervalId = setInterval(refreshData, props.refreshInterval)
     }
   } catch (error) {
@@ -133,6 +173,13 @@ onMounted(async () => {
 
 watch(() => props.zonesToDisplay, () => {
   drawZonesOnMap()
+}, { deep: true })
+
+watch(() => props.employeesToDisplay, (newVal) => {
+  if (newVal?.length && map.value) {
+    employees.value = newVal
+    updateMarkers(newVal, true)
+  }
 }, { deep: true })
 
 onUnmounted(() => {
@@ -148,25 +195,18 @@ defineExpose({
   loadEmployeeLocations,
 })
 
-const onlineCount = computed(() => employees.value.filter(e => e.isLocationRecent).length)
-const offlineCount = computed(() => employees.value.filter(e => !e.isLocationRecent).length)
+const markerCount = computed(() => employees.value.length)
 </script>
 
 <template>
   <div class="relative">
     <!-- Stats Header -->
-    <div class="flex items-center justify-between mb-4">
+    <div v-if="props.showStatsHeader" class="flex items-center justify-between mb-4">
       <div class="flex items-center gap-4">
-        <div class="flex items-center gap-2 bg-emerald-50 dark:bg-emerald-900/20 px-4 py-2 rounded-xl">
-          <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="text-sm font-medium text-emerald-700 dark:text-emerald-400">
-            متصل: {{ onlineCount }}
-          </span>
-        </div>
-        <div class="flex items-center gap-2 bg-red-50 dark:bg-red-900/20 px-4 py-2 rounded-xl">
-          <span class="w-3 h-3 rounded-full bg-red-500"></span>
-          <span class="text-sm font-medium text-red-700 dark:text-red-400">
-            غير متصل: {{ offlineCount }}
+        <div class="flex items-center gap-2 bg-primary-50 dark:bg-primary-900/20 px-4 py-2 rounded-xl">
+          <Icon name="ph:map-pin" class="size-4 text-primary-500" />
+          <span class="text-sm font-medium text-primary-700 dark:text-primary-400">
+            المواقع: {{ markerCount }}
           </span>
         </div>
       </div>

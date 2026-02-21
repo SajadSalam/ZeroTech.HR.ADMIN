@@ -13,24 +13,29 @@ export function useEmployeeMarkers(
   const infoWindows = ref<any[]>([])
 
   /**
-   * Create a marker icon for an employee
+   * Create a marker icon for a location point
    */
-  const createEmployeeMarkerIcon = (employeeId: number, isOnline: boolean): string => {
+  const createEmployeeMarkerIcon = (employeeId: number): string => {
     const avatarNumber = ((employeeId - 1) % 24) + 1
     const avatarImg = avatarCache.value.get(avatarNumber)
-    return createMarkerIcon(avatarImg, isOnline)
+    return createMarkerIcon(avatarImg, true)
   }
 
   /**
-   * Create tooltip content for an employee
+   * Create tooltip content for a location point
    */
-  const createEmployeeTooltip = (employee: LocationTimestampDto): string => {
-    return createTooltipHtml({
-      fullName: employee.fullName,
-      branchName: employee.branchName,
-      isOnline: employee.isLocationRecent,
-      timeSinceLastUpdate: employee.timeSinceLastUpdate
-    })
+  const createEmployeeTooltip = (point: LocationTimestampDto): string => {
+    const recordedAt = point.recordedAt
+      ? new Date(point.recordedAt).toLocaleString('ar-IQ', {
+          dateStyle: 'short',
+          timeStyle: 'short',
+        })
+      : undefined
+    return createTooltipHtml(
+      { employeeId: point.employeeId, recordedAt },
+      {},
+      options.showDetailsButton !== false
+    )
   }
 
   /**
@@ -42,32 +47,34 @@ export function useEmployeeMarkers(
     })
     markers.value = []
 
-    infoWindows.value.forEach(iw => iw.close())
+    infoWindows.value.forEach(iw => {
+      iw.close()
+      iw._pinned = false
+    })
     infoWindows.value = []
   }
 
   /**
-   * Create a single marker for an employee
+   * Create a single marker for a location point
    */
-  const createMarker = (employee: LocationTimestampDto): google.maps.Marker | null => {
+  const createMarker = (point: LocationTimestampDto): any => {
     if (!map.value || !window.google) return null
-    if (!employee.currentLatitude || !employee.currentLongitude) return null
+    if (point.latitude == null || point.longitude == null) return null
 
     const position = {
-      lat: employee.currentLatitude,
-      lng: employee.currentLongitude
+      lat: point.latitude,
+      lng: point.longitude
     }
 
     const markerSize = getMarkerSize()
     const markerAnchor = getMarkerAnchor()
 
-    const isOnline = employee.isLocationRecent
     const marker = new window.google.maps.Marker({
       map: map.value,
       position,
-      title: employee.fullName,
+      title: `موظف #${point.employeeId}`,
       icon: {
-        url: createEmployeeMarkerIcon(employee.id, isOnline),
+        url: createEmployeeMarkerIcon(point.employeeId),
         scaledSize: new window.google.maps.Size(markerSize.width, markerSize.height),
         anchor: new window.google.maps.Point(markerAnchor.x, markerAnchor.y)
       }
@@ -75,45 +82,67 @@ export function useEmployeeMarkers(
 
     // Create info window for tooltip
     const infoWindow = new window.google.maps.InfoWindow({
-      content: createEmployeeTooltip(employee),
+      content: createEmployeeTooltip(point),
       disableAutoPan: true,
       pixelOffset: new window.google.maps.Size(0, -10)
     })
 
     infoWindows.value.push(infoWindow)
 
-    // Add hover events
+    let isPinned = false
+
     marker.addListener('mouseover', () => {
-      infoWindow.open(map.value!, marker)
+      if (!isPinned) {
+        infoWindow.open(map.value!, marker)
+      }
     })
 
     marker.addListener('mouseout', () => {
-      infoWindow.close()
+      if (!isPinned) {
+        infoWindow.close()
+      }
     })
 
-    // Click to keep tooltip open and center map
     marker.addListener('click', () => {
-      // Close all other info windows
-      infoWindows.value.forEach(iw => iw.close())
+      // Unpin all other info windows
+      infoWindows.value.forEach(iw => {
+        iw.close()
+        iw._pinned = false
+      })
+
+      isPinned = true
+      infoWindow._pinned = true
       infoWindow.open(map.value!, marker)
 
-      // Center map on the clicked marker
       map.value?.panTo(position)
       map.value?.setZoom(16)
-
-      // Call optional callback
-      options.onMarkerClick?.(employee)
     })
+
+    window.google.maps.event.addListener(infoWindow, 'closeclick', () => {
+      isPinned = false
+      infoWindow._pinned = false
+    })
+
+    if (options.showDetailsButton !== false) {
+      window.google.maps.event.addListener(infoWindow, 'domready', () => {
+        const btn = document.querySelector(`.employee-detail-btn[data-employee-id="${point.employeeId}"]`)
+        if (btn) {
+          btn.addEventListener('click', () => {
+            options.onMarkerClick?.(point)
+          })
+        }
+      })
+    }
 
     markers.value.push(marker)
     return marker
   }
 
   /**
-   * Update markers for a list of employees
+   * Update markers for a list of location points
    * @param preserveView - If true, keeps the current zoom and center instead of fitting bounds
    */
-  const updateMarkers = (employees: LocationTimestampDto[], preserveView = false): google.maps.LatLngBounds | null => {
+  const updateMarkers = (points: LocationTimestampDto[], preserveView = false): any => {
     if (!map.value || !window.google) return null
 
     // Clear existing markers
@@ -122,15 +151,15 @@ export function useEmployeeMarkers(
     const bounds = new window.google.maps.LatLngBounds()
     let hasValidLocations = false
 
-    // Create markers for each employee
-    employees.forEach(employee => {
-      if (!employee.currentLatitude || !employee.currentLongitude) return
+    // Create markers for each point
+    points.forEach(point => {
+      if (point.latitude == null || point.longitude == null) return
 
-      const marker = createMarker(employee)
+      const marker = createMarker(point)
       if (marker) {
         bounds.extend({
-          lat: employee.currentLatitude,
-          lng: employee.currentLongitude
+          lat: point.latitude,
+          lng: point.longitude
         })
         hasValidLocations = true
       }
