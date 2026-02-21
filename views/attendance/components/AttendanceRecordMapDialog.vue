@@ -3,7 +3,7 @@ import DetailCardsGrid, { type DetailCard } from '~/components/DetailCardsGrid.v
 import EmployeeTrackingMap from '~/views/attendance/components/EmployeeTrackingMap.vue'
 import { useEmployeeStore } from '~/views/employees/store'
 import { zoneService } from '~/views/zones/service'
-import type { AttendanceRecord } from '../types'
+import type { AttendanceRecord, TimeSpan } from '../types'
 import type { LocationTimestampDto, MapZoneDisplay } from '../types'
 import { formatDate } from '~/services/formatters'
 
@@ -16,6 +16,78 @@ const emit = defineEmits<{
   'update:modelValue': [value: boolean]
 }>()
 
+/** Set to true to use mock data when record is null (open dialog to preview) */
+const USE_MOCK_DATA = true
+
+const emptyTimeSpan: TimeSpan = {
+  ticks: 0, days: 0, hours: 0, milliseconds: 0, microseconds: 0, nanoseconds: 0,
+  minutes: 0, seconds: 0, totalDays: 0, totalHours: 0, totalMilliseconds: 0,
+  totalMicroseconds: 0, totalNanoseconds: 0, totalMinutes: 0, totalSeconds: 0,
+}
+
+const MOCK_RECORD: AttendanceRecord = {
+  id: 1,
+  createdAt: '2025-02-20T08:00:00Z',
+  createdByUserId: 1,
+  createdBy: 'admin',
+  createdByUserName: 'مدير النظام',
+  updatedAt: '2025-02-20T17:30:00Z',
+  updatedByUserId: 1,
+  updatedBy: 'admin',
+  updatedByUserName: 'مدير النظام',
+  isActive: true,
+  employeeId: 101,
+  employeeName: 'أحمد محمد علي',
+  employeeNumber: 'EMP-001',
+  attendanceDate: '2025-02-20',
+  checkInTime: '2025-02-20T08:15:00',
+  checkOutTime: '2025-02-20T17:30:00',
+  workScheduleShiftId: 1,
+  workScheduleShiftName: 'الشفت الصباحي',
+  isLateCheckIn: true,
+  isEarlyCheckOut: false,
+  lateMinutes: 15,
+  earlyMinutes: 0,
+  hoursWorked: 8.25,
+  overtimeHours: 1.5,
+  notes: '',
+  isProcessedForPayroll: false,
+  payrollProcessedAt: '',
+  isCheckedIn: false,
+  isComplete: true,
+  totalWorkingTime: { ...emptyTimeSpan, totalHours: 9, hours: 9 },
+  netWorkingTime: { ...emptyTimeSpan, totalHours: 8.25, hours: 8 },
+  checkInLatitude: 33.3152,
+  checkInLongitude: 44.3661,
+  checkOutLatitude: 33.318,
+  checkOutLongitude: 44.37,
+}
+
+const MOCK_ZONES: MapZoneDisplay[] = [
+  {
+    id: 'mock-zone-1',
+    name: 'منطقة المكتب الرئيسي',
+    polygonCoordinates: JSON.stringify({
+      type: 'Polygon',
+      coordinates: [[
+        [44.35, 33.30],
+        [44.39, 33.30],
+        [44.39, 33.34],
+        [44.35, 33.34],
+        [44.35, 33.30],
+      ]],
+    }),
+    color: '#10B981',
+    opacity: 0.25,
+    isOperational: true,
+  },
+]
+
+/** Use mock record when USE_MOCK_DATA and no real record (e.g. for preview) */
+const recordToUse = computed<AttendanceRecord | null>(() =>
+  props.record ?? (USE_MOCK_DATA ? MOCK_RECORD : null),
+)
+
 const isOpen = computed({
   get: () => props.modelValue,
   set: (v) => emit('update:modelValue', v),
@@ -26,7 +98,7 @@ const zonesToDisplay = ref<MapZoneDisplay[]>([])
 const isLoadingZone = ref(false)
 
 const employeesToDisplay = computed<LocationTimestampDto[]>(() => {
-  const r = props.record
+  const r = recordToUse.value
   if (!r) return []
 
   const points: LocationTimestampDto[] = []
@@ -54,7 +126,7 @@ const employeesToDisplay = computed<LocationTimestampDto[]>(() => {
 })
 
 const hasLocationData = computed(() => {
-  const r = props.record
+  const r = recordToUse.value
   if (!r) return false
   const hasCheckIn = r.checkInLatitude != null && r.checkInLongitude != null
   const hasCheckOut = r.checkOutLatitude != null && r.checkOutLongitude != null
@@ -62,7 +134,7 @@ const hasLocationData = computed(() => {
 })
 
 const detailCards = computed<DetailCard[]>(() => {
-  const r = props.record
+  const r = recordToUse.value
   if (!r) return []
 
   const formatTime = (t: string) => {
@@ -107,8 +179,14 @@ const detailCards = computed<DetailCard[]>(() => {
 })
 
 const loadZone = async () => {
-  const r = props.record
+  const r = recordToUse.value
   if (!r?.employeeId) return
+
+  /** Use mock zones when displaying mock record (no real record passed) */
+  if (USE_MOCK_DATA && !props.record) {
+    zonesToDisplay.value = MOCK_ZONES
+    return
+  }
 
   try {
     isLoadingZone.value = true
@@ -134,7 +212,7 @@ const loadZone = async () => {
   }
 }
 
-watch(() => [props.modelValue, props.record], async ([open, record]) => {
+watch([() => props.modelValue, recordToUse], async ([open, record]) => {
   if (open && record) {
     await loadZone()
   } else {
@@ -145,7 +223,7 @@ watch(() => [props.modelValue, props.record], async ([open, record]) => {
 
 <template>
   <AppDialog v-model="isOpen" title="عرض الخريطة" size="3xl" overflow-y="auto">
-    <div v-if="record" class="space-y-6">
+    <div v-if="recordToUse" class="space-y-6">
       <!-- Employee & Record Data -->
       <DetailCardsGrid :cards="detailCards" />
 

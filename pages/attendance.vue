@@ -71,6 +71,12 @@ const viewRecordOnMap = (record: AttendanceRecord) => {
     isMapDialogOpen.value = true
 }
 
+/** Open map dialog with mock data (when USE_MOCK_DATA is true in AttendanceRecordMapDialog) */
+const previewMapDialog = () => {
+    selectedRecordForMap.value = null
+    isMapDialogOpen.value = true
+}
+
 
 const formatTime = (timeString: string) => {
     if (!timeString) return '-'
@@ -244,6 +250,11 @@ onUnmounted(() => {
                     <Icon name="ph:warning-duotone" class="size-4" />
                     يرجى اختيار الموظف لعرض الاحصائيات
                 </p>
+                <BaseButton v-if="!filters.employeeId" color="default" variant="outline" size="sm" class="gap-2 mt-2"
+                    @click="previewMapDialog">
+                    <Icon name="ph:map-trifold-duotone" class="size-4" />
+                    عرض تجريبي للخريطة
+                </BaseButton>
                 <div v-if="filters.employeeId && statistics" class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <div class="bg-info-500/10 rounded-full p-3">
@@ -304,6 +315,11 @@ onUnmounted(() => {
             </template>
 
             <template #headerActions>
+                <BaseButton color="default" variant="outline" class="gap-2"
+                    @click="previewMapDialog">
+                    <Icon name="ph:map-trifold-duotone" class="size-5" />
+                    عرض تجريبي للخريطة
+                </BaseButton>
                 <BaseButton color="success" variant="outline" class="gap-2" :loading="isLoading"
                     @click="handleExportRecordsCSV">
                     <Icon name="ph:file-csv-duotone" class="size-5" />
