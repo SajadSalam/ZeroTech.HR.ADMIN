@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useToast } from '~/composables/toaster'
 
 // export const baseURL = 'https://hr-api.pomelo-bot.xyz/'
-export const baseURL = 'http://157.245.67.219:5001/'
+export const baseURL = 'http://104.248.85.137:5001/'
 // export const baseURL = import.meta.env.VITE_BASE_URL
 
 const axiosIns = axios.create({
