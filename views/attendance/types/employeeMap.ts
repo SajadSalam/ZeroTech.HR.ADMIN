@@ -1,4 +1,4 @@
-import type { LocationTimestampDto } from "."
+import type { EmployeeMarkerPoint } from "."
 
 export interface TooltipData {
   employeeId: number
@@ -36,7 +36,7 @@ export interface MapOptions {
 }
 
 export interface UseEmployeeMarkersOptions {
-  onMarkerClick?: (point: LocationTimestampDto) => void
+  onMarkerClick?: (point: EmployeeMarkerPoint) => void
   /** When false, hides the "View Details" button in the marker tooltip */
   showDetailsButton?: boolean
 }

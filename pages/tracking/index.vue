@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import EmployeeTrackingMap from '~/views/attendance/components/EmployeeTrackingMap.vue'
 import { useAttendanceStore } from '~/views/attendance/store'
 import { zoneService } from '~/views/zones/service'
 import type { MapZoneDisplay } from '~/views/attendance/types'
+import EmployeesLocation from '~/views/attendance/components/EmployeesLocation.vue'
 
 definePageMeta({
   title: 'tracking',
@@ -32,14 +32,8 @@ const loadZonesForMap = async () => {
   }
 }
 
-const router = useRouter()
-
-const handleEmployeeClicked = (employeeId: number) => {
-    router.push(`/tracking/${employeeId}`)
-}
-
 onMounted(async () => {
-    await loadZonesForMap()
+  await loadZonesForMap()
 })
 
 onUnmounted(() => {
@@ -50,7 +44,6 @@ onUnmounted(() => {
     endDate: '',
     employeeId: null,
   }
-  attendanceStore.locationTimestamps = []
 })
 
 </script>
@@ -61,10 +54,10 @@ onUnmounted(() => {
       <h1 class="text-xl font-bold">
         تتبع الموظفين
       </h1>
-        <p>
-          يمكنك تتبع الموظفين ومعرفة مكانهم في الوقت الفعلي.
-        </p>
+      <p>
+        يمكنك تتبع الموظفين ومعرفة مكانهم في الوقت الفعلي.
+      </p>
     </div>
-      <EmployeeTrackingMap :zones-to-display="zonesToDisplay" @employee-clicked="handleEmployeeClicked" :show-details-button="false" />
+    <EmployeesLocation :zones-to-display="zonesToDisplay" />
   </div>
 </template>

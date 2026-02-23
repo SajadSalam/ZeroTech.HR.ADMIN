@@ -136,10 +136,10 @@ const loadEmployeeLocations = async () => {
         employees.value = []
         return
       }
-      await attendanceStore.getLocationTimestamp()
+      // const response = await attendanceStore.getLocationTimestamp()
       employees.value = getLatestPerEmployee(attendanceStore.locationTimestamps)
       updateMarkers(employees.value, !isInitialLoad.value)
-    }
+    } 
     isInitialLoad.value = false
   } catch (error) {
     console.error('Error loading employee locations:', error)
