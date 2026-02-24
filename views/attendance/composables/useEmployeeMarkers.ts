@@ -1,8 +1,27 @@
-import type { LocationTimestampDto } from '../types'
+import type { LocationTimestampDto, EmployeesLocation, EmployeeMarkerPoint } from '../types'
 import type { UseEmployeeMarkersOptions } from '../types/employeeMap'
 import { createMarkerIcon, getMarkerSize, getMarkerAnchor } from '../utils/createMarkerIcon'
 import { createTooltipHtml } from '../utils/createTooltipHtml'
 
+function toMarkerPoint(point: LocationTimestampDto | EmployeesLocation): EmployeeMarkerPoint | null {
+  if ('latitude' in point && point.latitude != null && point.longitude != null) {
+    return {
+      employeeId: point.employeeId,
+      latitude: point.latitude,
+      longitude: point.longitude,
+      recordedAt: point.recordedAt,
+    }
+  }
+  if ('currentLatitude' in point && point.currentLatitude != null && point.currentLongitude != null) {
+    return {
+      employeeId: point.id,
+      latitude: point.currentLatitude,
+      longitude: point.currentLongitude,
+      recordedAt: point.lastLocationUpdateAt,
+    }
+  }
+  return null
+}
 
 export function useEmployeeMarkers(
   map: Ref<any>,
@@ -24,7 +43,7 @@ export function useEmployeeMarkers(
   /**
    * Create tooltip content for a location point
    */
-  const createEmployeeTooltip = (point: LocationTimestampDto): string => {
+  const createEmployeeTooltip = (point: EmployeeMarkerPoint): string => {
     const recordedAt = point.recordedAt
       ? new Date(point.recordedAt).toLocaleString('ar-IQ', {
           dateStyle: 'short',
@@ -57,7 +76,7 @@ export function useEmployeeMarkers(
   /**
    * Create a single marker for a location point
    */
-  const createMarker = (point: LocationTimestampDto): any => {
+  const createMarker = (point: EmployeeMarkerPoint): any => {
     if (!map.value || !window.google) return null
     if (point.latitude == null || point.longitude == null) return null
 
@@ -139,10 +158,10 @@ export function useEmployeeMarkers(
   }
 
   /**
-   * Update markers for a list of location points
+   * Update markers for a list of location points (LocationTimestampDto or EmployeesLocation).
    * @param preserveView - If true, keeps the current zoom and center instead of fitting bounds
    */
-  const updateMarkers = (points: LocationTimestampDto[], preserveView = false): any => {
+  const updateMarkers = (points: (LocationTimestampDto | EmployeesLocation)[], preserveView = false): any => {
     if (!map.value || !window.google) return null
 
     // Clear existing markers
@@ -151,10 +170,9 @@ export function useEmployeeMarkers(
     const bounds = new window.google.maps.LatLngBounds()
     let hasValidLocations = false
 
-    // Create markers for each point
-    points.forEach(point => {
-      if (point.latitude == null || point.longitude == null) return
+    const normalized = points.map(toMarkerPoint).filter((p): p is EmployeeMarkerPoint => p != null)
 
+    normalized.forEach(point => {
       const marker = createMarker(point)
       if (marker) {
         bounds.extend({

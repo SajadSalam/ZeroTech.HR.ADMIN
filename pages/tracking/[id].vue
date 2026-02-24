@@ -7,6 +7,7 @@ import { zoneService } from '~/views/zones/service'
 import type { EmployeeDto } from '~/views/employees/types'
 import type { LocationTimestampDto, MapZoneDisplay } from '~/views/attendance/types'
 import { formatDate } from '~/services/formatters'
+import AppInputField from '~/components/app-field/AppInputField.vue'
 
 definePageMeta({
     title: 'تفاصيل تتبع الموظف',
@@ -21,46 +22,20 @@ const attendanceStore = useAttendanceStore()
 const employeeStore = useEmployeeStore()
 
 const employee = ref<EmployeeDto | null>(null)
-const employeeLocation = computed(() => attendanceStore.employeeLocation)
+const locationTimestamps = computed(() => attendanceStore.locationTimestamps)
 const zonesToDisplay = ref<MapZoneDisplay[]>([])
 const isLoading = ref(true)
 const error = ref<string | null>(null)
 
 const employeesToDisplay = computed<LocationTimestampDto[]>(() => {
-    const loc = employeeLocation.value
-    if (!loc) return []
-
-    const points: LocationTimestampDto[] = []
-    if (loc.checkInLatitude != null && loc.checkInLongitude != null) {
-        points.push({
-            id: 1,
-            employeeId: employeeId.value,
-            latitude: loc.checkInLatitude,
-            longitude: loc.checkInLongitude,
-            recordedAt: '',
-            clientTimestamp: '',
-        })
-    }
-    if (loc.checkOutLatitude != null && loc.checkOutLongitude != null) {
-        points.push({
-            id: 2,
-            employeeId: employeeId.value,
-            latitude: loc.checkOutLatitude,
-            longitude: loc.checkOutLongitude,
-            recordedAt: '',
-            clientTimestamp: '',
-        })
-    }
-    return points
+    const list = locationTimestamps.value
+    if (!list?.length) return []
+    return list.filter(
+        (p) => p.latitude != null && p.longitude != null
+    ) as LocationTimestampDto[]
 })
 
-const hasLocationData = computed(() => {
-    const loc = employeeLocation.value
-    if (!loc) return false
-    const hasCheckIn = loc.checkInLatitude != null && loc.checkInLongitude != null
-    const hasCheckOut = loc.checkOutLatitude != null && loc.checkOutLongitude != null
-    return hasCheckIn || hasCheckOut
-})
+const hasLocationData = computed(() => (locationTimestamps.value?.length ?? 0) > 0)
 
 const loadData = async () => {
     try {
@@ -69,7 +44,7 @@ const loadData = async () => {
 
         const [emp] = await Promise.all([
             employeeStore.getEmployeeById(employeeId.value),
-            attendanceStore.getEmployeeLocationTimestamp(employeeId.value),
+            attendanceStore.getLocationTimestamp(employeeId.value),
         ])
 
         employee.value = emp as EmployeeDto
@@ -100,12 +75,16 @@ const loadData = async () => {
     }
 }
 
+const refreshLocationByFilter = () => {
+    attendanceStore.getLocationTimestamp(employeeId.value)
+}
+
 onMounted(loadData)
 
 
 const detailCards = computed<DetailCard[]>(() => {
     const emp = employee.value
-    const loc = employeeLocation.value
+    const loc = locationTimestamps.value
     if (!emp) return []
 
     const cards: DetailCard[] = [
@@ -135,36 +114,35 @@ const detailCards = computed<DetailCard[]>(() => {
         },
     ]
 
-    // if (loc) {
-    //     const locationItems: DetailCard['items'] = []
-    //     if (loc.checkInLatitude != null && loc.checkInLongitude != null) {
-    //         locationItems.push(
-    //             { label: 'موقع الدخول', value: `${loc.checkInLatitude.toFixed(6)}, ${loc.checkInLongitude.toFixed(6)}` },
-    //         )
-    //     }
-    //     if (loc.checkOutLatitude != null && loc.checkOutLongitude != null) {
-    //         locationItems.push(
-    //             { label: 'موقع الخروج', value: `${loc.checkOutLatitude.toFixed(6)}, ${loc.checkOutLongitude.toFixed(6)}` },
-    //         )
-    //     }
-    //     if (locationItems.length > 0) {
-    //         cards.push({
-    //             title: 'مواقع الحضور',
-    //             icon: 'ph:map-pin',
-    //             iconColor: 'amber',
-    //             items: locationItems,
-    //         })
-    //     }
-    // }
+    const locList = locationTimestamps.value
+    if (locList?.length) {
+        const locationItems: DetailCard['items'] = locList
+            .filter((p) => p.latitude != null && p.longitude != null)
+            .map((p, i) => ({
+                label: p.recordedAt ? formatDate(p.recordedAt) : `موقع #${i + 1}`,
+                value: `${p.latitude.toFixed(6)}, ${p.longitude.toFixed(6)}`,
+            }))
+        if (locationItems.length > 0) {
+            cards.push({
+                title: 'مواقع الحضور',
+                icon: 'ph:map-pin',
+                iconColor: 'amber',
+                items: locationItems,
+            })
+        }
+    }
 
     return cards
 })
+watch(attendanceStore.locationTimestampFilters, () => {
+    refreshLocationByFilter()
+}, { deep: true })
 </script>
 
 <template>
     <div class="flex flex-col gap-6 p-4">
         <!-- Header -->
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div class="flex items-center gap-3">
                 <button
                     class="flex items-center gap-1 text-sm text-muted-500 hover:text-primary-500 transition-colors"
@@ -177,6 +155,10 @@ const detailCards = computed<DetailCard[]>(() => {
                 <h1 class="text-xl font-bold text-muted-800 dark:text-white">
                     تفاصيل تتبع الموظف
                 </h1>
+            </div>
+            <div class="flex items-center gap-3 flex-wrap">
+                <AppInputField type="date" v-model="attendanceStore.locationTimestampFilters.from" label="من تاريخ" />
+                <AppInputField type="date" v-model="attendanceStore.locationTimestampFilters.to" label="إلى تاريخ" />
             </div>
         </div>
 

@@ -6,6 +6,7 @@ import type {
     EmployeeAttendanceOverview,
     EmployeeAttendanceStats,
     EmployeeLocationTimestamp,
+    EmployeesLocation,
     LocationTimestampDto,
     LocationTimestampFilters,
 } from '../types'
@@ -29,7 +30,7 @@ export const useAttendanceStore = defineStore('attendance', () => {
     const totalPages = ref(0)
     const locationTimestamps = ref<LocationTimestampDto[]>([])
     const employeeLocation = ref<EmployeeLocationTimestamp | null>(null)
-
+    const employeesLocations = ref<EmployeesLocation[]>([])
     const locationTimestampFilters = ref<LocationTimestampFilters>({
         from: '',
         to: '',
@@ -247,13 +248,13 @@ export const useAttendanceStore = defineStore('attendance', () => {
         }
     }
 
-    const getLocationTimestamp = async () => {
+    const getLocationTimestamp = async (employeeId: number) => {
         const { from, to } = locationTimestampFilters.value
         if (!from || !to) return []
 
         try {
             isLoading.value = true
-            const response = await attendanceService.getLocationTimestamp({ from, to })
+            const response = await attendanceService.getLocationTimestamp(employeeId, { from, to })
             locationTimestamps.value = response
             return response
         } catch (error) {
@@ -272,6 +273,20 @@ export const useAttendanceStore = defineStore('attendance', () => {
             return response
         } catch (error) {
             console.error('Error getting employee location timestamp:', error)
+            throw error
+        } finally {
+            isLoading.value = false
+        }
+    }
+
+    const getEmployeesLocations = async () => {
+        try {
+            isLoading.value = true
+            const response = await attendanceService.getEmployeesLocations()
+            employeesLocations.value = response
+            return response
+        } catch (error) {
+            console.error('Error getting employees locations:', error)
             throw error
         } finally {
             isLoading.value = false
@@ -303,5 +318,7 @@ export const useAttendanceStore = defineStore('attendance', () => {
         locationTimestampFilters,
         getEmployeeLocationTimestamp,
         employeeLocation,
+        getEmployeesLocations,
+        employeesLocations,
     }
 })

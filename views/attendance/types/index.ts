@@ -110,6 +110,14 @@ export interface LocationTimestampDto  {
   clientTimestamp: string
 }
 
+/** Normalized marker point (employeeId + lat/lng + optional time); used when accepting both LocationTimestampDto and EmployeesLocation */
+export interface EmployeeMarkerPoint {
+  employeeId: number
+  latitude: number
+  longitude: number
+  recordedAt?: string
+}
+
 export interface EmployeeLocationTimestamp {
   checkInLatitude: number
   checkInLongitude: number
@@ -120,4 +128,24 @@ export interface EmployeeLocationTimestamp {
 export interface LocationTimestampFilters {
   from: string
   to: string
+}
+
+export interface EmployeesLocation  {
+  id: number
+  fullName: string
+  employeeNumber: string
+  email: string
+  phone: string
+  jobTitle: string
+  departmentId: number
+  departmentName: string
+  branchId: number
+  branchName: string
+  currentLatitude: number
+  currentLongitude: number
+  lastLocationUpdateAt: string // ISO date string
+  hasLocation: boolean
+  isLocationRecent: boolean
+  timeSinceLastUpdate: string
+  isActive: boolean
 }
