@@ -1,0 +1,61 @@
+name: Deploy Real Estate Bank Front-end UAT Service
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+              node-version: [18.x]
+        env:
+            target: '/var/www/hr/frontend/'
+
+            message: |
+              [${{ github.event.head_commit.committer.name }}](https://github.com/${{github.event.head_commit.committer.username}}) pushed new commit: 
+              `[ ${{github.event.head_commit.message}} ]` 
+              to [${{ github.event.repository.name }}](https://github.com/${{github.event.repository.html_url}}) 
+              You can now use it at https://zerotechapp.com
+            
+        steps:
+          - name: Checkout code
+            uses: actions/checkout@v2.4.2      
+
+          - name: Use Node.js ${{ matrix.node-version }}
+            uses: actions/setup-node@v2
+            with:
+              node-version: ${{ matrix.node-version }}
+
+          - name: Install pnpm
+            run: npm install -g pnpm
+
+          - name: Install npm dependencies
+            run: pnpm install
+
+          - name: Build application
+            run: pnpm run generate
+
+          - name: copy via ssh
+            uses: appleboy/scp-action@master
+            with:
+              host: 104.248.85.137
+              port: 22
+              username: root
+              password: 123@ZeroTech
+              source: .output/public/*
+              target: "/var/www/hr/frontend/"
+              overwrite: true
+              rm: false
+              debug: true # Enable debugging
+
+          - name: send notification to telegram
+            uses: appleboy/telegram-action@master
+            with:
+                to: 872819018
+                token: 1798483416:AAEPm2r9l6rdhHyeeovRAiL2db5sKigLNKo
+                message: ${{ env.message }}
+                format: markdown
+                disable_web_page_preview: true
