@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useToast } from '~/composables/toaster'
 
 // export const baseURL = 'https://hr-api.pomelo-bot.xyz/'
-export const baseURL = 'https://www.zerotechapp.com/'
+export const baseURL = 'http://api.zerotechapp.com/'
 // export const baseURL = import.meta.env.VITE_BASE_URL
 
 const axiosIns = axios.create({
